@@ -196,6 +196,8 @@ return [
         'system_mail_password' => 'パスワード',
         'system_mail_encryption' => '暗号化形式',
         'system_mail_from' => '送信元アドレス',
+        'test_mail_to' => 'テストメール送信先',
+        'submit_test_mail' => 'テストメール送信',
         'grid_pager_count' => 'データ一覧の表示件数',
         'datalist_pager_count' => '検索・ダッシュボードの表示件数',
         'template' => 'インストールテンプレート',
@@ -287,6 +289,7 @@ return [
             'system_mail' => 'システムからメールを送付する時の設定を行います。',
             'system_mail_from' => '送信元のメールアドレスです。このメールアドレスをFromとして、メールが送付されます。',
             'system_mail_encryption' => 'メールの暗号化プロトコル形式を、小文字で入力してください。(ssl,tlsなど)',
+            'test_mail' => '入力した送信先にテストメールを送ります。<br /><b>※上記のメール設定を必ず保存してから実行してください。入力途中の設定は無効になります。</b>',
             'template' => 'テンプレートを選択することで、テーブルや列、フォームが自動的にインストールされます。',
             'role_one_user_organization' => '権限にユーザーまたは組織を1件以上登録してください。',
             'default_date_format' => '日付と時刻の表示書式を設定します。',
@@ -812,6 +815,7 @@ return [
             'select_target_table' => '対象テーブル',
             'select_target_view' => '対象ビュー',
             'select_import_column_id' => 'インポート時のキー列',
+            'select_export_column_id' => 'エクスポート時のキー列',
             'select_load_ajax' => '選択肢を絞り込む',
             'true_value' => '選択肢1のときの値',
             'true_label' => '選択肢1のときの表示',
@@ -875,6 +879,7 @@ return [
             'select_target_view' => 'データを絞り込む場合に、条件ビューを指定します。条件ビューは、先にカスタムテーブルの設定画面で作成してください。',
             'select_import_column_id' => 'データのインポート時、選択テーブルのデータを絞り込むための、カスタム列を指定することができます。未設定の場合は、idを使用します。詳細は&nbsp;<a href="%s" target="_blank">こちら<i class="fa fa-external-link"></i></a>&nbsp;をご参照ください。',
             'select_import_column_id_key' => '親テーブルのデータの指定方法変更',
+            'select_export_column_id' => 'データのエクスポート時、選択テーブルのデータの出力するカスタム列を指定することができます。未設定の場合は、idを出力します。',
             'true_value' => '1つ目の選択肢を保存した場合に登録する値を入力してください。',
             'true_label' => '1つ目の選択肢を保存した場合に表示する文字列を入力してください。',
             'false_value' => '2つ目の選択肢を保存した場合に登録する値を入力してください。',
@@ -1206,11 +1211,13 @@ return [
         'parent_custom_table' => '親テーブル',
         'child_custom_table' => '子テーブル',
         'parent_import_column_id' => 'インポート時のキー列',
+        'parent_export_column_id' => 'エクスポート時のキー列',
 
         'help' => [
             'relation_caution' => '<span class="red bold"><i class="fa fa-exclamation-circle"></i> Exmentのテーブル間の関連付け設定方法は、この画面の他に、もう1種類あります。</span><br />登録前に、必ず<a href="%s" target="_blank">マニュアル</a>をご確認いただき、適切な選択を行うようにしてください。',
             'parent_import_column_id' => 'データのインポート時、親テーブルのデータを絞り込むための、カスタム列を指定することができます。未設定の場合は、idを使用します。詳細は&nbsp;<a href="%s" target="_blank">こちら<i class="fa fa-external-link"></i></a>&nbsp;をご参照ください。',
-        ]
+            'parent_export_column_id' => 'データのエクスポート時、親テーブルのデータの出力するカスタム列を指定することができます。未設定の場合は、idを出力します。',
+        ],
     ],
 
     'custom_copy' => [
@@ -1350,8 +1357,8 @@ return [
             'target_column_name' => '置換対象列名(英数字)',
             'help' => [
                 'description' => 'Exmentに、各テーブルのデータをインポートすることができます。<br />手順など、詳細は<a href="%s" target="_blank">こちら<i class="fa fa-external-link"></i></a>をご参照ください。',
-                'custom_table_file' => 'テンプレート出力した、CSVファイル、もしくはExcelファイル(xlsx形式)を選択してください。',
-                'primary_key' => '更新データを絞り込む対象のフィールドを選択します。<br />このフィールド値が、すでにあるデータと合致していた場合、更新データとして取り込みを行います。<br />合致するデータが存在しなかった場合、新規データとして取り込みます。',
+                'custom_table_file' => 'テンプレート出力した%sファイルを選択してください。',
+                'primary_key' => '更新データを絞り込む対象のフィールドを選択します。<br />このフィールド値が、すでにあるデータと合致していた場合、更新データとして取り込みを行います。<br />合致するデータが存在しなかった場合、新規データとして取り込みます。<br />※カスタム列は、「ユニーク」かつ「検索インデックス」列が表示されます。',
                 'import_plugin' => '取込ファイルを独自に処理する場合は、あらかじめプラグインをアップロードした上で選択してください。',
                 'error_flow' => 'データ不備などでエラーが発生した場合、正常データを取り込むかどうか選択します。',
                 'import_error_message' => '取込ファイルに不備があった場合、この項目に、行番号と、エラーメッセージを表示します。',
