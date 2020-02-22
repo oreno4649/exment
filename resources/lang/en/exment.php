@@ -12,6 +12,7 @@ return [
         'change' => 'Change',
         'reqired' => 'Required',
         'default' => 'Default',
+        'basic_setting' => 'Basic Setting',
         'detail_setting' => 'Detail Setting',
         'no_setting' => 'No Setting',
         'input' => 'Input',
@@ -196,6 +197,8 @@ return [
         'system_mail_password' => 'Password',
         'system_mail_encryption' => 'Encryption Format',
         'system_mail_from' => 'System Email',
+        'test_mail_to' => 'TestMail Send To',
+        'submit_test_mail' => 'Send TestMail',
         'grid_pager_count' => 'Number of displayed data list',
         'datalist_pager_count' => 'Number of displayed search and dashboard',
         'template' => 'Install Template',
@@ -287,6 +290,7 @@ return [
             'system_mail' => 'Configure settings when sending mail from the system.',
             'system_mail_from' => 'the mail address from this system. Using this mail address as "from", this system sends users.',
             'system_mail_encryption' => 'Enter the mail encryption protocol format in lower case. (ssl, tls etc)',
+            'test_mail' => 'Send a test email to the destination you entered. <br /> <b>*Be sure to save the above email settings before executing. The settings during input are invalid. </b>',
             'template' => 'If select these templates, install tables, columns and forms.',
             'role_one_user_organization' => 'Please register one or more users or organizations for permission.',
             'default_date_format' => 'Sets the display format for the date and time.',
@@ -1340,7 +1344,7 @@ return [
         'view_summary_detail' => 'Display the items of aggregated data',
         'soft_deleted_data' => 'Deleted Data',
         'restore' => 'Restore',
-        
+        'hard_delete' => 'Permanently Delete',
         'import' => [
             'manual_id' => 'Data Import',
             'import_file' => 'Import File',
@@ -1403,6 +1407,7 @@ return [
             'action_disabled' => 'Operations from the screen are restricted.',
             'restore' => 'Are you sure to restore this item ?',
             'restore_succeeded' => 'Restore succeeded !',
+            'hard_delete' => 'Permanently delete? (This operation cannot be restored)',
         ],
     ],
 
@@ -1548,6 +1553,11 @@ return [
             'table_write' => 'Get, Create, Update, Delete Table',
             'value_read' => 'Get Value',
             'value_write' => 'Get, Create, Update, Delete Value',
+            'notify_read' => 'Get Notify',
+            'notify_write' => 'Create Notify',
+            'workflow_read' => 'Get Workflow',
+            'workflow_execute' => 'Execute Workflow',
+            'plugin' => 'Plugin',
         ],
 
         'errors' => [
