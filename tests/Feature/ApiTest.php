@@ -212,7 +212,7 @@ class ApiTest extends ApiTestBase
     }
 
     public function testGetTableById(){
-        $token = $this->getAdminAccessToken([ApiScope::TABLE_WRITE]);
+        $token = $this->getAdminAccessToken([ApiScope::TABLE_READ]);
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
@@ -547,7 +547,7 @@ class ApiTest extends ApiTestBase
                 'user' => 2
             ]
         ])
-        ->assertStatus(200)
+        ->assertStatus(201)
         ->assertJsonFragment([
             'parent_id' => '5',
             'parent_type' => 'parent_table',

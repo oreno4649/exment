@@ -132,6 +132,14 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
     }
 
     /**
+     * get Custom columns using cache
+     */
+    public function getCustomColumnsCacheAttribute()
+    {
+        return $this->hasManyCache(CustomColumn::class, 'custom_table_id');
+    }
+
+    /**
      * Get Columns where select_target_table's id is this table.
      *
      * @return void
@@ -499,6 +507,48 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
         }
 
         return $value;
+    }
+
+    /**
+     * Convert base64 encode file
+     *
+     * @param array $value input value
+     * @return array Value after converting base64 encode file, and files value
+     */
+    public function convertFileData($value)
+    {
+        // get file columns
+        $file_columns = $this->custom_columns_cache->filter(function($column) {
+            return ColumnType::isAttachment($column->column_type);
+        });
+        
+        $files = [];
+
+        foreach ($file_columns as $file_column) {
+            // if not key in value, set default value
+            if (!array_has($value, $file_column->column_name)) {
+                continue;
+            }
+            $file_value = $value[$file_column->column_name];
+            if (!array_has($file_value, 'name') && !array_has($file_value, 'base64')) {
+                continue;
+            }
+
+            $file_name = $file_value['name'];
+            $file_data = $file_value['base64'];
+            $file_data = base64_decode($file_data);
+
+            // convert file name for validation
+            $value[$file_column->column_name] = null;
+
+            // append file data
+            $files[$file_column->column_name] = [
+                'name' => $file_name,
+                'data' => $file_data,
+            ];
+        }
+
+        return [$value, $files];
     }
 
     /**
@@ -963,7 +1013,18 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
         foreach (collect($values)->chunk(100) as $chunk) {
             $query = $this->getValueModel()->query();
 
-            $databaseKeyName = str_replace(".", "->", $keyName);
+            if (preg_match("/value\.([a-zA-Z0-9_-]+)/i", $keyName, $matches)) {
+                // get custom_column
+                $custom_column = CustomColumn::getEloquent($matches[1], $this);
+                if($custom_column->index_enabled){
+                    $databaseKeyName = $this->getIndexColumnName($matches[1]);
+                }
+                else{
+                    $databaseKeyName = "value->{$matches[1]}";
+                }
+            } else {
+                $databaseKeyName = $keyName;
+            }
             $query->whereIn($databaseKeyName, $chunk);
 
             if ($withTrashed) {

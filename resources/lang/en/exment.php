@@ -12,6 +12,7 @@ return [
         'change' => 'Change',
         'reqired' => 'Required',
         'default' => 'Default',
+        'basic_setting' => 'Basic Setting',
         'detail_setting' => 'Detail Setting',
         'no_setting' => 'No Setting',
         'input' => 'Input',
@@ -196,6 +197,8 @@ return [
         'system_mail_password' => 'Password',
         'system_mail_encryption' => 'Encryption Format',
         'system_mail_from' => 'System Email',
+        'test_mail_to' => 'TestMail Send To',
+        'submit_test_mail' => 'Send TestMail',
         'grid_pager_count' => 'Number of displayed data list',
         'datalist_pager_count' => 'Number of displayed search and dashboard',
         'template' => 'Install Template',
@@ -287,6 +290,7 @@ return [
             'system_mail' => 'Configure settings when sending mail from the system.',
             'system_mail_from' => 'the mail address from this system. Using this mail address as "from", this system sends users.',
             'system_mail_encryption' => 'Enter the mail encryption protocol format in lower case. (ssl, tls etc)',
+            'test_mail' => 'Send a test email to the destination you entered. <br /> <b>*Be sure to save the above email settings before executing. The settings during input are invalid. </b>',
             'template' => 'If select these templates, install tables, columns and forms.',
             'role_one_user_organization' => 'Please register one or more users or organizations for permission.',
             'default_date_format' => 'Sets the display format for the date and time.',
@@ -812,6 +816,7 @@ return [
             'select_target_table' => 'Select Target Table',
             'select_target_view' => 'Target view',
             'select_import_column_id' => 'Key column when importing',
+            'select_export_column_id' => 'Key column when exporting',
             'select_load_ajax' => 'Narrow down the choices',
             'true_value' => 'Select1 Value',
             'true_label' => 'Select1 Label',
@@ -875,6 +880,7 @@ return [
             'select_target_view' => 'To narrow the data, specify a condition view. Please create the condition view on the custom table setting screen first.',
             'select_import_column_id' => 'When importing data, you can specify custom columns to narrow the data in the selected table. If not set, use id. Please refer to &nbsp;<a href="%s" target="_blank">here<i class="fa fa-external-link"></i></a>&nbsp; for details.',
             'select_import_column_id_key' => 'Change of specification method of data of parent table',
+            'select_export_column_id' => 'When exporting data, you can specify a custom column to output selected table data. If not set, id is output.',
             'true_value' => 'Enter the value to be registered when the first choice is saved.',
             'true_label' => 'Enter the character string to be displayed when the first choice is saved.',
             'false_value' => 'Enter the value to be registered when saving the second choice.',
@@ -1206,11 +1212,13 @@ return [
         'parent_custom_table' => 'Parent Table',
         'child_custom_table' => 'Child Table',
         'parent_import_column_id' => 'Key column when importing',
+        'parent_export_column_id' => 'Key column when exporting',
 
         'help' => [
             'relation_caution' => '<span class="red bold"><i class="fa fa-exclamation-circle"></i> In addition to this screen, there is one more method of setting the association between Exment tables.</span><br />Please be sure to check the <a href="%s" target="_blank">manual</a> and make the appropriate selection before registration.',
             'parent_import_column_id' => 'When importing data, you can specify custom columns to refine the data in the parent table. If not set, use id. Please refer to&nbsp;<a href="%s" target="_blank">here<i class="fa fa-external-link"></i></a>&nbsp;for details.',
-        ]
+            'parent_export_column_id' => 'When exporting data, you can specify a custom column to output parent table data. If not set, id is output.',
+        ],
     ],
 
     'custom_copy' => [
@@ -1336,7 +1344,7 @@ return [
         'view_summary_detail' => 'Display the items of aggregated data',
         'soft_deleted_data' => 'Deleted Data',
         'restore' => 'Restore',
-        
+        'hard_delete' => 'Permanently Delete',
         'import' => [
             'manual_id' => 'Data Import',
             'import_file' => 'Import File',
@@ -1349,7 +1357,7 @@ return [
             'target_column_name' => 'Replacement target column name (alphanumeric characters)',
             'help' => [
                 'description' => 'You can import the data of each table into Exment. <br />Please refer to <a href="%s" target="_blank">here<i class="fa fa-external-link"></i></a> for details such as the procedure.',
-                'custom_table_file' => 'Select the CSV file that you output the template.',
+                'custom_table_file' => 'Select the %s file that you output the template.',
                 'primary_key' => 'Select the field to narrow down the update data.<br />If this field value matches existing data, it will be imported as update data.<br />If matching data does not exist, it will be imported as new data.',
                 'import_plugin' => 'If you want to process the import file independently, select it after uploading the plug-in in advance.',
                 'error_flow' => 'If an error occurs due to incomplete data , select whether to capture normal data.',
@@ -1399,6 +1407,7 @@ return [
             'action_disabled' => 'Operations from the screen are restricted.',
             'restore' => 'Are you sure to restore this item ?',
             'restore_succeeded' => 'Restore succeeded !',
+            'hard_delete' => 'Permanently delete? (This operation cannot be restored)',
         ],
     ],
 
@@ -1544,6 +1553,11 @@ return [
             'table_write' => 'Get, Create, Update, Delete Table',
             'value_read' => 'Get Value',
             'value_write' => 'Get, Create, Update, Delete Value',
+            'notify_read' => 'Get Notify',
+            'notify_write' => 'Create Notify',
+            'workflow_read' => 'Get Workflow',
+            'workflow_execute' => 'Execute Workflow',
+            'plugin' => 'Plugin',
         ],
 
         'errors' => [
