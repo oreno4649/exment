@@ -406,6 +406,8 @@ return [
                 'form_menubutton_edit' => 'フォームのメニューボタン（更新時）',
                 'workflow_action_executing' => 'ワークフロース実行前',
                 'workflow_action_executed' => 'ワークフロース実行後',
+                'notify_executing' => '通知前',
+                'notify_executed' => '通知後',
             ]
         ],
 
@@ -626,6 +628,7 @@ return [
         'work_targets' => '実行可能ユーザー',
         'work_targets_select' => '実行可能ユーザー選択',
         'work_conditions' => 'アクション設定',
+        'boss_target_type' => '上長の判定方法',
         'condition' => '条件',
         'flow_next_type' => '次のステータスへ進む条件',
         'upper_user' => '人以上実行',
@@ -688,6 +691,10 @@ return [
             'action_select' => '前アクションの実行ユーザーが選択',
             'fix' => '事前に設定',
             'boss' => '上長',
+        ],
+        'boss_target_type_options' => [
+            'created_user' => 'データ作成ユーザーの上長',
+            'executed_action_user' => '前アクション実行ユーザーの上長',
         ],
     ],
 
@@ -1453,6 +1460,7 @@ return [
         'header_trigger' => '通知条件設定',
         'header_action' => '通知アクション設定',
         'description' => '特定の条件で、通知を行うための設定を行います。',
+        'notify_name' => '通知名(英数字)',
         'notify_view_name' => '通知表示名',
         'notify_target' => '対象',
         'custom_table_id' => '対象テーブル',

@@ -353,7 +353,6 @@ class TemplateImporter
         if (array_key_exists('custom_columns', $settings) && array_key_exists('custom_tables', $settings)) {
             $custom_columns = array_get($settings, 'custom_columns');
             foreach ($custom_columns as &$custom_column) {
-                
                 // get table name
                 $table_name = array_get($custom_column, 'table_name');
                 // find $settings->custom_tables
