@@ -80,7 +80,6 @@ class ApiTest extends ApiTestBase
                 'updated_at',
                 'created_user_id',
                 'updated_user_id',
-                'label',
             ]);
     }
 
@@ -521,15 +520,15 @@ class ApiTest extends ApiTestBase
                 'user' => 2,
             ]
         ])
-        ->assertStatus(200);
-        
-        $json = json_decode($response->baseResponse->getContent(), true);
-        
-        $this->assertTrue(
-            array_get($json, 'value.text') == $text && 
-            array_get($json, 'value.user') == 2 && 
-            array_get($json, 'created_user_id') == 1 //ADMIN
-        );
+        ->assertStatus(201);
+
+        $this->assertJsonTrue($response, [
+            'value' => [
+                'text' => $text,
+                'user' => 2
+            ],
+            'created_user_id' => "1" //ADMIN
+        ]);
     }
 
     public function testCreateValueWithParent(){
@@ -547,8 +546,8 @@ class ApiTest extends ApiTestBase
                 'user' => 2
             ]
         ])
-        ->assertStatus(201)
-        ->assertJsonFragment([
+        ->assertStatus(201);
+        $this->assertJsonTrue($response, [
             'parent_id' => '5',
             'parent_type' => 'parent_table',
             //TODO: have to check
@@ -679,15 +678,15 @@ class ApiTest extends ApiTestBase
                 'user' => 'user_name'
             ]
         ])
-        ->assertStatus(200);
+        ->assertStatus(201);
         
-        $json = json_decode($response->baseResponse->getContent(), true);
-        
-        $this->assertTrue(
-            array_get($json, 'value.text') == $text && 
-            array_get($json, 'value.user') == 4 && 
-            array_get($json, 'created_user_id') == 1 //ADMIN
-        );
+        $this->assertJsonTrue($response, [
+            'value' => [
+                'text' => $text,
+                'user' => 4
+            ],
+            'created_user_id' => "1" //ADMIN
+        ]);
     }
 
     public function testCreateNoValue(){
@@ -797,24 +796,24 @@ class ApiTest extends ApiTestBase
         $token = $this->getAdminAccessToken([ApiScope::VALUE_WRITE]);
 
         $text = 'test' . date('YmdHis') . '_update';
-        $response = $this->withHeaders([
+
+        $response =$this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->put(admin_urls('api', 'data', 'custom_value_edit', $data->id), [
             'value' => [
                 'text' => $text,
                 'user' => 3,
             ]
-        ])
-            ->assertStatus(200);
-            
-        $json = json_decode($response->baseResponse->getContent(), true);
-        
-        $this->assertTrue(
-            array_get($json, 'value.text') == $text && 
-            array_get($json, 'value.user') == 3 && 
-            array_get($json, 'value.index_text') == $index_text && 
-            array_get($json, 'updated_user_id') == 1 //ADMIN
-        );
+        ])->assertStatus(200);
+
+        $this->assertJsonTrue($response, [
+            'value' => [
+                'text' => $text,
+                'user' => 3,
+                'index_text' => $index_text,
+            ],
+            'updated_user_id' => '1' //ADMIN
+        ]);
     }
 
     public function testUpdateValueWithFindKey(){
@@ -826,6 +825,7 @@ class ApiTest extends ApiTestBase
         $token = $this->getUser1AccessToken([ApiScope::VALUE_WRITE]);
 
         $text = 'test' . date('YmdHis') . '_update';
+        
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->put(admin_urls('api', 'data', 'custom_value_edit', $data->id), [
@@ -836,16 +836,16 @@ class ApiTest extends ApiTestBase
                 'user' => 'user_code'
             ]
         ])
-            ->assertStatus(200);
-            
-        $json = json_decode($response->baseResponse->getContent(), true);
-        
-        $this->assertTrue(
-            array_get($json, 'value.text') == $old_text && 
-            array_get($json, 'value.user') == 8 && 
-            array_get($json, 'value.index_text') == $index_text && 
-            array_get($json, 'updated_user_id') == 2 //ADMIN
-        );
+        ->assertStatus(200);
+
+        $this->assertJsonTrue($response, [
+            'value' => [
+                'text' => $old_text,
+                'user' => 8,
+                'index_text' => $index_text,
+            ],
+            'updated_user_id' => '2' //ADMIN
+        ]);
     }
 
     public function testUpdateValueWithParent(){
@@ -863,14 +863,14 @@ class ApiTest extends ApiTestBase
                 'text' => $text,
             ]
         ])
-        ->assertStatus(200)
-        ->assertJsonFragment([
+        ->assertStatus(200);
+
+        $this->assertJsonTrue($response, [
             'parent_id' => '6',
             'parent_type' => 'parent_table',
-            //TODO: have to check
-            // 'value' => [
-            //     'text' => $text,
-            // ],
+            'value' => [
+                'text' => $text,
+            ],
             'updated_user_id' => '2' //ADMIN
         ]);
     }
@@ -881,7 +881,7 @@ class ApiTest extends ApiTestBase
 
         $token = $this->getUser1AccessToken([ApiScope::VALUE_WRITE]);
 
-        $this->withHeaders([
+        $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->put(admin_urls('api', 'data', 'child_table', $data->id), [
             'value' => [
@@ -889,8 +889,9 @@ class ApiTest extends ApiTestBase
                 'parent_type' => 'parent_table',
             ]
         ])
-            ->assertStatus(200)
-            ->assertJsonFragment([
+        ->assertStatus(200);
+        
+        $this->assertJsonTrue($response, [
                 'parent_id' => '8',
                 'parent_type' => 'parent_table',
                 'value' => $data->value,
@@ -905,7 +906,8 @@ class ApiTest extends ApiTestBase
         $token = $this->getUser1AccessToken([ApiScope::VALUE_WRITE]);
 
         $text = 'test' . date('YmdHis') . '_update';
-        $this->withHeaders([
+        
+        $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->put(admin_urls('api', 'data', 'child_table', $data->id), [
             'value' => [
@@ -914,16 +916,16 @@ class ApiTest extends ApiTestBase
                 'text' => $text,
             ]
         ])
-            ->assertStatus(200)
-            ->assertJsonFragment([
-                'parent_id' => '7',
-                'parent_type' => 'parent_table',
-                //TODO: have to check
-                // 'value' => [
-                //     'text' => $text,
-                // ],
-                'updated_user_id' => '2' //ADMIN
-            ]);
+        ->assertStatus(200);
+
+        $this->assertJsonTrue($response, [
+            'parent_id' => '7',
+            'parent_type' => 'parent_table',
+            'value' => [
+                'text' => $text,
+            ],
+            'updated_user_id' => '2' //ADMIN
+        ]);
     }
 
     public function testUpdateValueNotFound(){
@@ -967,15 +969,22 @@ class ApiTest extends ApiTestBase
     public function testDeleteValue(){
         $token = $this->getAdminAccessToken([ApiScope::VALUE_WRITE]);
 
-        $data = CustomTable::getEloquent('custom_value_edit')->getValueModel()->find(80);
+        $id = 80;
+        for($i = 0; $i < 100; $i++){
+            $data = CustomTable::getEloquent('roletest_custom_value_edit')->getValueModel()->find($id + $i);
+            if(isset($data)){
+                $id += $i;
+                break;
+            }
+        }
         $this->assertTrue(isset($data));
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->delete(admin_urls('api', 'data', 'custom_value_edit', 80))
+        ])->delete(admin_urls('api', 'data', 'roletest_custom_value_edit', $id))
             ->assertStatus(204);
 
-        $data = CustomTable::getEloquent('custom_value_edit')->getValueModel()->find(80);
+        $data = CustomTable::getEloquent('roletest_custom_value_edit')->getValueModel()->find($id);
         $this->assertTrue(!isset($data));
     }
 
@@ -1883,7 +1892,8 @@ class ApiTest extends ApiTestBase
         $token = $this->getUserAccessToken('dev-userB', 'dev-userB', [ApiScope::WORKFLOW_EXECUTE]);
 
         $comment = 'comment' . date('YmdHis');
-        $this->withHeaders([
+        
+        $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'custom_value_edit_all', '1000', 'value'), [
             'workflow_action_id' => 2,
@@ -2094,13 +2104,28 @@ class ApiTest extends ApiTestBase
                 'code' => ErrorCode::WRONG_SCOPE
             ]);
     }
+    
+    /**
+     * Json inner fragment
+     *
+     * @return void
+     */
+    protected function assertJsonTrue($response, $arrays){
+        $json = json_decode($response->baseResponse->getContent(), true);
+        $this->assertJsonTrueFunc([], $arrays, $json);
+    }
 
-    protected function getJsonAssertValue($keys, $value){
-        $json = [];
-        foreach($keys as $key){
-            $json[$key] = array_get($value, $key);
+    protected function assertJsonTrueFunc($keys, $arrays, $json){
+        foreach($arrays as $k => $v){
+            $copykeys = $keys;
+            $copykeys[] = $k;
+            if(is_array($v)){
+                $this->assertJsonTrueFunc($copykeys, $v, $json);
+            }
+            else{
+                $checkKey = implode('.', $copykeys);
+                $this->assertTrue(array_get($json, $checkKey) == $v);
+            }
         }
-
-        return $json;
     }
 }
