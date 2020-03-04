@@ -5,6 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 use Exceedone\Exment\Database\ExtendedBlueprint;
 
+/**
+ * Wrong mistake name...
+ */
 class AddOptionsToFilters extends Migration
 {
     /**
