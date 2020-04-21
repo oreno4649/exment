@@ -60,10 +60,10 @@ class WorkflowController extends AdminControllerBase
     {
         $grid = new Grid(new Workflow);
         $grid->column('id', exmtrans("common.id"));
-        $grid->column('workflow_type', exmtrans("workflow.workflow_type"))->display(function ($v) {
+        $grid->column('workflow_type', exmtrans("workflow.workflow_type"))->displayEscape(function ($v) {
             return WorkflowType::getEnum($v)->transKey('workflow.workflow_type_options');
         });
-        $grid->column('workflow_tables', exmtrans("custom_table.table"))->display(function ($v) {
+        $grid->column('workflow_tables', exmtrans("custom_table.table"))->displayEscape(function ($v) {
             if (is_null($custom_table = $this->getDesignatedTable())) {
                 return null;
             }
@@ -71,7 +71,7 @@ class WorkflowController extends AdminControllerBase
             return $custom_table->table_view_name;
         });
         $grid->column('workflow_view_name', exmtrans("workflow.workflow_view_name"))->sortable();
-        $grid->column('workflow_statuses', exmtrans("workflow.status_name"))->display(function ($value) {
+        $grid->column('workflow_statuses', exmtrans("workflow.status_name"))->displayEscape(function ($value) {
             return $this->getStatusesString();
         });
         $grid->column('setting_completed_flg', exmtrans("workflow.setting_completed_flg"))->display(function ($value) {
@@ -83,7 +83,7 @@ class WorkflowController extends AdminControllerBase
         });
         
         $grid->disableExport();
-        if (!\Exment::user()->hasPermission(Permission::SYSTEM)) {
+        if (!\Exment::user()->hasPermission(Permission::WORKFLOW)) {
             $grid->disableCreateButton();
         }
 
@@ -294,7 +294,12 @@ class WorkflowController extends AdminControllerBase
             $form->display('custom_table_id', exmtrans('custom_table.table'))
                 ->default($custom_table->table_view_name ?? null);
         }
-        
+
+        $form->switchbool('workflow_edit_flg', exmtrans("workflow.workflow_edit_flg"))
+            ->help(exmtrans("workflow.help.workflow_edit_flg"))
+            ->default("0")
+        ;
+
         $field = $form->hasManyTable('workflow_actions', exmtrans("workflow.workflow_actions"), function ($form) use ($id, $workflow) {
             $form->workflowStatusSelects('status_from', exmtrans("workflow.status_name"))
                 ->config('allowClear', false)
@@ -1002,6 +1007,11 @@ class WorkflowController extends AdminControllerBase
                 });
 
                 $hasManyTable->render();
+
+                $form->radio("condition_join_{$index}", exmtrans("condition.condition_join"))
+                    ->options(exmtrans("condition.condition_join_options"))
+                    ->attribute(['data-filter' => json_encode(['key' => "enabled_flg_{$index}", 'value' => '1'])])
+                    ->default(array_get($work_condition, "condition_join") ?? 'and');
             }
         }
 

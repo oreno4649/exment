@@ -15,7 +15,6 @@ use Exceedone\Exment\Model\CustomRelation;
 use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Model\CustomValueAuthoritable;
 use Exceedone\Exment\Model\CustomView;
-use Exceedone\Exment\Model\CustomForm;
 use Exceedone\Exment\Model\Notify;
 use Exceedone\Exment\Model\File as ExmentFile;
 use Exceedone\Exment\Model\WorkflowAction;
@@ -48,11 +47,11 @@ class CustomValueController extends AdminControllerTableBase
      * CustomValueController constructor.
      * @param Request $request
      */
-    public function __construct(CustomTable $custom_table, Request $request)
+    public function __construct(?CustomTable $custom_table, Request $request)
     {
         parent::__construct($custom_table, $request);
 
-        if (!isset($this->custom_table)) {
+        if (!$this->custom_table) {
             return;
         }
 
@@ -583,12 +582,13 @@ class CustomValueController extends AdminControllerTableBase
         return $this->restore($request, $tableKey, $request->get('id'));
     }
 
-    protected function restore(Request $request, $tableKey, $id){
+    protected function restore(Request $request, $tableKey, $id)
+    {
         $ids = stringToArray($id);
 
         \DB::beginTransaction();
-        try{
-            foreach($ids as $id){
+        try {
+            foreach ($ids as $id) {
                 // get customvalue
                 $custom_value = CustomTable::getEloquent($tableKey)->getValueModel($id, true);
                 if (!isset($custom_value)) {
@@ -596,7 +596,7 @@ class CustomValueController extends AdminControllerTableBase
                     return getAjaxResponse(false);
                 }
 
-                if(!$custom_value->trashed()){
+                if (!$custom_value->trashed()) {
                     continue;
                 }
                 
@@ -720,7 +720,7 @@ class CustomValueController extends AdminControllerTableBase
             return back();
         }
 
-        $this->setFormViewInfo($request);
+        $this->setFormViewInfo($request, $id);
  
         // id set, checking as update.
         // check for update
@@ -797,12 +797,12 @@ class CustomValueController extends AdminControllerTableBase
      * set view and form info.
      * use session etc
      */
-    protected function setFormViewInfo(Request $request)
+    protected function setFormViewInfo(Request $request, $id = null)
     {
         // set view
         $this->custom_view = CustomView::getDefault($this->custom_table);
 
         // set form
-        $this->custom_form = CustomForm::getDefault($this->custom_table);
+        $this->custom_form = $this->custom_table->getPriorityForm($id);
     }
 }

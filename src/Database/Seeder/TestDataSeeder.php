@@ -2,34 +2,34 @@
 
 namespace Exceedone\Exment\Database\Seeder;
 
-use Illuminate\Database\Seeder;
-use Exceedone\Exment\Model\Define;
-use Exceedone\Exment\Model\CustomRelation;
-use Exceedone\Exment\Model\System;
-use Exceedone\Exment\Model\Workflow;
-use Exceedone\Exment\Model\CustomTable;
+use Exceedone\Exment\Enums\ColumnType;
+use Exceedone\Exment\Enums\ConditionType;
+use Exceedone\Exment\Enums\ConditionTypeDetail;
+use Exceedone\Exment\Enums\CustomValueAutoShare;
+use Exceedone\Exment\Enums\FilterOption;
+use Exceedone\Exment\Enums\Permission;
+use Exceedone\Exment\Enums\ViewKindType;
+use Exceedone\Exment\Enums\ViewType;
+use Exceedone\Exment\Model\ApiClientRepository;
+use Exceedone\Exment\Model\Condition;
 use Exceedone\Exment\Model\CustomColumn;
-use Exceedone\Exment\Model\CustomViewColumn;
-use Exceedone\Exment\Model\CustomViewFilter;
 use Exceedone\Exment\Model\CustomForm;
 use Exceedone\Exment\Model\CustomFormPriority;
+use Exceedone\Exment\Model\CustomRelation;
+use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Model\CustomView;
-use Exceedone\Exment\Model\Condition;
+use Exceedone\Exment\Model\CustomViewColumn;
+use Exceedone\Exment\Model\CustomViewFilter;
+use Exceedone\Exment\Model\Define;
 use Exceedone\Exment\Model\LoginUser;
-use Exceedone\Exment\Model\Notify;
 use Exceedone\Exment\Model\Menu;
+use Exceedone\Exment\Model\Notify;
 use Exceedone\Exment\Model\NotifyNavbar;
 use Exceedone\Exment\Model\RoleGroupPermission;
 use Exceedone\Exment\Model\RoleGroupUserOrganization;
-use Exceedone\Exment\Enums\CustomValueAutoShare;
-use Exceedone\Exment\Enums\ColumnType;
-use Exceedone\Exment\Enums\Permission;
-use Exceedone\Exment\Enums\ConditionType;
-use Exceedone\Exment\Enums\ConditionTypeDetail;
-use Exceedone\Exment\Enums\ViewType;
-use Exceedone\Exment\Enums\ViewKindType;
-use Exceedone\Exment\Enums\FilterOption;
-use Laravel\Passport\ClientRepository;
+use Exceedone\Exment\Model\System;
+use Exceedone\Exment\Model\Workflow;
+use Illuminate\Database\Seeder;
 
 class TestDataSeeder extends Seeder
 {
@@ -57,7 +57,6 @@ class TestDataSeeder extends Seeder
         $this->createApiSetting();
     }
 
-    
     protected function createSystem()
     {
         // create system data
@@ -97,10 +96,10 @@ class TestDataSeeder extends Seeder
 
         foreach ($values as $type => $typevalue) {
             $custom_table = CustomTable::getEloquent($type);
-            if(!isset($custom_table)){
+            if (!isset($custom_table)) {
                 continue;
             }
-                
+            
             foreach ($typevalue as $user_key => &$user) {
                 $model = $custom_table->getValueModel();
                 foreach ($user['value'] as $key => $value) {
@@ -155,7 +154,8 @@ class TestDataSeeder extends Seeder
         $relation->save();
     }
 
-    protected function createMenu(){
+    protected function createMenu()
+    {
         // create parent id
         $menu = Menu::create([
             'parent_id' => 0,
@@ -229,10 +229,12 @@ class TestDataSeeder extends Seeder
             ['column_name' => 'index_text', 'column_view_name' => 'index_text', 'column_type' => ColumnType::TEXT, 'options' => ['index_enabled' => '1']],
             ['column_name' => 'odd_even', 'column_view_name' => 'odd_even', 'column_type' => ColumnType::TEXT, 'options' => ['index_enabled' => '1']],
             ['column_name' => 'multiples_of_3', 'column_view_name' => 'multiples_of_3', 'column_type' => ColumnType::YESNO, 'options' => ['index_enabled' => '1']],
+            ['column_name' => 'file', 'column_view_name' => 'file', 'column_type' => ColumnType::FILE, 'options' => []],
+            ['column_name' => 'date', 'column_view_name' => 'date', 'column_type' => ColumnType::DATE, 'options' => []],
         ];
 
         $custom_columns = [];
-        foreach($columns as $column){
+        foreach ($columns as $column) {
             $custom_column = new CustomColumn;
             $custom_column->custom_table_id = $custom_table->id;
             $custom_column->column_name = $column['column_name'];
@@ -281,7 +283,6 @@ class TestDataSeeder extends Seeder
         }
 
         $this->createView($custom_table, $custom_columns);
-        
         $notify_id = $this->createNotify($custom_table);
 
         System::custom_value_save_autoshare(CustomValueAutoShare::USER_ORGANIZATION);
@@ -300,6 +301,7 @@ class TestDataSeeder extends Seeder
                 $custom_value->setValue("index_text", 'index_'.$id.'_'.$i);
                 $custom_value->setValue("odd_even", ($i % 2 == 0 ? 'even' : 'odd'));
                 $custom_value->setValue("multiples_of_3", ($i % 3 == 0 ? 1 : 0));
+                $custom_value->setValue("date", \Carbon\Carbon::now());
                 $custom_value->created_user_id = $id;
                 $custom_value->updated_user_id = $id;
     
@@ -359,7 +361,6 @@ class TestDataSeeder extends Seeder
         $notify->save();
         return $notify->id;
     }
-    
     /**
      * Create View
      *
@@ -410,7 +411,7 @@ class TestDataSeeder extends Seeder
                             'odd'
                         );
                     }
-                } elseif ($custom_column->column_type == ColumnType::YESNO)  {
+                } elseif ($custom_column->column_type == ColumnType::YESNO) {
                     $this->createCustomViewFilter(
                         $custom_view->id,
                         ConditionType::COLUMN,
@@ -419,7 +420,7 @@ class TestDataSeeder extends Seeder
                         FilterOption::EQ,
                         1
                     );
-                } elseif ($custom_column->column_type == ColumnType::USER)  {
+                } elseif ($custom_column->column_type == ColumnType::USER) {
                     $this->createCustomViewFilter(
                         $custom_view->id,
                         ConditionType::COLUMN,
@@ -433,10 +434,10 @@ class TestDataSeeder extends Seeder
         }
 
         // workflow view
-
     }
 
-    protected function createCustomViewFilter($custom_view_id, $view_column_type, $view_column_table_id, $view_column_target_id, $view_filter_condition, $view_filter_condition_value_text){
+    protected function createCustomViewFilter($custom_view_id, $view_column_type, $view_column_table_id, $view_column_target_id, $view_filter_condition, $view_filter_condition_value_text)
+    {
         $custom_view_filter = new CustomViewFilter;
         $custom_view_filter->custom_view_id = $custom_view_id;
         $custom_view_filter->view_column_type = $view_column_type;
@@ -447,7 +448,8 @@ class TestDataSeeder extends Seeder
         $custom_view_filter->save();
     }
     
-    protected function createSystemViewColumn($custom_view_id, $view_column_table_id, $order){
+    protected function createSystemViewColumn($custom_view_id, $view_column_table_id, $order)
+    {
         $custom_view_column = new CustomViewColumn;
         $custom_view_column->custom_view_id = $custom_view_id;
         $custom_view_column->view_column_type = ConditionType::SYSTEM;
@@ -457,7 +459,8 @@ class TestDataSeeder extends Seeder
         $custom_view_column->save();
     }
     
-    protected function createViewColumn($custom_view_id, $view_column_table_id, $view_column_target_id, $order){
+    protected function createViewColumn($custom_view_id, $view_column_table_id, $view_column_target_id, $order)
+    {
         $custom_view_column = new CustomViewColumn;
         $custom_view_column->custom_view_id = $custom_view_id;
         $custom_view_column->view_column_type = ConditionType::COLUMN;
@@ -486,12 +489,19 @@ class TestDataSeeder extends Seeder
         $notify_navbar->save();
     }
     
-    protected function createApiSetting(){
+    protected function createApiSetting()
+    {
         // init api
-        $clientRepository = new ClientRepository;
+        $clientRepository = new ApiClientRepository;
         $client = $clientRepository->createPasswordGrantClient(
             1,
             Define::API_FEATURE_TEST,
+            'http://localhost'
+        );
+        
+        $clientRepository->createApiKey(
+            1,
+            Define::API_FEATURE_TEST_APIKEY,
             'http://localhost'
         );
     }

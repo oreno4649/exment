@@ -10,8 +10,23 @@ use Exceedone\Exment\Model\WorkflowValueAuthority;
 
 class ApiTest extends ApiTestBase
 {
+    private const FILE_BASE64 = 'dGVzdA=='; //"test" text file.
+
     public function testOkAuthorize(){
         $response = $this->getPasswordToken('admin', 'adminadmin');
+        
+        $response
+            ->assertStatus(200)
+            ->assertJsonStructure([
+                'token_type',
+                'expires_in',
+                'access_token',
+                'refresh_token',
+            ]);
+    }
+
+    public function testOkAuthorizeApiKey(){
+        $response = $this->getApiKey();
         
         $response
             ->assertStatus(200)
@@ -47,6 +62,18 @@ class ApiTest extends ApiTestBase
             ]);
     }
 
+    public function testGetVersionApiKey(){
+        $token = $this->getAdminAccessTokenAsApiKey();
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'version'))
+            ->assertStatus(200)
+            ->assertJson([
+                'version' => getExmentCurrentVersion()
+            ]);
+    }
+
     public function testWrongScopeMe(){
         $token = $this->getAdminAccessToken([ApiScope::VALUE_READ]);
 
@@ -61,6 +88,42 @@ class ApiTest extends ApiTestBase
 
     public function testGetMe(){
         $token = $this->getAdminAccessToken([ApiScope::ME]);
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'me'))
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'value' => [
+                    "email"=> "admin@admin.foobar.test",
+                    "user_code"=> "admin",
+                    "user_name"=> "admin"
+                ]
+            ])
+            ->assertJsonStructure([
+                'id',
+                'suuid',
+                'created_at',
+                'updated_at',
+                'created_user_id',
+                'updated_user_id',
+            ]);
+    }
+
+    public function testWrongScopeMeApiKey(){
+        $token = $this->getAdminAccessTokenAsApiKey([ApiScope::VALUE_READ]);
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'me'))
+            ->assertStatus(403)
+            ->assertJsonFragment([
+                'code' => ErrorCode::WRONG_SCOPE
+            ]);
+    }
+
+    public function testGetMeApiKey(){
+        $token = $this->getAdminAccessTokenAsApiKey([ApiScope::ME]);
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
@@ -329,7 +392,7 @@ class ApiTest extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'column', 9999))
+        ])->get(admin_urls('api', 'column', 999999999))
             ->assertStatus(400)
             ->assertJsonFragment([
                 'code' => ErrorCode::DATA_NOT_FOUND
@@ -357,6 +420,56 @@ class ApiTest extends ApiTestBase
         ])->get(admin_urls('api', 'column', $custom_column->id))
             ->assertStatus(403);
     }
+
+
+    public function testGetColumnByName(){
+        $token = $this->getAdminAccessToken([ApiScope::TABLE_READ]);
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'table', 'information', 'column', 'title'))
+            ->assertStatus(200)
+            ->assertJsonFragment([
+                'column_name' => 'title',
+                'column_view_name' => 'タイトル',
+                'column_type' => 'text',
+            ]);
+    }
+
+    public function testNotFoundGetColumnByName(){
+        $token = $this->getAdminAccessToken([ApiScope::TABLE_READ]);
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+            ])->get(admin_urls('api', 'table', 'information', 'column', 'foobar'))
+            ->assertStatus(400)
+            ->assertJsonFragment([
+                'code' => ErrorCode::DATA_NOT_FOUND
+            ]);
+    }
+
+    public function testWrongScopeGetColumnByName(){
+        $token = $this->getAdminAccessToken([ApiScope::WORKFLOW_READ]);
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'table', 'information', 'column', 'title'))
+            ->assertStatus(403)
+            ->assertJsonFragment([
+                'code' => ErrorCode::WRONG_SCOPE
+            ]);
+    }
+
+    public function testDenyGetColumnByName(){
+        $token = $this->getUser2AccessToken([ApiScope::TABLE_READ]);
+        
+        // get no_permission table's column.
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'table', 'no_permission', 'column', 'text'))
+            ->assertStatus(403);
+    }
+
 
     public function testGetValues(){
         $token = $this->getAdminAccessToken([ApiScope::VALUE_READ]);
@@ -398,7 +511,7 @@ class ApiTest extends ApiTestBase
         $json = json_decode($response->baseResponse->getContent(), true);
         $data = array_get($json, 'data');
         $value = array_get($data[0], 'value');
-        $this->assertTrue(array_get($value, 'user') == '9');
+        $this->assertMatch(array_get($value, 'user'), '9');
     }
 
     public function testGetValuesByMultiId(){
@@ -592,7 +705,7 @@ class ApiTest extends ApiTestBase
         ])->post(admin_urls('api', 'data', 'custom_value_edit'), ['value' => $values])
             ->assertStatus(200);
         $count = CustomTable::getEloquent('custom_value_edit')->getValueModel()->count();
-        $this->assertTrue(($pre_count + 3) == $count);
+        $this->assertMatch(($pre_count + 3), $count);
     }
 
     public function testCreateMultipleValueWithParent(){
@@ -613,7 +726,7 @@ class ApiTest extends ApiTestBase
             ->assertStatus(200);
         $count = getModelName('parent_table')::find(4)
             ->getChildrenValues('child_table')->count();
-        $this->assertTrue(($pre_count + 3) == $count);
+        $this->assertMatch(($pre_count + 3), $count);
     }
 
     public function testCreateMultipleValueWrongParent(){
@@ -660,7 +773,7 @@ class ApiTest extends ApiTestBase
         $count = $parents->sum(function($parent) {
             return $parent->getChildrenValues('child_table')->count();
         });
-        $this->assertTrue(($pre_count + 3) == $count);
+        $this->assertMatch(($pre_count + 3), $count);
     }
 
     public function testCreateValueWithFindkey(){
@@ -971,7 +1084,7 @@ class ApiTest extends ApiTestBase
 
         $id = 80;
         for($i = 0; $i < 100; $i++){
-            $data = CustomTable::getEloquent('roletest_custom_value_edit')->getValueModel()->find($id + $i);
+            $data = CustomTable::getEloquent('custom_value_edit')->getValueModel()->find($id + $i);
             if(isset($data)){
                 $id += $i;
                 break;
@@ -981,10 +1094,10 @@ class ApiTest extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->delete(admin_urls('api', 'data', 'roletest_custom_value_edit', $id))
+        ])->delete(admin_urls('api', 'data', 'custom_value_edit', $id))
             ->assertStatus(204);
 
-        $data = CustomTable::getEloquent('roletest_custom_value_edit')->getValueModel()->find($id);
+        $data = CustomTable::getEloquent('custom_value_edit')->getValueModel()->find($id);
         $this->assertTrue(!isset($data));
     }
 
@@ -1223,6 +1336,268 @@ class ApiTest extends ApiTestBase
                 'code' => ErrorCode::WRONG_SCOPE
             ]);
     }
+
+
+
+    
+    
+    // file, document, attachment -------------------------------------
+    // test file column
+    public function testPostFile(){
+        $token = $this->getAdminAccessToken([ApiScope::VALUE_WRITE]);
+
+        $text = 'test' . date('YmdHis');
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->post(admin_urls('api', 'data', 'custom_value_edit'), [
+            'value' => [
+                'text' => $text,
+                'user' => 2,
+                'file' => [
+                    'name' => 'test.txt',
+                    'base64' => static::FILE_BASE64,
+                ],
+            ]
+        ])
+        ->assertStatus(201);
+
+        $this->assertJsonTrue($response, [
+            'value' => [
+                'text' => $text,
+                'user' => 2
+            ],
+            'created_user_id' => "1" //ADMIN
+        ]);
+
+        $this->assertFileUrl($token, $response);
+    }
+    
+    public function testPutFile(){
+        $token = $this->getUser1AccessToken([ApiScope::VALUE_WRITE]);
+
+        $text = 'test' . date('YmdHis');
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->put(admin_urls('api', 'data', 'custom_value_edit', 1), [
+            'value' => [
+                'file' => [
+                    'name' => 'test.txt',
+                    'base64' => static::FILE_BASE64,
+                ],
+            ]
+        ])
+        ->assertStatus(200);
+
+        $this->assertFileUrl($token, $response);
+    }
+
+    public function testPostDocument(){
+        $token = $this->getAdminAccessToken([ApiScope::VALUE_WRITE]);
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->post(admin_urls('api', 'document', 'custom_value_edit', 1), [
+            'name' => 'test1.txt',
+            'base64' => static::FILE_BASE64, //"test" text file.
+        ])
+        ->assertStatus(201);
+
+        $json = json_decode($response->baseResponse->getContent(), true);
+        $this->assertTrue(array_has($json, 'url'));
+        $this->assertTrue(array_has($json, 'created_at'));
+        $this->assertTrue(array_has($json, 'created_user_id'));
+        $this->assertMatch(array_get($json, 'name'), 'test1.txt');
+    }
+
+    public function testGetDocument(){
+        $token = $this->getAdminAccessToken([ApiScope::VALUE_READ]);
+
+        $custom_value = CustomTable::getEloquent('custom_value_edit')->getValueModel(1);
+        $document = $custom_value->getDocuments()->first();
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'document', 'custom_value_edit', 1))
+        ->assertStatus(200);
+        
+        $json = json_decode($response->baseResponse->getContent(), true);
+        $data = collect(array_get($json, 'data'))->first();
+        
+        $this->assertMatch(array_get($data, 'url'), $document->url);
+        $this->assertMatch(array_get($data, 'api_url'), $document->api_url);
+        $this->assertMatch(array_get($data, 'name'), $document->label);
+        $this->assertMatch(array_get($data, 'created_at'), $document->created_at->__toString());
+        $this->assertMatch(array_get($data, 'created_user_id'), $document->created_user_id);
+    }
+
+    public function testDownloadFile(){
+        $token = $this->getAdminAccessToken([ApiScope::VALUE_READ]);
+
+        $custom_value = CustomTable::getEloquent('custom_value_edit')->getValueModel(1);
+        $document = $custom_value->getDocuments()->first();
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'files', $document->file_uuid))
+        ->assertStatus(200);
+
+        $file = $response->baseResponse->getContent();
+
+        $this->assertMatch($file, 'test');
+    }
+
+    public function testDownloadFileJson(){
+        $token = $this->getAdminAccessToken([ApiScope::VALUE_READ]);
+
+        $custom_value = CustomTable::getEloquent('custom_value_edit')->getValueModel(1);
+        $document = $custom_value->getDocuments()->first();
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'files', $document->file_uuid . '?base64=1'))
+        ->assertStatus(200);
+        
+        $json = json_decode($response->baseResponse->getContent(), true);
+
+        $this->assertMatch(array_get($json, 'name'), $document->label);
+        $this->assertMatch(array_get($json, 'base64'), base64_encode('test'));
+    }
+
+    public function testNoPermissionCreateDocument(){
+        /// check not permission by user
+        $token = $this->getUser2AccessToken([ApiScope::VALUE_WRITE]);
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'document', 'custom_value_edit', 1))
+            ->assertStatus(403)
+            ->assertJsonFragment([
+                'code' => ErrorCode::PERMISSION_DENY
+            ]);
+    }
+
+    public function testNoPermissionGetDocuments(){
+        /// check not permission by user
+        $token = $this->getUser2AccessToken([ApiScope::VALUE_WRITE]);
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'document', 'custom_value_edit', 1))
+            ->assertStatus(403)
+            ->assertJsonFragment([
+                'code' => ErrorCode::PERMISSION_DENY
+            ]);
+    }
+
+    public function testNoPermissionDownloadFile(){
+        /// check not permission by user
+        $token = $this->getUser2AccessToken([ApiScope::VALUE_WRITE]);
+
+        $custom_value = CustomTable::getEloquent('custom_value_edit')->getValueModel(1);
+        $document = $custom_value->getDocuments()->first();
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get($document->api_url)
+            ->assertStatus(403)
+            ->assertJsonFragment([
+                'code' => ErrorCode::PERMISSION_DENY
+            ]);
+    }
+
+    public function testNoPermissionDeleteFile(){
+        /// check not permission by user
+        $token = $this->getUser2AccessToken([ApiScope::VALUE_WRITE]);
+
+        $custom_value = CustomTable::getEloquent('custom_value_edit')->getValueModel(1);
+        $document = $custom_value->getDocuments()->first();
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->delete($document->api_url)
+            ->assertStatus(403)
+            ->assertJsonFragment([
+                'code' => ErrorCode::PERMISSION_DENY
+            ]);
+    }
+
+    public function testWrongScopeCreateDocument(){
+        /// check not permission by user
+        $token = $this->getAdminAccessToken([ApiScope::VALUE_READ]);
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->post(admin_urls('api', 'document', 'custom_value_edit', 1), [
+            'name' => 'test1.txt',
+            'base64' => static::FILE_BASE64, //"test" text file.
+        ])
+            ->assertStatus(403)
+            ->assertJsonFragment([
+                'code' => ErrorCode::WRONG_SCOPE
+            ]);
+    }
+
+    public function testWrongScopeGetDocuments(){
+        /// check not permission by user
+        $token = $this->getAdminAccessToken([ApiScope::ME]);
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'document', 'custom_value_edit', 1))
+            ->assertStatus(403)
+            ->assertJsonFragment([
+                'code' => ErrorCode::WRONG_SCOPE
+            ]);
+    }
+
+    public function testWrongScopeDownloadFile(){
+        /// check not permission by user
+        $token = $this->getAdminAccessToken([ApiScope::ME]);
+
+        $custom_value = CustomTable::getEloquent('custom_value_edit')->getValueModel(1);
+        $document = $custom_value->getDocuments()->first();
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get($document->api_url)
+            ->assertStatus(403)
+            ->assertJsonFragment([
+                'code' => ErrorCode::WRONG_SCOPE
+            ]);
+    }
+
+    public function testWrongScopeDeleteFile(){
+        /// check not permission by user
+        $token = $this->getAdminAccessToken([ApiScope::VALUE_READ]);
+
+        $custom_value = CustomTable::getEloquent('custom_value_edit')->getValueModel(1);
+        $document = $custom_value->getDocuments()->first();
+
+        $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->delete($document->api_url)
+            ->assertStatus(403)
+            ->assertJsonFragment([
+                'code' => ErrorCode::WRONG_SCOPE
+            ]);
+    }
+
+    public function testDeleteFile(){
+        $token = $this->getAdminAccessToken([ApiScope::VALUE_WRITE]);
+
+        $custom_value = CustomTable::getEloquent('custom_value_edit')->getValueModel(1);
+        $document = $custom_value->getDocuments()->first();
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->delete($document->api_url)
+            ->assertStatus(204);
+    }
+
+
+
+
+
 
     // post notify -------------------------------------
 
@@ -2105,27 +2480,43 @@ class ApiTest extends ApiTestBase
             ]);
     }
     
-    /**
-     * Json inner fragment
-     *
-     * @return void
-     */
-    protected function assertJsonTrue($response, $arrays){
+    protected function assertFileUrl($token, $response){
         $json = json_decode($response->baseResponse->getContent(), true);
-        $this->assertJsonTrueFunc([], $arrays, $json);
-    }
+        $id = array_get($json, 'id');
 
-    protected function assertJsonTrueFunc($keys, $arrays, $json){
-        foreach($arrays as $k => $v){
-            $copykeys = $keys;
-            $copykeys[] = $k;
-            if(is_array($v)){
-                $this->assertJsonTrueFunc($copykeys, $v, $json);
-            }
-            else{
-                $checkKey = implode('.', $copykeys);
-                $this->assertTrue(array_get($json, $checkKey) == $v);
-            }
-        }
+        // get file url as uuid
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'data', 'custom_value_edit', $id . '?valuetype=text'))
+        ->assertStatus(200);
+        $json = json_decode($response->baseResponse->getContent(), true);
+        $url = array_get($json, 'value.file');
+        $this->assertTrue(isset($url));
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get($url);
+
+        $file = $response->baseResponse->getContent();
+
+        $this->assertMatch($file, 'test');
+
+
+        // get file url as tableKey and filename
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'data', 'custom_value_edit', $id))
+        ->assertStatus(200);
+        $json = json_decode($response->baseResponse->getContent(), true);
+        $path = array_get($json, 'value.file');
+        $this->assertTrue(isset($path));
+
+        $response = $this->withHeaders([
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'files', str_replace("\\", "/", $path)));
+
+        $file = $response->baseResponse->getContent();
+
+        $this->assertMatch($file, 'test');
     }
 }

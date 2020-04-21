@@ -4,7 +4,9 @@ namespace Exceedone\Exment\Controllers;
 
 use Illuminate\Http\Request;
 use Exceedone\Exment\Enums\ErrorCode;
+use Exceedone\Exment\Enums\Permission;
 use Exceedone\Exment\Model\CustomTable;
+use Exceedone\Exment\Model\CustomColumn;
 
 /**
  * Api about target table
@@ -20,7 +22,9 @@ trait ApiTrait
     protected function getErrorMessages($validator)
     {
         $errors = [];
-        foreach ($validator->errors()->messages() as $key => $message) {
+        foreach ($validator->getMessages() as $key => $message) {
+            // remove "value." key
+            $key = str_replace("value.", "", $key);
             if (is_array($message)) {
                 $errors[$key] = $message[0];
             } else {
@@ -28,6 +32,26 @@ trait ApiTrait
             }
         }
         return $errors;
+    }
+
+    /**
+     * response column data
+     *
+     * @param Request $request
+     * @param CustomColumn|null $custom_column
+     * @return void
+     */
+    protected function responseColumn(Request $request, ?CustomColumn $custom_column)
+    {
+        if (!isset($custom_column)) {
+            return abortJson(400, ErrorCode::DATA_NOT_FOUND());
+        }
+
+        if (!$custom_column->custom_table->hasPermission(Permission::AVAILABLE_ACCESS_CUSTOM_VALUE)) {
+            return abortJson(403, ErrorCode::PERMISSION_DENY());
+        }
+
+        return $custom_column;
     }
 
     /**

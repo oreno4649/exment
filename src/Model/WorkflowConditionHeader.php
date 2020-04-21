@@ -26,7 +26,7 @@ class WorkflowConditionHeader extends ModelBase
      */
     public function isMatchCondition($custom_value)
     {
-        $is_or = $this->condition_join == 'or'? true: false;
+        $is_or = $this->condition_join == 'or' ? true : false;
         foreach ($this->workflow_conditions as $condition) {
             if ($is_or) {
                 if ($condition->isMatchCondition($custom_value)) {
@@ -75,7 +75,11 @@ class WorkflowConditionHeader extends ModelBase
 
     public function setConditionJoinAttribute($val)
     {
-        $this->setOption('condition_join', $val);
+        if (is_null($val)) {
+            $this->forgetJson('options', 'condition_join');
+        } else {
+            $this->setOption('condition_join', $val);
+        }
 
         return $this;
     }

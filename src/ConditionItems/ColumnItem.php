@@ -155,10 +155,16 @@ class ColumnItem extends ConditionItemBase implements ConditionItemInterface
             $orgIndexName = static::getOrgIndexNameConditionQuery($custom_column);
             
             $query->where($authorityTableName . '.related_id', $custom_column->id)
-                ->where($authorityTableName . '.related_type', $relatedType);
-                
+                    ->where($authorityTableName . '.related_type', ConditionTypeDetail::COLUMN()->lowerkey());
+                    
             if ($custom_column->column_type == ColumnType::USER) {
-                $query->where($userIndexName, \Exment::user()->id);
+                $query->where($userIndexName, \Exment::user()->base_user_id);
+            } else {
+                $query->whereIn($tableName . '.' . $indexName, $ids);
+            }
+
+            if ($custom_column->column_type == ColumnType::USER) {
+                $query->where($userIndexName, \Exment::user()->base_user_id);
             } else {
                 $query->whereIn($orgIndexName, $org_ids);
             }

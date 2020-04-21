@@ -16,7 +16,7 @@ class CustomFormPriorityController extends AdminControllerTableBase
 {
     use HasResourceTableActions;
 
-    public function __construct(CustomTable $custom_table, Request $request)
+    public function __construct(?CustomTable $custom_table, Request $request)
     {
         parent::__construct($custom_table, $request);
         $this->setPageInfo(exmtrans("custom_form_priority.header"), exmtrans("custom_form_priority.header"), exmtrans("custom_form_priority.description"), 'fa-keyboard-o');
@@ -50,6 +50,7 @@ class CustomFormPriorityController extends AdminControllerTableBase
                 'include_system' => false,
                 'ignore_attachment' => true,
             ]),
+            'custom_table' => $custom_table,
             'filterKind' => FilterKind::FORM,
         ]);
 
@@ -58,6 +59,10 @@ class CustomFormPriorityController extends AdminControllerTableBase
         });
 
         $hasManyTable->render();
+
+        $form->radio('condition_join', exmtrans("condition.condition_join"))
+            ->options(exmtrans("condition.condition_join_options"))
+            ->default('and');
 
         $form->tools(function (Form\Tools $tools) use ($custom_table) {
             $tools->add((new Tools\GridChangePageMenu('form', $custom_table, false))->render());

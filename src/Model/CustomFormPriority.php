@@ -26,7 +26,7 @@ class CustomFormPriority extends ModelBase
      */
     public function isMatchCondition($custom_value)
     {
-        $is_or = $this->condition_join == 'or'? true: false;
+        $is_or = $this->condition_join == 'or' ? true: false;
         foreach ($this->custom_form_priority_conditions as $condition) {
             if ($is_or) {
                 if ($condition->isMatchCondition($custom_value)) {
@@ -76,5 +76,19 @@ class CustomFormPriority extends ModelBase
         $this->setOption('condition_join', $val);
 
         return $this;
+    }
+    
+    public function deletingChildren()
+    {
+        $this->custom_form_priority_conditions()->delete();
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        
+        static::deleting(function ($model) {
+            $model->deletingChildren();
+        });
     }
 }

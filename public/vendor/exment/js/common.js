@@ -1,8 +1,9 @@
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -25,6 +26,7 @@ var Exment;
             });
             $(document).on('change', '[data-linkage]', {}, CommonEvent.setLinkageEvent);
             $(document).off('click', '[data-help-text]').on('click', '[data-help-text]', {}, CommonEvent.showHelpModalEvent);
+            $(document).off('click', '.copyScript').on('click', '.copyScript', {}, CommonEvent.copyScriptEvent);
             $(document).on('pjax:complete', function (event) {
                 CommonEvent.AddEvent();
             });
@@ -87,6 +89,18 @@ var Exment;
             swal(elem.data('help-title'), elem.data('help-text'), 'info');
         }
         /**
+         * Copy Script event
+         */
+        static copyScriptEvent(ev) {
+            let input = $(ev.target).closest('input');
+            if (input.prop('type') != 'text') {
+                return;
+            }
+            input.select();
+            document.execCommand('copy');
+            toastr.success($('#copy_toastr').val(), null, { timeOut: 1000 });
+        }
+        /**
          *
          */
         static CallbackExmentAjax(res) {
@@ -121,6 +135,9 @@ var Exment;
                 // show swal
                 else if (hasValue(res.swal)) {
                     swal(res.swal, (hasValue(res.swaltext) ? res.swaltext : ''), 'error');
+                }
+                // if has message, not execute action
+                else if (hasValue(res.message)) {
                 }
                 else {
                     toastr.error('Undeifned Error');
@@ -845,32 +862,6 @@ var Exment;
     }
     CommonEvent.calcDataList = [];
     CommonEvent.relatedLinkageList = [];
-    /**
-    * Calc Date
-    */
-    CommonEvent.calcDate = () => {
-        var $type = $('.subscription_claim_type');
-        var $start_date = $('.subscription_agreement_start_date');
-        var $term = $('.subscription_agreement_term');
-        var $end_date = $('.subscription_agreement_limit_date');
-        var term = pInt($term.val());
-        if (!$type.val() || !$start_date.val()) {
-            return;
-        }
-        // 日付計算
-        var dt = new Date($('.subscription_agreement_start_date').val());
-        if ($type.val() == 'month') {
-            dt.setMonth(dt.getMonth() + term);
-        }
-        else if ($type.val() == 'year') {
-            dt.setFullYear(dt.getFullYear() + term);
-        }
-        dt.setDate(dt.getDate() - 1);
-        // セット
-        $end_date.val(dt.getFullYear() + '-'
-            + ('00' + (dt.getMonth() + 1)).slice(-2)
-            + '-' + ('00' + dt.getDate()).slice(-2));
-    };
     /**
      * call select2 items using linkage
      */
