@@ -12,6 +12,13 @@ use Exceedone\Exment\Validator;
 class File extends CustomItem
 {
     /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'file';
+
+    /**
      * get file info
      */
     public function file()
@@ -177,4 +184,10 @@ class File extends CustomItem
 
         return $field;
     }
+    
+    public function isAttachment()
+    {
+        return true;
+    }
+    
 }

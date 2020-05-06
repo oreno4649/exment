@@ -403,7 +403,7 @@ class CustomFormController extends AdminControllerTableBase
             
             foreach ($custom_columns as $custom_column) {
                 // if column_type is not select_table, return []
-                if (!ColumnType::isSelectTable(array_get($custom_column, 'column_type'))) {
+                if (!$custom_column->isSelectTable()) {
                     continue;
                 }
 

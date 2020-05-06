@@ -11,6 +11,13 @@ class Decimal extends CustomItem
 {
     use NumberTrait;
     
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'decimal';
+
     public function prepare()
     {
         if (!is_null($this->value())) {

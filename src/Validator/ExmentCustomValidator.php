@@ -79,9 +79,9 @@ class ExmentCustomValidator extends AdminValidator
         $column_target = array_get($view_column_target, 'column_target');
         if (is_numeric($column_target)) {
             // get column_type
-            $column_type = CustomColumn::getEloquent($column_target)->column_type;
+            $custom_column = CustomColumn::getEloquent($column_target);
             // numeric column can select all summary condition.
-            if (ColumnType::isCalc($column_type)) {
+            if (isset($custom_column) && $custom_column->isCalc()) {
                 return true;
             }
         }

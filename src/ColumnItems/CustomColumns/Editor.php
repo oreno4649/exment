@@ -7,6 +7,13 @@ use Exceedone\Exment\Form\Field;
 
 class Editor extends CustomItem
 {
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'editor';
+
     public function html()
     {
         $text = $this->text();

@@ -158,13 +158,19 @@ class DefaultTableProvider extends ProviderBase
         $body_items = [];
         foreach ($columns as $column) {
             // get key.
-            if (is_array($column) || $column instanceof CustomColumn) {
-                $key = (isset($array_header_key) ? $array_header_key : "").array_get($column, 'column_name');
-            } else {
-                $key = (isset($array_header_key) ? $array_header_key : "").$column;
+            if($column instanceof CustomColumn){
+                $value = $record->getPureValue($column);
             }
-            
-            $value = array_get($record, $key);
+            else{
+                if (is_array($column)) {
+                    $key = (isset($array_header_key) ? $array_header_key : "").array_get($column, 'column_name');
+                } else {
+                    $key = (isset($array_header_key) ? $array_header_key : "").$column;
+                }
+                
+                $value = array_get($record, $key);
+            }
+
             if (is_array($value)) {
                 $value = implode(",", $value);
             }
@@ -172,12 +178,12 @@ class DefaultTableProvider extends ProviderBase
             // if $view_column_type is column, get customcolumn
             if ($view_column_type == ConditionType::COLUMN) {
                 // if attachment, set url
-                if (ColumnType::isAttachment(array_get($column, 'column_type'))) {
+                if ($column->isAttachment()) {
                     $value = ExmentFile::getUrl($value);
                 }
 
                 // if select table and has select_export_column_id, change value
-                elseif (ColumnType::isSelectTable(array_get($column, 'column_type'))) {
+                elseif ($column->isSelectTable()) {
                     $value = $this->getSelectTableExportValue($column, $value);
                 }
             }

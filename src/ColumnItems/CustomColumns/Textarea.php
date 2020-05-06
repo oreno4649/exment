@@ -7,6 +7,13 @@ use Encore\Admin\Form\Field;
 
 class Textarea extends CustomItem
 {
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'textarea';
+
     public function html()
     {
         $text = $this->text();

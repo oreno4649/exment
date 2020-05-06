@@ -6,6 +6,13 @@ class SelectValtext extends Select
 {
     use ImportValueTrait;
     
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'select_valtext';
+
     protected function getReturnsValue($select_options, $val, $label)
     {
         // switch column_type and get return value

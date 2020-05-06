@@ -689,49 +689,49 @@ class CustomColumnController extends AdminControllerTableBase
         $options = [];
 
         // get calc options
-        $custom_table->custom_columns->filter(function ($column) use ($id) {
-            if (isset($id) && $id == array_get($column, 'id')) {
+        $custom_table->custom_columns_cache->filter(function ($custom_column) use ($id) {
+            if (isset($id) && $id == array_get($custom_column, 'id')) {
                 return false;
             }
-            if (!ColumnType::isCalc(array_get($column, 'column_type'))) {
+            if (!$custom_column->isCalc()) {
                 return false;
             }
 
             return true;
-        })->each(function ($column) use (&$options) {
+        })->each(function ($custom_column) use (&$options) {
             $options[] = [
-                'val' => $column->id,
+                'val' => $custom_column->id,
                 'type' => 'dynamic',
-                'text' => $column->column_view_name,
+                'text' => $custom_column->column_view_name,
             ];
         });
         
         // get select table custom columns
         $select_table_custom_columns = [];
-        $custom_table->custom_columns->each(function ($column) use ($id, &$options) {
-            if (isset($id) && $id == array_get($column, 'id')) {
+        $custom_table->custom_columns->each(function ($custom_column) use ($id, &$options) {
+            if (isset($id) && $id == array_get($custom_column, 'id')) {
                 return;
             }
-            if (!ColumnType::isSelectTable(array_get($column, 'column_type'))) {
+            if (!$custom_column->isSelectTable()) {
                 return;
             }
 
             // get select table's calc column
-            $column->select_target_table->custom_columns->filter(function ($select_target_column) use ($id, $column, &$options) {
+            $custom_column->select_target_table->custom_columns_cache->filter(function ($select_target_column) use ($id, $custom_column, &$options) {
                 if (isset($id) && $id == array_get($select_target_column, 'id')) {
                     return false;
                 }
-                if (!ColumnType::isCalc(array_get($select_target_column, 'column_type'))) {
+                if (!$select_target_column->isCalc()) {
                     return false;
                 }
     
                 return true;
-            })->each(function ($select_target_column) use ($column, &$options) {
+            })->each(function ($select_target_column) use ($custom_column, &$options) {
                 $options[] = [
-                    'val' => $column->id,
+                    'val' => $custom_column->id,
                     'type' => 'select_table',
                     'from' => $select_target_column->id,
-                    'text' => $column->column_view_name . '/' . $select_target_column->column_view_name,
+                    'text' => $custom_column->column_view_name . '/' . $select_target_column->column_view_name,
                 ];
             });
         });
@@ -748,14 +748,14 @@ class CustomColumnController extends AdminControllerTableBase
                     'custom_table_id' => $child_table->id
                 ];
 
-                $child_columns = $child_table->custom_columns->filter(function ($column) {
-                    return in_array(array_get($column, 'column_type'), ColumnType::COLUMN_TYPE_CALC());
-                })->map(function ($column) use ($child_table_name) {
+                $child_columns = $child_table->custom_columns_cache->filter(function ($custom_column) {
+                    return $custom_column->isCalc();
+                })->map(function ($custom_column) use ($child_table_name) {
                     return [
                         'type' => 'summary',
-                        'val' => $column->id,
-                        'text' => exmtrans('custom_column.child_sum_text', $child_table_name, $column->column_view_name),
-                        'custom_table_id' => $column->custom_table_id
+                        'val' => $custom_column->id,
+                        'text' => exmtrans('custom_column.child_sum_text', $child_table_name, $custom_column->column_view_name),
+                        'custom_table_id' => $custom_column->custom_table_id
                     ];
                 })->toArray();
                 $options = array_merge($options, $child_columns);
@@ -783,7 +783,7 @@ class CustomColumnController extends AdminControllerTableBase
         } elseif (isset($id) || old('column_type')) {
             $model = CustomColumn::getEloquent($id);
         }
-        if (isset($model) && in_array($model->column_type, [ColumnType::USER, ColumnType::ORGANIZATION])) {
+        if (isset($model) && $model->isUserOrganization()) {
             return CustomTable::getEloquent($model->column_type)->getColumnsSelectOptions([
                 'index_enabled_only' => $isImport,
                 'include_system' => false,

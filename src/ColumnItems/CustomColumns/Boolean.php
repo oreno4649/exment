@@ -11,6 +11,13 @@ class Boolean extends CustomItem
     use ImportValueTrait;
 
     /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'boolean';
+
+    /**
      * laravel-admin set required. if false, always not-set required
      */
     protected $required = false;

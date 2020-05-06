@@ -9,6 +9,13 @@ class AutoNumber extends CustomItem
 {
     protected $required = false;
 
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'auto_number';
+
     protected function getAdminFieldClass()
     {
         return Field\Display::class;

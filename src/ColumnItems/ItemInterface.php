@@ -60,6 +60,12 @@ interface ItemInterface
     public function sortable();
 
     /**
+     * whether column is enabled index.
+     *
+     */
+    public function indexEnabled();
+    
+    /**
      * set custom value
      */
     public function setCustomValue($custom_value);
@@ -83,4 +89,7 @@ interface ItemInterface
      * get item model
      */
     public static function getItem(...$options);
+
+
+
 }

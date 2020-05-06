@@ -28,6 +28,7 @@ use Exceedone\Exment\Enums\NotifyTrigger;
 use Exceedone\Exment\Enums\NotifySavedType;
 use Exceedone\Exment\Services\DataImportExport;
 use Exceedone\Exment\Middleware\Morph;
+use Exceedone\Exment\ColumnItems\CustomItem;
 use Carbon\Carbon;
 
 class PatchDataCommand extends Command
@@ -152,7 +153,7 @@ class PatchDataCommand extends Command
     protected function removeDecimalComma()
     {
         // get ColumnType is decimal or Currency
-        $columns = CustomColumn::whereIn('column_type', ColumnType::COLUMN_TYPE_CALC())->get();
+        $columns = CustomColumn::whereIn('column_type', CustomItem::getColumnTypesCalc())->get();
 
         foreach ($columns as $column) {
             $custom_table = $column->custom_table;
@@ -165,7 +166,10 @@ class PatchDataCommand extends Command
                 ->chunk(1000, function ($commaValues) use ($column, $dbTableName) {
                     foreach ($commaValues as &$commaValue) {
                         // rmcomma
-                        $v = array_get($commaValue, "value.{$column->column_name}");
+                        if(!isset($commaValue)){
+                            continue;
+                        }
+                        $v = $commaValue->getPureValue($column);
                         $v = rmcomma($v);
 
                         \DB::table($dbTableName)->where('id', $commaValue->id)->update(["value->{$column->column_name}" => $v]);
@@ -678,7 +682,7 @@ class PatchDataCommand extends Command
             return;
         }
 
-        if ($parent_organization->column_type == ColumnType::ORGANIZATION) {
+        if ($parent_organization->isOrganization()) {
             return;
         }
 
@@ -788,13 +792,13 @@ class PatchDataCommand extends Command
 
         // modify custom table file column
         CustomTable::all()->each(function ($custom_table) use ($func) {
-            $custom_columns = $custom_table->custom_columns_cache->filter(function ($column) {
-                return ColumnType::isAttachment($column->column_type);
+            $custom_columns = $custom_table->custom_columns_cache->filter(function ($custom_column) {
+                return $custom_column->isAttachment();
             });
 
             foreach ($custom_columns as $custom_column) {
                 $func($custom_table->getValueModel()->query(), $custom_column->getQueryKey(), function ($item) use ($custom_column) {
-                    $value = array_get($item, "value.{$custom_column->column_name}");
+                    $value = $item->getPureValue($custom_column);
                     $item->setValue($custom_column->column_name, str_replace('\\', '/', $value));
                     $item->disable_saved_event(true);
                 });

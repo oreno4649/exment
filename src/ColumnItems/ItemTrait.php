@@ -125,24 +125,6 @@ trait ItemTrait
             return "$key : $value";
         })->toArray());
     }
-
-    /**
-     * whether column is date
-     *
-     */
-    public function isDate()
-    {
-        return false;
-    }
-
-    /**
-     * whether column is Numeric
-     *
-     */
-    public function isNumeric()
-    {
-        return false;
-    }
     
     /**
      * Get Search queries for free text search
@@ -214,4 +196,88 @@ trait ItemTrait
 
         return ['=', $pureValue];
     }
+
+    
+    /**
+     * whether column is date (contains datetime)
+     *
+     */
+    public function isDate()
+    {
+        return false;
+    }
+
+    public function isDateTime()
+    {
+        return false;
+    }
+    
+    /**
+     * whether column is Numeric
+     *
+     */
+    public function isNumeric()
+    {
+        return false;
+    }
+
+    /**
+     * whether column is calc
+     *
+     */
+    public function isCalc()
+    {
+        return false;
+    }
+
+    public function isUrl()
+    {
+        return false;
+    }
+    
+    public function isAttachment()
+    {
+        return false;
+    }
+    
+    public function isUser()
+    {
+        return false;
+    }
+
+    public function isOrganization()
+    {
+        return false;
+    }
+
+    public function isUserOrganization()
+    {
+        return $this->isUser() || $this->isOrganization();
+    }
+
+    public function isSelectTable()
+    {
+        return false;
+    }
+
+    public function isMultipleEnabled()
+    {
+        return false;
+    }
+
+    public function isShowNotEscape()
+    {
+        return false;
+    }
+    
+    public function isSelect()
+    {
+        return false;
+    }
+
+    public function isEmail()
+    {
+        return false;
+    }
+    
 }

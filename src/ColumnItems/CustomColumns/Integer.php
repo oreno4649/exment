@@ -12,6 +12,13 @@ class Integer extends CustomItem
 {
     use NumberTrait;
 
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'integer';
+
     public function text()
     {
         if (is_null($this->value())) {

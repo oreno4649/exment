@@ -11,6 +11,13 @@ class Select extends CustomItem
 {
     use ImportValueTrait;
     
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'select';
+
     public function value()
     {
         return $this->getResultForSelect(false);
@@ -94,5 +101,15 @@ class Select extends CustomItem
         $index = \DB::getQueryGrammar()->wrap($this->index());
         // index is wraped
         $query->whereRaw("FIND_IN_SET(?, REPLACE(REPLACE(REPLACE(REPLACE($index, '[', ''), ' ', ''), ']', ''), '\\\"', ''))", $input);
+    }
+    
+    public function isMultipleEnabled()
+    {
+        return true;
+    }
+
+    public function isSelect()
+    {
+        return true;
     }
 }

@@ -423,7 +423,7 @@ class DataImportExportService extends AbstractExporter
 
                 // convert target key's id
                 if (isset($value)) {
-                    if (ColumnType::isMultipleEnabled(array_get($target_column, 'column_type'))
+                    if ($target_column->isMultipleEnabled()
                         && boolval(array_get($target_column, 'options.multiple_enabled'))) {
                         $value = explode(",", $value);
                     }

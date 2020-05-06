@@ -7,10 +7,23 @@ use Exceedone\Exment\Model\CustomTable;
 
 class Organization extends SelectTable
 {
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'organization';
+
     public function __construct($custom_column, $custom_value)
     {
         parent::__construct($custom_column, $custom_value);
 
         $this->target_table = CustomTable::getEloquent(SystemTableName::ORGANIZATION);
     }
+    
+    public function isOrganization()
+    {
+        return true;
+    }
+
 }

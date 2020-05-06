@@ -6,6 +6,13 @@ use Exceedone\Exment\Enums\CurrencySymbol;
 
 class Currency extends Decimal
 {
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'currency';
+
     public function text()
     {
         list($symbol, $value) = $this->getSymbolAndValue();

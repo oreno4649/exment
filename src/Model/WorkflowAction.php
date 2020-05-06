@@ -446,21 +446,21 @@ class WorkflowAction extends ModelBase
                     break;
                     
                 case ConditionTypeDetail::COLUMN:
-                    $column = CustomColumn::getEloquent($workflow_authority->related_id);
+                    $custom_column = CustomColumn::getEloquent($workflow_authority->related_id);
 
                     if ($getAsDefine) {
-                        $labels[] = $column->column_view_name ?? null;
+                        $labels[] = $custom_column->column_view_name ?? null;
                         break;
                     }
 
-                    $column_values = $custom_value->getValue($column->column_name);
+                    $column_values = $custom_value->getValue($custom_column->column_name);
 
                     if ($column_values instanceof CustomValue) {
                         $column_values = [$column_values];
                     }
 
                     foreach ($column_values as $column_value) {
-                        if ($column->column_type == ColumnType::USER) {
+                        if ($custom_column->isUser()) {
                             $userIds[] = $column_value->id;
                         } else {
                             $organizationIds[] = $column_value->id;

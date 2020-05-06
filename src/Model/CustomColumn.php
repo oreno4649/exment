@@ -17,6 +17,7 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
     use Traits\DatabaseJsonTrait;
     use Traits\TemplateTrait;
     use Traits\UniqueKeyCustomColumnTrait;
+    use Traits\ColumnItemTrait;
 
     protected $appends = ['required', 'index_enabled', 'unique'];
     protected $casts = ['options' => 'json'];
@@ -158,7 +159,7 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
 
     public function getSelectTargetTableAttribute()
     {
-        if (ColumnType::isUserOrganization($this->column_type)) {
+        if ($this->isUserOrganization()) {
             return CustomTable::getEloquent($this->column_type);
         }
         return CustomTable::getEloquent($this->getOption('select_target_table'));
@@ -547,7 +548,7 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
         // check need update
         $update_flg = false;
         // if column type is calc, set dynamic val
-        if (ColumnType::isCalc(array_get($json, 'column_type'))) {
+        if ($obj_column->isCalc()) {
             $calc_formula = array_get($json, 'options.calc_formula');
             if (is_null($calc_formula)) {
                 $obj_column->forgetOption('calc_formula');
@@ -627,7 +628,7 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
     protected function replaceTemplateSpecially($array)
     {
         // if column_type is calc, change value dynamic name using calc_formula property
-        if (!ColumnType::isCalc(array_get($this, 'column_type'))) {
+        if (!$this->isCalc()) {
             return $array;
         }
 

@@ -7,8 +7,20 @@ use Encore\Admin\Form\Field;
 
 class Email extends CustomItem
 {
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'email';
+
     protected function getAdminFieldClass()
     {
         return Field\Email::class;
+    }
+
+    public function isEmail()
+    {
+        return true;
     }
 }

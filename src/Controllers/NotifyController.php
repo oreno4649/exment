@@ -24,6 +24,7 @@ use Exceedone\Exment\Enums\NotifyActionTarget;
 use Exceedone\Exment\Enums\NotifySavedType;
 use Exceedone\Exment\Enums\MailKeyName;
 use Exceedone\Exment\Enums\ViewKindType;
+use Exceedone\Exment\ColumnItems\CustomItem;
 use Exceedone\Exment\Validator\RequiredIfExRule;
 
 class NotifyController extends AdminControllerBase
@@ -336,7 +337,7 @@ class NotifyController extends AdminControllerBase
 
         $options = CustomColumn
             ::where('custom_table_id', $custom_table->id)
-            ->whereIn('column_type', [ColumnType::DATE, ColumnType::DATETIME])
+            ->whereIn('column_type', CustomItem::getColumnTypesDate())
             ->get(['id', 'column_view_name as text']);
 
         if ($isApi) {
@@ -357,17 +358,20 @@ class NotifyController extends AdminControllerBase
 
         $custom_table = CustomTable::getEloquent($custom_table);
         if (isset($custom_table)) {
-            $options = array_merge($options, CustomColumn
-            ::where('custom_table_id', $custom_table->id)
-            ->whereIn('column_type', [ColumnType::USER, ColumnType::ORGANIZATION, ColumnType::EMAIL])
-            ->get(
-                ['id', 'column_view_name as text']
-            )->toArray());
+            $userOrgEmailColumnTypes = array_merge(CustomItem::getColumnTypesSelectTable(), CustomItem::getColumnTypesEmail());
+
+            $options = array_merge($options, 
+                CustomColumn::where('custom_table_id', $custom_table->id)
+                ->whereIn('column_type', $userOrgEmailColumnTypes)
+                ->get(
+                    ['id', 'column_view_name as text']
+                )->toArray()
+            );
 
 
             // get select table's
             $select_table_columns = $custom_table->custom_columns()
-                ->where('column_type', ColumnType::SELECT_TABLE)
+                ->whereIn('column_type', CustomItem::getColumnTypesSelectTable())
                 ->get();
 
             foreach ($select_table_columns as $select_table_column) {
@@ -378,7 +382,7 @@ class NotifyController extends AdminControllerBase
                 // if has $emailColumn, add $select_table_column
                 $emailColumn = CustomColumn
                     ::where('custom_table_id', $select_target_table->id)
-                    ->where('column_type', ColumnType::EMAIL)
+                    ->whereIn('column_type', CustomItem::getColumnTypesEmail())
                     ->first();
                 if (!isset($emailColumn)) {
                     continue;

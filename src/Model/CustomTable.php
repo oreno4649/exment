@@ -20,6 +20,7 @@ use Exceedone\Exment\Services\FormHelper;
 use Exceedone\Exment\Validator\EmptyRule;
 use Exceedone\Exment\Validator\CustomValueRule;
 use Exceedone\Exment\ColumnItems\WorkflowItem;
+use Exceedone\Exment\ColumnItems\CustomItem;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -211,7 +212,7 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
     public function getSelectTableColumns()
     {
         return $this->custom_columns->filter(function ($item) {
-            return ColumnType::isSelectTable($item->column_type);
+            return $item->isSelectTable();
         })->mapWithKeys(function ($item) {
             $key = $item->getIndexColumnName();
             return [$key => $item];
@@ -754,7 +755,7 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
     {
         // get file columns
         $file_columns = $this->custom_columns_cache->filter(function ($column) {
-            return ColumnType::isAttachment($column->column_type);
+            return $column->isAttachment();
         });
         
         $files = [];
@@ -1140,11 +1141,14 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
             case SearchType::SELECT_TABLE:
                 // get columns for relation child to parent
                 $searchColumns = $child_table->custom_columns()
-                    ->where('column_type', ColumnType::SELECT_TABLE)
-                    ->whereIn('options->select_target_table', [strval($this->id), intval($this->id)])
+                    ->whereIn('column_type', CustomItem::getColumnTypesSelectTable())
+                    //->whereIn('options->select_target_table', [strval($this->id), intval($this->id)])
                     ->indexEnabled()
                     ->get()
-                    ->map(function ($c) {
+                    ->filter(function($c) {
+                        $select_target_table = $c->select_target_table;
+                        return isset($select_target_table) && $select_target_table->id == $this->id;
+                    })->map(function ($c) {
                         return $c->getIndexColumnName();
                     });
 
@@ -1801,7 +1805,7 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
                 if ($index_enabled_only && !$custom_column->index_enabled) {
                     continue;
                 }
-                if ($ignore_attachment && ColumnType::isAttachment($custom_column->column_type)) {
+                if ($ignore_attachment && $custom_column->isAttachment()) {
                     continue;
                 }
                 $key = static::getOptionKey(array_get($custom_column, 'id'), $append_table, $table_id, $optionKeyParams);
@@ -1841,11 +1845,10 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
 
         ///// get table columns
         $custom_columns = $this->custom_columns;
-        foreach ($custom_columns as $option) {
-            $column_type = array_get($option, 'column_type');
-            if (ColumnType::isCalc($column_type) || ColumnType::isDateTime($column_type)) {
-                $key = static::getOptionKey(array_get($option, 'id'), true, $this->id);
-                $options[$key] = array_get($option, 'column_view_name');
+        foreach ($custom_columns as $custom_column) {
+            if ($custom_column->isCalc() || $custom_column->isDateTime()) {
+                $key = static::getOptionKey(array_get($custom_column, 'id'), true, $this->id);
+                $options[$key] = array_get($custom_column, 'column_view_name');
             }
         }
         ///// get child table columns for summary
@@ -1860,11 +1863,10 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
                 $options[$key] = $tablename . ' : ' . exmtrans('common.'.array_get($option, 'name'));
             }
             $child_columns = $child->custom_columns;
-            foreach ($child_columns as $option) {
-                $column_type = array_get($option, 'column_type');
-                if (ColumnType::isCalc($column_type) || ColumnType::isDateTime($column_type)) {
-                    $key = static::getOptionKey(array_get($option, 'id'), true, $tableid);
-                    $options[$key] = $tablename . ' : ' . array_get($option, 'column_view_name');
+            foreach ($child_columns as $child_column) {
+                if ($child_column->isCalc() || $child_column->isDateTime()) {
+                    $key = static::getOptionKey(array_get($child_column, 'id'), true, $tableid);
+                    $options[$key] = $tablename . ' : ' . array_get($child_column, 'column_view_name');
                 }
             }
         }
@@ -1878,11 +1880,10 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
                 $key = static::getOptionKey(array_get($option, 'name'), true, $custom_table->id);
                 $options[$key] = $tablename . ' : ' . exmtrans('common.'.array_get($option, 'name'));
             }
-            foreach ($custom_table->custom_columns as $option) {
-                $column_type = array_get($option, 'column_type');
-                if (ColumnType::isCalc($column_type) || ColumnType::isDateTime($column_type)) {
-                    $key = static::getOptionKey(array_get($option, 'id'), true, $custom_table->id);
-                    $options[$key] = $tablename . ' : ' . array_get($option, 'column_view_name');
+            foreach ($custom_table->custom_columns as $custom_column) {
+                if ($custom_column->isCalc() || $custom_column->isDateTime()) {
+                    $key = static::getOptionKey(array_get($custom_column, 'id'), true, $custom_table->id);
+                    $options[$key] = $tablename . ' : ' . array_get($custom_column, 'column_view_name');
                 }
             }
         }
@@ -1900,13 +1901,12 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
 
         ///// get table columns
         $custom_columns = $this->custom_columns;
-        foreach ($custom_columns as $option) {
+        foreach ($custom_columns as $custom_column) {
             if (!$option->index_enabled) {
                 continue;
             }
-            $column_type = array_get($option, 'column_type');
-            if (ColumnType::isDate($column_type)) {
-                $options[static::getOptionKey(array_get($option, 'id'), true, $this->id)] = array_get($option, 'column_view_name');
+            if ($custom_column->isDate()) {
+                $options[static::getOptionKey(array_get($custom_column, 'id'), true, $this->id)] = array_get($custom_column, 'column_view_name');
             }
         }
         

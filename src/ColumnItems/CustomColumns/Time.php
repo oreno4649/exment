@@ -8,6 +8,13 @@ use Exceedone\Exment\Validator;
 
 class Time extends Date
 {
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'time';
+
     protected $format = 'H:i:s';
 
     protected function getAdminFieldClass()

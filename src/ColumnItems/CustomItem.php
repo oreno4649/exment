@@ -29,6 +29,13 @@ abstract class CustomItem implements ItemInterface
     protected $custom_table;
     
     protected $custom_value;
+    
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = '';
 
     /**
      * laravel-admin set required. if false, always not-set required
@@ -70,6 +77,15 @@ abstract class CustomItem implements ItemInterface
     public static function extend($abstract, $class)
     {
         static::$availableFields[$abstract] = $class;
+    }
+
+    /**
+     * get column type
+     *
+     * @var string
+     */
+    public function getColumnType(){
+        return $this->column_type;
     }
 
     /**
@@ -193,12 +209,12 @@ abstract class CustomItem implements ItemInterface
                 $custom_value = $this->custom_table->getValueModel($custom_value->parent_id);
             } else {
                 $pivot_custom_column = CustomColumn::getEloquent($this->options['view_pivot_column']);
-                $pivot_id =  array_get($custom_value, 'value.'.$pivot_custom_column->column_name);
+                $pivot_id =  $custom_value->getPureValue($pivot_custom_column);
                 $custom_value = $this->custom_table->getValueModel($pivot_id);
             }
         }
 
-        return array_get($custom_value, 'value.'.$this->custom_column->column_name);
+        return isset($custom_value) ? $custom_value->getPureValue($this->custom_column) : null;
     }
     
     public function getFilterField($value_type = null)
@@ -380,28 +396,44 @@ abstract class CustomItem implements ItemInterface
      */
     public function getViewFilterType()
     {
-        // get column_type
-        $database_column_type = $this->custom_column->column_type;
-        switch ($database_column_type) {
-            case ColumnType::INTEGER:
-            case ColumnType::DECIMAL:
-            case ColumnType::CURRENCY:
-                return FilterType::NUMBER;
-            case ColumnType::SELECT:
-            case ColumnType::SELECT_VALTEXT:
-            case ColumnType::SELECT_TABLE:
-                return FilterType::SELECT;
-            case ColumnType::DATE:
-            case ColumnType::DATETIME:
-                return FilterType::DAY;
-            case ColumnType::IMAGE:
-            case ColumnType::FILE:
-                return FilterType::FILE;
-            case SystemTableName::USER:
-                return FilterType::USER;
-            default:
-                return FilterType::DEFAULT;
+        if($this->isNumeric()){
+            return FilterType::NUMBER;
         }
+        if($this->isDate()){
+            return FilterType::DAY;
+        }
+        if($this->isAttachment()){
+            return FilterType::FILE;
+        }
+        if($this->isUser()){
+            return FilterType::USER;
+        }
+        if($this->isSelect()){
+            return FilterType::USER;
+        }
+
+        return FilterType::DEFAULT;;
+
+        // switch ($database_column_type) {
+        //     case ColumnType::INTEGER:
+        //     case ColumnType::DECIMAL:
+        //     case ColumnType::CURRENCY:
+                
+        //     case ColumnType::SELECT:
+        //     case ColumnType::SELECT_VALTEXT:
+        //     case ColumnType::SELECT_TABLE:
+        //         return FilterType::SELECT;
+        //     case ColumnType::DATE:
+        //     case ColumnType::DATETIME:
+        //         return FilterType::DAY;
+        //     case ColumnType::IMAGE:
+        //     case ColumnType::FILE:
+        //         return FilterType::FILE;
+        //     case SystemTableName::USER:
+        //         return FilterType::USER;
+        //     default:
+        //         return FilterType::DEFAULT;
+        // }
     }
 
     /**
@@ -597,4 +629,40 @@ abstract class CustomItem implements ItemInterface
 
         return true;
     }
+
+
+
+    public static function getColumnTypesSelectTable(){
+        return static::getColumnTypes('isSelectTable');
+    }
+
+    public static function getColumnTypesUserOrganization(){
+        return static::getColumnTypes('isUserOrganization');
+    }
+
+    public static function getColumnTypesCalc(){
+        return static::getColumnTypes('isCalc');
+    }
+
+    public static function getColumnTypesDate(){
+        return static::getColumnTypes('isDate');
+    }
+
+    public static function getColumnTypesEmail(){
+        return static::getColumnTypes('isEmail');
+    }
+
+    protected static function getColumnTypes($func){
+        $key = sprintf(Define::SYSTEM_KEY_SESSION_CUSTOM_COLUMN_TYPE_FUNC, $func);
+        return System::cache($key, function(){
+            $columnTypes = [];
+            foreach(static::$availableFields as $column_type => $availableField){
+                if($availableField->{$func}()){
+                    $columnTypes[] = $column_type;
+                }
+            }
+    
+            return $columnTypes;
+        });
+    }    
 }

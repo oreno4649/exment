@@ -12,6 +12,13 @@ use Exceedone\Exment\Model\CustomColumnMulti;
 
 class Date extends CustomItem
 {
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'date';
+
     protected $format = 'Y-m-d';
 
     public function text()

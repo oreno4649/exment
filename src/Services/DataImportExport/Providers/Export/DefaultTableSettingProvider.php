@@ -6,6 +6,7 @@ use Exceedone\Exment\Enums\ColumnType;
 use Exceedone\Exment\Enums\RelationType;
 use Exceedone\Exment\Model\Define;
 use Exceedone\Exment\Model\CustomRelation;
+use Exceedone\Exment\ColumnItems\CustomItem;
 
 class DefaultTableSettingProvider extends ProviderBase
 {
@@ -110,7 +111,7 @@ class DefaultTableSettingProvider extends ProviderBase
     {
         // get custom columns. only select_valtext, select_table
         return $custom_table->custom_columns()
-            ->whereIn('column_type', ColumnType::COLUMN_TYPE_IMPORT_REPLACE())
+            ->whereIn('column_type', CustomItem::getColumnTypesSelectTable())
             ->get();
     }
 }

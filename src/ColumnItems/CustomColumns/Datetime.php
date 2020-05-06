@@ -9,6 +9,13 @@ use Exceedone\Exment\Form\Field as ExmentField;
 
 class Datetime extends Date
 {
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'datetime';
+
     protected $format = 'Y-m-d H:i:s';
 
     protected function getDisplayFormat()

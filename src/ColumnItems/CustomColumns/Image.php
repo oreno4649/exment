@@ -8,6 +8,13 @@ use Exceedone\Exment\Model\File as ExmentFile;
 class Image extends File
 {
     /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'image';
+
+    /**
      * get html. show link to image
      */
     public function html()

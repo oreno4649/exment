@@ -127,11 +127,11 @@ class NotifyTarget
                 }
 
                 // if email, return as only email
-                if ($custom_column->column_type == ColumnType::EMAIL) {
+                if ($custom_column->isEmail()) {
                     $result[] =  static::getModelAsEmail($v);
                 }
                 // if select table is organization
-                elseif ($custom_column->column_type == ColumnType::ORGANIZATION) {
+                elseif ($custom_column->isOrganization()) {
                     // get organization user
                     foreach ($v->users as $user) {
                         // get email address
@@ -142,7 +142,7 @@ class NotifyTarget
                     }
                 }
                 // if select table(cotains user)
-                elseif (ColumnType::COLUMN_TYPE_SELECT_TABLE($custom_column->column_type)) {
+                elseif ($custom_column->isSelectTable()) {
                     // get email address
                     $item = static::getModelAsSelectTable($v, null, $custom_column);
                     if (isset($item)) {
@@ -193,7 +193,9 @@ class NotifyTarget
                 $select_target_table = $target_value->custom_table;
             }
             // get email address
-            $email_column = $select_target_table->custom_columns()->where('column_type', ColumnType::EMAIL)->first();
+            $email_column = $select_target_table->custom_columns_cache->filter(function($custom_column){
+                return $custom_column->isEmail();
+            })->first();
         }
         
         $email = $target_value->getValue($email_column);

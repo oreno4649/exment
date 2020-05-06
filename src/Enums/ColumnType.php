@@ -26,155 +26,142 @@ class ColumnType extends EnumBase
     const USER = 'user';
     const ORGANIZATION = 'organization';
 
-    public static function COLUMN_TYPE_CALC()
-    {
-        return [
-            ColumnType::INTEGER,
-            ColumnType::DECIMAL,
-            ColumnType::CURRENCY,
-        ];
-    }
+    // public static function COLUMN_TYPE_CALC()
+    // {
+    //     return [
+    //         ColumnType::INTEGER,
+    //         ColumnType::DECIMAL,
+    //         ColumnType::CURRENCY,
+    //     ];
+    // }
 
-    public static function COLUMN_TYPE_DATETIME()
-    {
-        return [
-            ColumnType::DATE,
-            ColumnType::TIME,
-            ColumnType::DATETIME,
-        ];
-    }
+    // public static function COLUMN_TYPE_DATETIME()
+    // {
+    //     return [
+    //         ColumnType::DATE,
+    //         ColumnType::TIME,
+    //         ColumnType::DATETIME,
+    //     ];
+    // }
 
-    public static function COLUMN_TYPE_DATE()
-    {
-        return [
-            ColumnType::DATE,
-            ColumnType::DATETIME,
-        ];
-    }
+    // public static function COLUMN_TYPE_ATTACHMENT()
+    // {
+    //     return [
+    //         ColumnType::IMAGE,
+    //         ColumnType::FILE,
+    //     ];
+    // }
 
-    public static function COLUMN_TYPE_ATTACHMENT()
-    {
-        return [
-            ColumnType::IMAGE,
-            ColumnType::FILE,
-        ];
-    }
+    // public static function COLUMN_TYPE_URL()
+    // {
+    //     return [
+    //         ColumnType::SELECT_TABLE,
+    //         ColumnType::USER,
+    //         ColumnType::ORGANIZATION,
+    //         ColumnType::URL,
+    //     ];
+    // }
 
-    public static function COLUMN_TYPE_URL()
-    {
-        return [
-            ColumnType::SELECT_TABLE,
-            ColumnType::USER,
-            ColumnType::ORGANIZATION,
-            ColumnType::URL,
-        ];
-    }
+    // public static function COLUMN_TYPE_USER_ORGANIZATION()
+    // {
+    //     return [
+    //         ColumnType::USER,
+    //         ColumnType::ORGANIZATION,
+    //     ];
+    // }
 
-    public static function COLUMN_TYPE_USER_ORGANIZATION()
-    {
-        return [
-            ColumnType::USER,
-            ColumnType::ORGANIZATION,
-        ];
-    }
+    // public static function COLUMN_TYPE_SELECT_TABLE()
+    // {
+    //     return [
+    //         ColumnType::SELECT_TABLE,
+    //         ColumnType::USER,
+    //         ColumnType::ORGANIZATION,
+    //     ];
+    // }
 
-    public static function COLUMN_TYPE_SELECT_TABLE()
-    {
-        return [
-            ColumnType::SELECT_TABLE,
-            ColumnType::USER,
-            ColumnType::ORGANIZATION,
-        ];
-    }
+    // public static function COLUMN_TYPE_SELECT_FORM()
+    // {
+    //     return [
+    //         ColumnType::SELECT,
+    //         ColumnType::SELECT_VALTEXT,
+    //         ColumnType::SELECT_TABLE,
+    //         ColumnType::YESNO,
+    //         ColumnType::BOOLEAN,
+    //     ];
+    // }
 
-    public static function COLUMN_TYPE_SELECT_FORM()
-    {
-        return [
-            ColumnType::SELECT,
-            ColumnType::SELECT_VALTEXT,
-            ColumnType::SELECT_TABLE,
-            ColumnType::YESNO,
-            ColumnType::BOOLEAN,
-        ];
-    }
+    // public static function COLUMN_TYPE_MULTIPLE_ENABLED()
+    // {
+    //     return [
+    //         ColumnType::SELECT,
+    //         ColumnType::SELECT_VALTEXT,
+    //         ColumnType::SELECT_TABLE,
+    //         ColumnType::USER,
+    //         ColumnType::ORGANIZATION,
+    //     ];
+    // }
 
-    public static function COLUMN_TYPE_MULTIPLE_ENABLED()
-    {
-        return [
-            ColumnType::SELECT,
-            ColumnType::SELECT_VALTEXT,
-            ColumnType::SELECT_TABLE,
-            ColumnType::USER,
-            ColumnType::ORGANIZATION,
-        ];
-    }
+    // public static function COLUMN_TYPE_SHOW_NOT_ESCAPE()
+    // {
+    //     return [
+    //         ColumnType::URL,
+    //         ColumnType::TEXTAREA,
+    //         ColumnType::SELECT_TABLE,
+    //         ColumnType::EDITOR,
+    //         ColumnType::USER,
+    //         ColumnType::ORGANIZATION,
+    //     ];
+    // }
 
-    public static function COLUMN_TYPE_SHOW_NOT_ESCAPE()
-    {
-        return [
-            ColumnType::URL,
-            ColumnType::TEXTAREA,
-            ColumnType::SELECT_TABLE,
-            ColumnType::EDITOR,
-            ColumnType::USER,
-            ColumnType::ORGANIZATION,
-        ];
-    }
+    // public static function COLUMN_TYPE_IMPORT_REPLACE()
+    // {
+    //     return [
+    //         ColumnType::SELECT_TABLE,
+    //         ColumnType::USER,
+    //         ColumnType::ORGANIZATION,
+    //     ];
+    // }
 
-    public static function COLUMN_TYPE_IMPORT_REPLACE()
-    {
-        return [
-            ColumnType::SELECT_TABLE,
-            ColumnType::USER,
-            ColumnType::ORGANIZATION,
-        ];
-    }
+    // public static function isCalc($column_type)
+    // {
+    //     return in_array($column_type, static::COLUMN_TYPE_CALC());
+    // }
 
-    public static function isCalc($column_type)
-    {
-        return in_array($column_type, static::COLUMN_TYPE_CALC());
-    }
-
-    public static function isDate($column_type)
-    {
-        return in_array($column_type, static::COLUMN_TYPE_DATE());
-    }
-
-    public static function isDateTime($column_type)
-    {
-        return in_array($column_type, static::COLUMN_TYPE_DATETIME());
-    }
+    // public static function isDateTime($column_type)
+    // {
+    //     return in_array($column_type, static::COLUMN_TYPE_DATETIME());
+    // }
     
-    public static function isUrl($column_type)
-    {
-        return in_array($column_type, static::COLUMN_TYPE_URL());
-    }
+    // public static function isUrl($column_type)
+    // {
+    //     return in_array($column_type, static::COLUMN_TYPE_URL());
+    // }
     
-    public static function isAttachment($column_type)
-    {
-        return in_array($column_type, static::COLUMN_TYPE_ATTACHMENT());
-    }
+    // public static function isAttachment($column_type)
+    // {
+    //     return in_array($column_type, static::COLUMN_TYPE_ATTACHMENT());
+    // }
     
-    public static function isUserOrganization($column_type)
-    {
-        return in_array($column_type, static::COLUMN_TYPE_USER_ORGANIZATION());
-    }
-    public static function isSelectTable($column_type)
-    {
-        return in_array($column_type, static::COLUMN_TYPE_SELECT_TABLE());
-    }
-    public static function isMultipleEnabled($column_type)
-    {
-        return in_array($column_type, static::COLUMN_TYPE_MULTIPLE_ENABLED());
-    }
-    public static function isNotEscape($column_type)
-    {
-        return in_array($column_type, static::COLUMN_TYPE_SHOW_NOT_ESCAPE());
-    }
-    public static function isSelectForm($column_type)
-    {
-        return in_array($column_type, static::COLUMN_TYPE_SELECT_FORM());
-    }
+    // public static function isUserOrganization($column_type)
+    // {
+    //     return in_array($column_type, static::COLUMN_TYPE_USER_ORGANIZATION());
+    // }
+    // public static function isSelectTable($column_type)
+    // {
+    //     return in_array($column_type, static::COLUMN_TYPE_SELECT_TABLE());
+    // }
+    // public static function isMultipleEnabled($column_type)
+    // {
+    //     return in_array($column_type, static::COLUMN_TYPE_MULTIPLE_ENABLED());
+    // }
+    // public static function isNotEscape($column_type)
+    // {
+    //     return in_array($column_type, static::COLUMN_TYPE_SHOW_NOT_ESCAPE());
+    // }
+    // public static function isSelectForm($column_type)
+    // {
+    //     return in_array($column_type, static::COLUMN_TYPE_SELECT_FORM());
+    // }
 
     /**
      * get text is date, or datetime

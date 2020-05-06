@@ -7,6 +7,13 @@ use Exceedone\Exment\Form\Field;
 
 class Text extends CustomItem
 {
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'text';
+
     protected function getAdminFieldClass()
     {
         return Field\Text::class;

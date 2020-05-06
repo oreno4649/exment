@@ -223,7 +223,7 @@ class CustomColumnMulti extends ModelBase implements Interfaces\TemplateImporter
      * @param [type] $value
      * @return bool
      */
-    public function compareValue($input, $custom_value = null)
+    public function compareValue(?array $input, $custom_value = null)
     {
         $column1 = $this->compare_column1;
         $column2 = $this->compare_column2;

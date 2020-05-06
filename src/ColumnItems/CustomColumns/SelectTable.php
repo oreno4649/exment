@@ -19,6 +19,13 @@ use Illuminate\Support\Collection;
 
 class SelectTable extends CustomItem
 {
+    /**
+     * Set column type
+     *
+     * @var string
+     */
+    protected $column_type = 'select_table';
+
     protected $target_table;
     protected $target_view;
     
@@ -167,7 +174,7 @@ class SelectTable extends CustomItem
         if (boolval(config('exment.select_relation_linkage_disabled', false))) {
         } elseif (isset($relationColumn)) {
             $parent_value = $this->custom_column->custom_table->getValueModel($this->id);
-            $parent_v = array_get($parent_value, 'value.' . $relationColumn['parent_column']->column_name);
+            $parent_v = isset($parent_value) ? $parent_value->getPureValue($relationColumn['parent_column']) : null;
             $parent_target_table_id = $relationColumn['parent_column']->select_target_table->id;
             $parent_target_table_name = $relationColumn['parent_column']->select_target_table->table_name;
                 
@@ -190,9 +197,13 @@ class SelectTable extends CustomItem
                 $child_target_table_id = $relationColumn['child_column']->select_target_table->id;
                 if ($parent_target_table_id != $child_target_table_id) {
                     $searchColumn = $relationColumn['child_column']->select_target_table->custom_columns()
-                        ->where('column_type', ColumnType::SELECT_TABLE)
-                        ->whereIn('options->select_target_table', [strval($parent_target_table_id), intval($parent_target_table_id)])
-                        ->first();
+                        ->whereIn('column_type', CustomItem::getColumnTypesSelectTable())
+                        ->get()
+                        ->filter(function($c) use($parent_target_table_id) {
+                            $select_target_table = $c->select_target_table;
+                            return isset($select_target_table) && $select_target_table->id == $parent_target_table_id;
+                        })->first();
+                        
                     if (isset($searchColumn)) {
                         $callback = function (&$query) use ($parent_v, $searchColumn) {
                             $query = $query->where("value->{$searchColumn->column_name}", $parent_v);
@@ -331,14 +342,14 @@ class SelectTable extends CustomItem
         $sessionkey = sprintf(Define::SYSTEM_KEY_SESSION_IMPORT_KEY_VALUE, $this->custom_table, $this->custom_column->column_name, $key);
         return System::requestSession($sessionkey, function () use ($datalist, $key) {
             // get key and value list
-            $keyValueList = collect($datalist)->map(function ($d) {
-                return array_get($d, 'value.' . $this->custom_column->column_name);
+            $keyValueList = collect($datalist)->filter()->map(function ($d) {
+                return $d->getPureValue($this->custom_column);
             })->flatten()->filter()->toArray();
 
             $target_custom_column = CustomColumn::getEloquent($key, $this->target_table);
-            $indexName = $target_custom_column ?? $target_custom_column->index_enabled ? $target_custom_column->getIndexColumnName() : "value->$key";
+            $indexName = $target_custom_column ? $target_custom_column->getQueryKey() : "value->$key";
             $values = $this->target_table->getValueModel()->whereIn($indexName, $keyValueList)->select(['value', 'id'])
-                ->get()->mapWithKeys(function ($v) use ($key) {
+                ->get()->filter()->mapWithKeys(function ($v) use ($key) {
                     return [array_get($v, "value.$key") => $v->id];
                 });
 
@@ -440,6 +451,26 @@ class SelectTable extends CustomItem
         $name = $custom_column->getQueryKey();
         $query->where($name, 'LIKE', $searchValue);
         
+        return true;
+    }
+    
+    public function isUrl()
+    {
+        return true;
+    }
+    
+    public function isSelectTable()
+    {
+        return true;
+    }
+    
+    public function isMultipleEnabled()
+    {
+        return true;
+    }
+    
+    public function isSelect()
+    {
         return true;
     }
 }

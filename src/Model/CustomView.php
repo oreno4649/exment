@@ -949,13 +949,13 @@ class CustomView extends ModelBase implements Interfaces\TemplateImporterInterfa
 
         switch ($view_column_type) {
             case ConditionType::COLUMN:
-                $column = $custom_view_column->custom_column;
-                $is_number = ColumnType::isCalc(array_get($column, 'column_type'));
+                $custom_column = $custom_view_column->custom_column;
+                $is_number = $custom_column->isCalc();
 
                 if (is_nullorempty($column_view_name)) {
-                    $column_view_name = array_get($column, 'column_view_name');
+                    $column_view_name = array_get($custom_column, 'column_view_name');
                     // if table is not equal target table, add table name to column name.
-                    if ($custom_table_id != array_get($column, 'custom_table_id')) {
+                    if ($custom_table_id != array_get($custom_column, 'custom_table_id')) {
                         $column_view_name = array_get($column->custom_table, 'table_view_name') . '::' . $column_view_name;
                     }
                 }

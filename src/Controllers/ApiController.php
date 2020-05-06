@@ -213,7 +213,7 @@ class ApiController extends AdminControllerBase
         $custom_column = CustomColumn::getEloquent($id);
 
         // if column_type is not select_table, return []
-        if (!ColumnType::isSelectTable(array_get($custom_column, 'column_type'))) {
+        if (!$custom_column->isSelectTable()) {
             return [];
         }
 

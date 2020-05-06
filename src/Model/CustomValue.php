@@ -801,6 +801,28 @@ abstract class CustomValue extends ModelBase
         }
         return $item->value();
     }
+    
+    /**
+     * Get Pure value. Almost return from database.
+     *
+     * @param CustomColumn|string $custom_column
+     * @return mixed
+     */
+    public function getPureValue($custom_column)
+    {
+        $custom_column = CustomColumn::getEloquent($custom_column, $this->custom_table);
+        if(!isset($custom_column)){
+            return null;
+        }
+        
+        //TODO: if not set database value logic
+        if(false){
+            return $this->getValue($custom_column, ValueType::PURE_VALUE);
+        }
+
+        return array_get($this->value, $custom_column->custom_column);
+    }
+
 
     /**
      * Get vustom_value's label
@@ -1071,7 +1093,7 @@ abstract class CustomValue extends ModelBase
         if ($relation instanceof CustomColumn) {
             // get custom column as array
             // target column is select table and has index, get index name
-            if (ColumnType::isSelectTable($relation->column_type) && $relation->indexEnabled()) {
+            if ($relation->isSelectTable() && $relation->indexEnabled()) {
                 $index_name = $relation->getIndexColumnName();
                 // get children values where this id
                 $query = getModelName(CustomTable::getEloquent($relation))

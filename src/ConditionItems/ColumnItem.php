@@ -84,10 +84,10 @@ class ColumnItem extends ConditionItemBase implements ConditionItemInterface
     public function hasAuthority($workflow_authority, $custom_value, $targetUser)
     {
         $custom_column = CustomColumn::find($workflow_authority->related_id);
-        if (!ColumnType::isUserOrganization($custom_column->column_type)) {
+        if (!$this->isUserOrganization()) {
             return false;
         }
-        $auth_values = array_get($custom_value, 'value.' . $custom_column->column_name);
+        $auth_values = isset($custom_value) ? $custom_value->getPureValue($custom_column) : null;
         if (is_null($auth_values)) {
             return false;
         }
@@ -95,14 +95,14 @@ class ColumnItem extends ConditionItemBase implements ConditionItemInterface
             $auth_values = [$auth_values];
         }
 
-        switch ($custom_column->column_type) {
-            case ColumnType::USER:
-                return in_array($targetUser->id, $auth_values);
-            case ColumnType::ORGANIZATION:
-                $ids = $targetUser->belong_organizations->pluck('id')->toArray();
-                return collect($auth_values)->contains(function ($auth_value) use ($ids) {
-                    return collect($ids)->contains($auth_value);
-                });
+        if($custom_column->isUser()){
+            return in_array($targetUser->id, $auth_values);
+        }
+        elseif($custom_column->isOrganization()){
+            $ids = $targetUser->belong_organizations->pluck('id')->toArray();
+            return collect($auth_values)->contains(function ($auth_value) use ($ids) {
+                return collect($ids)->contains($auth_value);
+            });
         }
         return false;
     }
@@ -126,7 +126,7 @@ class ColumnItem extends ConditionItemBase implements ConditionItemInterface
             if (!$custom_column->index_enabled) {
                 return false;
             }
-            if (!ColumnType::isUserOrganization($custom_column->column_type)) {
+            if (!$custom_column->isUserOrganization()) {
                 return false;
             }
             return true;
@@ -140,7 +140,7 @@ class ColumnItem extends ConditionItemBase implements ConditionItemInterface
                 $query->where($authorityTableName . '.related_id', $custom_column->id)
                     ->where($authorityTableName . '.related_type', ConditionTypeDetail::COLUMN()->lowerkey());
                     
-                if ($custom_column->column_type == ColumnType::USER) {
+                if ($custom_column->isUser()) {
                     $query->where($tableName . '.' . $indexName, \Exment::user()->getUserId());
                 } else {
                     $query->whereIn($tableName . '.' . $indexName, $ids);
