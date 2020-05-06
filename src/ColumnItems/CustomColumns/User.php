@@ -26,4 +26,19 @@ class User extends SelectTable
         return true;
     }
 
+    /**
+     * Get default value
+     *
+     * @return mixed
+     */
+    public function default(){
+        if(!is_null($default = parent::default())){
+            return $default;
+        }
+        if(!is_null($default = $this->custom_column->getOption('login_user_default'))){
+            return $default;
+        }
+
+        return null;
+    }
 }

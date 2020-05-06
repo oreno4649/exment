@@ -63,12 +63,12 @@ class SelectTable extends CustomItem
             return;
         }
         
-        if (!is_array($this->value) && preg_match('/\[.+\]/i', $this->value)) {
-            $this->value = json_decode($this->value);
+        if (!is_array($this->value()) && preg_match('/\[.+\]/i', $this->value())) {
+            $this->value = json_decode($this->value());
         }
 
-        $isArray = is_array($this->value);
-        $value = $isArray ? $this->value : [$this->value];
+        $isArray = is_array($this->value());
+        $value = $isArray ? $this->value() : [$this->value()];
         $result = [];
 
         // if can select table relation, set value
@@ -363,7 +363,7 @@ class SelectTable extends CustomItem
      * @param [type] $value
      * @return ?string string:matched, null:not matched
      */
-    public function getPureValue($label)
+    public function getValFromLabel($label)
     {
         $select_table = $this->custom_column->select_target_table ?? null;
         if (!isset($select_table)) {
@@ -437,7 +437,7 @@ class SelectTable extends CustomItem
             return false;
         }
 
-        $searchValue = $column_item->getPureValue($value);
+        $searchValue = $column_item->getValFromLabel($value);
         if (!isset($searchValue)) {
             $searchValue = $value;
         }
