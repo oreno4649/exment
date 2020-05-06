@@ -18,10 +18,10 @@ class Select extends CustomItem
      */
     protected $column_type = 'select';
 
-    public function value()
-    {
-        return $this->getResultForSelect(false);
-    }
+    // public function value()
+    // {
+    //     return $this->getResultForSelect(false);
+    // }
 
     public function text()
     {

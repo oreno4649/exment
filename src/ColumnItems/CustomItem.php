@@ -134,11 +134,21 @@ abstract class CustomItem implements ItemInterface
     }
     
     /**
-     * get value
+     * Get default value. Only avaiable form input.
+     *
+     * @return mixed
      */
-    public function value()
+    public function defaultForm(){
+        return $this->default();
+    }
+    
+    /**
+     * get value
+     * Don't call $this->value(). otherwise, aborting.
+     */
+    public function pureValue()
     {
-        if(!is_null($this->value)){
+        if(!is_nullorempty($this->value)){
             return $this->value;
         }
 
@@ -235,12 +245,12 @@ abstract class CustomItem implements ItemInterface
                 $custom_value = $this->custom_table->getValueModel($custom_value->parent_id);
             } else {
                 $pivot_custom_column = CustomColumn::getEloquent($this->options['view_pivot_column']);
-                $pivot_id =  $custom_value->getPureValue($pivot_custom_column);
+                $pivot_id =  $custom_value->pureValue($pivot_custom_column);
                 $custom_value = $this->custom_table->getValueModel($pivot_id);
             }
         }
 
-        return isset($custom_value) ? $custom_value->getPureValue($this->custom_column) : null;
+        return isset($custom_value) ? $custom_value->pureValue($this->custom_column) : null;
     }
     
     public function getFilterField($value_type = null)
@@ -315,13 +325,8 @@ abstract class CustomItem implements ItemInterface
         }
 
         // default
-        if (!is_null($this->default())) {
-            $field->default($this->default());
-        }
-
-        // default (login user)
-        if (boolval(array_get($options, 'login_user_default'))) {
-            $field->default(\Exment::user()->getUserId());
+        if (!is_null($this->defaultForm())) {
+            $field->default($this->defaultForm());
         }
 
         // number_format

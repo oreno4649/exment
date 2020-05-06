@@ -159,7 +159,7 @@ class DefaultTableProvider extends ProviderBase
         foreach ($columns as $column) {
             // get key.
             if($column instanceof CustomColumn){
-                $value = $record->getPureValue($column);
+                $value = $record->pureValue($column);
             }
             else{
                 if (is_array($column)) {
