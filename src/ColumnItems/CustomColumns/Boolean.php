@@ -15,7 +15,7 @@ class Boolean extends CustomItem
      *
      * @var string
      */
-    protected $column_type = 'boolean';
+    protected static $column_type = 'boolean';
 
     /**
      * laravel-admin set required. if false, always not-set required

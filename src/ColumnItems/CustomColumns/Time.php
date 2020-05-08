@@ -13,7 +13,7 @@ class Time extends Date
      *
      * @var string
      */
-    protected $column_type = 'time';
+    protected static $column_type = 'time';
 
     protected $format = 'H:i:s';
 
@@ -48,7 +48,7 @@ class Time extends Date
      * whether column is date
      *
      */
-    public function isDate()
+    public static function isDate()
     {
         return false;
     }

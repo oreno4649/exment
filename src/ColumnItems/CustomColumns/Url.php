@@ -12,7 +12,7 @@ class Url extends CustomItem
      *
      * @var string
      */
-    protected $column_type = 'url';
+    protected static $column_type = 'url';
 
     /**
      * get html(for display)
@@ -33,7 +33,7 @@ class Url extends CustomItem
         return Field\Url::class;
     }
     
-    public function isUrl()
+    public static function isUrl()
     {
         return true;
     }

@@ -69,6 +69,18 @@ class Embeds extends AdminField\Embeds
     }
 
     /**
+     * Get form's script
+     *
+     * @return void
+     */
+    public function getScript()
+    {
+        return collect($this->fields())->map(function ($field) {
+            /* @var Field $field  */
+            return $field->getScript();
+        })->filter()->values()->toArray();
+    }
+    /**
      * Render the form.
      *
      * @return \Illuminate\View\View

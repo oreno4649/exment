@@ -14,7 +14,7 @@ class Datetime extends Date
      *
      * @var string
      */
-    protected $column_type = 'datetime';
+    protected static $column_type = 'datetime';
 
     protected $format = 'Y-m-d H:i:s';
 

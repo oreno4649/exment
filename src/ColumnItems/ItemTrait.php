@@ -212,12 +212,12 @@ trait ItemTrait
      * whether column is date (contains datetime)
      *
      */
-    public function isDate()
+    public static function isDate()
     {
         return false;
     }
 
-    public function isDateTime()
+    public static function isDateTime()
     {
         return false;
     }
@@ -226,7 +226,7 @@ trait ItemTrait
      * whether column is Numeric
      *
      */
-    public function isNumeric()
+    public static function isNumeric()
     {
         return false;
     }
@@ -235,57 +235,57 @@ trait ItemTrait
      * whether column is calc
      *
      */
-    public function isCalc()
+    public static function isCalc()
     {
         return false;
     }
 
-    public function isUrl()
+    public static function isUrl()
     {
         return false;
     }
     
-    public function isAttachment()
+    public static function isAttachment()
     {
         return false;
     }
     
-    public function isUser()
+    public static function isUser()
     {
         return false;
     }
 
-    public function isOrganization()
+    public static function isOrganization()
     {
         return false;
     }
 
-    public function isUserOrganization()
+    public static function isUserOrganization()
     {
-        return $this->isUser() || $this->isOrganization();
+        return static::isUser() || static::isOrganization();
     }
 
-    public function isSelectTable()
-    {
-        return false;
-    }
-
-    public function isMultipleEnabled()
+    public static function isSelectTable()
     {
         return false;
     }
 
-    public function isShowNotEscape()
+    public static function isMultipleEnabled()
+    {
+        return false;
+    }
+
+    public static function isShowNotEscape()
     {
         return false;
     }
     
-    public function isSelect()
+    public static function isSelect()
     {
         return false;
     }
 
-    public function isEmail()
+    public static function isEmail()
     {
         return false;
     }

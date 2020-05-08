@@ -16,7 +16,7 @@ class Decimal extends CustomItem
      *
      * @var string
      */
-    protected $column_type = 'decimal';
+    protected static $column_type = 'decimal';
 
     public function prepare()
     {
@@ -126,5 +126,25 @@ class Decimal extends CustomItem
         } else {
             return $grammar->getCastString(DatabaseDataType::TYPE_DECIMAL, true);
         }
+    }
+    
+    /**
+     * Set Custom Column Option Form. Using laravel-admin form option
+     * https://laravel-admin.org/docs/#/en/model-form-fields
+     *
+     * @param Form $form
+     * @return void
+     */
+    public function setCustomColumnOptionForm(&$form)
+    {
+        $this->setCustomColumnOptionFormNumber($form);
+
+        $form->switchbool('percent_format', exmtrans("custom_column.options.percent_format"))
+            ->help(exmtrans("custom_column.help.percent_format"));
+
+        $form->number('decimal_digit', exmtrans("custom_column.options.decimal_digit"))
+            ->default(2)
+            ->min(0)
+            ->max(8);
     }
 }

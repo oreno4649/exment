@@ -12,12 +12,4 @@ class ModalForm extends WidgetForm
      * @var array
      */
     protected $buttons = [];
-
-    public function getScript()
-    {
-        return collect($this->fields)->map(function ($field) {
-            /* @var Field $field  */
-            return $field->getScript();
-        })->filter()->values()->toArray();
-    }
 }

@@ -16,7 +16,7 @@ class Select extends CustomItem
      *
      * @var string
      */
-    protected $column_type = 'select';
+    protected static $column_type = 'select';
 
     // public function value()
     // {
@@ -91,6 +91,23 @@ class Select extends CustomItem
         $filter->select($options);
     }
     
+    /**
+     * Set Custom Column Option Form. Using laravel-admin form option
+     * https://laravel-admin.org/docs/#/en/model-form-fields
+     *
+     * @param Form $form
+     * @return void
+     */
+    public function setCustomColumnOptionForm(&$form)
+    {
+        $form->textarea('select_item', exmtrans("custom_column.options.select_item"))
+                ->required()
+                ->help(exmtrans("custom_column.help.select_item"));
+                
+        // enable multiple
+        $form->switchbool('multiple_enabled', exmtrans("custom_column.options.multiple_enabled"));
+    }
+
     protected function getImportValueOption()
     {
         return $this->custom_column->createSelectOptions();
@@ -103,12 +120,12 @@ class Select extends CustomItem
         $query->whereRaw("FIND_IN_SET(?, REPLACE(REPLACE(REPLACE(REPLACE($index, '[', ''), ' ', ''), ']', ''), '\\\"', ''))", $input);
     }
     
-    public function isMultipleEnabled()
+    public static function isMultipleEnabled()
     {
         return true;
     }
 
-    public function isSelect()
+    public static function isSelect()
     {
         return true;
     }

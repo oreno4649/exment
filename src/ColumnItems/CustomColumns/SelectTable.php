@@ -2,20 +2,44 @@
 
 namespace Exceedone\Exment\ColumnItems\CustomColumns;
 
-use Exceedone\Exment\Validator;
-use Exceedone\Exment\ColumnItems\CustomItem;
-use Exceedone\Exment\Model\CustomTable;
-use Exceedone\Exment\Model\CustomColumn;
-use Exceedone\Exment\Model\CustomView;
-use Exceedone\Exment\Model\System;
-use Exceedone\Exment\Model\Define;
-use Exceedone\Exment\Enums\SearchType;
-use Exceedone\Exment\Enums\ColumnType;
-use Exceedone\Exment\Enums\FilterSearchType;
-use Exceedone\Exment\Form\Field as ExmentField;
+use Encore\Admin\Form;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
+use Encore\Admin\Grid\Filter\Where;
+use Encore\Admin\Layout\Content;
+use Encore\Admin\Widgets\Table;
+use Exceedone\Exment\ColumnItems\CustomColumns\AutoNumber;
+use Exceedone\Exment\ColumnItems\CustomItem;
+use Exceedone\Exment\Enums\ColumnType;
+use Exceedone\Exment\Enums\ConditionType;
+use Exceedone\Exment\Enums\CurrencySymbol;
+use Exceedone\Exment\Enums\FilterSearchType;
+use Exceedone\Exment\Enums\FilterType;
+use Exceedone\Exment\Enums\FormBlockType;
+use Exceedone\Exment\Enums\FormColumnType;
+use Exceedone\Exment\Enums\Permission;
+use Exceedone\Exment\Enums\SearchType;
+use Exceedone\Exment\Enums\SystemColumn;
+use Exceedone\Exment\Enums\SystemTableName;
+use Exceedone\Exment\Enums\ViewKindType;
+use Exceedone\Exment\Form\Field as ExmentField;
+use Exceedone\Exment\Form\Tools;
+use Exceedone\Exment\Grid\Filter as ExmentFilter;
+use Exceedone\Exment\Model\CustomColumn;
+use Exceedone\Exment\Model\CustomColumnMulti;
+use Exceedone\Exment\Model\CustomForm;
+use Exceedone\Exment\Model\CustomFormColumn;
+use Exceedone\Exment\Model\CustomTable;
+use Exceedone\Exment\Model\CustomView;
+use Exceedone\Exment\Model\CustomViewColumn;
+use Exceedone\Exment\Model\Define;
+use Exceedone\Exment\Model\System;
+use Exceedone\Exment\Model\Traits\ColumnOptionQueryTrait;
+use Exceedone\Exment\Validator;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\Rule;
 
 class SelectTable extends CustomItem
 {
@@ -24,7 +48,7 @@ class SelectTable extends CustomItem
      *
      * @var string
      */
-    protected $column_type = 'select_table';
+    protected static $column_type = 'select_table';
 
     protected $target_table;
     protected $target_view;
@@ -452,23 +476,134 @@ class SelectTable extends CustomItem
         
         return true;
     }
+
     
-    public function isUrl()
+    /**
+     * Set Custom Column Option Form. Using laravel-admin form option
+     * https://laravel-admin.org/docs/#/en/model-form-fields
+     *
+     * @param Form $form
+     * @return void
+     */
+    public function setCustomColumnOptionForm(&$form)
+    {
+        $custom_column = $this->custom_column;
+        $id = $this->custom_column->id;
+
+        // define select-target table
+        if(!is_subclass_of($this, \Exceedone\Exment\ColumnItems\CustomColumns\SelectTable::class)){
+            $form->select('select_target_table', exmtrans("custom_column.options.select_target_table"))
+            ->help(exmtrans("custom_column.help.select_target_table"))
+            ->required()
+            ->options(function ($select_table) {
+                $options = CustomTable::filterList()->whereNotIn('table_name', [SystemTableName::USER, SystemTableName::ORGANIZATION])->pluck('table_view_name', 'id')->toArray();
+                return $options;
+            })
+            ->attribute([
+                'data-linkage' => json_encode([
+                    'options_select_import_column_id' => [
+                        'url' => admin_url('webapi/table/indexcolumns'),
+                        'text' => 'column_view_name',
+                    ],
+                    'options_select_export_column_id' => [
+                        'url' => admin_url('webapi/table/columns'),
+                        'text' => 'column_view_name',
+                    ],
+                    'options_select_target_view' => [
+                        'url' => admin_url('webapi/table/filterviews'),
+                        'text' => 'view_view_name',
+                    ]
+                ]),
+            ]);
+
+        }
+
+        // define select-target table view
+        $form->select('select_target_view', exmtrans("custom_column.options.select_target_view"))
+            ->help(exmtrans("custom_column.help.select_target_view"))
+            ->options(function ($select_view, $form) use ($custom_column) {
+                $data = $form->data();
+                if (!isset($data)) {
+                    return [];
+                }
+
+                // select_table
+                $select_target_table = array_get($data, 'select_target_table');
+                if (!isset($select_target_table)) {
+                    if (!isset($custom_column) || !$custom_column->isUserOrganization()) {
+                        return [];
+                    }
+                    $select_target_table = CustomTable::getEloquent($custom_column->custom_table_id);
+                }
+
+                return CustomTable::getEloquent($select_target_table)->custom_views
+                    ->filter(function ($value) {
+                        return array_get($value, 'view_kind_type') == ViewKindType::FILTER;
+                    })->pluck('view_view_name', 'id');
+            });
+        
+        $custom_item = $this;
+        $manual_url = getManualUrl('data_import_export#'.exmtrans('custom_column.help.select_import_column_id_key'));
+        $form->select('select_import_column_id', exmtrans("custom_column.options.select_import_column_id"))
+            ->help(exmtrans("custom_column.help.select_import_column_id", $manual_url))
+            ->options(function ($select_table, $form) use ($id, $custom_item) {
+                return $custom_item->getImportExportColumnSelect($select_table, $form, $id);
+            });
+
+        $form->select('select_export_column_id', exmtrans("custom_column.options.select_export_column_id"))
+            ->help(exmtrans("custom_column.help.select_export_column_id"))
+            ->options(function ($select_table, $form) use ($id, $custom_item) {
+                return $custom_item->getImportExportColumnSelect($select_table, $form, $id, false);
+            });
+
+        $form->switchbool('select_load_ajax', exmtrans("custom_column.options.select_load_ajax"))
+            ->help(exmtrans("custom_column.help.select_load_ajax", config('exment.select_table_limit_count', 100)))
+            ->default("0");
+
+        // enable multiple
+        $form->switchbool('multiple_enabled', exmtrans("custom_column.options.multiple_enabled"));
+    }
+    
+    /**
+     * Get import export select list
+     *
+     * @return void
+     */
+    protected function getImportExportColumnSelect($select_table, $form, $id, $isImport = true)
+    {
+        if ($this->isUserOrganization()) {
+            return CustomTable::getEloquent($this->isUser() ? SystemTableName::USER : SystemTableName::ORGANIZATION)->getColumnsSelectOptions([
+                'index_enabled_only' => $isImport,
+                'include_system' => false,
+            ]) ?? [];
+        }
+
+        // select_table
+        if (is_null($select_target_table = $this->custom_column->select_target_table)) {
+            return [];
+        }
+        return CustomTable::getEloquent($select_target_table)->getColumnsSelectOptions([
+            'index_enabled_only' => $isImport,
+            'include_system' => false,
+        ]) ?? [];
+    }
+
+    public static function isUrl()
     {
         return true;
     }
     
-    public function isSelectTable()
+    public static function isSelectTable()
     {
         return true;
     }
     
-    public function isMultipleEnabled()
+    public static function isMultipleEnabled()
     {
         return true;
     }
     
-    public function isSelect()
+    public static function isSelect()
     {
         return true;
     }

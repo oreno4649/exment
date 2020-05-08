@@ -12,10 +12,19 @@ class Hidden extends CustomItem
      *
      * @var string
      */
-    protected $column_type = 'hidden';
+    protected static $column_type = 'hidden';
 
     protected function getAdminFieldClass()
     {
         return Field\Hidden::class;
+    }
+
+    /**
+     * Whether is use custom column. If false, not show column column list.
+     *
+     * @return boolean
+     */
+    public static function isUseCustomColumn(){
+        return false;
     }
 }

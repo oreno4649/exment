@@ -12,7 +12,7 @@ class Image extends File
      *
      * @var string
      */
-    protected $column_type = 'image';
+    protected static $column_type = 'image';
 
     /**
      * get html. show link to image

@@ -14,7 +14,7 @@ class AutoNumber extends CustomItem
      *
      * @var string
      */
-    protected $column_type = 'auto_number';
+    protected static $column_type = 'auto_number';
 
     protected function getAdminFieldClass()
     {
@@ -70,4 +70,36 @@ class AutoNumber extends CustomItem
         $auto_number = replaceTextFromFormat($format, $value);
         return $auto_number;
     }
+
+    /**
+     * Set Custom Column Option Form. Using laravel-admin form option
+     * https://laravel-admin.org/docs/#/en/model-form-fields
+     *
+     * @param Form $form
+     * @return void
+     */
+    public function setCustomColumnOptionForm(&$form)
+    {
+        $form->select('auto_number_type', exmtrans("custom_column.options.auto_number_type"))
+            ->required()
+            ->options(
+                [
+                'format' => exmtrans("custom_column.options.auto_number_type_format"),
+                'random25' => exmtrans("custom_column.options.auto_number_type_random25"),
+                'random32' => exmtrans("custom_column.options.auto_number_type_random32"),
+                'other' => exmtrans("custom_column.options.auto_number_other"),
+                ]
+            )
+            ->attribute(['data-filtertrigger' =>true]);
+
+        // set manual
+        $manual_url = getManualUrl('column#'.exmtrans('custom_column.auto_number_format_rule'));
+        $form->text('auto_number_format', exmtrans("custom_column.options.auto_number_format"))
+                ->attribute(['data-filter' => json_encode([
+                    ['parent' => 1, 'key' => 'options_auto_number_type', 'value' => 'format'],
+                ])])
+                ->help(sprintf(exmtrans("custom_column.help.auto_number_format"), $manual_url))
+            ;
+    }
+
 }

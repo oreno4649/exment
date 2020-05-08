@@ -16,7 +16,7 @@ class File extends CustomItem
      *
      * @var string
      */
-    protected $column_type = 'file';
+    protected static $column_type = 'file';
 
     /**
      * get file info
@@ -209,7 +209,7 @@ class File extends CustomItem
         return $field;
     }
     
-    public function isAttachment()
+    public static function isAttachment()
     {
         return true;
     }

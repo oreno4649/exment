@@ -331,6 +331,7 @@ var Exment;
         }
         /**
          * Set changedata event
+         * *ChangeData* : If select A item, call ajax for getting A properties, and set them to other items.
          */
         static setChangedataEvent(datalist) {
             // loop "data-changedata" targets   
@@ -908,6 +909,7 @@ var Exment;
     };
     /**
      * call select2 items using linkage
+     * *Linkage : If select A, change B-select2 items.*
      */
     CommonEvent.setLinkageEvent = (ev) => {
         let $base = $(ev.target).closest('[data-linkage]');

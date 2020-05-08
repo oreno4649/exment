@@ -366,6 +366,7 @@ namespace Exment {
 
         /**
          * Set changedata event
+         * *ChangeData* : If select A item, call ajax for getting A properties, and set them to other items.
          */
         public static setChangedataEvent(datalist) {
             // loop "data-changedata" targets   
@@ -634,6 +635,7 @@ namespace Exment {
 
         /**
          * call select2 items using linkage
+         * *Linkage : If select A, change B-select2 items.*
          */
         private static setLinkageEvent = (ev: JQueryEventObject) => {
             let $base = $(ev.target).closest('[data-linkage]');

@@ -12,14 +12,14 @@ class Email extends CustomItem
      *
      * @var string
      */
-    protected $column_type = 'email';
+    protected static $column_type = 'email';
 
     protected function getAdminFieldClass()
     {
         return Field\Email::class;
     }
 
-    public function isEmail()
+    public static function isEmail()
     {
         return true;
     }

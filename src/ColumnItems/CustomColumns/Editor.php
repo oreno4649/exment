@@ -12,7 +12,7 @@ class Editor extends CustomItem
      *
      * @var string
      */
-    protected $column_type = 'editor';
+    protected static $column_type = 'editor';
 
     public function html()
     {
@@ -38,5 +38,21 @@ class Editor extends CustomItem
     {
         $options = $this->custom_column->options;
         $field->rows(array_get($options, 'rows', 6));
+    }
+    
+    /**
+     * Set Custom Column Option Form. Using laravel-admin form option
+     * https://laravel-admin.org/docs/#/en/model-form-fields
+     *
+     * @param Form $form
+     * @return void
+     */
+    public function setCustomColumnOptionForm(&$form)
+    {
+        $form->number('rows', exmtrans("custom_column.options.rows"))
+            ->default(6)
+            ->min(1)
+            ->max(30)
+            ->help(exmtrans("custom_column.help.rows"));
     }
 }

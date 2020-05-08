@@ -2,23 +2,42 @@
 
 namespace Exceedone\Exment\ColumnItems;
 
+use Encore\Admin\Form;
 use Encore\Admin\Form\Field;
+use Encore\Admin\Grid;
 use Encore\Admin\Grid\Filter;
-use Exceedone\Exment\Form\Field as ExmentField;
-use Exceedone\Exment\Grid\Filter as ExmentFilter;
 use Encore\Admin\Grid\Filter\Where;
-use Exceedone\Exment\Model\System;
-use Exceedone\Exment\Model\CustomTable;
+use Encore\Admin\Layout\Content;
+use Encore\Admin\Widgets\Table;
+use Exceedone\Exment\ColumnItems\CustomColumns\AutoNumber;
+use Exceedone\Exment\ColumnItems\CustomItem;
+use Exceedone\Exment\Enums\ColumnType;
+use Exceedone\Exment\Enums\ConditionType;
+use Exceedone\Exment\Enums\CurrencySymbol;
+use Exceedone\Exment\Enums\FilterSearchType;
+use Exceedone\Exment\Enums\FilterType;
+use Exceedone\Exment\Enums\FormBlockType;
+use Exceedone\Exment\Enums\FormColumnType;
+use Exceedone\Exment\Enums\Permission;
+use Exceedone\Exment\Enums\SystemColumn;
+use Exceedone\Exment\Enums\SystemTableName;
+use Exceedone\Exment\Enums\ViewKindType;
+use Exceedone\Exment\Form\Field as ExmentField;
+use Exceedone\Exment\Form\Tools;
+use Exceedone\Exment\Grid\Filter as ExmentFilter;
 use Exceedone\Exment\Model\CustomColumn;
 use Exceedone\Exment\Model\CustomColumnMulti;
+use Exceedone\Exment\Model\CustomForm;
+use Exceedone\Exment\Model\CustomFormColumn;
+use Exceedone\Exment\Model\CustomTable;
+use Exceedone\Exment\Model\CustomView;
+use Exceedone\Exment\Model\CustomViewColumn;
+use Exceedone\Exment\Model\Define;
+use Exceedone\Exment\Model\System;
 use Exceedone\Exment\Model\Traits\ColumnOptionQueryTrait;
-use Exceedone\Exment\Enums\ColumnType;
-use Exceedone\Exment\Enums\SystemColumn;
-use Exceedone\Exment\Enums\FilterType;
-use Exceedone\Exment\Enums\FilterSearchType;
-use Exceedone\Exment\Enums\SystemTableName;
-use Exceedone\Exment\ColumnItems\CustomColumns\AutoNumber;
 use Exceedone\Exment\Validator;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 abstract class CustomItem implements ItemInterface
 {
@@ -35,7 +54,7 @@ abstract class CustomItem implements ItemInterface
      *
      * @var string
      */
-    protected $column_type = '';
+    protected static $column_type = '';
 
     /**
      * laravel-admin set required. if false, always not-set required
@@ -84,8 +103,14 @@ abstract class CustomItem implements ItemInterface
      *
      * @var string
      */
-    public function getColumnType(){
-        return $this->column_type;
+    public static function getColumnType()
+    {
+        return static::$column_type;
+    }
+
+    public static function getColumnTypeViewName()
+    {
+        return array_get(ColumnType::transArray("custom_column.column_type_options"), static::getColumnType());
     }
 
     /**
@@ -431,16 +456,16 @@ abstract class CustomItem implements ItemInterface
         if($this->isNumeric()){
             return FilterType::NUMBER;
         }
-        if($this->isDate()){
+        if(self::isDate()){
             return FilterType::DAY;
         }
-        if($this->isAttachment()){
+        if(self::isAttachment()){
             return FilterType::FILE;
         }
-        if($this->isUser()){
+        if(self::isUser()){
             return FilterType::USER;
         }
-        if($this->isSelect()){
+        if(self::isSelect()){
             return FilterType::USER;
         }
 
@@ -531,6 +556,7 @@ abstract class CustomItem implements ItemInterface
     public static function getItem(...$args)
     {
         list($custom_column, $custom_value, $view_column_target) = $args + [null, null, null];
+
         $column_type = $custom_column->column_type;
 
         if ($className = static::findItemClass($column_type)) {
@@ -551,6 +577,10 @@ abstract class CustomItem implements ItemInterface
      */
     public static function findItemClass($column_type)
     {
+        if(!isset($column_type)){
+            return false;
+        }
+        
         $class = array_get(static::$availableFields, $column_type);
 
         if (class_exists($class)) {
@@ -667,6 +697,25 @@ abstract class CustomItem implements ItemInterface
     }
 
 
+    /**
+     * Set Custom Column Option Form. Using laravel-admin form option
+     * https://laravel-admin.org/docs/#/en/model-form-fields
+     *
+     * @param Form $form
+     * @return void
+     */
+    public function setCustomColumnOptionForm(&$form)
+    {
+    }
+
+    /**
+     * Whether is use custom column. If false, not show column column list.
+     *
+     * @return boolean
+     */
+    public static function isUseCustomColumn(){
+        return true;
+    }
 
     public static function getColumnTypesSelectTable(){
         return static::getColumnTypes('isSelectTable');
@@ -684,16 +733,24 @@ abstract class CustomItem implements ItemInterface
         return static::getColumnTypes('isDate');
     }
 
+    public static function getColumnTypesDatetime(){
+        return static::getColumnTypes('isDatetime');
+    }
+
     public static function getColumnTypesEmail(){
         return static::getColumnTypes('isEmail');
     }
 
+    public static function getColumnTypesMultipleEnabled(){
+        return static::getColumnTypes('isMultipleEnabled');
+    }
+
     protected static function getColumnTypes($func){
         $key = sprintf(Define::SYSTEM_KEY_SESSION_CUSTOM_COLUMN_TYPE_FUNC, $func);
-        return System::cache($key, function(){
+        return System::cache($key, function() use($func){
             $columnTypes = [];
             foreach(static::$availableFields as $column_type => $availableField){
-                if($availableField->{$func}()){
+                if($availableField::{$func}()){
                     $columnTypes[] = $column_type;
                 }
             }
