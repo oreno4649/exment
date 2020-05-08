@@ -60,8 +60,32 @@ class File extends CustomItem
      */
     public function getImportValue($value, $setting = [])
     {
+        if(is_nullorempty($value)){
+            return [
+                'skip' => true,
+            ];
+        }
+
+        // Get file info by url
+        // only check by uuid
+        $uuid = pathinfo(trim($value, '/'), PATHINFO_FILENAME);
+        if(is_nullorempty($uuid)){
+            return [
+                'skip' => true,
+            ];
+        }
+
+        $file = ExmentFile::where('uuid', $uuid)->first();
+        if(!isset($file)){
+            return [
+                'skip' => true,
+            ];
+        }
+
+        // return file path
         return [
-            'skip' => true,
+            'result' => true,
+            'value' => $file->path,
         ];
     }
 
@@ -137,15 +161,15 @@ class File extends CustomItem
      */
     protected function fileValue()
     {
-        if (is_null($this->value())) {
+        if (is_null($this->value)) {
             return null;
         }
 
-        if (is_array($this->value())) {
-            return count($this->value()) == 0 ? null : $this->value()[0];
+        if (is_array($this->value)) {
+            return count($this->value) == 0 ? null : $this->value[0];
         }
 
-        return $this->value();
+        return $this->value;
     }
 
     protected function setValidates(&$validates, $form_column_options)
@@ -179,7 +203,7 @@ class File extends CustomItem
             if (!isset($custom_value)) {
                 return $value;
             }
-            return array_get($custom_value->value(), $custom_column->column_name);
+            return array_get($custom_value->value, $custom_column->column_name);
         });
 
         return $field;
