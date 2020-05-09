@@ -153,7 +153,7 @@ class PatchDataCommand extends Command
     protected function removeDecimalComma()
     {
         // get ColumnType is decimal or Currency
-        $columns = CustomColumn::whereIn('column_type', CustomItem::getColumnTypesCalc())->get();
+        $columns = CustomColumn::whereIn('column_type', CustomItem::getColumnTypesNumber())->get();
 
         foreach ($columns as $column) {
             $custom_table = $column->custom_table;

@@ -322,7 +322,7 @@ class CustomViewController extends AdminControllerTableBase
                                 $columnItem = CustomViewColumn::getColumnItem($view_column_target);
                                 if (isset($columnItem)) {
                                     // only numeric
-                                    if ($columnItem->isNumeric()) {
+                                    if ($columnItem->isNumber()) {
                                         $options = SummaryCondition::getOptions();
                                     } else {
                                         $options = SummaryCondition::getOptions(['numeric' => false]);
@@ -517,7 +517,7 @@ class CustomViewController extends AdminControllerTableBase
         }
 
         // only numeric
-        if ($columnItem->isNumeric()) {
+        if ($columnItem->isNumber()) {
             $options = SummaryCondition::getOptions();
         } else {
             $options = SummaryCondition::getOptions(['numeric' => false]);

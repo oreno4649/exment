@@ -4,6 +4,7 @@ namespace Exceedone\Exment\ColumnItems\CustomColumns;
 
 use Exceedone\Exment\ColumnItems\CustomItem;
 use Exceedone\Exment\Validator\SelectRule;
+use Exceedone\Exment\Enums;
 use Encore\Admin\Form\Field;
 use Encore\Admin\Grid\Filter;
 
@@ -72,6 +73,14 @@ class Select extends CustomItem
             return Filter\Where::class;
         }
         return Filter\Equal::class;
+    }
+
+    /**
+     * get view filter type
+     */
+    public function getViewFilterType()
+    {
+        return Enums\FilterType::SELECT;
     }
 
     protected function setAdminOptions(&$field, $form_column_options)

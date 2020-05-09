@@ -404,6 +404,7 @@ class Initialize
             'changeField'          => Field\ChangeField::class,
             'progressTracker'          => Field\ProgressTracker::class,
             'systemValues'          => Field\SystemValues::class,
+            'numberRange'          => Field\NumberRange::class,
             
             ///// workflow
             'workflowStatusSelects'          => Field\WorkFlow\StatusSelects::class,

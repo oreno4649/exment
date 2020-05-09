@@ -7,6 +7,7 @@ use Encore\Admin\Form\Field;
 use Exceedone\Exment\Model\File as ExmentFile;
 use Exceedone\Exment\Model\System;
 use Exceedone\Exment\Model\Define;
+use Exceedone\Exment\Enums;
 use Exceedone\Exment\Validator;
 
 class File extends CustomItem
@@ -94,6 +95,14 @@ class File extends CustomItem
         return Field\File::class;
     }
     
+    /**
+     * get view filter type
+     */
+    public function getViewFilterType()
+    {
+        return Enums\FilterType::FILE;
+    }
+
     protected function setAdminOptions(&$field, $form_column_options)
     {
         // set file options

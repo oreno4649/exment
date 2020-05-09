@@ -4,6 +4,7 @@ namespace Exceedone\Exment\ColumnItems\CustomColumns;
 
 use Exceedone\Exment\Model\CustomColumnMulti;
 use Exceedone\Exment\Enums\FilterOption;
+use Exceedone\Exment\Enums;
 
 /**
  * Intefer, decimal, currency common logic
@@ -14,7 +15,7 @@ trait NumberTrait
      * whether column is Numeric
      *
      */
-    public static function isNumeric()
+    public static function isNumber()
     {
         return true;
     }
@@ -28,6 +29,14 @@ trait NumberTrait
         return true;
     }
 
+    /**
+     * get view filter type
+     */
+    public function getViewFilterType()
+    {
+        return Enums\FilterType::NUMBER;
+    }
+    
     /**
      * Compare two values.
      */

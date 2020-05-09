@@ -3,6 +3,7 @@
 namespace Exceedone\Exment\ColumnItems\CustomColumns;
 
 use Exceedone\Exment\Enums\SystemTableName;
+use Exceedone\Exment\Enums;
 use Exceedone\Exment\Model\CustomTable;
 
 class User extends SelectTable
@@ -21,6 +22,14 @@ class User extends SelectTable
         $this->target_table = CustomTable::getEloquent(SystemTableName::USER);
     }
         
+    /**
+     * get view filter type
+     */
+    public function getViewFilterType()
+    {
+        return Enums\FilterType::USER;
+    }
+
     public static function isUser()
     {
         return true;

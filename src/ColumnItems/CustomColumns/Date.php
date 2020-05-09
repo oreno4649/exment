@@ -6,6 +6,7 @@ use Exceedone\Exment\ColumnItems\CustomItem;
 use Encore\Admin\Form\Field;
 use Exceedone\Exment\Enums\DatabaseDataType;
 use Exceedone\Exment\Enums\FilterOption;
+use Exceedone\Exment\Enums;
 use Exceedone\Exment\Grid\Filter;
 use Exceedone\Exment\Form\Field as ExmentField;
 use Exceedone\Exment\Model\CustomColumnMulti;
@@ -22,7 +23,7 @@ class Date extends CustomItem
     protected $format = 'Y-m-d';
 
     public function value(){
-        new \Carbon\Carbon($this->pureValue());
+        return new \Carbon\Carbon($this->pureValue());
     }
 
     public function text()
@@ -103,6 +104,14 @@ class Date extends CustomItem
         return Filter\BetweenDatetime::class;
     }
 
+    /**
+     * get view filter type
+     */
+    public function getViewFilterType()
+    {
+        return Enums\FilterType::DAY;
+    }
+    
     protected function getCustomField($classname, $form_column_options = null, $column_name_prefix = null)
     {
         $this->autoDate();

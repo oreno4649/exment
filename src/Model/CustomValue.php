@@ -469,8 +469,11 @@ abstract class CustomValue extends ModelBase
         // because on value edit display, if before upload file and not upload again, don't post value.
         $value = $this->value;
         $original = json_decode($this->getOriginal('value'), true);
-        // get  columns
-        $custom_columns = $this->custom_table->custom_columns;
+        
+        // get  columns. Only not virtual.
+        $custom_columns = $this->custom_table->custom_columns_cache->filter(function($custom_column){
+            return !$custom_column->column_item->isVirtual();
+        });
 
         // loop columns
         $update_flg = false;

@@ -207,6 +207,27 @@ trait ItemTrait
         return ['=', $pureValue];
     }
 
+
+
+
+
+    /**
+     * Disabled form. If true, not showing.
+     *
+     */
+    public static function disabledForm()
+    {
+        return false;
+    }
+
+    /**
+     * whether column is Virtual. Not save in form "value" field.
+     *
+     */
+    public static function isVirtual()
+    {
+        return true;
+    }
     
     /**
      * whether column is date (contains datetime)
@@ -223,10 +244,19 @@ trait ItemTrait
     }
     
     /**
-     * whether column is Numeric
+     * whether column is Number
      *
      */
-    public static function isNumeric()
+    public static function isNumber()
+    {
+        return false;
+    }
+
+    /**
+     * whether column is text
+     *
+     */
+    public static function isText()
     {
         return false;
     }

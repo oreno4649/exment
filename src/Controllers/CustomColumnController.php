@@ -277,7 +277,7 @@ class CustomColumnController extends AdminControllerTableBase
         })->disableHeader();
 
         $form->number('order', exmtrans("custom_column.order"))->rules("integer")
-        ->help(sprintf(exmtrans("common.help.order"), exmtrans('common.custom_column')));
+            ->help(sprintf(exmtrans("common.help.order"), exmtrans('common.custom_column')));
 
         // if create column, add custom form and view
         if (!isset($id)) {

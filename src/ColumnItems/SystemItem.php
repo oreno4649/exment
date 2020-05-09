@@ -281,6 +281,15 @@ class SystemItem implements ItemInterface
     }
 
     /**
+     * Disabled form. If true, not showing.
+     *
+     */
+    public static function disabledForm()
+    {
+        return true;
+    }
+
+    /**
      * whether column is date
      *
      */

@@ -61,4 +61,13 @@ class Text extends CustomItem
                 ->help(sprintf(exmtrans("custom_column.help.regex_validate"), $manual_url));
         }
     }
+
+    /**
+     * whether column is text
+     *
+     */
+    public static function isText()
+    {
+        return true;
+    }
 }
