@@ -16,7 +16,7 @@ class AutoNumber extends CustomItem
      */
     protected static $column_type = 'auto_number';
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\Display::class;
     }

@@ -16,7 +16,7 @@ class Header extends FormOtherItem
         return esc_html($this->text());
     }
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\Header::class;
     }

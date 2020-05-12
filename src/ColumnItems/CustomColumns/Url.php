@@ -28,7 +28,7 @@ class Url extends CustomItem
         return "<a href='{$url}' target='_blank'>$value</a>";
     }
     
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\Url::class;
     }

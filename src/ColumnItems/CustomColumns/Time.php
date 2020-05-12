@@ -21,7 +21,7 @@ class Time extends Date
         new \Carbon\Carbon($this->pureValue());
     }
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         if ($this->displayDate()) {
             return ExmentField\Display::class;

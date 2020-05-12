@@ -27,7 +27,7 @@ class Datetime extends Date
         }
     }
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         if ($this->displayDate()) {
             return ExmentField\Display::class;

@@ -28,7 +28,7 @@ class Image extends File
         return '<a href="'.$url.'" target="_blank"><img src="'.$url.'" class="image_html" /></a>';
     }
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\Image::class;
     }

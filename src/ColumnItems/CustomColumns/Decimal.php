@@ -72,7 +72,7 @@ class Decimal extends CustomItem
         }
         return $rmv;
     }
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\Text::class;
     }

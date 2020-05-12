@@ -7,7 +7,7 @@ use Exceedone\Exment\Form\Field;
 
 class Explain extends FormOtherItem
 {
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\Description::class;
     }

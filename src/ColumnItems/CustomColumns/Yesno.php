@@ -43,12 +43,12 @@ class Yesno extends CustomItem
         return boolval($value) ? 1 : 0;
     }
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\SwitchBoolField::class;
     }
     
-    protected function getAdminFilterClass()
+    protected function getAdminFilterClassName()
     {
         return Filter\Equal::class;
     }

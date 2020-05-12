@@ -251,11 +251,11 @@ abstract class CustomItem implements ItemInterface
         ];
     }
 
-    protected function getAdminFieldClass(){
+    protected function getAdminFieldClassName(){
         return null;
     }
 
-    protected function getAdminFilterClass()
+    protected function getAdminFilterClassName()
     {
         if (System::filter_search_type() == FilterSearchType::ALL) {
             return Filter\Like::class;

@@ -14,7 +14,7 @@ class Hidden extends CustomItem
      */
     protected static $column_type = 'hidden';
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\Hidden::class;
     }

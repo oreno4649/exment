@@ -29,7 +29,7 @@ class Editor extends CustomItem
         return  '<div class="show-tinymce">'.replaceBreak(esc_script_tag($text), false).'</div>';
     }
     
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\Tinymce::class;
     }

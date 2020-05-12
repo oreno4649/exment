@@ -42,7 +42,7 @@ class Integer extends CustomItem
         return strval(intval($rmv));
     }
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\Number::class;
     }

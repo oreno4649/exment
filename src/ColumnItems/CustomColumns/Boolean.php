@@ -39,12 +39,12 @@ class Boolean extends CustomItem
         }
     }
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\SwitchField::class;
     }
     
-    protected function getAdminFilterClass()
+    protected function getAdminFilterClassName()
     {
         return Filter\Equal::class;
     }

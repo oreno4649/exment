@@ -169,7 +169,7 @@ trait CustomItemEngineTrait
                     $classname = Field\Select::class;
                     break;
                 default:
-                    $classname = $this->getFilterFieldClass();
+                    $classname = $this->getFilterFieldClassName();
                     break;
             }
         }
@@ -181,9 +181,9 @@ trait CustomItemEngineTrait
         return $this->getCustomField($classname);
     }
     
-    protected function getFilterFieldClass()
+    protected function getFilterFieldClassName()
     {
-        return $this->getAdminFieldClass();
+        return $this->getAdminFieldClassName();
     }
 
     public function getAdminField($form_column = null, $column_name_prefix = null)
@@ -197,7 +197,11 @@ trait CustomItemEngineTrait
             $classname = ExmentField\Display::class;
         } else {
             // get field
-            $classname = $this->getAdminFieldClass();
+            $classname = $this->getAdminFieldClassName();
+        }
+
+        if(!isset($classname)){
+            return null;
         }
 
         return $this->getCustomField($classname, $form_column_options, $column_name_prefix);
@@ -308,7 +312,7 @@ trait CustomItemEngineTrait
      */
     public function setAdminFilter(&$filter)
     {
-        $classname = $this->getAdminFilterClass();
+        $classname = $this->getAdminFilterClassName();
 
         // if where query, call Cloquire
         if ($classname == Where::class) {

@@ -15,7 +15,7 @@ class Text extends CustomItem
      */
     protected static $column_type = 'text';
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\Text::class;
     }

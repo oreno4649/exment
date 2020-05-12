@@ -23,7 +23,7 @@ class Html extends FormOtherItem
         return $this->form_column->id;
     }
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\Html::class;
     }

@@ -58,7 +58,7 @@ class Select extends CustomItem
         return $val;
     }
     
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         if (boolval(array_get($this->custom_column, 'options.multiple_enabled'))) {
             return Field\MultipleSelect::class;
@@ -67,7 +67,7 @@ class Select extends CustomItem
         }
     }
     
-    protected function getAdminFilterClass()
+    protected function getAdminFilterClassName()
     {
         if (boolval($this->custom_column->getOption('multiple_enabled'))) {
             return Filter\Where::class;

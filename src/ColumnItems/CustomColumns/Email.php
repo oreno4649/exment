@@ -14,7 +14,7 @@ class Email extends CustomItem
      */
     protected static $column_type = 'email';
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\Email::class;
     }

@@ -21,7 +21,7 @@ class Textarea extends CustomItem
         
         return  replaceBreak($text);
     }
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\Textarea::class;
     }

@@ -112,13 +112,13 @@ abstract class FormOtherItem implements ItemInterface
 
     public function getAdminField($form_column = null, $column_name_prefix = null)
     {
-        $classname = $this->getAdminFieldClass();
+        $classname = $this->getAdminFieldClassName();
         $field = new $classname($this->html(), []);
 
         return $field;
     }
 
-    abstract protected function getAdminFieldClass();
+    abstract protected function getAdminFieldClassName();
 
     protected function setAdminOptions(&$field, $form_column_options)
     {

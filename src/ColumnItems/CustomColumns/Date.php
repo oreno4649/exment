@@ -91,7 +91,7 @@ class Date extends CustomItem
         return (new \Carbon\Carbon($this->pureValue()))->format($format) ?? null;
     }
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         if ($this->displayDate()) {
             return ExmentField\Display::class;
@@ -99,7 +99,7 @@ class Date extends CustomItem
         return Field\Date::class;
     }
     
-    protected function getAdminFilterClass()
+    protected function getAdminFilterClassName()
     {
         return Filter\BetweenDatetime::class;
     }

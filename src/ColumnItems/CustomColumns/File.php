@@ -90,7 +90,7 @@ class File extends CustomItem
         ];
     }
 
-    protected function getAdminFieldClass()
+    protected function getAdminFieldClassName()
     {
         return Field\File::class;
     }
