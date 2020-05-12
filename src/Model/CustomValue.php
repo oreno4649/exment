@@ -471,9 +471,7 @@ abstract class CustomValue extends ModelBase
         $original = json_decode($this->getOriginal('value'), true);
         
         // get  columns. Only not virtual.
-        $custom_columns = $this->custom_table->custom_columns_cache->filter(function($custom_column){
-            return !$custom_column->column_item->isVirtual();
-        });
+        $custom_columns = $this->custom_table->custom_columns_physical;
 
         // loop columns
         $update_flg = false;

@@ -7,7 +7,7 @@ namespace Exceedone\Exment\Services\Plugin;
 
 trait PluginPageTrait
 {
-    use PluginBase;
+    use PluginTrait;
 
     /**
      * get load view if view exists and path

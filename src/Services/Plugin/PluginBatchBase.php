@@ -7,7 +7,7 @@ namespace Exceedone\Exment\Services\Plugin;
  */
 class PluginBatchBase
 {
-    use PluginBase;
+    use PluginTrait;
     
     public function __construct($plugin)
     {

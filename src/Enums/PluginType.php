@@ -21,6 +21,7 @@ class PluginType extends EnumBase
     public const EXPORT = '10';
     public const BUTTON = '11';
     public const EVENT = '12';
+    public const COLUMN = '14';
     
     /**
      *
@@ -142,13 +143,10 @@ class PluginType extends EnumBase
             'as_setting' => false,
         ], $options);
 
-        // get class short name.
-        $classShortName = static::getPluginClassShortName($plugin_type, $plugin, $options);
-
-        $classname = $plugin->getNameSpace($classShortName);
-        $fuleFullPath = $plugin->getFullPath($classShortName . '.php');
+        // get class name.
+        $classname = $plugin->getClassName($plugin_type, $options);
     
-        if (\File::exists($fuleFullPath) && class_exists($classname)) {
+        if (class_exists($classname)) {
             // if only one record, set $plugin_type
             if (count($plugin->plugin_types) == 1) {
                 $plugin_type = $plugin->plugin_types[0];

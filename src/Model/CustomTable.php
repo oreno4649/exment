@@ -164,6 +164,16 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
     }
 
     /**
+     * get Custom columns using cache. Ignore Virtual
+     */
+    public function getCustomColumnsPhysicalAttribute()
+    {
+        return $this->custom_columns_cache->filter(function($custom_column){
+            return !$custom_column->isVirtual();
+        });
+    }
+
+    /**
      * Get Columns where select_target_table's id is this table.
      *
      * @return void

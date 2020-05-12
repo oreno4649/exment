@@ -157,6 +157,10 @@ class Define
     public const SYSTEM_KEY_SESSION_IMPORT_KEY_VALUE = "import_key_value_%s_%s_%s";
     public const SYSTEM_KEY_SESSION_ORGANIZATION_TREE = "organization_tree";
     public const SYSTEM_KEY_SESSION_CUSTOM_COLUMN_TYPE_FUNC = "custom_column_type_func_%s";
+    public const SYSTEM_KEY_SESSION_PLUGIN_CLASS = "plugin_class_%s";
+    public const SYSTEM_KEY_SESSION_PLUGIN_REQUIRE = "plugin_require_%s";
+    public const SYSTEM_KEY_SESSION_EXMENT_EXTEND_FIELD = "exment_extend_field";
+    public const SYSTEM_KEY_SESSION_ADMIN_EXTEND_FIELD = "admin_extend_field";
 
     /**
      * MENU SYSTEM DIFINITION

@@ -4,7 +4,7 @@ namespace Exceedone\Exment\Services\Plugin;
 
 use Encore\Admin\Form;
 
-trait PluginBase
+trait PluginTrait
 {
     protected $plugin;
 

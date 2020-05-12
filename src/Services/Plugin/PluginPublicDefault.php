@@ -9,7 +9,7 @@ namespace Exceedone\Exment\Services\Plugin;
  */
 class PluginPublicDefault extends PluginPublicBase
 {
-    use PluginBase;
+    use PluginTrait;
 
     public function __construct($plugin)
     {

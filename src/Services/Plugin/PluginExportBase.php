@@ -9,7 +9,7 @@ use Exceedone\Exment\Model\Define;
  */
 abstract class PluginExportBase
 {
-    use PluginBase;
+    use PluginTrait;
 
     protected $custom_table;
     

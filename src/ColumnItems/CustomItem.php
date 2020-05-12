@@ -61,6 +61,7 @@ abstract class CustomItem implements ItemInterface
      */
     protected $required = true;
 
+    
     public function __construct($custom_column, $custom_value, $view_column_target = null)
     {
         $this->custom_column = $custom_column;
@@ -75,6 +76,10 @@ abstract class CustomItem implements ItemInterface
         } else {
             $this->label = $this->custom_column->column_view_name;
         }
+
+        if(method_exists($this, 'initialized')){
+            $this->initialized([]);
+        }
     }
 
     /**
@@ -87,9 +92,23 @@ abstract class CustomItem implements ItemInterface
         return static::$column_type;
     }
 
+    /**
+     * Get column type's view name.
+     *
+     * @return void
+     */
     public static function getColumnTypeViewName()
     {
         return array_get(ColumnType::transArray("custom_column.column_type_options"), static::getColumnType());
+    }
+
+    /**
+     * Get custom laravel admin's Fields class name
+     *
+     * @return void
+     */
+    public static function getCustomAdminExtends(){
+        return [];
     }
 
     /**
@@ -232,7 +251,9 @@ abstract class CustomItem implements ItemInterface
         ];
     }
 
-    abstract protected function getAdminFieldClass();
+    protected function getAdminFieldClass(){
+        return null;
+    }
 
     protected function getAdminFilterClass()
     {

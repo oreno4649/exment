@@ -230,6 +230,17 @@ class Plugin extends ModelBase
     }
 
     /**
+     * Get Class name
+     */
+    public function getClassName($plugin_type, $options = [])
+    {
+        // get class short name.
+        $classShortName = PluginType::getPluginClassShortName($plugin_type, $this, $options);
+        $this->requirePlugin();
+        return $this->getNameSpace($classShortName);
+    }
+
+    /**
      * Get plugin path. (not fullpath. relation from laravel root)
      * if $pass_array is empty, return plugin folder path.
      */
@@ -255,37 +266,61 @@ class Plugin extends ModelBase
      */
     public function getFullPath(...$pass_array)
     {
-        $diskService = new PluginDiskService($this);
-        // sync from crowd.
-        $diskService->syncFromDisk();
+        // using request session
+        $key = sprintf(Define::SYSTEM_KEY_SESSION_PLUGIN_CLASS, $this->id);
 
-        $plugin_fullpath = $diskService->localSyncDiskItem()->dirFullPath();
-        $this->requirePlugin($plugin_fullpath);
+        return System::requestSession($key, function() use($pass_array){
+            $diskService = new PluginDiskService($this);
+            // sync from crowd.
+            $diskService->syncFromDisk();
+    
+            $plugin_fullpath = $diskService->localSyncDiskItem()->dirFullPath();
+            $this->requirePlugin();
+    
+            return path_join($plugin_fullpath, ...$pass_array);
+        });
+    }
 
-        return path_join($plugin_fullpath, ...$pass_array);
+    /**
+     * Get Full Path by plugin type
+     */
+    public function getFullPathByPluginType($plugin_type, $options = [])
+    {
+        // get class short name.
+        $classShortName = PluginType::getPluginClassShortName($plugin_type, $this, $options);
+        return $this->getFullPath($classShortName . '.php');
     }
 
     /**
      * call require
      *
-     * @param [type] $pathDir
      * @return void
      */
-    public function requirePlugin($fullPathDir)
+    public function requirePlugin()
     {
-        // call plugin
-        $plugin_paths = \File::allFiles($fullPathDir);
-        foreach ($plugin_paths as $plugin_path) {
-            $pathinfo = pathinfo($plugin_path);
-            if ($pathinfo['extension'] != 'php') {
-                continue;
+        // using request session
+        $key = sprintf(Define::SYSTEM_KEY_SESSION_PLUGIN_REQUIRE, $this->id);
+        return System::requestSession($key, function(){
+            $diskService = new PluginDiskService($this);
+            $fullPathDir = $diskService->localSyncDiskItem()->dirFullPath();
+    
+            // call plugin
+            $plugin_paths = \File::allFiles($fullPathDir);
+            foreach ($plugin_paths as $plugin_path) {
+                $pathinfo = pathinfo($plugin_path);
+                if ($pathinfo['extension'] != 'php') {
+                    continue;
+                }
+                // if blade, not require
+                if (strpos($pathinfo['basename'], 'blade.php') !== false) {
+                    continue;
+                }
+                require_once($plugin_path);
             }
-            // if blade, not require
-            if (strpos($pathinfo['basename'], 'blade.php') !== false) {
-                continue;
-            }
-            require_once($plugin_path);
-        }
+
+            return true;
+        });
+
     }
     
     //Check all plugins satisfied take out from function getPluginByTableId

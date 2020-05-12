@@ -388,7 +388,7 @@ trait CustomValueShow
 
         // set table columns
         $table_columns = [];
-        foreach ($this->custom_table->custom_columns as $custom_column) {
+        foreach ($this->custom_table->custom_columns_cache as $custom_column) {
             $revision_value_column = $revision_value->getValue($custom_column, true);
             $custom_value_column = $custom_value->getValue($custom_column, true);
 

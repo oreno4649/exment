@@ -6,7 +6,7 @@ namespace Exceedone\Exment\Services\Plugin;
  */
 class PluginTriggerBase
 {
-    use PluginBase, PluginEventTrait, PluginButtonTrait;
+    use PluginTrait, PluginEventTrait, PluginButtonTrait;
     
     public $custom_table;
     public $custom_value;

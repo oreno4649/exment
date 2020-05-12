@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\File;
  */
 abstract class PluginDocumentBase
 {
-    use PluginBase;
+    use PluginTrait;
     
     protected $custom_table;
     protected $custom_value;

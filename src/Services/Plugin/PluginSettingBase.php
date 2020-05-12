@@ -7,7 +7,7 @@ namespace Exceedone\Exment\Services\Plugin;
  */
 abstract class PluginSettingBase
 {
-    use PluginBase;
+    use PluginTrait;
     
     public function __construct($plugin)
     {

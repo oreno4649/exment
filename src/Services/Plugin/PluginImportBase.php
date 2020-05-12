@@ -7,7 +7,7 @@ namespace Exceedone\Exment\Services\Plugin;
  */
 class PluginImportBase
 {
-    use PluginBase;
+    use PluginTrait;
 
     protected $custom_table;
     

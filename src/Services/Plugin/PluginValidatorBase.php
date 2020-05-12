@@ -8,7 +8,7 @@ use Exceedone\Exment\Model\CustomValue;
  */
 class PluginValidatorBase
 {
-    use PluginBase;
+    use PluginTrait;
     
     public $custom_table;
     public $original_value;

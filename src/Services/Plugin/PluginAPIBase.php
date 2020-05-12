@@ -13,7 +13,7 @@ use Exceedone\Exment\Controllers\ApiTrait;
 class PluginApiBase
 {
     use ApiTrait;
-    use PluginBase;
+    use PluginTrait;
     
     public function _plugin()
     {
