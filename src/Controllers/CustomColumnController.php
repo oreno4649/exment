@@ -264,12 +264,6 @@ class CustomColumnController extends AdminControllerTableBase
             if(isset($column_item)){
                 $column_item->setCustomColumnOptionForm($form);
             }
-            
-            // // image, file, select
-            // // enable multiple
-            // $form->switchbool('multiple_enabled', exmtrans("custom_column.options.multiple_enabled"))
-            //     ->attribute(['data-filter' => json_encode(['parent' => 1, 'key' => 'column_type', 'value' => CustomItem::getColumnTypesMultipleEnabled()])]);
-
                 
             // Form options area -- End
             $form->html('</div>')->plain(); 
