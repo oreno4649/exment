@@ -21,7 +21,7 @@ class PluginType extends EnumBase
     public const EXPORT = '10';
     public const BUTTON = '11';
     public const EVENT = '12';
-    public const COLUMN = '14';
+    public const COLUMN = '13';
     
     /**
      *
@@ -69,6 +69,7 @@ class PluginType extends EnumBase
     }
 
     /**
+     * Use plugin permission
      *
      * @return array
      */

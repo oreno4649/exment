@@ -153,7 +153,7 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
         $key = sprintf(Define::SYSTEM_KEY_SESSION_TABLE_COLUMNS, $this->id);
         return System::requestSession($key, function(){
             return $this->hasManyCache(CustomColumn::class, 'custom_table_id');
-        })
+        });
     }
 
     /**

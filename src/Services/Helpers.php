@@ -1263,7 +1263,7 @@ if (!function_exists('getAjaxResponse')) {
             'errors' => [],
         ], $results);
 
-        if(isset($results['swaltext']) && !isset($results['swal'])){
+        if (isset($results['swaltext']) && !isset($results['swal'])) {
             $results['swal'] = $results['result'] === true ? exmtrans('common.success') : exmtrans('common.error');
         }
 

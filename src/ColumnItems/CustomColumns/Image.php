@@ -38,7 +38,7 @@ class Image extends File
         parent::setAdminOptions($field, $form_column_options);
 
         $field->attribute(['accept' => "image/*"]);
-    }   
+    }
 
     protected function setValidates(&$validates, $form_column_options)
     {
