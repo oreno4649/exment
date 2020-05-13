@@ -55,11 +55,6 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
         'ignoreImportChildren' => ['custom_columns', 'custom_column_multisettings'],
     ];
 
-    /**
-     * Getted custom columns. if call attributes "custom_columns_cache", already called, return this value.
-     */
-    protected $cached_custom_columns = [];
-
     public function custom_columns()
     {
         return $this->hasMany(CustomColumn::class, 'custom_table_id');
@@ -155,12 +150,10 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
      */
     public function getCustomColumnsCacheAttribute()
     {
-        if(!empty($this->cached_custom_columns)){
-            return $this->cached_custom_columns;
-        }
-
-        $this->cached_custom_columns = $this->hasManyCache(CustomColumn::class, 'custom_table_id');
-        return $this->cached_custom_columns;
+        $key = sprintf(Define::SYSTEM_KEY_SESSION_TABLE_COLUMNS, $this->id);
+        return System::requestSession($key, function(){
+            return $this->hasManyCache(CustomColumn::class, 'custom_table_id');
+        })
     }
 
     /**

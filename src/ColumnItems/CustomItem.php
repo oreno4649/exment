@@ -107,8 +107,8 @@ abstract class CustomItem implements ItemInterface
      *
      * @return void
      */
-    public static function getCustomAdminExtends(){
-        return [];
+    public static function getCustomAdminExtend(){
+        return null;
     }
 
     /**

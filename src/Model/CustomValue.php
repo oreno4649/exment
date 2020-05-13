@@ -680,9 +680,17 @@ abstract class CustomValue extends ModelBase
         return $query->get();
     }
 
+    /**
+     * Set to "value" column.
+     *
+     * @param string|array|Collection $key value's key. Or, key-value array or Collection.
+     * @param [type] $val
+     * @param boolean $forgetIfNull
+     * @return self
+     */
     public function setValue($key, $val = null, $forgetIfNull = false)
     {
-        $custom_columns = $this->custom_table->custom_columns_cache;
+        $custom_columns = $this->custom_table->custom_columns_physical;
 
         if (is_list($key)) {
             $key = collect($key)->filter(function ($item, $itemkey) use ($custom_columns) {

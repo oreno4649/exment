@@ -38,14 +38,4 @@ class PluginApiBase
 
         return $this->plugin->getRouteUri($endpoint);
     }
-
-    /**
-     * override method.
-     *
-     * @return void
-     */
-    public function _getLoadView()
-    {
-        return null;
-    }
 }

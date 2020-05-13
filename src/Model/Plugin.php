@@ -266,19 +266,21 @@ class Plugin extends ModelBase
      */
     public function getFullPath(...$pass_array)
     {
-        // using request session
+        // using cache
         $key = sprintf(Define::SYSTEM_KEY_SESSION_PLUGIN_CLASS, $this->id);
 
-        return System::requestSession($key, function() use($pass_array){
+        $plugin_fullpath = System::cache($key, function() use($pass_array){
             $diskService = new PluginDiskService($this);
             // sync from crowd.
             $diskService->syncFromDisk();
     
             $plugin_fullpath = $diskService->localSyncDiskItem()->dirFullPath();
             $this->requirePlugin();
-    
-            return path_join($plugin_fullpath, ...$pass_array);
+
+            return $plugin_fullpath;
         });
+    
+        return path_join($plugin_fullpath, ...$pass_array);
     }
 
     /**
@@ -298,9 +300,9 @@ class Plugin extends ModelBase
      */
     public function requirePlugin()
     {
-        // using request session
+        // using cache
         $key = sprintf(Define::SYSTEM_KEY_SESSION_PLUGIN_REQUIRE, $this->id);
-        return System::requestSession($key, function(){
+        return System::cache($key, function(){
             $diskService = new PluginDiskService($this);
             $fullPathDir = $diskService->localSyncDiskItem()->dirFullPath();
     
@@ -536,11 +538,7 @@ class Plugin extends ModelBase
         }
 
         return $plugins->map(function ($plugin) use ($targetPluginTypes) {
-            if (!is_array($targetPluginTypes)) {
-                $targetPluginTypes = [$targetPluginTypes];
-            }
-
-            foreach ($targetPluginTypes as $targetPluginType) {
+            foreach (toArray($targetPluginTypes) as $targetPluginType) {
                 $class = $plugin->getClass($targetPluginType, ['throw_ex' => false]);
                 if (isset($class)) {
                     return $class;
@@ -651,6 +649,21 @@ class Plugin extends ModelBase
         return exmtrans('plugin.error.cannot_read', [
             'plugin_view_name' => $this->plugin_view_name
         ]);
+    }
+
+    /**
+     * get load view if view exists and path
+     *
+     * @return void
+     */
+    public function getLoadView()
+    {
+        $base_path = $this->getFullPath(path_join('resources', 'views'));
+        if (!\File::exists($base_path)) {
+            return null;
+        }
+
+        return [$base_path, 'exment_' . snake_case($this->plugin_name)];
     }
 
     /**

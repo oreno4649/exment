@@ -377,13 +377,12 @@ class Initialize
             ];
 
             collect(CustomItem::$availableFields)->each(function($item, $key) use(&$map){
-                foreach($item::getCustomAdminExtends() as $fieldClass){
-                    if(!isset($fieldClass) || !class_exists($fieldClass)){
-                        continue;
-                    }
-
-                    $map[$key] = $fieldClass;
+                $fieldClass = $item::getCustomAdminExtend();
+                if(!isset($fieldClass) || !class_exists($fieldClass)){
+                    return;
                 }
+
+                $map[$key] = $fieldClass;
             });
 
             return $map;

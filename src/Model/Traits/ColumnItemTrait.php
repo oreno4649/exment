@@ -68,4 +68,9 @@ trait ColumnItemTrait
     {
         return $this->column_item->isSelectForm();
     }
+    
+    public function isVirtual()
+    {
+        return $this->column_item->isVirtual();
+    }
 }
