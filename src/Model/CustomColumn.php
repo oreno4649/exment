@@ -293,9 +293,9 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
         }
         
         if (is_numeric($column_obj)) {
-            return static::allRecordsCache(function ($record) use ($column_obj) {
+            return static::firstRecordCache(function ($record) use ($column_obj) {
                 return $record->id == $column_obj;
-            })->first();
+            });
         }
         // else,call $table_obj
         else {
@@ -306,9 +306,9 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
                 return null;
             }
             
-            return static::allRecordsCache(function ($record) use ($table_obj, $column_obj) {
+            return static::firstRecordCache(function ($record) use ($table_obj, $column_obj) {
                 return $record->column_name == $column_obj && $record->custom_table_id == $table_obj->id;
-            })->first();
+            });
         }
         return null;
     }

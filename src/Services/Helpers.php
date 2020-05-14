@@ -966,29 +966,9 @@ if (!function_exists('getModelName')) {
      */
     function getModelName($obj, $get_name_only = false)
     {
-        if ($obj instanceof CustomValue) {
-            $table = $obj->custom_table;
+        $table = CustomTable::getEloquent($obj);
+        if(isset($table)){
             $suuid = $table->suuid;
-        } elseif ($obj instanceof CustomTable) {
-            $suuid = $obj->suuid;
-        } elseif ($obj instanceof CustomColumn) {
-            $suuid = CustomTable::getEloquent($obj)->suuid;
-        } elseif (is_numeric($obj) || is_string($obj)) {
-            // get all table info
-            $table = CustomTable::allRecordsCache(function ($table) use ($obj) {
-                if (is_numeric($obj)) {
-                    return array_get($table, 'id') == $obj;
-                }
-                return array_get($table, 'table_name') == $obj;
-            })->first();
-
-            // $table = collect($tables)->first(function ($table) use ($obj) {
-            //     if (is_numeric($obj)) {
-            //         return array_get($table, 'id') == $obj;
-            //     }
-            //     return array_get($table, 'table_name') == $obj;
-            // });
-            $suuid = array_get($table, 'suuid');
         }
 
         if (!isset($suuid)) {
