@@ -299,7 +299,7 @@ abstract class CustomItem implements ItemInterface
      * whether column is Virtual. Not save in form "value" field.
      *
      */
-    public static function isVirtual()
+    public static function disableSave()
     {
         return false;
     }

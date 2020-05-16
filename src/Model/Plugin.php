@@ -269,7 +269,7 @@ class Plugin extends ModelBase
         // using cache
         $key = sprintf(Define::SYSTEM_KEY_SESSION_PLUGIN_CLASS, $this->id);
 
-        $plugin_fullpath = System::cache($key, function() use($pass_array){
+        $plugin_fullpath = System::requestSession($key, function() use($pass_array){
             $diskService = new PluginDiskService($this);
             // sync from crowd.
             $diskService->syncFromDisk();
@@ -302,7 +302,7 @@ class Plugin extends ModelBase
     {
         // using cache
         $key = sprintf(Define::SYSTEM_KEY_SESSION_PLUGIN_REQUIRE, $this->id);
-        return System::cache($key, function(){
+        return System::requestSession($key, function(){
             $diskService = new PluginDiskService($this);
             $fullPathDir = $diskService->localSyncDiskItem()->dirFullPath();
     

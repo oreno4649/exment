@@ -35,12 +35,9 @@ trait CustomValueGrid
         $grid = new Grid(new $classname);
         Plugin::pluginExecuteEvent(PluginEventTrigger::LOADING, $this->custom_table);
         
-        // get search_enabled_columns and loop
-        $search_enabled_columns = $this->custom_table->getSearchEnabledColumns();
-
         // filter
         Admin::user()->filterModel($grid->model(), $this->custom_view, $filter_func);
-        $this->setCustomGridFilters($grid, $search_enabled_columns);
+        $this->setCustomGridFilters($grid);
     
         // create grid
         $this->custom_view->setGrid($grid);
@@ -58,13 +55,13 @@ trait CustomValueGrid
     /**
      * set grid filter
      */
-    protected function setCustomGridFilters($grid, $search_enabled_columns)
+    protected function setCustomGridFilters($grid)
     {
         $grid->quickSearch(function ($model, $input) {
             $model->eloquent()->setSearchQueryOrWhere($model, $input);
         }, 'left');
 
-        $grid->filter(function ($filter) use ($search_enabled_columns) {
+        $grid->filter(function ($filter) {
             if ($this->custom_table->enableShowTrashed() === true) {
                 $filter->scope('trashed', exmtrans('custom_value.soft_deleted_data'))->onlyTrashed();
             }
@@ -160,6 +157,7 @@ trait CustomValueGrid
             }
 
             // loop custom column
+            $search_enabled_columns = $this->custom_table->getSearchEnabledColumns();
             foreach ($search_enabled_columns as $search_column) {
                 $filterItems[] = function ($filter) use ($search_column) {
                     $search_column->column_item->setAdminFilter($filter);

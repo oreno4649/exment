@@ -162,7 +162,7 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
     public function getCustomColumnsPhysicalAttribute()
     {
         return $this->custom_columns_cache->filter(function($custom_column){
-            return !$custom_column->isVirtual();
+            return !$custom_column->disableSave();
         });
     }
 
@@ -480,7 +480,7 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
         // get custom attributes
         $customAttributes = $this->getValidateCustomAttributes($systemColumn, $column_name_prefix, $appendKeyName);
 
-        foreach ($this->custom_columns_cache as $custom_column) {
+        foreach ($this->custom_columns_physical as $custom_column) {
             $fields[] = FormHelper::getFormField($this, $custom_column, $custom_value, null, $column_name_prefix, true, true);
 
             // if not contains $value[$custom_column->column_name], set as null.

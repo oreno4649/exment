@@ -279,7 +279,7 @@ EOT;
                 continue;
             }
             
-            if($column_item->isVirtual()){
+            if($column_item->disableSave()){
                 $form->ignore($field->column());
             }
 

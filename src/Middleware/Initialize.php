@@ -343,50 +343,47 @@ class Initialize
             'classname' => \Exceedone\Exment\PartialCrudItems\Providers\OrgazanizationTreeItem::class,
         ]);
 
-        $map = System::cache(Define::SYSTEM_KEY_SESSION_ADMIN_EXTEND_FIELD, function(){
-            $map = [
-                'ajaxButton'        => Field\AjaxButton::class,
-                'text'          => Field\Text::class,
-                'password'          => Field\Password::class,
-                'number'        => Field\Number::class,
-                'tinymce'        => Field\Tinymce::class,
-                'image'        => Field\Image::class,
-                'display'        => Field\Display::class,
-                'link'           => Field\Link::class,
-                'exmheader'           => Field\Header::class,
-                'description'           => Field\Description::class,
-                'switchbool'          => Field\SwitchBoolField::class,
-                'pivotMultiSelect'          => Field\PivotMultiSelect::class,
-                'checkboxone'          => Field\Checkboxone::class,
-                'checkboxTable'          => Field\CheckboxTable::class,
-                'tile'          => Field\Tile::class,
-                'hasMany'           => Field\HasMany::class,
-                'hasManyTable'           => Field\HasManyTable::class,
-                'relationTable'          => Field\RelationTable::class,
-                'embeds'          => Field\Embeds::class,
-                'nestedEmbeds'          => Field\NestedEmbeds::class,
-                'valueModal'          => Field\ValueModal::class,
-                'changeField'          => Field\ChangeField::class,
-                'progressTracker'          => Field\ProgressTracker::class,
-                'systemValues'          => Field\SystemValues::class,
-                'numberRange'          => Field\NumberRange::class,
-                
-                ///// workflow
-                'workflowStatusSelects'          => Field\WorkFlow\StatusSelects::class,
-                'workflowOptions'          => Field\WorkFlow\Options::class,
-            ];
+        $map = [
+            'ajaxButton'        => Field\AjaxButton::class,
+            'text'          => Field\Text::class,
+            'password'          => Field\Password::class,
+            'number'        => Field\Number::class,
+            'tinymce'        => Field\Tinymce::class,
+            'image'        => Field\Image::class,
+            'display'        => Field\Display::class,
+            'link'           => Field\Link::class,
+            'exmheader'           => Field\Header::class,
+            'description'           => Field\Description::class,
+            'switchbool'          => Field\SwitchBoolField::class,
+            'pivotMultiSelect'          => Field\PivotMultiSelect::class,
+            'checkboxone'          => Field\Checkboxone::class,
+            'checkboxTable'          => Field\CheckboxTable::class,
+            'tile'          => Field\Tile::class,
+            'hasMany'           => Field\HasMany::class,
+            'hasManyTable'           => Field\HasManyTable::class,
+            'relationTable'          => Field\RelationTable::class,
+            'embeds'          => Field\Embeds::class,
+            'nestedEmbeds'          => Field\NestedEmbeds::class,
+            'valueModal'          => Field\ValueModal::class,
+            'changeField'          => Field\ChangeField::class,
+            'progressTracker'          => Field\ProgressTracker::class,
+            'systemValues'          => Field\SystemValues::class,
+            'numberRange'          => Field\NumberRange::class,
+            
+            ///// workflow
+            'workflowStatusSelects'          => Field\WorkFlow\StatusSelects::class,
+            'workflowOptions'          => Field\WorkFlow\Options::class,
+        ];
 
-            collect(CustomItem::$availableFields)->each(function($item, $key) use(&$map){
-                $fieldClass = $item::getCustomAdminExtend();
-                if(!isset($fieldClass) || !class_exists($fieldClass)){
-                    return;
-                }
+        collect(CustomItem::$availableFields)->each(function($item, $key) use(&$map){
+            $fieldClass = $item::getCustomAdminExtend();
+            if(!isset($fieldClass) || !class_exists($fieldClass)){
+                return;
+            }
 
-                $map[$key] = $fieldClass;
-            });
-
-            return $map;
+            $map[$key] = $fieldClass;
         });
+
 
         foreach ($map as $abstract => $class) {
             Form::extend($abstract, $class);
@@ -406,46 +403,42 @@ class Initialize
      * @return void
      */
     protected static function registerExmentField(){
-        $map = System::cache(Define::SYSTEM_KEY_SESSION_EXMENT_EXTEND_FIELD, function(){
-            ///// set Exment-item class
-            $map = [
-                'text'        => CustomColumns\Text::class,
-                'textarea'        => CustomColumns\Textarea::class,
-                'editor'        => CustomColumns\Editor::class,
-                'integer'        => CustomColumns\Integer::class,
-                'decimal'        => CustomColumns\Decimal::class,
-                'currency'        => CustomColumns\Currency::class,
-                'email'        => CustomColumns\Email::class,
-                'url'        => CustomColumns\Url::class,
-                'date'        => CustomColumns\Date::class,
-                'time'        => CustomColumns\Time::class,
-                'datetime'        => CustomColumns\Datetime::class,
-                'select'        => CustomColumns\Select::class,
-                'select_valtext'        => CustomColumns\SelectValtext::class,
-                'select_table'        => CustomColumns\SelectTable::class,
-                'yesno'        => CustomColumns\Yesno::class,
-                'boolean'        => CustomColumns\Boolean::class,
-                'file'        => CustomColumns\File::class,
-                'image'        => CustomColumns\Image::class,
-                'auto_number'        => CustomColumns\AutoNumber::class,
-                'hidden'        => CustomColumns\Hidden::class,
-                'user'        => CustomColumns\User::class,
-                'organization'        => CustomColumns\Organization::class,
-            ];
+        $map = [
+            'text'        => CustomColumns\Text::class,
+            'textarea'        => CustomColumns\Textarea::class,
+            'editor'        => CustomColumns\Editor::class,
+            'integer'        => CustomColumns\Integer::class,
+            'decimal'        => CustomColumns\Decimal::class,
+            'currency'        => CustomColumns\Currency::class,
+            'email'        => CustomColumns\Email::class,
+            'url'        => CustomColumns\Url::class,
+            'date'        => CustomColumns\Date::class,
+            'time'        => CustomColumns\Time::class,
+            'datetime'        => CustomColumns\Datetime::class,
+            'select'        => CustomColumns\Select::class,
+            'select_valtext'        => CustomColumns\SelectValtext::class,
+            'select_table'        => CustomColumns\SelectTable::class,
+            'yesno'        => CustomColumns\Yesno::class,
+            'boolean'        => CustomColumns\Boolean::class,
+            'file'        => CustomColumns\File::class,
+            'image'        => CustomColumns\Image::class,
+            'auto_number'        => CustomColumns\AutoNumber::class,
+            'hidden'        => CustomColumns\Hidden::class,
+            'user'        => CustomColumns\User::class,
+            'organization'        => CustomColumns\Organization::class,
+        ];
 
-            ///// set plugin field
-            Plugin::getByPluginTypes(PluginType::COLUMN)->each(function($plugin) use(&$map){
-                // get className
-                $classname = $plugin->getClassName(PluginType::COLUMN);
-                if(!isset($classname) || !class_exists($classname)){
-                    return;
-                }
+        ///// set plugin field
+        Plugin::getByPluginTypes(PluginType::COLUMN)->each(function($plugin) use(&$map){
+            // get className
+            $classname = $plugin->getClassName(PluginType::COLUMN);
+            if(!isset($classname) || !class_exists($classname)){
+                return;
+            }
 
-                $map[$classname::getColumnType()] = $classname;
-            });
-
-            return $map;
+            $map[$classname::getColumnType()] = $classname;
         });
+
 
         foreach ($map as $abstract => $class) {
             CustomItem::extend($abstract, $class);

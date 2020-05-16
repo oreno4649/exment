@@ -69,8 +69,8 @@ trait ColumnItemTrait
         return $this->column_item->isSelectForm();
     }
     
-    public function isVirtual()
+    public function disableSave()
     {
-        return $this->column_item->isVirtual();
+        return $this->column_item->disableSave();
     }
 }
