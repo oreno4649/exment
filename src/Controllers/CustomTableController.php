@@ -223,7 +223,7 @@ class CustomTableController extends AdminControllerBase
             // if edit mode
             if ($id != null) {
                 $model = CustomTable::getEloquent($id);
-                $tools->append((new Tools\CustomTableMenuButton('table', $model, 'default_setting'))->render());
+                $tools->append((new Tools\CustomTableMenuButton('table', $model, 'default_setting')));
             }
         });
         
@@ -402,7 +402,7 @@ HTML;
             // if edit mode
             if ($id != null) {
                 $model = CustomTable::getEloquent($id);
-                $tools->append((new Tools\CustomTableMenuButton('table', $model, 'expand_setting'))->render());
+                $tools->append((new Tools\CustomTableMenuButton('table', $model, 'expand_setting')));
             }
         });
         

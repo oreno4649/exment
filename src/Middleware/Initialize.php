@@ -192,7 +192,7 @@ class Initialize
         Config::set('admin.database.users_table', \Exceedone\Exment\Model\LoginUser::getTableName());
         Config::set('admin.database.users_model', \Exceedone\Exment\Model\LoginUser::class);
         Config::set('admin.enable_default_breadcrumb', false);
-        Config::set('admin.show_environment', false);
+        Config::set('session.show_environment', false);
 
         if ($setDatabase) {
             // Set system setting to config --------------------------------------------------

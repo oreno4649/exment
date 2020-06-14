@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Exceedone\Exment\Model\ApiClient;
 use Exceedone\Exment\Model\ApiClientRepository;
 use Exceedone\Exment\Enums\ApiClientType;
+use Exceedone\Exment\Form\Tools;
 use Laravel\Passport\Client;
 
 class ApiSettingController extends AdminControllerBase
@@ -41,6 +42,9 @@ class ApiSettingController extends AdminControllerBase
         $grid->disableExport();
         $grid->actions(function (Grid\Displayers\Actions $actions) {
             $actions->disableView();
+        });
+        $grid->tools(function (Grid\Tools $tools) {
+            $tools->prepend(new Tools\SystemChangePageMenu());
         });
         return $grid;
     }
@@ -97,6 +101,10 @@ class ApiSettingController extends AdminControllerBase
                 })->help(exmtrans('api.help.executed_user'));
             }
         }
+
+        $form->tools(function (Form\Tools $tools) {
+            $tools->append(new Tools\SystemChangePageMenu());
+        });
 
         $form->disableReset();
         return $form;
