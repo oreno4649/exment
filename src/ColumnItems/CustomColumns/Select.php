@@ -10,7 +10,7 @@ use Encore\Admin\Grid\Filter;
 
 class Select extends CustomItem
 {
-    use ImportValueTrait;
+    use ImportValueTrait, SelectTrait;
     
     /**
      * Set column type
@@ -124,9 +124,7 @@ class Select extends CustomItem
     
     public function getAdminFilterWhereQuery($query, $input)
     {
-        $index = \DB::getQueryGrammar()->wrap($this->index());
-        // index is wraped
-        $query->whereRaw("FIND_IN_SET(?, REPLACE(REPLACE(REPLACE(REPLACE($index, '[', ''), ' ', ''), ']', ''), '\\\"', ''))", $input);
+        $this->getSelectFilterQuery($query, $input);
     }
     
     public static function isMultipleEnabled()
