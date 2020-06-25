@@ -143,6 +143,16 @@ abstract class CustomItem implements ItemInterface
     }
 
     /**
+     * Get API column name
+     *
+     * @return string
+     */
+    public function apiName()
+    {
+        return $this->_apiName();
+    }
+
+    /**
      * Get default value. If value is null, return this result.
      *
      * @return mixed
@@ -150,7 +160,7 @@ abstract class CustomItem implements ItemInterface
     public function default(){
         return null;
     }
-    
+        
     /**
      * Get default value. Only avaiable form input.
      *
