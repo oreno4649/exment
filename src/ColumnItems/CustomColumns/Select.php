@@ -117,6 +117,11 @@ class Select extends CustomItem
         $form->switchbool('multiple_enabled', exmtrans("custom_column.options.multiple_enabled"));
     }
 
+    /**
+     * replace value for import
+     *
+     * @return array
+     */
     protected function getImportValueOption()
     {
         return $this->custom_column->createSelectOptions();

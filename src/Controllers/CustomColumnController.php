@@ -285,6 +285,7 @@ class CustomColumnController extends AdminControllerTableBase
             ;
             $form->ignore('add_custom_form_flg');
             $form->ignore('add_custom_view_flg');
+            $form->ignore('add_custom_view_flg');
         }
 
         $form->saved(function (Form $form) {
@@ -313,36 +314,6 @@ class CustomColumnController extends AdminControllerTableBase
         $column_item = $this->getCustomItem($request, $id, $request->get('column_type'));
 
         return $column_item->calcModal($request);
-
-        // get other columns
-        // return $id is null(calling create fuction) or not match $id and row id.
-        $custom_column_options = $this->getCalcCustomColumnOptions($id, $this->custom_table);
-        
-        // get value
-        $value = $request->get('options_calc_formula');
-
-        if (!isset($value)) {
-            $value = [];
-        }
-        $value = jsonToArray($value);
-
-        ///// get text
-        foreach ($value as &$v) {
-            $v['text'] = $this->getCalcDisplayText($v, $custom_column_options);
-        }
-        
-        $render = view('exment::custom-column.calc_formula_modal', [
-            'custom_columns' => $custom_column_options,
-            'value' => $value,
-            'symbols' => exmtrans('custom_column.symbols'),
-        ]);
-        return getAjaxResponse([
-            'body'  => $render->render(),
-            'showReset' => true,
-            'title' => exmtrans("custom_column.options.calc_formula"),
-            'contentname' => 'options_calc_formula',
-            'submitlabel' => trans('admin.setting'),
-        ]);
     }
 
     /**
@@ -413,6 +384,21 @@ class CustomColumnController extends AdminControllerTableBase
             $custom_view_column->order = $order;
 
             $custom_view_column->save();
+        }
+
+        // set table labels --------------------------------------------------
+        $add_table_label_flg = app('request')->input('add_table_label_flg');
+        if (boolval($add_table_label_flg)) {
+            $priority = CustomColumnMulti::where('custom_table_id', $this->custom_table->id)->where('multisetting_type', MultisettingType::TABLE_LABELS)->max('priority') ?? 0;
+            
+            CustomColumnMulti::create([
+                'custom_table_id' => $this->custom_table->id,
+                'multisetting_type' => MultisettingType::TABLE_LABELS,
+                'priority' => ++$priority,
+                'options' => [
+                    'table_label_id' => $model->id,
+                ],
+            ]);
         }
     }
 

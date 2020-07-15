@@ -31,6 +31,7 @@ use Exceedone\Exment\Enums\NotifySavedType;
 use Exceedone\Exment\Enums\LoginType;
 use Exceedone\Exment\Enums\FormColumnType;
 use Exceedone\Exment\Services\DataImportExport;
+use Exceedone\Exment\Services\EnvService;
 use Exceedone\Exment\Middleware\Morph;
 use Exceedone\Exment\ColumnItems\CustomItem;
 use Carbon\Carbon;
@@ -156,7 +157,13 @@ class PatchDataCommand extends Command
             case 'clear_form_column_relation':
                 $this->clearFormColumnRelation();
                 return;
-        }
+            case 'patch_freeword_search':
+                $this->setFreewordSearchOption();
+                return;
+            case 'set_env':
+                $this->setEnv();
+                return;
+            }
 
         $this->error('patch name not found.');
     }
@@ -260,13 +267,29 @@ class PatchDataCommand extends Command
     }
     
     /**
+     * set freeword_search option true, if index-column
+     *
+     * @return void
+     */
+    protected function setFreewordSearchOption()
+    {
+        // get index columns
+        $index_custom_columns = CustomColumn::indexEnabled()->get();
+        
+        foreach ($index_custom_columns as  $index_custom_column) {
+            $index_custom_column->setOption('freeword_search', '1');
+            $index_custom_column->save();
+        }
+    }
+    
+    /**
      * import mail template for 2factor
      *
      * @return void
      */
     protected function import2factorTemplate()
     {
-        return $this->patchMailTemplate([
+        $this->patchMailTemplate([
             'verify_2factor',
             'verify_2factor_google',
             'verify_2factor_system',
@@ -280,7 +303,7 @@ class PatchDataCommand extends Command
      */
     protected function importZipPasswordTemplate()
     {
-        return $this->patchMailTemplate([
+        $this->patchMailTemplate([
             'password_notify',
             'password_notify_header',
         ]);
@@ -293,7 +316,7 @@ class PatchDataCommand extends Command
      */
     protected function importWorkflowTemplate()
     {
-        return $this->patchMailTemplate([
+        $this->patchMailTemplate([
             'workflow_notify',
         ]);
     }
@@ -604,7 +627,7 @@ class PatchDataCommand extends Command
      */
     protected function movePluginFolder()
     {
-        return $this->moveAppToStorageFolder('Plugins', Define::DISKNAME_PLUGIN_LOCAL);
+        $this->moveAppToStorageFolder('Plugins', Define::DISKNAME_PLUGIN_LOCAL);
     }
     
     // /**
@@ -1123,6 +1146,31 @@ class PatchDataCommand extends Command
                 $v->suuid = short_uuid();
                 $v->save();
             });
+        }
+    }
+    
+    /**
+     * setEnv
+     *
+     * @return void
+     */
+    protected function setEnv()
+    {
+        if (!canConnection() || !hasTable(SystemTableName::SYSTEM)) {
+            return;
+        }
+
+        if (!boolval(System::initialized())) {
+            return;
+        }
+
+        // write env
+        try {
+            EnvService::setEnv(['EXMENT_INITIALIZE' => 1]);
+        }
+        // if cannot write, nothing do
+        catch (\Exception $ex) {
+        } catch (\Throwable $ex) {
         }
     }
 }
