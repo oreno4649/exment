@@ -2,7 +2,12 @@
 
 namespace Exceedone\Exment;
 
+use Exceedone\Exment\Validator as ExmentValidator;
+use Exceedone\Exment\Enums\UrlTagType;
 use Exceedone\Exment\Model\Menu;
+use Exceedone\Exment\Model\System;
+use Exceedone\Exment\Model\Define;
+use Exceedone\Exment\Model\LoginUser;
 use Illuminate\Support\Facades\Auth;
 use Encore\Admin\Admin;
 
@@ -50,7 +55,7 @@ class Exment
             return $errorController->error($request, $exception);
         } catch (\Exception $ex) {
             return $callback($request, $exception);
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             return $callback($request, $exception);
         }
     }
@@ -85,4 +90,117 @@ class Exment
         list($latest, $current) = getExmentVersion($getFromComposer);
         return $current;
     }
+
+
+
+
+
+
+
+    // Helper logic ----------------------------------------------------
+
+    public function getUrlTag(?string $url, ?string $label, $urlTagType, array $attributes = [], array $options = [])
+    {
+        $options = array_merge(
+            [
+                'tooltipTitle' => null,
+                'notEscape' => false,
+            ],
+            $options
+        );
+
+        if (!boolval($options['notEscape'])) {
+            $label = esc_html($label);
+        }
+
+        // if disable url tag in request, return only url. (for use modal search)
+        if (boolval(System::requestSession(Define::SYSTEM_KEY_SESSION_DISABLE_DATA_URL_TAG))) {
+            return view('exment::widgets.url-nottag', [
+                'label' => $label,
+            ]);
+        }
+
+        $href = $url;
+        if ($urlTagType == UrlTagType::MODAL) {
+            $url .= '?modal=1';
+            $href = 'javascript:void(0);';
+            $options['tooltipTitle'] = exmtrans('custom_value.data_detail');
+
+            $attributes['data-widgetmodal_url'] = $url;
+        } elseif ($urlTagType == UrlTagType::BLANK) {
+            $attributes['target'] = '_blank';
+        } elseif ($urlTagType == UrlTagType::TOP) {
+            $attributes['target'] = '_top';
+        }
+
+        if (isset($options['tooltipTitle'])) {
+            $attributes['data-toggle'] = 'tooltip';
+            $attributes['title'] = esc_html($options['tooltipTitle']);
+        }
+
+        return view('exment::widgets.url-tag', [
+            'href' => $href,
+            'label' => $label,
+            'attributes' => formatAttributes($attributes),
+        ]);
+    }
+
+    
+    /**
+     * get_password_rule(for validation)
+     * @return string
+     */
+    public function get_password_rule($required = true, ?LoginUser $login_user = null, array $options = [])
+    {
+        $options = array_merge([
+            'confirmed' => true,
+        ], $options);
+
+        $validates = [];
+        if ($required) {
+            $validates[] = 'required';
+        } else {
+            $validates[] = 'nullable';
+        }
+
+        if(boolval($options['confirmed'])){
+            $validates[] = 'confirmed';
+        }
+
+        $validates[] = 'max:'.(!is_null(config('exment.password_rule.max')) ? config('exment.password_rule.max') : '32');
+        
+        // check password policy
+        $complex = false;
+        $validates[] = new ExmentValidator\PasswordHistoryRule($login_user);
+
+        if (!is_null($is_complex = System::complex_password()) && boolval($is_complex)) {
+            $validates[] = new ExmentValidator\ComplexPasswordRule;
+            $complex = true;
+        }
+
+        if (!$complex) {
+            $validates[] = 'min:'.(!is_null(config('exment.password_rule.min')) ? config('exment.password_rule.min') : '8');
+        }
+
+        // set regex
+        if (!$complex && !is_null(config('exment.password_rule.rule'))) {
+            $validates[] = 'regex:/'.config('exment.password_rule.rule').'/';
+        }
+        
+        return $validates;
+    }
+
+    /**
+     * get_password_help
+     * @return string
+     */
+    public function get_password_help()
+    {
+        $is_complex = System::complex_password() ?? false;
+        if(boolval($is_complex)){
+            return exmtrans('validation.complex_password');
+        }
+        return exmtrans('user.help.password');
+    }
+
 }

@@ -29,6 +29,11 @@ class SelectValtext extends Select
         return $returns;
     }
     
+    /**
+     * replace value for import
+     *
+     * @return array
+     */
     protected function getImportValueOption()
     {
         return $this->custom_column->createSelectOptions();
@@ -37,7 +42,7 @@ class SelectValtext extends Select
     /**
      * Get pure value. If you want to change the search value, change it with this function.
      *
-     * @param [type] $value
+     * @param string $label
      * @return ?string string:matched, null:not matched
      */
     public function getValFromLabel($label)

@@ -177,6 +177,10 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
         }
         return CustomTable::getEloquent($this->getOption('select_target_table'));
     }
+    public function getSelectTargetViewAttribute()
+    {
+        return CustomView::getEloquent($this->getOption('select_target_view'));
+    }
 
     public function getRequiredAttribute()
     {
@@ -385,11 +389,21 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
     /**
      * Get where query. index name or value->XXXX
      *
-     * @return void
+     * @return string database query key.
      */
     public function getQueryKey()
     {
         return $this->index_enabled ? $this->getIndexColumnName() : 'value->' . $this->column_name;
+    }
+
+    /**
+     * Is get all user or org. Not filtering display table.
+     *
+     * @return boolean
+     */
+    public function isGetAllUserOrganization()
+    {
+        return $this->isUserOrganization() && boolval($this->getOption('showing_all_user_organizations'));
     }
 
     /**
@@ -452,7 +466,7 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
 
         if (is_string($select_item)) {
             $str = str_replace(array("\r\n","\r","\n"), "\n", $select_item);
-            if (isset($str) && mb_strlen($str) > 0) {
+            if (!is_nullorempty($str) && mb_strlen($str) > 0) {
                 // loop for split new line
                 $array = explode("\n", $str);
                 foreach ($array as $a) {

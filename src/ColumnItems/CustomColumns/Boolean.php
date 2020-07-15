@@ -71,6 +71,11 @@ class Boolean extends CustomItem
         ]);
     }
     
+    /**
+     * replace value for import
+     *
+     * @return array
+     */
     protected function getImportValueOption()
     {
         $column = $this->custom_column;
@@ -83,7 +88,7 @@ class Boolean extends CustomItem
     /**
      * Get pure value. If you want to change the search value, change it with this function.
      *
-     * @param [type] $value
+     * @param string $label
      * @return ?string string:matched, null:not matched
      */
     public function getValFromLabel($label)

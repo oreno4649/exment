@@ -644,6 +644,9 @@ namespace Exment {
                 var expand = link.expand;
                 var $target = $parent.find(CommonEvent.getClassKey(link.to));
 
+                // if has 'widgetmodal_expand' on button, append linkage_value_id
+                CommonEvent.setLinkgaeExpandToSearchButton(expand, $target, $base.val());
+
                 // if target has 'data-add-select2-ajax'(Call as ajax), set data to $target, and not call linkage
                 if(hasValue($target.data('add-select2-ajax'))){
                     let select2_expand = $target.data('add-select2-expand');
@@ -652,7 +655,7 @@ namespace Exment {
                     }
 
                     select2_expand['linkage_value_id'] = $base.val();
-                    $target.data('add-select2-expand', select2_expand);
+                    $target.data('add-select2-expand', select2_expand).val(null).trigger("change");
                     continue;
                 }
                 CommonEvent.linkage($target, url, $base.val(), expand);
@@ -739,6 +742,27 @@ namespace Exment {
                 $d.resolve();
             });
             return $d.promise();
+        }
+
+
+        /**
+         * Set linkage expand info for modal search
+         * @param expand 
+         * @param $target 
+         */
+        private static setLinkgaeExpandToSearchButton(expand, $target, linkage_value_id){
+            let $button = $target.parent().find('[data-widgetmodal_url]');
+            if(!hasValue($button)){
+                return;
+            }
+
+            let buttonExpand = $button.data('widgetmodal_expand');
+            if(!hasValue(buttonExpand)){
+                buttonExpand = {};
+            }
+            expand['linkage_value_id'] = linkage_value_id;
+            buttonExpand['linkage'] = expand;
+            $button.data('widgetmodal_expand', buttonExpand);
         }
 
         /**
@@ -1207,6 +1231,14 @@ const pInt = (obj) => {
     obj = obj.toString().replace(/,/g, '');
     return parseInt(obj);
 }
+
+const pBool = (obj) : boolean => {
+    if (!hasValue(obj)) {
+        return false;
+    }
+    const booleanStr = obj.toString().toLowerCase();
+    return booleanStr === "true" || booleanStr === "1";
+ }
 
 const hasValue = (obj): boolean => {
     if (obj == null || obj == undefined || obj.length == 0) {

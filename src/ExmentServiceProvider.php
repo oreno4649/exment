@@ -284,13 +284,12 @@ class ExmentServiceProvider extends ServiceProvider
             return;
         }
 
-        $plugin_types = array_merge(PluginType::PLUGIN_TYPE_PLUGIN_PAGE(), [PluginType::COLUMN]);
-        Plugin::getByPluginTypes($plugin_types)->each(function($plugin){
-            if (is_null($items = $plugin->getLoadView())) {
-                return;
+        $pluginPages = Plugin::getByPluginTypes(PluginType::PLUGIN_TYPE_PLUGIN_USE_VIEW(), true);
+        foreach ($pluginPages as $pluginPage) {
+            if (!is_null($items = $pluginPage->_getLoadView())) {
+                $this->loadViewsFrom($items[0], $items[1]);
             }
-            $this->loadViewsFrom($items[0], $items[1]);
-        });
+        };
     }
 
     protected function bootApp()

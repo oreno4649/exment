@@ -429,6 +429,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | SELECT TABLE MODAL SEARCH DISABLED
+    |--------------------------------------------------------------------------
+    |
+    | It is limit count whether ajax or select.
+    |
+    */
+    'select_table_modal_search_disabled' => env('EXMENT_SELECT_TABLE_MODAL_SEARCH_DISABLED', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | GRID_MIN_WIDTH
     |--------------------------------------------------------------------------
     |
@@ -619,6 +629,17 @@ return [
     */
     'select_relation_linkage_disabled' => env('SELECT_RELATION_LINKAGE_DISABLED', false),
 
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Textarea html space to tag
+    |--------------------------------------------------------------------------
+    |
+    | When showing html if textarea, space to tag.
+    | 
+    */
+    'textarea_space_tag' => env('EXMENT_TEXTAREA_SPACE_TAG', true),
+    
     /*
     |--------------------------------------------------------------------------
     | API default get data count 

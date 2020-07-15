@@ -10,12 +10,12 @@ use Exceedone\Exment\Model\Define;
 use Exceedone\Exment\Enums\ChartAxisType;
 use Exceedone\Exment\Enums\ChartOptionType;
 use Exceedone\Exment\Enums\ChartType;
-use Exceedone\Exment\Enums\DashboardType;
 use Exceedone\Exment\Enums\DashboardBoxType;
 use Exceedone\Exment\Enums\Permission;
 use Exceedone\Exment\Enums\SystemColumn;
 use Exceedone\Exment\Enums\ViewType;
 use Exceedone\Exment\Enums\ViewKindType;
+use Exceedone\Exment\Enums\DashboardType;
 
 class ChartItem implements ItemInterface
 {
@@ -127,7 +127,7 @@ class ChartItem implements ItemInterface
         $view_column_x = CustomViewSummary::getSummaryViewColumn($this->axis_x);
         $view_column_y = CustomViewSummary::getSummaryViewColumn($this->axis_y);
 
-        if (!isset($view_column_x) || !isset($view_column_y)) {
+        if (is_nullorempty($view_column_x) || is_nullorempty($view_column_y)) {
             return false;
         }
 
@@ -251,7 +251,7 @@ class ChartItem implements ItemInterface
                         return array_get($value, 'view_kind_type') != ViewKindType::CALENDAR;
                     })
                     ->filter(function ($value) use ($dashboard) {
-                        if (array_get($dashboard, 'dashboard_type') != DashBoardType::SYSTEM) {
+                        if (array_get($dashboard, 'dashboard_type') != DashboardType::SYSTEM) {
                             return true;
                         }
                         return array_get($value, 'view_type') == ViewType::SYSTEM;
@@ -370,7 +370,7 @@ EOT;
     /**
      * get chart color array.
      *
-     * @return chart color array
+     * @return array Chart color array
      */
     protected function getChartColor($datacnt)
     {
