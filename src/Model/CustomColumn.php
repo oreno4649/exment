@@ -403,7 +403,7 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
      */
     public function isGetAllUserOrganization()
     {
-        return ColumnType::isUserOrganization($this->column_type) && boolval($this->getOption('showing_all_user_organizations'));
+        return $this->isUserOrganization() && boolval($this->getOption('showing_all_user_organizations'));
     }
 
     /**

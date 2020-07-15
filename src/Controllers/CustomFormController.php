@@ -332,9 +332,11 @@ class CustomFormController extends AdminControllerTableBase
 
                 // get column view name
                 $column_view_name = null;
+                $is_select_table = false;
                 switch (array_get($custom_form_column, 'form_column_type')) {
                     case FormColumnType::COLUMN:
                         $custom_column = array_get($custom_form_column, 'custom_column');
+                        $is_select_table = $custom_column->isSelectTable();
                         if (!isset($custom_column)) {
                             // get from form_column_target_id
                             $custom_column = CustomColumn::getEloquent(array_get($custom_form_column, 'form_column_target_id'));
@@ -352,7 +354,8 @@ class CustomFormController extends AdminControllerTableBase
                 }
                 // set view_name using custom_column info.
                 $custom_form_column_array = array_merge($custom_form_column_array, [
-                    'column_view_name' => $column_view_name
+                    'column_view_name' => $column_view_name,
+                    'is_select_table' => $is_select_table,
                 ]);
 
                 // add header name

@@ -1078,7 +1078,7 @@ class PatchDataCommand extends Command
                 return true;
             }
 
-            if (!ColumnType::isSelectTable($custom_column['column_type'])) {
+            if (!$custom_column->isSelectTable()) {
                 return true;
             }
 

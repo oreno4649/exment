@@ -275,17 +275,20 @@ class CustomColumnController extends AdminControllerTableBase
 
         // if create column, add custom form and view
         if (!isset($id)) {
+            $form->exmheader(exmtrans('common.create_only_setting'))->hr();
+
             $form->switchbool('add_custom_form_flg', exmtrans("custom_column.add_custom_form_flg"))->help(exmtrans("custom_column.help.add_custom_form_flg"))
                 ->default("1")
-                ->attribute(['data-filtertrigger' =>true])
             ;
             $form->switchbool('add_custom_view_flg', exmtrans("custom_column.add_custom_view_flg"))->help(exmtrans("custom_column.help.add_custom_view_flg"))
                 ->default("0")
-                ->attribute(['data-filtertrigger' =>true])
+            ;
+            $form->switchbool('add_table_label_flg', exmtrans("custom_column.add_table_label_flg"))->help(exmtrans("custom_column.help.add_table_label_flg"))
+                ->default("0")
             ;
             $form->ignore('add_custom_form_flg');
             $form->ignore('add_custom_view_flg');
-            $form->ignore('add_custom_view_flg');
+            $form->ignore('add_table_label_flg');
         }
 
         $form->saved(function (Form $form) {

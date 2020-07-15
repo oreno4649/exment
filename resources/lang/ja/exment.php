@@ -519,6 +519,7 @@ return [
             'api' => 'API',
             'event' => 'イベント',
             'button' => 'ボタン',
+            'column' => 'カスタム列',
         ],
     ],
 

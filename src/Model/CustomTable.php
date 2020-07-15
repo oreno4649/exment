@@ -2126,13 +2126,13 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
 
         ///// get table columns
         $custom_columns = $this->custom_columns_cache;
-        foreach ($custom_columns as $option) {
-            if ($options['index_enabled_only'] && !$option->index_enabled) {
+        foreach ($custom_columns as $custom_column) {
+            if ($options['index_enabled_only'] && !$custom_column->index_enabled) {
                 continue;
             }
-            $column_type = array_get($option, 'column_type');
-            if (ColumnType::isUserOrganization($column_type)) {
-                $results[static::getOptionKey(array_get($option, 'id'), $options['append_table'], $this->id)] = array_get($option, 'column_view_name');
+            $column_type = array_get($custom_column, 'column_type');
+            if ($column_type->isUserOrganization()) {
+                $results[static::getOptionKey(array_get($custom_column, 'id'), $options['append_table'], $this->id)] = array_get($custom_column, 'column_view_name');
             }
         }
 

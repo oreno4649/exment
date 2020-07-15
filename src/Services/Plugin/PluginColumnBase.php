@@ -5,9 +5,9 @@ use Exceedone\Exment\Model\Plugin as PluginModel;
 use Exceedone\Exment\Enums\PluginType;
 
 /**
- * Plugin (column) trait class
+ * Plugin (Button) base class
  */
-trait PluginColumnTrait
+class PluginColumnBase extends \Exceedone\Exment\ColumnItems\CustomItem
 {
     use PluginPageTrait;
     
