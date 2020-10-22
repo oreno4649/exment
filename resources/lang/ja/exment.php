@@ -1006,6 +1006,7 @@ return [
         'add_parent_menu' => '追加先の親メニュー',
         'default_setting' => '通常設定',
         'expand_setting' => '拡張設定',
+        'show_authority' => '権限確認',
         'help' => [
             'color' => '検索などで使用する、テーブルの色を設定します。',
             'icon' => 'メニューなどに表示するアイコンを選択してください。',
@@ -1026,6 +1027,16 @@ return [
             'saved_redirect_column' => '保存しました！次はカスタム列を設定してください。',
             'delete_confirm_message' => '削除する場合は「%s」を入力してください。',
             'delete_confirm_error' => 'キーワードが正しくありません。',
+        ],
+
+        'permission' => [
+            'title' => '権限確認',
+            'all_user' => 'テーブルに割り当てられた権限',
+            'row_count0' => 'なし',
+            'role_group_columns' => [
+                'name' => '役割グループ',
+                'permission' => '権限',
+            ]
         ],
 
         'custom_column_multi' => [

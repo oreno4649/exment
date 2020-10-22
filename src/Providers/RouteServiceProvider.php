@@ -111,6 +111,9 @@ class RouteServiceProvider extends ServiceProvider
 
             $router->get('table/menuModal/{id}', 'CustomTableController@menuModal');
 
+            $router->get('tablepermission/{tableKey}/{id}', 'TablePermissionController@getData');
+            $router->get('tablepermission/{tableKey}', 'TablePermissionController@getTable');
+
             $router->get("workflow/beginning", 'WorkflowController@beginningForm');
             $router->post("workflow/beginning", 'WorkflowController@beginningPost');
 

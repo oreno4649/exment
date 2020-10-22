@@ -229,6 +229,14 @@ class CustomTableController extends AdminControllerBase
             if ($id != null) {
                 $model = CustomTable::getEloquent($id);
                 $tools->append((new Tools\CustomTableMenuButton('table', $model, 'default_setting')));
+
+                $tools->append(view('exment::tools.modal-button', [
+                    'suuid' => $model->suuid,
+                    'url' => admin_urls('tablepermission', $model->table_name),
+                    'label' => exmtrans('custom_table.show_authority'),
+                    'icon' => 'fa-key',
+                    'button_class' => 'btn-primary',
+                ]));
             }
         });
         
