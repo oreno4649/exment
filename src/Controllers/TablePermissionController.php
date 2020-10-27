@@ -2,23 +2,22 @@
 
 namespace Exceedone\Exment\Controllers;
 
-use Encore\Admin\Grid\Linker;
+use App\Http\Controllers\Controller;
 use Encore\Admin\Widgets\Table as WidgetTable;
 use Illuminate\Http\Request;
 use Exceedone\Exment\Enums\Permission;
 use Exceedone\Exment\Enums\RoleType;
 use Exceedone\Exment\Enums\SystemRoleType;
+use Exceedone\Exment\Enums\UrlTagType;
 use Exceedone\Exment\Model\RoleGroup;
 use Exceedone\Exment\Model\RoleGroupPermission;
 use Exceedone\Exment\Model\CustomTable;
+use Exceedone\Exment\Model\CustomValueAuthoritable;
 use Exceedone\Exment\Model\System;
 
-class TablePermissionController extends AdminControllerBase
+class TablePermissionController extends Controller
 {
-    public function __construct()
-    {
-        $this->setPageInfo(trans('admin.operation_log'), trans('admin.operation_log'), exmtrans('operation_log.description'), 'fa-file-text');
-    }
+    use ExmentControllerTrait;
 
     /**
      * @return Grid
@@ -35,16 +34,45 @@ class TablePermissionController extends AdminControllerBase
             'showSubmit' => false
         ];
     }
+
+    /**
+     * Make a show builder.
+     *
+     * @param mixed   $id
+     * @return Show
+     */
+    public function getData(Request $request, $tableKey, $id)
+    {
+        $custom_table = CustomTable::getEloquent($tableKey);
+        $custom_value = $custom_table->getValueModel($id);
+
+        return [
+            'title' => exmtrans('custom_table.permission.title'),
+            'body' => $this->body($custom_table, $custom_value),
+            'footer' => null,
+            'suuid' => $custom_value->suuid,
+            'showSubmit' => false
+        ];
+    }
     
     /**
      * get body
      * *this function calls from non-value method. So please escape if not necessary unescape.
      */
-    public function body($custom_table)
+    public function body($custom_table, $custom_value = null)
     {
-        return $this->getAllUserList($custom_table) . $this->getRoleGroupList($custom_table);
+        $result = $this->getAllUserList($custom_table) . $this->getRoleGroupList($custom_table, $custom_value);
+
+        if (isset($custom_value)) {
+            $result .= $this->getCustomValueList($custom_value);
+        }
+
+        return $result;
     }
 
+    /**
+     * get authority list for all user
+     */
     protected function getAllUserList($custom_table)
     {
         $headers = [exmtrans('custom_table.permission.all_user')];
@@ -81,10 +109,7 @@ class TablePermissionController extends AdminControllerBase
         })->get();
 
         // create headers
-        $headers = [
-            exmtrans('custom_table.permission.role_group_columns.name'), 
-            exmtrans('custom_table.permission.role_group_columns.permission')
-        ];
+        $headers = exmtrans('custom_table.permission.role_group_columns');
 
         $bodies = [];
         $role_groups = collect();
@@ -105,15 +130,46 @@ class TablePermissionController extends AdminControllerBase
 
             $bodies = $role_groups->map(function($item, $key) {
                 $role_group = RoleGroup::find($key);
+                $url = admin_urls('userorganization', "?role_group=$key");
+                $link = \Exment::getUrlTag($url, $role_group->role_group_view_name, UrlTagType::TOP);
                 $permission_text = implode(exmtrans('common.separate_word'), $item);
-                // $link = (new Linker)
-                //     ->url(admin_urls('role_group', $key, 'edit'))
-                //     //->linkattributes(['style' => "margin:0 3px;"])
-                //     ->icon('fa-eye')
-                //     ->tooltip(trans('admin.show'))
-                //     ->render();
                 return [
-                    $role_group->role_group_view_name,
+                    $link,
+                    $permission_text
+                ];
+            })->values()->toArray();
+        }
+
+        $widgetTable = new WidgetTable($headers, $bodies);
+        $widgetTable->class('table table-hover');
+        return $widgetTable->render();
+    }
+
+    protected function getCustomValueList($custom_value)
+    {
+        $authorities = CustomValueAuthoritable::getListsOnCustomValue($custom_value);
+
+        // create headers
+        $headers = exmtrans('custom_table.permission.custom_value_columns');
+
+        $bodies = [];
+        
+        if (isset($authorities)) {
+            $bodies = $authorities->map(function($item, $key) {
+                $user_org = $item->authoritable_user_org;
+                $authority_type_name = null;
+                $link = null;
+                $permission_text = exmtrans('role_group.role_type_option_value.'.$item->authoritable_type.'.label');
+                if (isset($user_org)) {
+                    $custom_table = $user_org->custom_table;
+                    $authority_type_name = $custom_table->table_view_name;
+                    $url = admin_urls('data', $custom_table->table_name, $user_org->id);
+                    $name = $user_org->getValue($custom_table->table_name . '_name');
+                    $link = \Exment::getUrlTag($url, $name, UrlTagType::TOP);
+                }
+                return [
+                    $authority_type_name,
+                    $link,
                     $permission_text
                 ];
             })->values()->toArray();
@@ -140,16 +196,5 @@ class TablePermissionController extends AdminControllerBase
                 return exmtrans("role_group.role_type_option_table.$permission.label");
             }
         })->toArray();
-    }
-
-    /**
-     * Make a show builder.
-     *
-     * @param mixed   $id
-     * @return Show
-     */
-    public function getData(Request $request, $tableKey, $id)
-    {
-        return null;
     }
 }

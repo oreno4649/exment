@@ -295,6 +295,21 @@ class Permission
                     return false;
                 }
                 return array_keys_exists(PermissionEnum::AVAILABLE_VIEW_CUSTOM_VALUE, $this->permission_details);
+            case "tablepermission":
+                if ($this->role_type == RoleType::SYSTEM) {
+                    return array_keys_exists(PermissionEnum::CUSTOM_TABLE, $this->permission_details);
+                }
+                $tableKey = request()->tableKey;
+                if (!$this->matchEndPointTable($tableKey)) {
+                    return false;
+                }
+                if (array_keys_exists(PermissionEnum::CUSTOM_TABLE, $this->permission_details)) {
+                    return true;
+                }
+                if (!is_null($id = request()->id)) {
+                    return array_keys_exists(PermissionEnum::CUSTOM_VALUE_PERMISSION, $this->permission_details);
+                }
+                return false;
             case "data":
                 return $this->validateCustomValuePermission($endpoint);
         }

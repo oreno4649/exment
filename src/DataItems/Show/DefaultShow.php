@@ -176,7 +176,7 @@ class DefaultShow extends ShowBase
                     $copyButtons = $this->custom_table->from_custom_copies;
                     $notifies = $this->custom_table->notifies;
                     $operations = $this->custom_table->operations;
-     
+         
                     // only not trashed
                     if (!$this->custom_value->trashed()) {
                         foreach ($listButtons as $plugin) {
@@ -217,6 +217,16 @@ class DefaultShow extends ShowBase
                                 $this->custom_value->id,
                                 admin_urls('data', $this->custom_table->table_name, $this->custom_value->id, "shareClick")
                             ));
+                        }
+
+                        if ($this->custom_value->enableCheckPermission() === true) {
+                            $tools->append(view('exment::tools.modal-button', [
+                                'suuid' => $this->custom_value->suuid,
+                                'url' => admin_urls('tablepermission', $this->custom_table->table_name, $this->custom_value->id),
+                                'label' => exmtrans('custom_table.show_authority'),
+                                'icon' => 'fa-key',
+                                'button_class' => 'btn-primary',
+                            ]));
                         }
                     }
                     // only trashed

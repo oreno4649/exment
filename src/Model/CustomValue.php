@@ -1610,4 +1610,33 @@ abstract class CustomValue extends ModelBase
 
         return true;
     }
+    
+    /**
+     * User can check this custom value's permission
+     */
+    public function enableCheckPermission()
+    {
+        // if system doesn't use role, return false
+        if (!System::permission_available()) {
+            return false;
+        }
+
+        if ($this->trashed()) {
+            return false;
+        }
+        
+        $custom_table = $this->custom_table;
+
+        // if master, false
+        if (in_array($custom_table->table_name, SystemTableName::SYSTEM_TABLE_NAME_MASTER())) {
+            return false;
+        }
+
+        // if not has share data, return false
+        if (!$custom_table->hasPermission([Permission::CUSTOM_TABLE, Permission::CUSTOM_VALUE_PERMISSION])) {
+            return false;
+        }
+
+        return true;
+    }
 }

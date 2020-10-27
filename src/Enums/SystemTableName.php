@@ -43,6 +43,7 @@ class SystemTableName extends EnumBase
 
     const VIEW_WORKFLOW_VALUE_UNION = 'view_workflow_value_unions';
     const VIEW_WORKFLOW_START = 'view_workflow_start';
+    const VIEW_USER_ORGANIZATION = 'view_user_organizations';
 
     public static function SYSTEM_TABLE_NAME_IGNORE_SAVED_AUTHORITY()
     {

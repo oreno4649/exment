@@ -16,6 +16,7 @@ class Permission extends EnumBase
     const CUSTOM_VALUE_ACCESS = 'custom_value_access';
     const CUSTOM_VALUE_SHARE = 'custom_value_share';
     const CUSTOM_VALUE_VIEW_TRASHED = 'custom_value_view_trashed';
+    const CUSTOM_VALUE_PERMISSION = 'custom_value_permission';
     const PLUGIN_ALL = 'plugin_all';
     const PLUGIN_ACCESS = 'plugin_access';
     const PLUGIN_SETTING = 'plugin_setting';
@@ -81,5 +82,6 @@ class Permission extends EnumBase
         self::CUSTOM_VALUE_VIEW,
         self::CUSTOM_VALUE_SHARE,
         self::CUSTOM_VALUE_VIEW_TRASHED,
+        self::CUSTOM_VALUE_PERMISSION,
     ];
 }

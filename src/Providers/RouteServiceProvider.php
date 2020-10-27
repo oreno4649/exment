@@ -79,6 +79,8 @@ class RouteServiceProvider extends ServiceProvider
                 return redirect(admin_url('template'));
             });
             
+            $router->get('userorganization', 'ViewUserOrganizationController@index');
+
             $router->post('notify/setting', 'NotifyController@postNotifySetting');
             $router->get('notify/targetcolumn', 'NotifyController@targetcolumn');
             $router->get('notify/notify_action_target', 'NotifyController@notify_action_target');
