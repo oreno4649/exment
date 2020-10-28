@@ -1037,6 +1037,9 @@ return [
             'title' => '権限確認',
             'all_user' => 'テーブルに割り当てられた権限',
             'row_count0' => 'なし',
+            'all_user_setting' => '全ユーザーに設定されている権限',
+            'table_setting' => 'テーブル設定',
+            'share_setting' => '個別共有',
             'role_group_columns' => [
                 '役割グループ',
                 '権限',
@@ -1045,7 +1048,7 @@ return [
                 '種類',
                 '対象',
                 '権限',
-            ]
+            ],
         ],
 
         'custom_column_multi' => [

@@ -56,6 +56,12 @@ class ViewUserOrganizationController extends AdminControllerBase
         $grid->disableExport();
         $grid->disableActions();
         
+        $grid->tools(function (Grid\Tools $tools) use ($grid) {
+            $tools->batch(function (Grid\Tools\BatchActions $actions) {
+                $actions->disableDelete();
+            });
+        });
+        
         $grid->filter(function ($filter) {
             $filter->disableIdFilter();
             $filter->like('code', exmtrans("user_organization.code"));

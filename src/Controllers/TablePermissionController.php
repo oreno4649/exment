@@ -3,6 +3,7 @@
 namespace Exceedone\Exment\Controllers;
 
 use App\Http\Controllers\Controller;
+use Encore\Admin\Widgets\Box;
 use Encore\Admin\Widgets\Table as WidgetTable;
 use Illuminate\Http\Request;
 use Exceedone\Exment\Enums\Permission;
@@ -91,9 +92,10 @@ class TablePermissionController extends Controller
             $bodies[] = [exmtrans('custom_table.permission.row_count0')];
         }
 
-        $widgetTable = new WidgetTable($headers, $bodies);
+        $widgetTable = new WidgetTable([], $bodies);
         $widgetTable->class('table table-hover');
-        return $widgetTable->render();
+        $box = new Box(exmtrans('custom_table.permission.all_user_setting'), $widgetTable);
+        return $box->render();
     }
 
     protected function getRoleGroupList($custom_table)
@@ -142,7 +144,8 @@ class TablePermissionController extends Controller
 
         $widgetTable = new WidgetTable($headers, $bodies);
         $widgetTable->class('table table-hover');
-        return $widgetTable->render();
+        $box = new Box(exmtrans('custom_table.permission.table_setting'), $widgetTable);
+        return $box->render();
     }
 
     protected function getCustomValueList($custom_value)
@@ -177,7 +180,8 @@ class TablePermissionController extends Controller
 
         $widgetTable = new WidgetTable($headers, $bodies);
         $widgetTable->class('table table-hover');
-        return $widgetTable->render();
+        $box = new Box(exmtrans('custom_table.permission.share_setting'), $widgetTable);
+        return $box->render();
     }
 
     protected function getPermissionList($data)

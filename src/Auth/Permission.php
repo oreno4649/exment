@@ -213,6 +213,7 @@ class Permission
             case "oauth":
             case "files":
             case "notify_navbar":
+            case "userorganization":
                 return true;
             ///// only system permission
             case "system":
