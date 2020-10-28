@@ -7,7 +7,7 @@ use Exceedone\Exment\Model\Define;
 use Exceedone\Exment\Model\System;
 use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\JoinedOrgFilterType;
-use Exceedone\Exment\Services\AuthUserOrgHelper;
+use Exceedone\Exment\Services\AuthUserOrg\AuthUserOrgHelper;
 
 trait UserTrait
 {

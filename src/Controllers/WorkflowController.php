@@ -34,7 +34,7 @@ use Exceedone\Exment\Enums\WorkflowWorkTargetType;
 use Exceedone\Exment\Enums\ConditionTypeDetail;
 use Exceedone\Exment\Form\Tools\ConditionHasManyTable;
 use Exceedone\Exment\Form\Tools;
-use Exceedone\Exment\Services\AuthUserOrgHelper;
+use Exceedone\Exment\Services\AuthUserOrg\AuthUserOrgHelper;
 use Symfony\Component\HttpFoundation\Response;
 use \Carbon\Carbon;
 

@@ -5,6 +5,8 @@ namespace Exceedone\Exment\Model;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Collection;
 use Encore\Admin\Facades\Admin;
+use Exceedone\Exment\Services\AuthUserOrg\AuthUserOrgHelper;
+use Exceedone\Exment\Services\AuthUserOrg\RolePermissionScope;
 use Exceedone\Exment\ColumnItems\CustomItem;
 use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\RelationType;
@@ -437,8 +439,8 @@ abstract class CustomValue extends ModelBase
 
             $model->postRestore();
         });
-
-        static::addGlobalScope(new CustomValueModelScope);
+        
+        static::addGlobalScope(new RolePermissionScope);
     }
 
     /**
@@ -1457,6 +1459,57 @@ abstract class CustomValue extends ModelBase
         System::setRequestSession($key, $this);
 
         return $this;
+    }
+
+    /**
+     * get all users and organizations who can access custom_value.
+     *
+     * @param string|null|array $tablePermission
+     * @return array
+     */
+    public function getRoleUserAndOrganizations($tablePermission = null)
+    {
+        $results = [
+            SystemTableName::USER => collect(),
+            SystemTableName::ORGANIZATION => collect(),
+        ];
+        $ids = [
+            SystemTableName::USER => [],
+            SystemTableName::ORGANIZATION => [],
+        ];
+        
+        // check request session
+        $key = sprintf(Define::SYSTEM_KEY_SESSION_VALUE_ACCRSSIBLE_USERS, $this->custom_table->id, $this->id);
+        // if set $tablePermission, always call
+        if (isset($tablePermission) || is_null($results = System::requestSession($key))) {
+            // get ids contains value_authoritable table
+            $ids[SystemTableName::USER] = $this->value_authoritable_users()->pluck('authoritable_target_id')->toArray();
+
+            // get custom_value's organizations
+            if (System::organization_available()) {
+                // get ids contains value_authoritable table
+                $ids[SystemTableName::ORGANIZATION]= $this->value_authoritable_organizations()->pluck('authoritable_target_id')->toArray();
+            }
+
+            foreach ($ids as $idkey => $idvalue) {
+                // get custom table's user ids(contains all table and permission role group)
+                $func = $idkey == SystemTableName::USER ? 'getRoleUserAndOrgBelongsUserQueryTable' : 'getRoleOrganizationQueryTable';
+                $queryTable = static::{$func}($this->custom_table, $tablePermission);
+                $queryTable->withoutGlobalScope(RolePermissionScope::class);
+
+                $tablename = getDBTableName($idkey);
+                $ids[$idkey] = array_merge($queryTable->pluck("$tablename.id")->toArray(), $ids[$idkey]);
+
+                // get real value
+                $results[$idkey] = AuthUserOrgHelper::getRealUserOrOrgs($idkey, $ids[$idkey]);
+            }
+
+            if (!isset($tablePermission)) {
+                System::requestSession($key, $results);
+            }
+        }
+        
+        return $results;
     }
 
     /**
