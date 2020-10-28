@@ -2,9 +2,12 @@
 
 namespace Exceedone\Exment\Model;
 
+use Exceedone\Exment\Model\System;
+use Exceedone\Exment\Model\Define;
+use Exceedone\Exment\Enums\JoinedOrgFilterType;
+use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Auth\HasPermissions;
 use Exceedone\Exment\Providers\LoginUserProvider;
-use Exceedone\Exment\Enums\SystemTableName;
 use Encore\Admin\Traits\AdminBuilder;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Session;
@@ -12,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Exceedone\Exment\Notifications\MailSender;
 use Exceedone\Exment\Enums\MailKeyName;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Authenticatable;
 
 class LoginUser extends ModelBase implements \Illuminate\Contracts\Auth\Authenticatable, \Illuminate\Contracts\Auth\CanResetPassword
 {
@@ -212,6 +216,7 @@ class LoginUser extends ModelBase implements \Illuminate\Contracts\Auth\Authenti
             }
         }
     }
+    
     
     protected static function boot()
     {

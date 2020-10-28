@@ -70,13 +70,14 @@ class RoleGroup extends ModelBase
                 if (!is_nullorempty($organization_ids) && $user_org->role_group_user_org_type == SystemTableName::ORGANIZATION) {
                     if (!$checkContainJointdOrgs && in_array($user_org->role_group_target_id, (array)$organization_ids)) {
                         return true;
-                    } elseif ($checkContainJointdOrgs) {
+                    } 
+                    elseif ($checkContainJointdOrgs) {
                         $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_role_group(), JoinedOrgFilterType::ALL);
                         foreach ((array)$organization_ids as $organization_id) {
                             // ge check contains parent and child organizaions.
                             $org = CustomTable::getEloquent(SystemTableName::ORGANIZATION)->getValueModel($organization_id);
                             
-                            $targetOrgIds = $org->getOrganizationIds($enum);
+                            $targetOrgIds = $org->getOrgJoinedIds($enum);
                             if (in_array($organization_id, $targetOrgIds)) {
                                 return true;
                             }

@@ -54,8 +54,10 @@ class UserScope extends RolePermissionScope
 
         // First, get users org joined
         $db_table_name_pivot = CustomRelation::getRelationNameByTables(SystemTableName::ORGANIZATION, SystemTableName::USER);
-        $target_users = \DB::table($db_table_name_pivot)->whereIn('parent_id', $user->getOrganizationIds($joinedOrgFilterType))
-            ->get(['child_id'])->pluck('child_id');
+        $target_users = \DB::table($db_table_name_pivot)
+            ->whereIn('parent_id', \Exment::getOrgJoinedIds($joinedOrgFilterType))
+            ->get(['child_id'])
+            ->pluck('child_id');
 
         $target_users = $target_users->merge($user->getUserId())->unique();
         

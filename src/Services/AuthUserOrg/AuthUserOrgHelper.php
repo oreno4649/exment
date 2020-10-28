@@ -5,7 +5,6 @@ use Exceedone\Exment\Model\Define;
 use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Model\System;
 use Exceedone\Exment\Enums\SystemTableName;
-use Exceedone\Exment\Enums\JoinedOrgFilterType;
 use Exceedone\Exment\Form\Widgets\ModalForm;
 use Exceedone\Exment\Services\AuthUserOrg\RolePermissionScope;
 
@@ -17,7 +16,7 @@ class AuthUserOrgHelper
     public static function getRealUserOrOrgs($related_type, $ids){
         return getModelName($related_type)::query()
             ->withoutGlobalScope(RolePermissionScope::class)
-            ->whereIn('id', $ids)
+            ->whereOrIn('id', $ids)
             ->get()
             ->unique();
     }
@@ -72,15 +71,10 @@ class AuthUserOrgHelper
             // and get authoritiable organization
             $organizations = static::getRoleOrganizationQueryTable($target_table)
                 ->get() ?? [];
+            $organizations->load('users');
             foreach ($organizations as $organization) {
-                // get JoinedOrgFilterType. this method is for org_joined_type_role_group. get users for has role groups.
-                $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_role_group(), JoinedOrgFilterType::ONLY_JOIN);
-                $relatedOrgs = CustomTable::getEloquent(SystemTableName::ORGANIZATION)->getValueModel()->with('users')->find($organization->getOrganizationIds($enum));
-
-                foreach ($relatedOrgs as $related_organization) {
-                    foreach ($related_organization->users as $user) {
-                        $target_ids[] = $user->getUserId();
-                    }
+                foreach ($organization->users as $user) {
+                    $target_ids[] = $user->getUserId();
                 }
             }
 
@@ -118,7 +112,7 @@ class AuthUserOrgHelper
             // if set $tablePermission, always call
             if (isset($tablePermission) || is_null($target_ids = System::requestSession($key))) {
                 // get user ids
-                $target_ids = $target_table->getRoleUserOrgId($related_type, $tablePermission);
+                $target_ids = $target_table->getRoleUserOrgIds($related_type, $tablePermission);
 
                 if ($target_ids_callback) {
                     $target_ids = $target_ids_callback($target_ids, $target_table);
@@ -143,159 +137,7 @@ class AuthUserOrgHelper
     }
 
 
-    /**
-     * get organization ids
-     * @return mixed
-     * get organization ids by organization ids
-     * @return array
-     */
-    public static function getTreeOrganizationIds($filterType = JoinedOrgFilterType::ALL, $targetOrgId) : array
-    {
-        if (!System::organization_available()) {
-            return [];
-        }
-        // get organization and ids. only match $targetOrgId.
-        $orgsArray = collect(static::getOrganizationTreeArray())->filter(function($org) use($targetOrgId){
-            return isMatchString($targetOrgId, array_get($org, 'id'));
-        });
-        $results = [];
-        foreach ($orgsArray as $org) {
-            static::setJoinedOrganization($results, $org, $filterType, null);
-        }
-
-        return collect($results)->pluck('id')->toArray();
-    }
-
     
-    /**
-     * get organization ids
-     * @return mixed
-     */
-    public static function getOrganizationIds($filterType = JoinedOrgFilterType::ALL, $targetUserId = null)
-    {
-        // if system doesn't use organization, return empty array.
-        if (!System::organization_available()) {
-            return [];
-        }
-        
-        // get organization and ids
-        $orgsArray = static::getOrganizationTreeArray();
-                
-        if (!isset($targetUserId)) {
-            $targetUserId = \Exment::getUserId();
-        }
-
-        $results = [];
-        foreach ($orgsArray as $org) {
-            static::setJoinedOrganization($results, $org, $filterType, $targetUserId);
-        }
-
-        return collect($results)->pluck('id')->toArray();
-    }
-
-    /**
-     * Get all organization tree array
-     *
-     * @return array
-     */
-    protected static function getOrganizationTreeArray() : array
-    {
-        return System::requestSession(Define::SYSTEM_KEY_SESSION_ORGANIZATION_TREE, function () {
-            $modelname = getModelName(SystemTableName::ORGANIZATION);
-            $indexName = $modelname::getParentOrgIndexName();
-
-            // get query
-            $orgs = $modelname::with([
-                    'users' => function ($query) {
-                        // pass aborting
-                        return $query->withoutGlobalScope(RolePermissionScope::class);
-                    }
-                ])
-                // pass aborting
-                ->withoutGlobalScopes([RolePermissionScope::class])
-                ->get(['id', $indexName])->toArray();
-
-            $baseOrgs = $orgs;
-
-            if (is_nullorempty($orgs)) {
-                return [];
-            }
-
-            foreach ($orgs as &$org) {
-                static::parents($org, $baseOrgs, $org, $indexName);
-                static::children($org, $orgs, $org, $indexName);
-            }
-
-            return $orgs;
-        });
-    }
-
-    protected static function parents(&$org, $orgs, $target, $indexName)
-    {
-        if (!isset($target[$indexName])) {
-            return;
-        }
-
-        // if same id, return
-        if ($org['id'] == $target[$indexName]) {
-            return;
-        }
-
-        $newTarget = collect($orgs)->first(function ($o) use ($target, $indexName) {
-            return $target[$indexName] == $o['id'];
-        });
-        if (!isset($newTarget)) {
-            return;
-        }
-
-        // set parent
-        $org['parents'][] = $newTarget;
-        static::parents($org, $orgs, $newTarget, $indexName);
-    }
-
-    protected static function children(&$org, $orgs, $target, $indexName)
-    {
-        $children = collect($orgs)->filter(function ($o) use ($target, $indexName) {
-            if (!isset($o[$indexName])) {
-                return;
-            }
-
-            return $o[$indexName] == $target['id'];
-        });
-
-        foreach ($children as $child) {
-            if ($org['id'] == $child['id']) {
-                continue;
-            }
-            // set children
-            $org['children'][] = $child;
-            static::children($org, $orgs, $child, $indexName);
-        }
-    }
-
-    protected static function setJoinedOrganization(&$results, $org, $filterType, $targetUserId)
-    {
-        // set $org id only $targetUserId
-        if (!array_has($org, 'users') || !collect($org['users'])->contains(function ($user) use ($targetUserId) {
-            return $user['id'] == $targetUserId;
-        })) {
-            return;
-        }
-
-        $results[] = $org;
-        if (JoinedOrgFilterType::isGetDowner($filterType) && array_has($org, 'parents')) {
-            foreach ($org['parents'] as $parent) {
-                $results[] = $parent;
-            }
-        }
-
-        if (JoinedOrgFilterType::isGetUpper($filterType) && array_has($org, 'children')) {
-            foreach ($org['children'] as $child) {
-                $results[] = $child;
-            }
-        }
-    }
-
     /**
      * Get User, org, role group form
      *

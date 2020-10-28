@@ -52,7 +52,7 @@ class OrganizationScope extends RolePermissionScope
         $joinedOrgFilterType = JoinedOrgFilterType::getEnum($setting);
 
         // get only login user's organization
-        $builder->whereIn("$db_table_name.id", $user->getOrganizationIds($joinedOrgFilterType));
+        $builder->whereIn("$db_table_name.id", \Exment::getOrgJoinedIds($joinedOrgFilterType));
     }
 
 }

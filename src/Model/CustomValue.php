@@ -747,7 +747,7 @@ abstract class CustomValue extends ModelBase
                     return $value['authoritable_target_id'] == \Exment::getUserId();
                 } elseif ($related_type == SystemTableName::ORGANIZATION) {
                     $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_custom_value(), JoinedOrgFilterType::ONLY_JOIN);
-                    return in_array($value['authoritable_target_id'], \Exment::user()->getOrganizationIds($enum));
+                    return in_array($value['authoritable_target_id'], \Exment::getOrgAuthoritableIds($enum));
                 }
             });
         }
@@ -761,7 +761,7 @@ abstract class CustomValue extends ModelBase
             $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_custom_value(), JoinedOrgFilterType::ONLY_JOIN);
             $query = $this
                 ->value_authoritable_organizations()
-                ->whereIn('authoritable_target_id', \Exment::user()->getOrganizationIds($enum));
+                ->whereIn('authoritable_target_id', \Exment::getOrgAuthoritableIds($enum));
         } else {
             throw new \Exception;
         }

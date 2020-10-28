@@ -11,6 +11,7 @@ use Exceedone\Exment\Model\Define;
 use Exceedone\Exment\Model\System;
 use Encore\Admin\Traits\ModelTree;
 use Encore\Admin\Traits\AdminBuilder;
+use Exceedone\Exment\Services\AuthUserOrg\OrganizationTree;
 
 trait OrganizationTrait
 {
@@ -106,28 +107,25 @@ trait OrganizationTrait
     }
 
     /**
-     * Get Parent and Children Ids
+     * Get Parent and Children Ids for Authoritable
      *
-     * @param [type] $joinedOrgFilterType
-     * @return void
+     * @param string $filterType
+     * @return array
      */
-    public function getOrganizationIds($filterType = JoinedOrgFilterType::ALL)
+    public function getOrgAuthoritableIds($filterType = JoinedOrgFilterType::ALL) : array
     {
-        return System::requestSession(sprintf(Define::SYSTEM_KEY_SESSION_ORGANIZATION_IDS_ORG, $this->id, $filterType), function () use ($filterType) {
-            $orgs = collect();
-            if (JoinedOrgFilterType::isGetUpper($filterType)) {
-                $orgs = $orgs->merge($this->all_children_organizations());
-            }
-            if (JoinedOrgFilterType::isGetDowner($filterType)) {
-                $orgs = $orgs->merge($this->all_parent_organizations());
-            }
+        return OrganizationTree\JoinHelper::getOrgAuthoritableIds($filterType, $this->getUserId());
+    }
 
-            $orgs->push($this);
-
-            return $orgs->map(function ($org) {
-                return $org->id;
-            })->sort()->unique()->toArray();
-        });
+    /**
+     * Get Parent and Children Ids for joined
+     *
+     * @param string $filterType
+     * @return array
+     */
+    public function getOrgJoinedIds($filterType = JoinedOrgFilterType::ALL) : array
+    {
+        return OrganizationTree\TreeOrgHelper::getOrgJoinedIds($filterType, $this->id);
     }
 
     protected static function setChildrenOrganizations($deep, $target, &$organizations)

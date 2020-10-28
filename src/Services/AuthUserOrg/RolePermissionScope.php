@@ -58,6 +58,6 @@ class RolePermissionScope implements Scope
         }
 
         $scope = $this->getScopeClassName($model);
-        $scope->callApply($builder, $user, $model);
+        (new $scope())->callApply($builder, $user, $model);
     }
 }

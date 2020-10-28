@@ -1785,7 +1785,7 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
      * @param string $related_type "user" or "organization"
      * @param string|array|null $tablePermission target permission
      */
-    public function getRoleUserOrgId($related_type, $tablePermission = null)
+    public function getRoleUserOrgIds($related_type, $tablePermission = null) : array
     {
         // Get role group contains target_table's
         $roleGroups = RoleGroup::whereHas('role_group_permissions', function ($query) {
@@ -1846,8 +1846,10 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
         elseif($related_type == SystemTableName::ORGANIZATION){
             $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_role_group(), JoinedOrgFilterType::ONLY_JOIN);
             $org_target_ids = collect();
-            $target_ids->each(function($target_id) use($org_target_ids, $enum){
-                collect(AuthUserOrgHelper::getTreeOrganizationIds($enum, $target_id))->each(function($target_id) use($org_target_ids){
+
+            // get organizations, and withoutGlobalScope
+            AuthUserOrgHelper::getRealUserOrOrgs($related_type, $target_ids)->filter()->each(function($organization) use($org_target_ids, $enum){
+                collect($organization->getOrgJoinedIds($enum))->each(function($target_id) use($org_target_ids){
                     $org_target_ids->push($target_id);
                 });
             });
