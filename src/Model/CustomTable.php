@@ -1843,13 +1843,13 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
             $target_ids = $target_ids->merge(System::system_admin_users() ?? []);
         }
         // consider org parent and child
-        elseif($related_type == SystemTableName::ORGANIZATION){
+        elseif ($related_type == SystemTableName::ORGANIZATION) {
             $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_role_group(), JoinedOrgFilterType::ONLY_JOIN);
             $org_target_ids = collect();
 
             // get organizations, and withoutGlobalScope
-            AuthUserOrgHelper::getRealUserOrOrgs($related_type, $target_ids)->filter()->each(function($organization) use($org_target_ids, $enum){
-                collect($organization->getOrgJoinedIds($enum))->each(function($target_id) use($org_target_ids){
+            AuthUserOrgHelper::getRealUserOrOrgs($related_type, $target_ids)->filter()->each(function ($organization) use ($org_target_ids, $enum) {
+                collect($organization->getOrgJoinedIds($enum))->each(function ($target_id) use ($org_target_ids) {
                     $org_target_ids->push($target_id);
                 });
             });

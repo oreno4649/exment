@@ -2,7 +2,6 @@
 
 namespace Exceedone\Exment\Services\AuthUserOrg\Scopes;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Exceedone\Exment\Model\LoginUser;
 use Exceedone\Exment\Model\CustomValue;

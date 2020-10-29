@@ -1,13 +1,8 @@
 <?php
 namespace Exceedone\Exment\Services\AuthUserOrg\OrganizationTree;
 
-use Exceedone\Exment\Model\Define;
-use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Model\System;
-use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\JoinedOrgFilterType;
-use Exceedone\Exment\Form\Widgets\ModalForm;
-use Exceedone\Exment\Services\AuthUserOrg\RolePermissionScope;
 
 /**
  * organization join helper.
@@ -15,9 +10,7 @@ use Exceedone\Exment\Services\AuthUserOrg\RolePermissionScope;
 class TreeOrgHelper extends HelperBase
 {
     /**
-     * get organization ids by org
-     * @return mixed
-     * get organization ids by organization ids
+     * get organization ids by organization.
      * @return array
      */
     public static function getOrgJoinedIds($filterType = JoinedOrgFilterType::ALL, $targetOrgId) : array
@@ -26,7 +19,7 @@ class TreeOrgHelper extends HelperBase
             return [];
         }
         // get organization and ids. only match $targetOrgId.
-        $orgsArray = collect(static::getOrganizationTreeArray())->filter(function($org) use($targetOrgId){
+        $orgsArray = collect(static::getOrganizationTreeArray())->filter(function ($org) use ($targetOrgId) {
             return isMatchString($targetOrgId, array_get($org, 'id'));
         });
         $results = [];
@@ -38,8 +31,8 @@ class TreeOrgHelper extends HelperBase
     }
 
     /**
-     * Set joined organization. 
-     * Set tree joined organization. 
+     * Set joined organization.
+     * Set tree joined organization.
      *
      * @param array $results organization array.
      * @param [type] $org
@@ -62,5 +55,4 @@ class TreeOrgHelper extends HelperBase
             }
         }
     }
-
 }

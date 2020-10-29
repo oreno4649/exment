@@ -1,10 +1,8 @@
 <?php
 namespace Exceedone\Exment\Services\Calc;
 
-use Exceedone\Exment\Services\Calc\Items;
 use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Model\CustomFormBlock;
-use Exceedone\Exment\Enums\FormBlockType;
 use Exceedone\Exment\Enums\FormColumnType;
 
 /**
@@ -20,13 +18,13 @@ class CalcService
      */
     public static function getCalcDisplayText($value, CustomTable $custom_table)
     {
-        if(is_nullorempty($value)){
+        if (is_nullorempty($value)) {
             return $value;
         }
 
         $params = static::getCalcParamsFromString($value, $custom_table);
 
-        foreach($params as $param){
+        foreach ($params as $param) {
             // replace value
             $value = str_replace(array_get($param, 'key'), array_get($param, 'displayText'), $value);
         }
@@ -70,12 +68,12 @@ class CalcService
             if (is_nullorempty($option_calc_formula) || $option_calc_formula == "null") {
                 continue;
             }
-            if(!is_string($option_calc_formula)){
+            if (!is_string($option_calc_formula)) {
                 continue;
             }
 
             $params = static::getCalcParamsFromString($option_calc_formula, $custom_column->custom_table_cache, $custom_form_block);
-            foreach($params as $param){
+            foreach ($params as $param) {
                 // set column name
                 $formula_column = array_get($param, 'custom_column');
                 // get column name as key
@@ -85,7 +83,7 @@ class CalcService
                 }
 
                 $formula_key_name = $param['trigger_block'] . '-' . $column_name;
-                if(!array_has($calc_formulas, $formula_key_name)){
+                if (!array_has($calc_formulas, $formula_key_name)) {
                     $calc_formulas[$formula_key_name] = [
                         'trigger_block' => $param['trigger_block'],
                         'trigger_column' => $param['trigger_column'],
@@ -100,15 +98,15 @@ class CalcService
             }
 
             // if contains type "count", set 'calc_counts'
-            if(collect($params)->contains(function($param){
+            if (collect($params)->contains(function ($param) {
                 return in_array(array_get($param, 'type'), ['count', 'parent']);
-            })){
+            })) {
                 $child_relation_name = array_get($param, 'child_relation_name');
-                if(is_nullorempty($child_relation_name)){
+                if (is_nullorempty($child_relation_name)) {
                     continue;
                 }
                 
-                if(!array_has($calc_counts, $child_relation_name)){
+                if (!array_has($calc_counts, $child_relation_name)) {
                     $calc_counts[$child_relation_name] = [
                         'block_key' => 'default',
                         'formulas' => [],
@@ -147,42 +145,42 @@ class CalcService
      */
     protected static function getCalcParamsFromString($value, CustomTable $custom_table, ?CustomFormBlock $custom_form_block = null) : array
     {
-        if(is_nullorempty($value)){
+        if (is_nullorempty($value)) {
             return [];
         }
 
         $results = [];
         // replace ${value:column_name}, ${count:table_name}, ${sum:table_name.column_name}
         $regs = [
-            '\$\{count:(?<key>.+?)\}' => function($splits) use($custom_table){
+            '\$\{count:(?<key>.+?)\}' => function ($splits) use ($custom_table) {
                 return Items\Count::getItemBySplits($splits, $custom_table);
-            }, 
-            '\$\{sum:(?<key>.+?)\}' => function($splits) use($custom_table){
+            },
+            '\$\{sum:(?<key>.+?)\}' => function ($splits) use ($custom_table) {
                 return Items\Sum::getItemBySplits($splits, $custom_table);
-            }, 
-            '\$\{value:(?<key>.+?)\}' => function($splits) use($custom_table){
+            },
+            '\$\{value:(?<key>.+?)\}' => function ($splits) use ($custom_table) {
                 return Items\Dynamic::getItemBySplits($splits, $custom_table);
-            }, 
-            '\$\{select_table:(?<key>.+?)\}' => function($splits) use($custom_table){
+            },
+            '\$\{select_table:(?<key>.+?)\}' => function ($splits) use ($custom_table) {
                 return Items\SelectTable::getItemBySplits($splits, $custom_table);
-            }, 
-            '\$\{parent:(?<key>.+?)\}' => function($splits) use($custom_table){
+            },
+            '\$\{parent:(?<key>.+?)\}' => function ($splits) use ($custom_table) {
                 return Items\ParentItem::getItemBySplits($splits, $custom_table);
-            }, 
+            },
         ];
 
-        foreach($regs as $regKey => $regFunc){
+        foreach ($regs as $regKey => $regFunc) {
             preg_match_all('/' . $regKey . '/i', $value, $matched);
 
-            if(is_nullorempty($matched[0])){
+            if (is_nullorempty($matched[0])) {
                 continue;
             }
 
-            foreach($matched[0] as $index => $m){
+            foreach ($matched[0] as $index => $m) {
                 // split "."
                 $splits = explode(".", $matched['key'][$index]);
                 $item = $regFunc($splits);
-                if(!$item){
+                if (!$item) {
                     continue;
                 }
                 $arr = $item->setCustomFormBlock($custom_form_block)->toArray();
@@ -232,9 +230,9 @@ class CalcService
      */
     public static function getSymbols()
     {
-        return collect(exmtrans('custom_column.symbols'))->map(function($symbol, $key){
+        return collect(exmtrans('custom_column.symbols'))->map(function ($symbol, $key) {
             $val = null;
-            switch($key){
+            switch ($key) {
                 case 'plus':
                     $val = '+';
                     break;
@@ -256,6 +254,4 @@ class CalcService
             ];
         });
     }
-
-
 }

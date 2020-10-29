@@ -2,7 +2,6 @@
 
 namespace Exceedone\Exment\Services\AuthUserOrg\Scopes;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Exceedone\Exment\Model\CustomValue;
 use Exceedone\Exment\Model\CustomRelation;
@@ -64,5 +63,4 @@ class UserScope extends RolePermissionScope
         // get only login user's organization user
         $builder->whereIn("$db_table_name.id", $target_users->toArray());
     }
-    
 }

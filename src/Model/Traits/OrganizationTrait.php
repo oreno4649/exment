@@ -8,7 +8,6 @@ use Exceedone\Exment\Model\CustomColumn;
 use Exceedone\Exment\Model\CustomRelation;
 use Exceedone\Exment\Model\RoleGroup;
 use Exceedone\Exment\Model\Define;
-use Exceedone\Exment\Model\System;
 use Encore\Admin\Traits\ModelTree;
 use Encore\Admin\Traits\AdminBuilder;
 use Exceedone\Exment\Services\AuthUserOrg\OrganizationTree;

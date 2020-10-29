@@ -1,23 +1,21 @@
 <?php
 namespace Exceedone\Exment\Services\AuthUserOrg\OrganizationTree;
 
-use Exceedone\Exment\Model\Define;
-use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Model\System;
-use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\JoinedOrgFilterType;
-use Exceedone\Exment\Form\Widgets\ModalForm;
-use Exceedone\Exment\Services\AuthUserOrg\RolePermissionScope;
 
 /**
  * user and organization for authoritable helper.
+ * *This organization is NOT real user joined org.*
+ *  It's reverse upper and downer.
+ *
  */
 class AuthoritableHelper extends HelperBase
 {
     /**
      * get organization ids for authoritable.
      * *This organization is NOT user joined org.*
-     * It's reverse upper and downer. 
+     * It's reverse upper and downer.
      * @return array
      */
     public static function getOrgAuthoritableIds($filterType = JoinedOrgFilterType::ALL, $targetUserId = null)

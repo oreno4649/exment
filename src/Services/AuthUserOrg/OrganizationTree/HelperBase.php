@@ -2,11 +2,9 @@
 namespace Exceedone\Exment\Services\AuthUserOrg\OrganizationTree;
 
 use Exceedone\Exment\Model\Define;
-use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Model\System;
 use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\JoinedOrgFilterType;
-use Exceedone\Exment\Form\Widgets\ModalForm;
 use Exceedone\Exment\Services\AuthUserOrg\RolePermissionScope;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Exceedone\Exment\Services\AuthUserOrg\Scopes;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use Exceedone\Exment\Model\CustomValue;
 use Exceedone\Exment\Enums\Permission;
@@ -54,5 +53,4 @@ class OrganizationScope extends RolePermissionScope
         // get only login user's organization
         $builder->whereIn("$db_table_name.id", \Exment::getOrgJoinedIds($joinedOrgFilterType));
     }
-
 }

@@ -6,14 +6,14 @@ use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Model\System;
 use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Form\Widgets\ModalForm;
-use Exceedone\Exment\Services\AuthUserOrg\RolePermissionScope;
 
 /**
  * Role, user , organization helper
  */
 class AuthUserOrgHelper
 {
-    public static function getRealUserOrOrgs($related_type, $ids){
+    public static function getRealUserOrOrgs($related_type, $ids)
+    {
         return getModelName($related_type)::query()
             ->withoutGlobalScope(RolePermissionScope::class)
             ->whereOrIn('id', $ids)

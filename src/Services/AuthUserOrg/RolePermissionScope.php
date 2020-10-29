@@ -11,7 +11,8 @@ use Exceedone\Exment\Enums\SystemTableName;
 
 class RolePermissionScope implements Scope
 {
-    protected function getScopeClassName(CustomValue $custom_value){
+    protected function getScopeClassName(CustomValue $custom_value)
+    {
         $table_name = $custom_value->custom_table->table_name;
         if ($table_name == SystemTableName::USER) {
             return Scopes\UserScope::class;
