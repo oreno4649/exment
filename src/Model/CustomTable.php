@@ -2723,18 +2723,9 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
 
         // else, get model using value_authoritable.
         // if count > 0, return true.
-        $rows = $model->getAuthoritable(SystemTableName::USER);
+        $rows = $model->getAuthoritable();
         if ($this->checkPermissionWithPivot($rows, $dataRole)) {
             return true;
-        }
-
-        // else, get model using value_authoritable. (only that system uses organization.)
-        // if count > 0, return true.
-        if (System::organization_available()) {
-            $rows = $model->getAuthoritable(SystemTableName::ORGANIZATION);
-            if ($this->checkPermissionWithPivot($rows, $dataRole)) {
-                return true;
-            }
         }
 
         // else, return false.
