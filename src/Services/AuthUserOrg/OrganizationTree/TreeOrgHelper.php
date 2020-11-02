@@ -10,10 +10,30 @@ use Exceedone\Exment\Enums\JoinedOrgFilterType;
 class TreeOrgHelper extends HelperBase
 {
     /**
+     * get organization ids for authoritable.
+     * *This organization is NOT org joined org.*
+     * It's reverse upper and downer.
+     * @return array
+     */
+    public static function getOrgAuthoritableIds($filterType = JoinedOrgFilterType::ALL, $targetOrgId) : array
+    {
+        return static::_getOrgJoinedIds($filterType, $targetOrgId, true);
+    }
+
+    /**
      * get organization ids by organization.
      * @return array
      */
     public static function getOrgJoinedIds($filterType = JoinedOrgFilterType::ALL, $targetOrgId) : array
+    {
+        return static::_getOrgJoinedIds($filterType, $targetOrgId, false);
+    }
+
+    /**
+     * get organization ids by organization.
+     * @return array
+     */
+    protected static function _getOrgJoinedIds($filterType = JoinedOrgFilterType::ALL, $targetOrgId, bool $reverse) : array
     {
         if (!System::organization_available()) {
             return [];
@@ -24,7 +44,7 @@ class TreeOrgHelper extends HelperBase
         });
         $results = [];
         foreach ($orgsArray as $org) {
-            static::setTreeOrganization($results, $org, $filterType);
+            static::setTreeOrganization($results, $org, $filterType, $reverse);
         }
 
         return collect($results)->pluck('id')->toArray();
@@ -39,17 +59,20 @@ class TreeOrgHelper extends HelperBase
      * @param string $filterType filter type. is upper or downer
      * @return void
      */
-    protected static function setTreeOrganization(&$results, $org, $filterType)
+    protected static function setTreeOrganization(&$results, $org, $filterType, bool $reverse)
     {
         $results[] = $org;
         // Set parent and child orgs.
-        // *This logic is reverse isGetDowner and parents.*
-        if (JoinedOrgFilterType::isGetUpper($filterType) && array_has($org, 'parents')) {
+
+        $isParent = $reverse ? JoinedOrgFilterType::isGetDowner($filterType) : JoinedOrgFilterType::isGetUpper($filterType);
+        $isChild = $reverse ? JoinedOrgFilterType::isGetUpper($filterType) : JoinedOrgFilterType::isGetDowner($filterType);
+
+        if ($isParent && array_has($org, 'parents')) {
             foreach ($org['parents'] as $parent) {
                 $results[] = $parent;
             }
         }
-        if (JoinedOrgFilterType::isGetDowner($filterType) && array_has($org, 'children')) {
+        if ($isChild && array_has($org, 'children')) {
             foreach ($org['children'] as $child) {
                 $results[] = $child;
             }

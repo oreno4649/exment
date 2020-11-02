@@ -11,9 +11,7 @@ use Exceedone\Exment\Enums\JoinedOrgFilterType;
 class JoinHelper extends HelperBase
 {
     /**
-     * get organization ids by org
-     * @return mixed
-     * get organization ids by organization ids
+     * get organizations that this_user joined.
      * @return array
      */
     public static function getOrgJoinedIds($filterType = JoinedOrgFilterType::ALL, $targetUserId = null) : array

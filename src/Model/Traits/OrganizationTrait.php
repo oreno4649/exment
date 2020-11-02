@@ -113,7 +113,7 @@ trait OrganizationTrait
      */
     public function getOrgAuthoritableIds($filterType = JoinedOrgFilterType::ALL) : array
     {
-        return OrganizationTree\JoinHelper::getOrgAuthoritableIds($filterType, $this->getUserId());
+        return OrganizationTree\TreeOrgHelper::getOrgAuthoritableIds($filterType, $this->id);
     }
 
     /**
