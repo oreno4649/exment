@@ -372,11 +372,12 @@ class TestDataSeeder extends Seeder
     protected function createAllColumnsTable($menu)
     {
         $custom_table_view_all = CustomTable::getEloquent('custom_value_view_all');
+        $custom_table_edit = CustomTable::getEloquent('custom_value_edit');
         // cerate table
         $custom_table = $this->createTable('all_columns_table', [
                 'menuParentId' => $menu->id,
                 'count' => 0,
-                'createColumnCallback' => function ($custom_table, &$custom_columns) use ($custom_table_view_all) {
+                'createColumnCallback' => function ($custom_table, &$custom_columns) use ($custom_table_view_all, $custom_table_edit) {
                     // creating relation column
                     $columns = [
                         ['column_type' => ColumnType::TEXT, 'options' => ['index_enabled' => '1', 'freeword_search' => '1']],
@@ -393,6 +394,7 @@ class TestDataSeeder extends Seeder
                         ['column_type' => ColumnType::SELECT, 'options' => ['index_enabled' => '1', 'select_item' => "foo\r\nbar\r\nbaz"]],
                         ['column_type' => ColumnType::SELECT_VALTEXT, 'options' => ['index_enabled' => '1', 'select_item_valtext' => "foo,FOO\r\nbar,BAR\r\nbaz,BAZ"]],
                         ['column_type' => ColumnType::SELECT_TABLE, 'options' => ['index_enabled' => '1', 'select_target_table' => $custom_table_view_all->id]],
+                        ['column_name' => 'select_table_2', 'column_type' => ColumnType::SELECT_TABLE, 'options' => ['index_enabled' => '1', 'select_target_table' => $custom_table_edit->id]],
                         ['column_type' => ColumnType::YESNO, 'options' => ['index_enabled' => '1']],
                         ['column_type' => ColumnType::BOOLEAN, 'options' => ['index_enabled' => '1', 'true_value' => 'ok', 'true_label' => 'OK', 'false_value' => 'ng', 'false_label' => 'NG']],
                         ['column_type' => ColumnType::AUTO_NUMBER, 'options' => ['index_enabled' => '1', 'auto_number_type' => 'random25']],
@@ -405,8 +407,8 @@ class TestDataSeeder extends Seeder
                     foreach ($columns as $column) {
                         $custom_column = CustomColumn::create([
                             'custom_table_id' => $custom_table->id,
-                            'column_name' => $column['column_type'],
-                            'column_view_name' => $column['column_type'],
+                            'column_name' => $column['column_name'] ?? $column['column_type'],
+                            'column_view_name' => $column['column_name'] ?? $column['column_type'],
                             'column_type' => $column['column_type'],
                             'options' => $column['options'],
                         ]);
