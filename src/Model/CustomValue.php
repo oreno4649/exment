@@ -1515,13 +1515,15 @@ abstract class CustomValue extends ModelBase
                 // get custom table's user ids(contains all table and permission role group)
                 $func = $idkey == SystemTableName::USER ? 'getRoleUserAndOrgBelongsUserQueryTable' : 'getRoleOrganizationQueryTable';
                 $queryTable = AuthUserOrgHelper::{$func}($this->custom_table, $tablePermission);
-                $queryTable->withoutGlobalScope(RolePermissionScope::class);
+                if($queryTable){
+                    $queryTable->withoutGlobalScope(RolePermissionScope::class);
 
-                $tablename = getDBTableName($idkey);
-                $ids[$idkey] = array_merge($queryTable->pluck("$tablename.id")->toArray(), $ids[$idkey]);
-
-                // get real value
-                $results[$idkey] = AuthUserOrgHelper::getRealUserOrOrgs($idkey, $ids[$idkey]);
+                    $tablename = getDBTableName($idkey);
+                    $ids[$idkey] = array_merge($queryTable->pluck("$tablename.id")->toArray(), $ids[$idkey]);
+    
+                    // get real value
+                    $results[$idkey] = AuthUserOrgHelper::getRealUserOrOrgs($idkey, $ids[$idkey]);
+                }
             }
 
             if (!isset($tablePermission)) {

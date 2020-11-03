@@ -30,16 +30,16 @@ class AuthUserOrgHelper
     public static function getRoleOrganizationQueryTable($target_table, $tablePermission = null, $builder = null)
     {
         if (!System::organization_available()) {
-            return [];
+            return null;
         }
 
         if (is_null($target_table)) {
-            return [];
+            return null;
         }
 
         $target_table = CustomTable::getEloquent($target_table);
         if (is_null($target_table)) {
-            return [];
+            return null;
         }
 
         $key = sprintf(Define::SYSTEM_KEY_SESSION_TABLE_ACCRSSIBLE_ORGS, $target_table->id);
@@ -57,7 +57,7 @@ class AuthUserOrgHelper
     public static function getRoleUserAndOrgBelongsUserQueryTable($target_table, $tablePermission = null, $builder = null)
     {
         if (is_null($target_table)) {
-            return [];
+            return null;
         }
         $target_table = CustomTable::getEloquent($target_table);
         $key = sprintf(Define::SYSTEM_KEY_SESSION_TABLE_ACCRSSIBLE_USERS_ORGS, $target_table->id);
@@ -69,12 +69,14 @@ class AuthUserOrgHelper
             }
 
             // and get authoritiable organization
-            $organizations = static::getRoleOrganizationQueryTable($target_table)
-                ->get() ?? [];
-            $organizations->load('users');
-            foreach ($organizations as $organization) {
-                foreach ($organization->users as $user) {
-                    $target_ids[] = $user->getUserId();
+            $orgQuery = $organizations = static::getRoleOrganizationQueryTable($target_table);
+            if($orgQuery){
+                $organizations = $orgQuery->get();
+                $organizations->load('users');
+                foreach ($organizations as $organization) {
+                    foreach ($organization->users as $user) {
+                        $target_ids[] = $user->getUserId();
+                    }
                 }
             }
 
