@@ -51,8 +51,8 @@ class LoginSettingController extends AdminControllerBase
 
         // 2factor box
         if (boolval(config('exment.login_use_2factor', false))) {
-            $box = $this->get2factorSettingBox();
-            $content->row(new Box(exmtrans("2factor.2factor"), $box->render()));
+            $form = $this->get2factorSettingForm();
+            $content->row(new Box(exmtrans("2factor.2factor"), $form->render()));
         }
 
         return $content;
@@ -558,7 +558,7 @@ class LoginSettingController extends AdminControllerBase
      *
      * @return Content
      */
-    protected function get2factorSettingBox()
+    protected function get2factorSettingForm() : WidgetForm
     {
         $form = new WidgetForm(System::get_system_values(['2factor']));
         $form->action(route('exment.post2factor'));
@@ -609,6 +609,12 @@ class LoginSettingController extends AdminControllerBase
                     'login_2factor_verify_code' => exmtrans('2factor.message.verify_failed')
                 ]);
             }
+        }
+
+        // validation
+        $form = $this->get2factorSettingForm();
+        if(($response = $form->validateRedirect($request)) instanceof \Illuminate\Http\RedirectResponse){
+            return $response;
         }
 
         DB::beginTransaction();
