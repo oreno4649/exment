@@ -314,8 +314,7 @@ class LoginSettingController extends AdminControllerBase
 
         $form->number('password_expiration_days', exmtrans("system.password_expiration_days"))
             ->default(0)
-            ->min(0)
-            ->max(999)
+            ->between(0, 999)
             ->help(exmtrans("system.help.password_expiration_days"));
 
         $form->switchbool('first_change_password', exmtrans("system.first_change_password"))
@@ -323,8 +322,7 @@ class LoginSettingController extends AdminControllerBase
 
         $form->number('password_history_cnt', exmtrans("system.password_history_cnt"))
             ->default(0)
-            ->min(0)
-            ->max(20)
+            ->between(0, 20)
             ->help(exmtrans("system.help.password_history_cnt"));
 
         $form->exmheader(exmtrans('system.login_page_view'))->hr();
