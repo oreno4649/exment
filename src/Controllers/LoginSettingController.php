@@ -229,7 +229,7 @@ class LoginSettingController extends AdminControllerBase
         $form->tools(function (Form\Tools $tools) use ($login_setting) {
             $tools->append(new Tools\SystemChangePageMenu());
             
-            if (isset($login_setting)) {
+            if (isset($login_setting) && !is_null($className = $login_setting->getLoginServiceClassName())) {
                 $tools->append(new Tools\ModalMenuButton(
                     route('exment.logintest_modal', ['id' => $login_setting->id]),
                     [
@@ -239,7 +239,7 @@ class LoginSettingController extends AdminControllerBase
                     ]
                 ));
 
-                $login_setting->getLoginServiceClassName()::appendActivateSwalButton($tools, $login_setting);
+                $className::appendActivateSwalButton($tools, $login_setting);
             }
         });
         

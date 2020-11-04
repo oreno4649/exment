@@ -389,9 +389,9 @@ class LoginSetting extends ModelBase
     /**
      * Get Login Service Class Name
      *
-     * @return string
+     * @return string|null
      */
-    public function getLoginServiceClassName() : string
+    public function getLoginServiceClassName() : ?string
     {
         return LoginType::getLoginServiceClassName($this->login_type);
     }
