@@ -207,7 +207,7 @@ class Dashboard extends ModelBase implements Interfaces\TemplateImporterInterfac
                         $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_custom_value(), JoinedOrgFilterType::ONLY_JOIN);
                         $query->whereInMultiple(
                             ['authoritable_user_org_type', 'authoritable_target_id'],
-                            $user->getUserAndOrganizationIds($enum),
+                            \Exment::getUserAndOrgAuthoritableIds($enum),
                             true
                         );
                     });
@@ -235,7 +235,7 @@ class Dashboard extends ModelBase implements Interfaces\TemplateImporterInterfac
         $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_custom_value(), JoinedOrgFilterType::ONLY_JOIN);
         $hasEdit = $this->data_share_authoritables()
             ->where('authoritable_type', 'data_share_edit')
-            ->whereInMultiple(['authoritable_user_org_type', 'authoritable_target_id'], $login_user->getUserAndOrganizationIds($enum), true)
+            ->whereInMultiple(['authoritable_user_org_type', 'authoritable_target_id'], \Exment::getUserAndOrgAuthoritableIds($enum), true)
             ->exists();
 
         return $hasEdit;

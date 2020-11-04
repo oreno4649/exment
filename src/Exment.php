@@ -3,6 +3,7 @@
 namespace Exceedone\Exment;
 
 use Exceedone\Exment\Validator as ExmentValidator;
+use Exceedone\Exment\Services\AuthUserOrg\OrganizationTree;
 use Exceedone\Exment\Enums\UrlTagType;
 use Exceedone\Exment\Enums\FilterSearchType;
 use Exceedone\Exment\Enums\SystemTableName;
@@ -255,6 +256,60 @@ class Exment
     }
     
 
+    /**
+     * get organizations that this_user authoritable.
+     * @return mixed
+     */
+    public function getOrgAuthoritableIds($filterType = JoinedOrgFilterType::ALL, $userId = null) : array
+    {
+        $userId = $userId ?? $this->getUserId();
+        $key = sprintf(Define::SYSTEM_KEY_SESSION_ORGANIZATION_AUTHORITABLE_IDS, $filterType, $userId);
+        return System::requestSession($key, function () use ($filterType, $userId) {
+            if (!System::organization_available()) {
+                return [];
+            }
+            return OrganizationTree\AuthoritableHelper::getOrgAuthoritableIds($filterType, $userId);
+        });
+    }
+
+    
+    /**
+     * get organizations that this_user joined.
+     * @return mixed
+     */
+    public function getOrgJoinedIds($filterType = JoinedOrgFilterType::ALL, $userId = null) : array
+    {
+        $userId = $userId ?? $this->getUserId();
+        $key = sprintf(Define::SYSTEM_KEY_SESSION_ORGANIZATION_JOINED_IDS, $filterType, $userId);
+        return System::requestSession($key, function () use ($filterType, $userId) {
+            if (!System::organization_available()) {
+                return [];
+            }
+            return OrganizationTree\JoinHelper::getOrgJoinedIds($filterType, $userId);
+        });
+    }
+
+
+    /**
+     * Get user and organization ids for query whereInMultiple.
+     *
+     * @param string $filterType
+     * @return array offset 0 : type, 1 : user or organization id.
+     */
+    public function getUserAndOrgAuthoritableIds($filterType = JoinedOrgFilterType::ALL)
+    {
+        $results = [[SystemTableName::USER, $this->getUserId()]];
+
+        if (System::organization_available()) {
+            collect($this->getOrgAuthoritableIds($filterType))->each(function ($id) use (&$results) {
+                $results[] = [SystemTableName::ORGANIZATION, $id];
+            });
+        }
+        
+        return $results;
+    }
+
+
 
 
 
@@ -491,6 +546,13 @@ class Exment
     }
 
 
+    /**
+     * Get "More" tag. contains link.
+     *
+     * @param string|null $uri
+     * @param string|null $id_transkey
+     * @return void
+     */
     public function getMoreTag(?string $uri = null, ?string $id_transkey = null)
     {
         $url = $this->getManualUrl($uri);

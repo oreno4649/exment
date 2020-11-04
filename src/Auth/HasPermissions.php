@@ -16,7 +16,6 @@ use Exceedone\Exment\Enums\Permission;
 use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\JoinedOrgFilterType;
 use Exceedone\Exment\Enums\PluginType;
-use Exceedone\Exment\Services\AuthUserOrgHelper;
 
 trait HasPermissions
 {
@@ -304,41 +303,6 @@ trait HasPermissions
         return $model;
     }
 
-    /**
-     * get organizations that this_user joins.
-     * @return mixed
-     */
-    public function getOrganizationIds($filterType = JoinedOrgFilterType::ALL)
-    {
-        return System::requestSession(Define::SYSTEM_KEY_SESSION_ORGANIZATION_IDS . '_' . $filterType, function () use ($filterType) {
-            //return $this->base_user->getOrganizationIds($filterType);
-            // if system doesn't use organization, return empty array.
-            if (!System::organization_available()) {
-                return [];
-            }
-            return AuthUserOrgHelper::getOrganizationIds($filterType, $this->base_user_id);
-        });
-    }
-
-
-    /**
-     * Get user and organization ids for query whereInMultiple.
-     *
-     * @param string $filterType
-     * @return array offset 0 : type, 1 : user or organization id.
-     */
-    public function getUserAndOrganizationIds($filterType = JoinedOrgFilterType::ALL)
-    {
-        $results = [[SystemTableName::USER, $this->getUserId()]];
-
-        if (System::organization_available()) {
-            collect($this->getOrganizationIds($filterType))->each(function ($id) use (&$results) {
-                $results[] = [SystemTableName::ORGANIZATION, $id];
-            });
-        }
-        
-        return $results;
-    }
 
     /**
      * get permisson array.
@@ -493,7 +457,7 @@ trait HasPermissions
     protected function getPermissionItems()
     {
         $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_role_group(), JoinedOrgFilterType::ALL);
-        $organization_ids = $this->getOrganizationIds($enum);
+        $organization_ids = \Exment::getOrgAuthoritableIds($enum);
         
         // get all permissons for system. --------------------------------------------------
         return RoleGroup::getHasPermissionRoleGroup($this->getUserId(), $organization_ids);

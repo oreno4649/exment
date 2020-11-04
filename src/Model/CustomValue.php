@@ -5,6 +5,8 @@ namespace Exceedone\Exment\Model;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Collection;
 use Encore\Admin\Facades\Admin;
+use Exceedone\Exment\Services\AuthUserOrg\AuthUserOrgHelper;
+use Exceedone\Exment\Services\AuthUserOrg\RolePermissionScope;
 use Exceedone\Exment\ColumnItems\CustomItem;
 use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\RelationType;
@@ -228,6 +230,22 @@ abstract class CustomValue extends ModelBase
             ;
     }
 
+    // user value_authoritable. it's all role data. only filter morph_type
+    public function getValueAuthoritables()
+    {
+        // not use Eloquent, because not use scope
+        $key = sprintf(Define::SYSTEM_KEY_SESSION_CUSTOM_VALUE_AUTHORITABLES_VALUE, $this->id, $this->custom_table_name);
+        return System::requestSession($key, function(){
+            $query = \DB::table(SystemTableName::CUSTOM_VALUE_AUTHORITABLE)
+                ->where('parent_id', $this->id)
+                ->where('parent_type', $this->custom_table_name);
+            if (!System::organization_available()) {
+                $query->where('authoritable_user_org_type', SystemTableName::USER);
+            }
+            return $query->get();
+        });
+    }
+
 
     /**
      * Get dynamic relation value for custom value.
@@ -437,8 +455,8 @@ abstract class CustomValue extends ModelBase
 
             $model->postRestore();
         });
-
-        static::addGlobalScope(new CustomValueModelScope);
+        
+        static::addGlobalScope(new RolePermissionScope);
     }
 
     /**
@@ -723,48 +741,55 @@ abstract class CustomValue extends ModelBase
      * get Authoritable values.
      * this function selects value_authoritable, and get all values.
      */
-    public function getAuthoritable($related_type)
+    public function getAuthoritable()
     {
         // check request session for grid.
         $key = sprintf(Define::SYSTEM_KEY_SESSION_GRID_AUTHORITABLE, $this->custom_table->id);
         $reqSessions = System::requestSession($key);
 
+        $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_custom_value(), JoinedOrgFilterType::ONLY_JOIN);
+        $items = \Exment::getUserAndOrgAuthoritableIds($enum);
+
+        // Contains check function using getUserAndOrgAuthoritableIds
+        $checkFunc = function($value) use($enum, $items){
+            // check has user or org id
+            $result = false;
+            foreach($items as $item){
+                if ($item[0] == SystemTableName::USER) {
+                    $result = $value['authoritable_target_id'] == \Exment::getUserId();
+                } elseif ($item[0] == SystemTableName::ORGANIZATION) {
+                    $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_custom_value(), JoinedOrgFilterType::ONLY_JOIN);
+                    $result = in_array($value['authoritable_target_id'], \Exment::getOrgAuthoritableIds($enum));
+                }
+
+                if($result){
+                    return true;
+                }
+            }
+
+            return false;
+        };
+
         // If already getting, filter value.
         if (!is_null($reqSessions)) {
-            return $reqSessions->filter(function ($value) use ($related_type) {
+            return $reqSessions->filter(function ($value) use($checkFunc, $enum, $items) {
                 $value = (array)$value;
-                if ($value['authoritable_user_org_type'] != $related_type) {
-                    return false;
-                }
                 if ($value['parent_id'] != $this->id) {
                     return false;
                 }
 
                 // check has user or org id
-                if ($related_type == SystemTableName::USER) {
-                    return $value['authoritable_target_id'] == \Exment::getUserId();
-                } elseif ($related_type == SystemTableName::ORGANIZATION) {
-                    $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_custom_value(), JoinedOrgFilterType::ONLY_JOIN);
-                    return in_array($value['authoritable_target_id'], \Exment::user()->getOrganizationIds($enum));
-                }
+                return $checkFunc($value);
             });
         }
 
         // if not get before, now get.
-        if ($related_type == SystemTableName::USER) {
-            $query = $this
-            ->value_authoritable_users()
-            ->where('authoritable_target_id', \Exment::getUserId());
-        } elseif ($related_type == SystemTableName::ORGANIZATION) {
-            $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_custom_value(), JoinedOrgFilterType::ONLY_JOIN);
-            $query = $this
-                ->value_authoritable_organizations()
-                ->whereIn('authoritable_target_id', \Exment::user()->getOrganizationIds($enum));
-        } else {
-            throw new \Exception;
-        }
-
-        return $query->get();
+        return $this->getValueAuthoritables()
+            ->filter(function($value) use($checkFunc, $enum, $items){
+                $value = (array)$value;
+                // check has user or org id
+                return $checkFunc($value);
+            });
     }
 
     /**
@@ -1457,6 +1482,56 @@ abstract class CustomValue extends ModelBase
         System::setRequestSession($key, $this);
 
         return $this;
+    }
+
+    /**
+     * get all users and organizations who can access custom_value.
+     *
+     * @param string|null|array $tablePermission
+     * @return array
+     */
+    public function getRoleUserAndOrganizations($tablePermission = null)
+    {
+        $results = [
+            SystemTableName::USER => collect(),
+            SystemTableName::ORGANIZATION => collect(),
+        ];
+        $ids = [
+            SystemTableName::USER => [],
+            SystemTableName::ORGANIZATION => [],
+        ];
+        
+        // check request session
+        $key = sprintf(Define::SYSTEM_KEY_SESSION_VALUE_ACCRSSIBLE_USERS, $this->custom_table->id, $this->id);
+        // if set $tablePermission, always call
+        if (isset($tablePermission) || is_null($results = System::requestSession($key))) {
+            // get ids contains value_authoritable table
+            $this->getValueAuthoritables()->each(function($value) use(&$ids){
+                $value = (array)$value;
+                $ids[array_get($value, 'authoritable_user_org_type')][] = array_get($value, 'authoritable_target_id');
+            });
+
+            foreach ($ids as $idkey => $idvalue) {
+                // get custom table's user ids(contains all table and permission role group)
+                $func = $idkey == SystemTableName::USER ? 'getRoleUserAndOrgBelongsUserQueryTable' : 'getRoleOrganizationQueryTable';
+                $queryTable = AuthUserOrgHelper::{$func}($this->custom_table, $tablePermission);
+                if($queryTable){
+                    $queryTable->withoutGlobalScope(RolePermissionScope::class);
+
+                    $tablename = getDBTableName($idkey);
+                    $ids[$idkey] = array_merge($queryTable->pluck("$tablename.id")->toArray(), $ids[$idkey]);
+    
+                    // get real value
+                    $results[$idkey] = AuthUserOrgHelper::getRealUserOrOrgs($idkey, $ids[$idkey]);
+                }
+            }
+
+            if (!isset($tablePermission)) {
+                System::requestSession($key, $results);
+            }
+        }
+        
+        return $results;
     }
 
     /**

@@ -149,8 +149,9 @@ class Define
     public const SYSTEM_KEY_SESSION_USER_SETTING = "user_setting";
     public const SYSTEM_KEY_SESSION_SYSTEM_VERSION = "system_version";
     public const SYSTEM_KEY_SESSION_SYSTEM_VERSION_EXECUTE = "system_version_execute";
-    public const SYSTEM_KEY_SESSION_ORGANIZATION_IDS = "organization_ids";
-    public const SYSTEM_KEY_SESSION_ORGANIZATION_IDS_ORG = "organization_ids_org_%s_%s";
+    public const SYSTEM_KEY_SESSION_ORGANIZATION_AUTHORITABLE_IDS = "organization_authoritable_ids_%s_%s";
+    public const SYSTEM_KEY_SESSION_ORGANIZATION_JOINED_IDS = "organization_joined_ids_%s_%s";
+    public const SYSTEM_KEY_SESSION_ORGANIZATION_IDS_ORG = "organization_ids_org_%s_%s_%s";
     public const SYSTEM_KEY_SESSION_FILE_UPLOADED_UUID = "file_uploaded_uuid";
     public const SYSTEM_KEY_SESSION_TABLE_ACCRSSIBLE_ORGS = "table_accessible_orgs_%s";
     public const SYSTEM_KEY_SESSION_TABLE_ACCRSSIBLE_USERS = "table_accessible_users_%s";
@@ -162,6 +163,7 @@ class Define
     public const SYSTEM_KEY_SESSION_ALL_CUSTOM_TABLES = "all_custom_tables";
     public const SYSTEM_KEY_SESSION_TABLE_RELATION_TABLES = "custom_table_relation_tables.%s";
     public const SYSTEM_KEY_SESSION_CUSTOM_VALUE_VALUE = "custom_value_value.%s.%s";
+    public const SYSTEM_KEY_SESSION_CUSTOM_VALUE_AUTHORITABLES_VALUE = "custom_value_AUTHORITABLES_%s_%s";
     public const SYSTEM_KEY_SESSION_CUSTOM_VALUE_COUNT = "custom_value_count.%s";
     public const SYSTEM_KEY_SESSION_DATABASE_COLUMN_NAMES_IN_TABLE = "database_column_names_in_table_%s";
     public const SYSTEM_KEY_SESSION_HAS_CUSTOM_TABLE_ORDER = "has_custom_table_order";

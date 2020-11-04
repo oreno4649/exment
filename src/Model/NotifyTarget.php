@@ -3,7 +3,6 @@
 namespace Exceedone\Exment\Model;
 
 use Illuminate\Support\Collection;
-use Exceedone\Exment\Services\AuthUserOrgHelper;
 use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\ColumnType;
 use Exceedone\Exment\Enums\NotifyActionTarget;
@@ -274,7 +273,7 @@ class NotifyTarget
      */
     protected static function getModelsAsRole(CustomValue $custom_value) : Collection
     {
-        $items = AuthUserOrgHelper::getRoleUserAndOrganizations($custom_value, Permission::AVAILABLE_ACCESS_CUSTOM_VALUE);
+        $items = $custom_value->getRoleUserAndOrganizations(Permission::AVAILABLE_ACCESS_CUSTOM_VALUE);
         
         $list = collect();
         foreach ([SystemTableName::USER, SystemTableName::ORGANIZATION] as $key) {

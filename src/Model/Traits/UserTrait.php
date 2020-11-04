@@ -7,7 +7,6 @@ use Exceedone\Exment\Model\Define;
 use Exceedone\Exment\Model\System;
 use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\JoinedOrgFilterType;
-use Exceedone\Exment\Services\AuthUserOrgHelper;
 
 trait UserTrait
 {
@@ -35,19 +34,25 @@ trait UserTrait
     {
         return $this->hasOne(Model\UserSetting::class, "user_id");
     }
-    
     /**
-     * get organizations that this_user joins.
+     * get organizations that this_user authoritable.
      * @return mixed
      */
-    public function getOrganizationIds($filterType = JoinedOrgFilterType::ALL)
+    public function getOrgAuthoritableIds($filterType = JoinedOrgFilterType::ALL)
     {
-        // if system doesn't use organization, return empty array.
-        if (!System::organization_available()) {
-            return [];
-        }
-        return AuthUserOrgHelper::getOrganizationIds($filterType, $this->id);
+        return \Exment::getOrgAuthoritableIds($filterType, $this->getUserId());
     }
+
+    
+    /**
+     * get organizations that this_user joined.
+     * @return mixed
+     */
+    public function getOrgJoinedIds($filterType = JoinedOrgFilterType::ALL)
+    {
+        return \Exment::getOrgJoinedIds($filterType, $this->getUserId());
+    }
+
 
     /**
      * Get organizations user joined.

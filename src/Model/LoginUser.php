@@ -2,9 +2,9 @@
 
 namespace Exceedone\Exment\Model;
 
+use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Auth\HasPermissions;
 use Exceedone\Exment\Providers\LoginUserProvider;
-use Exceedone\Exment\Enums\SystemTableName;
 use Encore\Admin\Traits\AdminBuilder;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Support\Facades\Session;
@@ -212,6 +212,7 @@ class LoginUser extends ModelBase implements \Illuminate\Contracts\Auth\Authenti
             }
         }
     }
+    
     
     protected static function boot()
     {

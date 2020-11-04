@@ -10,7 +10,7 @@ use Exceedone\Exment\Enums\SearchType;
 use Exceedone\Exment\Enums\ColumnType;
 use Exceedone\Exment\Enums\FormColumnType;
 use Exceedone\Exment\Tests\TestDefine;
-use Exceedone\Exment\Services\AuthUserOrgHelper;
+use Exceedone\Exment\Services\AuthUserOrg\AuthUserOrgHelper;
 use Illuminate\Support\Collection;
 
 class SelectTableTest extends UnitTestBase

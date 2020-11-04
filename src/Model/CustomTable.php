@@ -14,8 +14,10 @@ use Exceedone\Exment\Enums\ConditionTypeDetail;
 use Exceedone\Exment\Enums\ErrorCode;
 use Exceedone\Exment\Enums\FormActionType;
 use Exceedone\Exment\Enums\MultisettingType;
+use Exceedone\Exment\Enums\JoinedOrgFilterType;
 use Exceedone\Exment\Revisionable\Revision;
-use Exceedone\Exment\Services\AuthUserOrgHelper;
+use Exceedone\Exment\Services\AuthUserOrg\AuthUserOrgHelper;
+use Exceedone\Exment\Services\AuthUserOrg\RolePermissionScope;
 use Exceedone\Exment\Services\FormHelper;
 use Exceedone\Exment\Validator\EmptyRule;
 use Exceedone\Exment\Validator\CustomValueRule;
@@ -1733,7 +1735,7 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
         if (boolval($options['callQuery'])) {
             $key = sprintf(Define::SYSTEM_KEY_SESSION_CUSTOM_VALUE_COUNT, $this->id);
             $count = System::requestSession($key, function () {
-                return $this->getValueModel()->withoutGlobalScopes([CustomValueModelScope::class])->count();
+                return $this->getValueModel()->withoutGlobalScopes([RolePermissionScope::class])->count();
             });
             // when count > 0, create option only value.
             return $count <= config('exment.select_table_limit_count', 100);
@@ -1774,6 +1776,87 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
 
             return $query->select(['id'])->pluck('id');
         });
+    }
+
+
+    /**
+     * get users or organizaitons who can access table.
+     *
+     * @param string $related_type "user" or "organization"
+     * @param string|array|null $tablePermission target permission
+     */
+    public function getRoleUserOrgIds($related_type, $tablePermission = null) : array
+    {
+        // Get role group contains target_table's
+        $roleGroups = RoleGroup::whereHas('role_group_permissions', function ($query) {
+            $query->where(function ($query) {
+                $query->orWhere(function ($query) {
+                    $query->where('role_group_permission_type', RoleType::SYSTEM);
+                });
+                $query->orWhere(function ($query) {
+                    $query->where('role_group_permission_type', RoleType::TABLE)
+                        ->where('role_group_target_id', $this->id);
+                });
+            });
+        })->with(['role_group_user_organizations', 'role_group_permissions'])->get();
+
+        $target_ids = collect();
+        foreach ($roleGroups as $roleGroup) {
+            // check permission
+            if (!$roleGroup->role_group_permissions->contains(function ($role_group_permission) use ($tablePermission) {
+                // check as system
+                if ($role_group_permission->role_group_permission_type == RoleType::SYSTEM) {
+                    $tablePermission = [Permission::SYSTEM, Permission::CUSTOM_TABLE, Permission::CUSTOM_VALUE_EDIT_ALL];
+                }
+                // check as table
+                else {
+                    // not match table, return false
+                    if ($this->id != $role_group_permission->role_group_target_id) {
+                        return false;
+                    }
+                }
+
+                // check as table
+                if (!isset($tablePermission)) {
+                    $tablePermission = Permission::AVAILABLE_ACCESS_CUSTOM_VALUE;
+                }
+                
+                // check contains $tablePermission in $role_group_permission
+                return collect($tablePermission)->contains(function ($p) use ($role_group_permission) {
+                    return in_array($p, $role_group_permission->permissions);
+                });
+            })) {
+                continue;
+            }
+
+            foreach ($roleGroup->role_group_user_organizations as $role_group_user_organization) {
+                // merge users from $role_group_user_organization
+                if ($role_group_user_organization->role_group_user_org_type != $related_type) {
+                    continue;
+                }
+                $target_ids = $target_ids->merge($role_group_user_organization->role_group_target_id);
+            }
+        }
+
+        // set system user if $related_type is USER
+        if ($related_type == SystemTableName::USER) {
+            $target_ids = $target_ids->merge(System::system_admin_users() ?? []);
+        }
+        // consider org parent and child
+        elseif ($related_type == SystemTableName::ORGANIZATION) {
+            $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_role_group(), JoinedOrgFilterType::ONLY_JOIN);
+            $org_target_ids = collect();
+
+            // get organizations, and withoutGlobalScope
+            AuthUserOrgHelper::getRealUserOrOrgs($related_type, $target_ids)->filter()->each(function ($organization) use ($org_target_ids, $enum) {
+                collect($organization->getOrgJoinedIds($enum))->each(function ($target_id) use ($org_target_ids) {
+                    $org_target_ids->push($target_id);
+                });
+            });
+            $target_ids = $org_target_ids->filter()->unique();
+        }
+
+        return $target_ids->filter()->unique()->toArray();
     }
 
 
@@ -2640,18 +2723,9 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
 
         // else, get model using value_authoritable.
         // if count > 0, return true.
-        $rows = $model->getAuthoritable(SystemTableName::USER);
+        $rows = $model->getAuthoritable();
         if ($this->checkPermissionWithPivot($rows, $dataRole)) {
             return true;
-        }
-
-        // else, get model using value_authoritable. (only that system uses organization.)
-        // if count > 0, return true.
-        if (System::organization_available()) {
-            $rows = $model->getAuthoritable(SystemTableName::ORGANIZATION);
-            if ($this->checkPermissionWithPivot($rows, $dataRole)) {
-                return true;
-            }
         }
 
         // else, return false.
@@ -2666,7 +2740,7 @@ class CustomTable extends ModelBase implements Interfaces\TemplateImporterInterf
      */
     public function hasCustomValueInDB($custom_value_id)
     {
-        return $this->getValueModel()->withoutGlobalScopes([CustomValueModelScope::class])->where('id', $custom_value_id)->count() > 0;
+        return $this->getValueModel()->withoutGlobalScopes([RolePermissionScope::class])->where('id', $custom_value_id)->count() > 0;
     }
 
     /**

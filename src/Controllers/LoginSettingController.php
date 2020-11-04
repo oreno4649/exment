@@ -287,6 +287,20 @@ class LoginSettingController extends AdminControllerBase
      */
     protected function globalSettingBox(Request $request)
     {
+        $form = $this->globalSettingForm($request);
+        $box = new Box(exmtrans('common.detail_setting'), $form);
+        return $box;
+    }
+
+    
+    /**
+     * Get form for global setting
+     *
+     * @param Request $request
+     * @return WidgetForm
+     */
+    protected function globalSettingForm(Request $request) : WidgetForm
+    {
         $form = new WidgetForm(System::get_system_values(['login']));
         $form->disableReset();
         $form->action(route('exment.postglobal'));
@@ -300,8 +314,7 @@ class LoginSettingController extends AdminControllerBase
 
         $form->number('password_expiration_days', exmtrans("system.password_expiration_days"))
             ->default(0)
-            ->min(0)
-            ->max(999)
+            ->between(0, 999)
             ->help(exmtrans("system.help.password_expiration_days"));
 
         $form->switchbool('first_change_password', exmtrans("system.first_change_password"))
@@ -309,8 +322,7 @@ class LoginSettingController extends AdminControllerBase
 
         $form->number('password_history_cnt', exmtrans("system.password_history_cnt"))
             ->default(0)
-            ->min(0)
-            ->max(20)
+            ->between(0, 20)
             ->help(exmtrans("system.help.password_history_cnt"));
 
         $form->exmheader(exmtrans('system.login_page_view'))->hr();
@@ -362,9 +374,7 @@ class LoginSettingController extends AdminControllerBase
                 ;
         }
 
-        $box = new Box(exmtrans('common.detail_setting'), $form);
-        
-        return $box;
+        return $form;
     }
     
     /**
@@ -373,6 +383,12 @@ class LoginSettingController extends AdminControllerBase
      */
     public function postGlobal(Request $request)
     {
+        // validation
+        $form = $this->globalSettingForm($request);
+        if(($response = $form->validateRedirect($request)) instanceof \Illuminate\Http\RedirectResponse){
+            return $response;
+        }
+
         DB::beginTransaction();
         try {
             $result = $this->postInitializeForm($request, ['login'], false, false);
