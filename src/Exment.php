@@ -291,7 +291,7 @@ class Exment
 
 
     /**
-     * Get user and organization ids for query whereInMultiple.
+     * Get user and organization authoriable ids for query whereInMultiple.
      *
      * @param string $filterType
      * @return array offset 0 : type, 1 : user or organization id.

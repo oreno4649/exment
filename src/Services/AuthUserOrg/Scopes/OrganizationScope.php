@@ -14,6 +14,8 @@ use Exceedone\Exment\Enums\JoinedMultiUserFilterType;
 
 class OrganizationScope extends RolePermissionScope
 {
+    use UserOrgScopeTrait;
+    
     /**
      * is Apply the scope to a given Eloquent query builder.
      *
@@ -38,18 +40,12 @@ class OrganizationScope extends RolePermissionScope
      */
     protected function filter(Builder $builder, LoginUser $user, $db_table_name)
     {
-        $setting = System::filter_multi_user();
-        if ($setting == JoinedMultiUserFilterType::NOT_FILTER) {
+        // getJoinedOrgFilterType
+        $joinedOrgFilterType = $this->getJoinedOrgFilterType();
+        if (is_null($joinedOrgFilterType)) {
             return;
         }
-
-        // if login user have FILTER_MULTIUSER_ALL, no filter
-        if (\Exment::user()->hasPermission(Permission::FILTER_MULTIUSER_ALL)) {
-            return;
-        }
-
-        $joinedOrgFilterType = JoinedOrgFilterType::getEnum($setting);
-
+        
         // get only login user's organization
         $builder->whereIn("$db_table_name.id", \Exment::getOrgJoinedIds($joinedOrgFilterType));
     }
