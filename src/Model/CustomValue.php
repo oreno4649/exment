@@ -250,9 +250,9 @@ abstract class CustomValue extends ModelBase
     /**
      * Get dynamic relation value for custom value.
      *
-     * @param CustomValue $custom_value
+     * @param int $custom_relation_id
      * @param boolean $isCallAsParent
-     * @return void
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany | \Illuminate\Database\Eloquent\Relations\MorphMany | \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function getDynamicRelationValue(int $custom_relation_id, bool $isCallAsParent)
     {
@@ -325,7 +325,7 @@ abstract class CustomValue extends ModelBase
     /**
      * get workflow histories
      *
-     * @return void
+     * @return Collection
      */
     public function getWorkflowHistories($appendsStatus = false)
     {
@@ -462,7 +462,7 @@ abstract class CustomValue extends ModelBase
     /**
      * Call saved event
      *
-     * @param [type] $isCreate
+     * @param bool $isCreate
      * @return void
      */
     protected function savedEvent($isCreate)
@@ -965,7 +965,6 @@ abstract class CustomValue extends ModelBase
 
     /**
      * Get vustom_value's label
-     * @param CustomValue $custom_value
      * @return string
      */
     public function getLabel()
@@ -1136,7 +1135,7 @@ abstract class CustomValue extends ModelBase
     /**
      * Get document list
      *
-     * @return void
+     * @return Collection
      */
     public function getDocuments($options = [])
     {
@@ -1270,7 +1269,7 @@ abstract class CustomValue extends ModelBase
     /**
      * Get Query for text search.
      *
-     * @return void
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function getSearchQuery($q, $options = [])
     {
@@ -1557,7 +1556,7 @@ abstract class CustomValue extends ModelBase
     /**
      * User can access this custom value
      *
-     * @return void
+     * @return bool|ErrorCode
      */
     public function enableAccess()
     {
@@ -1575,7 +1574,8 @@ abstract class CustomValue extends ModelBase
     /**
      * User can edit this custom value
      *
-     * @return void
+     * @param bool $checkFormAction if true, check as display
+     * @return bool|ErrorCode
      */
     public function enableEdit($checkFormAction = false)
     {
@@ -1615,7 +1615,8 @@ abstract class CustomValue extends ModelBase
     /**
      * User can delete this custom value
      *
-     * @param $checkFormAction if true, check as display
+     * @param bool $checkFormAction if true, check as display
+     * @return bool|ErrorCode
      */
     public function enableDelete($checkFormAction = false)
     {
@@ -1637,7 +1638,7 @@ abstract class CustomValue extends ModelBase
         }
         
         if (method_exists($this, 'disabled_delete_trait') && $this->disabled_delete_trait()) {
-            return ErrorCode::DELETE_DISABLED;
+            return ErrorCode::DELETE_DISABLED();
         }
         
         if (!is_null($parent_value = $this->getParentValue()) && ($code = $parent_value->enableDelete($checkFormAction)) !== true) {
@@ -1649,6 +1650,7 @@ abstract class CustomValue extends ModelBase
     
     /**
      * User can share this custom value
+     * @return bool
      */
     public function enableShare()
     {

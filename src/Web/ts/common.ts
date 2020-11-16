@@ -408,6 +408,7 @@ namespace Exment {
 
                 // set change event
                 $('.box-body').on('change', CommonEvent.getClassKey(key), { data: data }, async (ev) => {
+                    CalcEvent.resetLoopConnt();
                     await CommonEvent.changeModelData($(ev.target), ev.data.data);
                 });
 
@@ -930,7 +931,11 @@ namespace Exment {
         public static setValue($target, value) {
             if (!hasValue($target)) { return; }
             let column_type = $target.data('column_type');
-            
+
+            // if has data-disable-setvalue, return (For use view only)
+            if(pBool($target.data('disable-setvalue'))){
+                return;
+            }
             // if 'image' or 'file', cannot setValue, continue
             if ($.inArray(column_type, ['file', 'image']) != -1) {
                 return;
@@ -984,8 +989,12 @@ namespace Exment {
                 });
             }
             
-            // set value
-            $target.val(value).trigger('change');
+            // set value and trigger next
+            let isChange = !isMatchString(value, $target.val());
+            $target.val(value);
+            if(isChange){
+                $target.trigger('change');
+            }
         }
 
         /**
@@ -1134,12 +1143,23 @@ const pBool = (obj) : boolean => {
     return booleanStr === "true" || booleanStr === "1";
  }
 
+
 const hasValue = (obj): boolean => {
     if (obj == null || obj == undefined || obj.length == 0) {
         return false;
     }
     return true;
 }
+
+
+const isMatchString = (val1, val2) : boolean => {
+    if(!hasValue(val1) && !hasValue(val2)){
+        return true;
+    }
+
+    return val1 ==val2;
+}
+
 
 const comma = (x) => {
     if (x === null || x === undefined) {
