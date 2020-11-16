@@ -174,7 +174,7 @@ class NotifyTarget
 
                 // if select table is user
                 elseif ($custom_column->column_type == ColumnType::USER) {
-                    $result[] = static::getModelAsUser($v, $custom_column);
+                    $result[] = static::getModelAsUser($v);
                 }
                 
                 // if select table(cotains user)
@@ -236,7 +236,7 @@ class NotifyTarget
         $notifyTarget->email = $target_value->getValue($custom_column, true);
         $notifyTarget->name = $label;
         $notifyTarget->notifyKey = $target_value->custom_table->id . '_' . $target_value->id;
-        $notifyTarget->joinname = true;
+        $notifyTarget->joinName = true;
         $notifyTarget->slack_id = $slack_id ?? null;
 
         return $notifyTarget;
@@ -268,8 +268,8 @@ class NotifyTarget
     /**
      * get models as role
      *
-     * @param string $email
-     * @return NotifyTarget
+     * @param CustomValue $custom_value
+     * @return Collection
      */
     protected static function getModelsAsRole(CustomValue $custom_value) : Collection
     {

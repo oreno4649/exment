@@ -16,6 +16,7 @@ use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Model\CustomColumn;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Collection;
 use Encore\Admin\Admin;
 
 /**
@@ -420,6 +421,7 @@ class Exment
         return exmtrans('user.help.password');
     }
 
+    
     /**
      * get Data from excel sheet
      */
@@ -508,14 +510,15 @@ class Exment
     }
 
     /**
-     * Push collection. if $item is \Illuminate\Support\Collection, loop
+     * Push collection. if $item is Collection, loop
      *
-     * @param [type] $item
+     * @param Collection $collect
+     * @param Collection|mixed $item
      * @return void
      */
-    public function pushCollection(\Illuminate\Support\Collection $collect, $item) : \Illuminate\Support\Collection
+    public function pushCollection(Collection $collect, $item) : Collection
     {
-        if ($item instanceof \Illuminate\Support\Collection) {
+        if ($item instanceof Collection) {
             foreach ($item as $i) {
                 $collect->push($i);
             }
