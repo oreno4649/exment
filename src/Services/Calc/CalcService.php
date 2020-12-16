@@ -14,7 +14,7 @@ class CalcService
      * get calc display text.
      *
      * @param mixed $value
-     * @return void
+     * @return string
      */
     public static function getCalcDisplayText($value, CustomTable $custom_table)
     {
@@ -41,7 +41,7 @@ class CalcService
      * @param array $calc_params
      * @param [type] $count_detail_array
      * @param boolean $is_default
-     * @return void set above values:
+     * @return array set above values:
      *     'formula': formula string.
      *     'target_column': Defined formula setting column.
      *     'formula_column': formula column's name. Contains trigger column.
@@ -83,13 +83,16 @@ class CalcService
                     continue;
                 }
 
-                $formula_key_name = $param['trigger_block'] . '-' . $column_name;
+                // get formula_key_name
+                $target_block = ($relationInfo ? $relationInfo[1] : null) ?? 'default';
+                $formula_key_name = sprintf('%s/%s/%s/%s', $param['trigger_block'], $param['trigger_column'], $custom_column->column_name, $target_block);
+                
                 if (!array_has($calc_formulas, $formula_key_name)) {
                     $calc_formulas[$formula_key_name] = [
                         'trigger_block' => $param['trigger_block'],
                         'trigger_column' => $param['trigger_column'],
                         'target_column' => $custom_column->column_name,
-                        'target_block' => $relationInfo ? $relationInfo[1] : 'default',
+                        'target_block' => $target_block,
                         'type' => array_get($param, 'type'),
                         'formulas' => [],
                     ];
@@ -101,29 +104,32 @@ class CalcService
                 ];
             }
 
-            // if contains type "count", set 'calc_counts'
-            if (collect($params)->contains(function ($param) {
-                return in_array(array_get($param, 'type'), ['count', 'parent']);
-            })) {
+            // if contains type "count", set 'calc_counts'. If set $calc_counts array, execuite click "+Add" Or "-Remove" Button.
+            collect($params)->filter(function ($param) {
+                return in_array(array_get($param, 'type'), ['count']);
+            })->each(function ($param) use (&$calc_counts, $custom_column, $params, $option_calc_formula) {
                 $child_relation_name = array_get($param, 'child_relation_name');
                 if (is_nullorempty($child_relation_name)) {
-                    continue;
+                    return;
                 }
+
+                $formula_key_name = sprintf('%s/%s', $child_relation_name, $custom_column->column_name);
                 
-                if (!array_has($calc_counts, $child_relation_name)) {
-                    $calc_counts[$child_relation_name] = [
+                if (!array_has($calc_counts, $formula_key_name)) {
+                    $calc_counts[$formula_key_name] = [
+                        'child_relation_name' => $child_relation_name,
                         'block_key' => 'default',
                         'target_column' => $custom_column->column_name,
-                        'type' => 'summary',
+                        'type' => array_get($param, 'type'),
                         'formulas' => [],
                     ];
                 }
-                $calc_counts[$child_relation_name]['formulas'][] = [
+                $calc_counts[$formula_key_name]['formulas'][] = [
                     'child_relation_name' => $child_relation_name,
                     'formula_string' => $option_calc_formula,
                     'params' => $params,
                 ];
-            }
+            });
         }
 
         return ['calc_formulas' => $calc_formulas, 'calc_counts' => $calc_counts];

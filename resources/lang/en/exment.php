@@ -1253,6 +1253,14 @@ return [
             'fixed' => 'Fixed Value',
             'symbol' => 'Symbol',
             'input_number' => 'Input Number',
+            'validate_formula' => 'Validate Formula',
+
+            'message' => [
+                'description' => "Please enter the calculation formula. The formula can also be entered manually. When you're done, click the Validate Expression button to confirm your entry.",
+                'validate_success' => 'The correct formula.',
+                'validate_error' => 'There is an error in the formula you entered. Please check the formula.',
+                'infinity' => 'Division by zero may have occurred. Please check the formula.',
+            ]
         ],
     ],
 
@@ -2080,11 +2088,13 @@ return [
     'command' => [
         'import' => [
             'file_count' => 'Number of applicable files:',
-            'file_info' => ' case implementation start. file:{%s}',
+            'file_info' => ' case implementation start. file:%s',
+            'file_row_info' => '    - Import start. File:%s Row:%s-%s',
+            'file_row_error' => '   - Import error. File:%s Row:%s-%s Error:%s',
             'error_info' => 'Error info : ',
-            'success_message' => 'The import was successful. number:{%s}',
-            'error_table' => 'The target table {%s} cannot be found.',
-            'error_info_ex' => 'An error occurred during processing. There is already imported data.{%s}',
+            'success_message' => 'The import was successful. File:%s Count:%s',
+            'error_table' => 'The target table %s cannot be found.',
+            'error_info_ex' => 'An error occurred during processing. There is already imported data.%s',
         ],
         'export' => [
             'success_message' => 'The export was successful. Directory path:%s',

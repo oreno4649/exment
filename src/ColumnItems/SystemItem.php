@@ -63,6 +63,14 @@ class SystemItem implements ItemInterface
     }
 
     /**
+     * get sort name
+     */
+    public function getSortName()
+    {
+        return $this->getSqlColumnName();
+    }
+
+    /**
      * Get API column name
      *
      * @return string
@@ -151,6 +159,7 @@ class SystemItem implements ItemInterface
     public function index()
     {
         $option = $this->getSystemColumnOption();
+        //return getDBTableName($this->custom_table) .'-'. array_get($option, 'sqlname', $this->name());
         return array_get($option, 'sqlname', $this->name());
     }
 

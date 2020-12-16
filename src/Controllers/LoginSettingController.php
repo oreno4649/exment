@@ -385,7 +385,7 @@ class LoginSettingController extends AdminControllerBase
     {
         // validation
         $form = $this->globalSettingForm($request);
-        if(($response = $form->validateRedirect($request)) instanceof \Illuminate\Http\RedirectResponse){
+        if (($response = $form->validateRedirect($request)) instanceof \Illuminate\Http\RedirectResponse) {
             return $response;
         }
 

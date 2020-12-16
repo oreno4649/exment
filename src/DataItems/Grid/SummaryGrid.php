@@ -81,7 +81,6 @@ class SummaryGrid extends GridBase
                     'grid' => $grid,
                     'custom_table' => $this->custom_table,
                     'custom_view' => $this->custom_view,
-                    'is_summary' => true,
                 ]
             ));
         $grid->exporter($service);
@@ -114,7 +113,7 @@ class SummaryGrid extends GridBase
     /**
      * set summary grid
      */
-    protected function setSummaryGrid($grid)
+    public function setSummaryGrid($grid)
     {
         $query = $grid->model();
         return $this->getQuery($query, ['grid' => $grid]);
@@ -590,6 +589,8 @@ class SummaryGrid extends GridBase
             $form->text('view_column_name', exmtrans("custom_view.view_column_name"))->icon(null);
 
             $form->select('view_group_condition', exmtrans("custom_view.view_group_condition"))
+                // ignore HasOptionRule.
+                ->removeRules(\Encore\Admin\Validator\HasOptionRule::class)
                 ->options(function ($val, $form) {
                     if (is_null($data = $form->data())) {
                         return [];
@@ -637,6 +638,8 @@ class SummaryGrid extends GridBase
                     }
                     return [];
                 })
+                // ignore HasOptionRule.
+                ->removeRules(\Encore\Admin\Validator\HasOptionRule::class)
                 ->required()->rules('summaryCondition');
             $form->text('view_column_name', exmtrans("custom_view.view_column_name"))->icon(null);
             $form->select('sort_order', exmtrans("custom_view.sort_order"))
