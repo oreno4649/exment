@@ -12,7 +12,6 @@ use Encore\Admin\Widgets\Box;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use GuzzleHttp\Client;
-use Validator;
 
 class TemplateController extends AdminControllerBase
 {
@@ -163,7 +162,7 @@ class TemplateController extends AdminControllerBase
     /**
      * create export box
      *
-     * @return Form
+     * @return \Encore\Admin\Widgets\Form
      */
     protected function exportBoxForm()
     {
@@ -234,7 +233,7 @@ class TemplateController extends AdminControllerBase
     {
         // validation
         $form = static::exportBoxForm();
-        if(($response = $form->validateRedirect($request)) instanceof \Illuminate\Http\RedirectResponse){
+        if (($response = $form->validateRedirect($request)) instanceof \Illuminate\Http\RedirectResponse) {
             return $response;
         }
 
@@ -257,7 +256,7 @@ class TemplateController extends AdminControllerBase
      */
     public function import(Request $request)
     {
-        setTimeLimitLong();
+        \Exment::setTimeLimitLong();
         
         // upload template file and install
         $this->uploadTemplate($request);

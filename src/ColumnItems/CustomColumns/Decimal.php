@@ -106,6 +106,11 @@ class Decimal extends CustomItem
         $validates[] = new Validator\DecimalCommaRule;
     }
 
+    protected function getRemoveValidates()
+    {
+        return ['integer', 'numeric'];
+    }
+    
     /**
      * get cast Options
      */
@@ -117,7 +122,23 @@ class Decimal extends CustomItem
                 'decimal_digit' => intval(array_get($this->custom_column, 'options.decimal_digit', 2))
             ]];
         } else {
-            return [DatabaseDataType::TYPE_DECIMAL, false, []];
+            return [DatabaseDataType::TYPE_DECIMAL, true, []];
         }
+    }
+
+    
+    /**
+     * Convert filter value.
+     * Ex. If value is decimal and Column Type is decimal, return floatval.
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    public function convertFilterValue($value)
+    {
+        if (is_null($value)) {
+            return null;
+        }
+        return floatval($value);
     }
 }

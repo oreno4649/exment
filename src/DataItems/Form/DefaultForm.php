@@ -13,6 +13,7 @@ use Exceedone\Exment\Model\Linkage;
 use Exceedone\Exment\Model\Plugin;
 use Exceedone\Exment\Model\CustomValue;
 use Exceedone\Exment\Model\CustomFormBlock;
+use Exceedone\Exment\Model\System;
 use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\ValidateCalledType;
 use Exceedone\Exment\Enums\RelationType;
@@ -286,7 +287,7 @@ EOT;
                 // if set form_column_options changedata_target_column_id, and changedata_column_id
                 if (array_key_value_exists('changedata_target_column_id', $form_column_options) && array_key_value_exists('changedata_column_id', $form_column_options)) {
                     ///// set changedata info
-                    $this->setChangeDataArray($column, $form_column_options, $options, $changedata_array);
+                    $this->setChangeDataArray($column, $custom_form_block, $form_column_options, $options, $changedata_array);
                 }
                     
                 // set relatedlinkage_array
@@ -415,9 +416,32 @@ EOT;
 
     protected function manageFormToolButton($form, $custom_table, $custom_form)
     {
-        $form->disableEditingCheck(false);
-        $form->disableCreatingCheck(false);
-        $form->disableViewCheck(false);
+        $checkboxes = collect([
+            [
+                'key' => 'continue_editing',
+                'value' => 1,
+            ],
+            [
+                'key' => 'continue_creating',
+                'value' => 2,
+            ],
+            [
+                'key' => 'view',
+                'value' => 3,
+            ],
+            [
+                'key' => 'list',
+                'value' => 4,
+                'redirect' => admin_urls('data', $this->custom_table->table_name),
+            ],
+        ])->map(function ($checkbox) {
+            return array_merge([
+                'label' => trans('admin.' . $checkbox['key']),
+                'default' => isMatchString(System::data_submit_redirect(), $checkbox['value']),
+            ], $checkbox);
+        })->each(function ($checkbox) use ($form) {
+            $form->submitRedirect($checkbox);
+        });
 
         $id = $this->id;
         $form->tools(function (Form\Tools $tools) use ($id, $custom_table) {
@@ -475,7 +499,7 @@ EOT;
      * "changedata_target_column_id" : trigger column when user select
      * "changedata_column_id" : set column when getting selected value
      */
-    protected function setChangeDataArray($column, $form_column_options, $options, &$changedata_array)
+    protected function setChangeDataArray(CustomColumn $column, CustomFormBlock $custom_form_block, array $form_column_options, $options, &$changedata_array)
     {
         // get this table
         $column_table = $column->custom_table;
@@ -516,17 +540,34 @@ EOT;
         } else {
             $to_block_name = null;
         }
+        
+        //// get from block name.
+        // if not match form block's and $changedata_target_table. from block is default
+        if (!isMatchString($custom_form_block->form_block_target_table_id, $changedata_target_table->id)) {
+            $from_block_name = 'default';
+        //$from_block_name = CustomRelation::getRelationNameByTables($changedata_target_table->id, $custom_form_block->form_block_target_table_id);
+        }
+        // if child form
+        elseif ($custom_form_block->form_block_type != FormBlockType::DEFAULT) {
+            $from_block_name = $custom_form_block->getRelationInfo()[1];
+        } else {
+            $from_block_name = null;
+        }
+
+        // get group key for changedata trigger
+        $group_key = "{$from_block_name}/{$changedata_target_column->column_name}";
 
         // if not exists $changedata_target_column->column_name in $changedata_array
-        if (!array_has($changedata_array, $changedata_target_column->column_name)) {
-            $changedata_array[$changedata_target_column->column_name] = [];
+        if (!array_has($changedata_array, $group_key)) {
+            $changedata_array[$group_key] = [];
         }
-        if (!array_has($changedata_array[$changedata_target_column->column_name], $select_target_table->table_name)) {
-            $changedata_array[$changedata_target_column->column_name][$select_target_table->table_name] = [];
+        if (!array_has($changedata_array[$group_key], $select_target_table->table_name)) {
+            $changedata_array[$group_key][$select_target_table->table_name] = [];
         }
         // push changedata column from and to column name
-        $changedata_array[$changedata_target_column->column_name][$select_target_table->table_name][] = [
+        $changedata_array[$group_key][$select_target_table->table_name][] = [
             'from' => $changedata_column->column_name, // target_table's column
+            'from_block' => $from_block_name, // target_table's block
             'to' => $column->column_name, // set data
             'to_block' => is_null($to_block_name) ? null : '.has-many-' . $to_block_name . ',.has-many-table-' . $to_block_name,
             'to_block_form' => is_null($to_block_name) ? null : '.has-many-' . $to_block_name . '-form,.has-many-table-' . $to_block_name.'-form',
@@ -632,7 +673,7 @@ EOT;
                 })
                 ->required()
                 ->ajax($parent_custom_table->getOptionAjaxUrl())
-                ->attribute(['data-target_table_name' => array_get($parent_custom_table, 'table_name')]);
+                ->attribute(['data-target_table_name' => array_get($parent_custom_table, 'table_name'), 'data-parent_id' => true]);
 
             // set buttons
             $select->buttons([
@@ -658,7 +699,7 @@ EOT;
             $parent_value = $parent_custom_table->getValueModel($parent_id);
 
             if (isset($parent_id) && isset($parent_value) && isset($parent_custom_table)) {
-                $form->hidden('parent_id')->default($parent_id)->attribute(['data-target_table_name' => array_get($parent_custom_table, 'table_name')]);
+                $form->hidden('parent_id')->default($parent_id)->attribute(['data-target_table_name' => array_get($parent_custom_table, 'table_name'), 'data-parent_id' => true]);
                 $form->display('parent_id_display', $parent_custom_table->table_view_name)->default($parent_value->label);
             }
         }

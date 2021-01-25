@@ -1,6 +1,16 @@
 # Test / テスト
 How to test. / テスト実行方法です。  
 
+## Browser, Unit, Feature Test / ブラウザ・単体・結合テスト
+
+### Install (Only first) / インストール(初回のみ) 
+- Please execute this command.  / 以下のコマンドを実行してください。  
+
+```
+composer require symfony/css-selector=~4.2
+composer require laravel/browser-kit-testing=~5.2
+```
+
 ## Create test data / テストデータ作成
 
 - Please execute this command.   / 以下のコマンドを実行してください。  
@@ -9,17 +19,6 @@ How to test. / テスト実行方法です。
 ```
 php artisan exment:inittest
 ```
-
-
-### Install (Only first) / インストール(初回のみ) 
-- Please execute this command.  / 以下のコマンドを実行してください。  
-
-```
-composer require symfony/css-selector=~4.2
-composer require laravel/browser-kit-testing=~4.2
-```
-
-## Browser, Unit, Feature Test / ブラウザ・単体・結合テスト
 
 ### Setup and execute test / テスト実行
 

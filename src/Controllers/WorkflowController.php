@@ -281,12 +281,14 @@ class WorkflowController extends AdminControllerBase
 
         if (isset($workflow)) {
             $form->submitRedirect([
+                'key' => 'action_2',
                 'value' => 'action_2',
                 'label' => exmtrans('common.redirect_to', exmtrans('workflow.workflow_actions')),
                 'redirect' => function ($resourcesPath, $key) {
                     return redirect(admin_urls('workflow', $key, 'edit?action=2'));
                 },
             ])->submitRedirect([
+                'key' => 'continue_editing',
                 'value' => 1,
                 'label' => trans('admin.continue_editing'),
                 'redirect' => function ($resourcesPath, $key) {
@@ -448,12 +450,14 @@ class WorkflowController extends AdminControllerBase
         });
 
         $form->submitRedirect([
+            'key' => 'action_1',
             'value' => 'action_1',
             'label' => exmtrans('common.redirect_to', exmtrans('workflow.workflow_statuses')),
             'redirect' => function ($resourcesPath, $key) {
                 return redirect(admin_urls('workflow', $key, 'edit?action=1'));
             },
         ])->submitRedirect([
+            'key' => 'continue_editing',
             'value' => 1,
             'label' => trans('admin.continue_editing'),
             'redirect' => function ($resourcesPath, $key) {
@@ -582,6 +586,9 @@ class WorkflowController extends AdminControllerBase
         $validator = \Validator::make($request->all(), [
             'workflow_tables.*.workflows.*.active_start_date' => ['nullable', 'date', 'before_or_equal:workflow_tables.*.workflows.*.active_end_date'],
             'workflow_tables.*.workflows.*.active_end_date' => ['nullable', 'date']
+        ], [], [
+            'workflow_tables.*.workflows.*.active_start_date' => exmtrans('workflow.active_start_date'),
+            'workflow_tables.*.workflows.*.active_end_date' => exmtrans('workflow.active_end_date'),
         ]);
 
         $errors = $validator->errors();
@@ -679,7 +686,7 @@ class WorkflowController extends AdminControllerBase
      * Activate workflow
      *
      * @param Request $request
-     * @param [type] $id
+     * @param string|int $id
      * @return void
      */
     public function activate(Request $request, $id)
@@ -874,7 +881,7 @@ class WorkflowController extends AdminControllerBase
      * Get target modal html
      *
      * @param Request $request
-     * @param [type] $id
+     * @param string|int $id
      * @return void
      */
     public function targetModal(Request $request, $id)
@@ -949,7 +956,7 @@ class WorkflowController extends AdminControllerBase
      * Get condition modal html
      *
      * @param Request $request
-     * @param [type] $id
+     * @param string|int $id
      * @return void
      */
     public function conditionModal(Request $request, $id)

@@ -7,6 +7,20 @@ return [
     'timezone' => env('APP_TIMEZONE', config('app.timezone')),
 
     'system_locale_options' => env('EXMENT_SYSTEM_LOCALE_OPTIONS'),
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | composer path
+    |--------------------------------------------------------------------------
+    |
+    | If select composer path, set composer path
+    |
+    */
+    'composer_path' => env('EXMENT_COMPOSER_PATH'),
+
+
     /*
     |--------------------------------------------------------------------------
     | Use API
@@ -607,7 +621,7 @@ return [
     | Impoer row max count
     |
     */
-    'import_max_row_count' => env('EXMENT_IMPORT_MAX_ROW_COUNT', 1000),
+    'import_max_row_count' => env('EXMENT_IMPORT_MAX_ROW_COUNT', 5000),
     
     /*
     |--------------------------------------------------------------------------
@@ -671,6 +685,26 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | export library
+    |--------------------------------------------------------------------------
+    |
+    | export data library, default is PHP SPREAT SHEET
+    |
+    */
+    'export_library' => env('EXMENT_EXPORT_LIBRARY'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | import library
+    |--------------------------------------------------------------------------
+    |
+    | import data library, default is SPOUT
+    |
+    */
+    'import_library' => env('EXMENT_IMPORT_LIBRARY'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Select relation linkage disabled
     |--------------------------------------------------------------------------
     |
@@ -679,6 +713,16 @@ return [
     | 
     */
     'select_relation_linkage_disabled' => env('SELECT_RELATION_LINKAGE_DISABLED', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | SystemUpdateDisplayDisabled
+    |--------------------------------------------------------------------------
+    |
+    | IF true, disabled system update on display.
+    |
+    */
+    'system_update_display_disabled' => env('EXMENT_SYSTEM_UPDATE_DISPLAY_DISABLED', false),
 
     
     /*
