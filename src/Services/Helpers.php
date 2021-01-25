@@ -493,25 +493,6 @@ if (!function_exists('bytesToHuman')) {
 }
 
 
-if (!function_exists('getUploadMaxFileSize')) {
-    /**
-     * get Upload Max File Size. get php.ini config
-     *
-     * @return int byte size.
-     */
-    function getUploadMaxFileSize()
-    {
-        $post_max_size = (int)(str_replace('M', '', ini_get('post_max_size')));
-        $upload_max_filesize = (int)(str_replace('M', '', ini_get('upload_max_filesize')));
-
-        // return min size post_max_size or upload_max_filesize
-        $minsize = collect([$post_max_size, $upload_max_filesize])->min();
-
-        // return byte size
-        return $minsize * 1024 * 1024;
-    }
-}
-
 if (!function_exists('isMatchRequest')) {
     /**
      * Is match uri from request
@@ -638,6 +619,28 @@ if (!function_exists('array_key_value_exists')) {
                 continue;
             }
             if (!is_nullorempty(array_get($array, $k))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+if (!function_exists('array_value_exists')) {
+    /**
+     * whether has array_value
+     * @param mixed $key
+     * @param array|\Illuminate\Support\Collection $array
+     * @return bool
+     */
+    function array_value_exists($value, $array) : bool
+    {
+        if (is_null($array)) {
+            return false;
+        }
+        foreach ($array as $arr) {
+            if (isMatchString($arr, $value)) {
                 return true;
             }
         }
@@ -864,6 +867,9 @@ if (!function_exists('isMatchString')) {
      */
     function isMatchString($v1, $v2) : bool
     {
+        if (is_array($v1) || is_array($v2)) {
+            return false;
+        }
         return strcmp($v1, $v2) == 0;
     }
 }

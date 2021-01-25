@@ -175,6 +175,11 @@ var Exment;
                     $.pjax({ container: '#pjax-container', url: res.redirect });
                 }
             }
+            else if (res.logoutAsync) {
+                setTimeout(function () {
+                    location.href = admin_url('auth/logout');
+                }, 5000);
+            }
             else {
                 $.pjax.reload('#pjax-container');
             }
@@ -207,6 +212,7 @@ var Exment;
                 data: [],
                 redirect: null,
                 preConfirmValidate: null,
+                postEvent: null,
                 showCancelButton: true,
                 confirmCallback: null,
             }, options);
@@ -240,6 +246,9 @@ var Exment;
                     }
                     if (hasValue(options.inputKey)) {
                         data[options.inputKey] = input;
+                    }
+                    if (hasValue(options.postEvent)) {
+                        return options.postEvent(data);
                     }
                     return new Promise(function (resolve) {
                         $.ajax({
@@ -1047,87 +1056,6 @@ $(function () {
     Exment.CommonEvent.AddEvent();
     Exment.CommonEvent.AddEventOnce();
 });
-const URLJoin = (...args) => args
-    .join('/')
-    .replace(/[\/]+/g, '/')
-    .replace(/^(.+):\//, '$1://')
-    .replace(/^file:/, 'file:/')
-    .replace(/\/(\?|&|#[^!])/g, '$1')
-    .replace(/\?/g, '&')
-    .replace('&', '?');
-const pInt = (obj) => {
-    if (!hasValue(obj)) {
-        return 0;
-    }
-    obj = obj.toString().replace(/,/g, '');
-    return parseInt(obj);
-};
-const pFloat = (obj) => {
-    if (!hasValue(obj)) {
-        return 0;
-    }
-    obj = obj.toString().replace(/,/g, '');
-    // check integer
-    if (obj.indexOf('.') === -1) {
-        return parseInt(obj);
-    }
-    return parseFloat(obj);
-};
-const pBool = (obj) => {
-    if (!hasValue(obj)) {
-        return false;
-    }
-    const booleanStr = obj.toString().toLowerCase();
-    return booleanStr === "true" || booleanStr === "1";
-};
-const hasValue = (obj) => {
-    if (obj == null || obj == undefined || obj.length == 0) {
-        return false;
-    }
-    return true;
-};
-const isMatchString = (val1, val2) => {
-    if (!hasValue(val1) && !hasValue(val2)) {
-        return true;
-    }
-    return val1 == val2;
-};
-const comma = (x) => {
-    if (x === null || x === undefined) {
-        return x;
-    }
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-};
-const rmcomma = (x) => {
-    if (x === null || x === undefined) {
-        return x;
-    }
-    return x.toString().replace(/,/g, '');
-};
-const trimAny = function (str, any) {
-    if (!hasValue(str)) {
-        return str;
-    }
-    return str.replace(new RegExp("^" + any + "+|" + any + "+$", "g"), '');
-};
-const entityMap = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#39;',
-    '/': '&#x2F;',
-    '`': '&#x60;',
-    '=': '&#x3D;'
-};
-function escHtml(string) {
-    if (!string) {
-        return string;
-    }
-    return String(string).replace(/[&<>"'`=\/]/g, function (s) {
-        return entityMap[s];
-    });
-}
 const selectedRow = function () {
     var id = $('.grid-row-checkbox:checked').eq(0).data('id');
     return id;

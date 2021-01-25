@@ -649,4 +649,95 @@ class Exment
         }
         set_time_limit($time);
     }
+
+
+    /**
+     * get Upload Max File Size. get php.ini config
+     *
+     * @return int byte size.
+     */
+    public function getUploadMaxFileSize()
+    {
+        // get mega size
+        $post_max_size = $this->getFileMegaSizeValue(ini_get('post_max_size'));
+        $upload_max_filesize = $this->getFileMegaSizeValue(ini_get('upload_max_filesize'));
+
+        // return min size post_max_size or upload_max_filesize
+        $minsize = collect([$post_max_size, $upload_max_filesize])->min();
+
+        // return byte size
+        return $minsize * 1024 * 1024;
+    }
+
+
+    /**
+     * Get file size
+     *
+     * @param string $val
+     * @return int
+     */
+    public function getFileMegaSizeValue($val)
+    {
+        $val = strtolower(strval($val));
+        $val = str_replace('m', '', $val);
+
+        if (strpos($val, 'g') !== false) {
+            $val = str_replace('g', '', $val) * 1024;
+        }
+        return intval($val);
+    }
+    
+
+    /**
+     * Whether db is sqlserver.
+     *
+     * @return boolean
+     */
+    public function isSqlServer() : bool
+    {
+        return \DB::getSchemaBuilder() instanceof \Illuminate\Database\Schema\SqlServerBuilder;
+    }
+
+
+    /**
+     * Whether server os is Windows
+     *
+     * @return boolean
+     */
+    public function isWindows() : bool
+    {
+        return 0 === strpos(PHP_OS, 'WIN');
+    }
+
+
+    /**
+     * Get composer path. If env EXMENT_COMPOSER_PATH set, return this env value.
+     *
+     * @return string
+     */
+    public function getComposerPath() : string
+    {
+        $path = config('exment.composer_path');
+        if (!\is_nullorempty($path)) {
+            return $path;
+        }
+
+        return 'composer';
+    }
+
+
+    /**
+     * Convert to array for Carbon
+     *
+     * @param \Carbon\Carbon $carbon
+     * @return array
+     */
+    public function carbonToArray(\Carbon\Carbon $carbon) : array
+    {
+        return [
+            'date' => $carbon->format("Y-m-d H:i:s.u"),
+            'timezone_type' => 3,  // Directly set timezone type, because cannot get.
+            'timezone' => $carbon->getTimezone()->getName(),
+        ];
+    }
 }

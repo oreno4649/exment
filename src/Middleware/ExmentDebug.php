@@ -9,7 +9,7 @@ class ExmentDebug
 {
     public function handle(Request $request, \Closure $next)
     {
-        static::handleLog();
+        static::handleLog($request);
 
         return $next($request);
     }
@@ -70,14 +70,17 @@ class ExmentDebug
         $input = collect($request->input())->map(function ($value, $key) {
             if (in_array($key, LogOperation::getHideColumns())) {
                 return "$key:xxxx";
+            } elseif (is_array($value)) {
+                return "$key:" . json_encode($value);
             } else {
                 return "$key:$value";
             }
         })->implode(', ');
         $url = $request->fullUrl();
         $headers = $request->headers->__toString();
+        $ip = $request->ip();
 
-        \Log::debug("URL : $url\nInput : $input\nHeaders --------------------------------------\n$headers");
+        \Log::debug("\nIP : {$ip}\nURL : $url\nInput : $input\nHeaders --------------------------------------\n$headers");
     }
 
     protected static function getFunctionName($oneFunction = false)

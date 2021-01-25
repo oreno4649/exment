@@ -4,9 +4,12 @@ namespace Exceedone\Exment\Tests;
 
 use Exceedone\Exment\Model\System;
 use Exceedone\Exment\Model\CustomTable;
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 
 trait TestTrait
 {
+    use ArraySubsetAsserts;
+
     /**
      * Assert that the response is a superset of the given JSON.
      *
@@ -17,9 +20,7 @@ trait TestTrait
      */
     public function assertJsonExment(array $data1, $data2, $strict = false)
     {
-        \PHPUnit\Framework\Assert::assertArraySubset(
-            $data1, $data2, $strict
-        );
+        self::assertArraySubset($data1, $data2, $strict);
 
         return $this;
     }
@@ -33,6 +34,25 @@ trait TestTrait
 
         return $this;
     }
+
+
+    /**
+     * Check post's Response
+     *
+     * @param mixed $response
+     * @param string|null $expectUrl
+     * @return void
+     */
+    protected function assertPostResponse($response, ?string $expectUrl)
+    {
+        $statusCode = $response->getStatusCode();
+        $this->assertTrue(in_array($statusCode, [200, 302]), "Status code is {$statusCode}.");
+
+        if($statusCode == 302){
+            $this->assertMatch($response->getTargetUrl(), $expectUrl);
+        }
+    }
+
 
     /**
      * Skip test temporarily.

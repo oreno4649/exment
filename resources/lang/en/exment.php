@@ -6,6 +6,7 @@ return [
         'home' => 'HOME',
         'success' => 'Success',
         'error' => 'Error',
+        'warning' => 'Warning',
         'import' => 'Import',
         'plugin' => 'Plugin',
         'copy' => 'Copy',
@@ -15,6 +16,7 @@ return [
         'default' => 'Default',
         'basic_setting' => 'Basic Setting',
         'detail_setting' => 'Detail Setting',
+        'result' => 'Result',
         'execute_result' => 'Execute Result',
         'no_setting' => 'No Setting',
         'input' => 'Input',
@@ -75,6 +77,7 @@ return [
         'download' => 'Download',
         'append_to_selectitem' => 'Append',
         'redirect_to' => 'Move to %s',
+        'second' => 'second',
 
         'message' => [
             'confirm_execute' => 'Are you sure to %s ?',
@@ -93,6 +96,8 @@ return [
             'input_keyword' => 'Please input "%s".',
             'no_permission' => '(No Permission)',
             'file_drag_drop' => 'Drag & drop files here …',
+            'modal_confirm' => 'If you want to do it, enter "%s".',
+            'label_link' => 'For :label, please check <a href=":link" target="_blank">here<i class="fa fa-external-link"></i></a>.',
         ],
 
         'help' =>[
@@ -165,6 +170,10 @@ return [
             'password' => 'Password',
         ],
 
+        'system_require' => [
+            'header' => 'Check System Requirements',
+        ],
+
         'installing' => [
             'header' => 'Initial Data Installation',
             'installing' => 'Execute Install',
@@ -226,6 +235,7 @@ return [
         'default_date_format' => 'Date and time display format',
         'filter_search_type' => 'Data search method',
         'grid_filter_disable_flg' => 'Disable Grid Filter',
+        'data_submit_redirect' => 'Data Submit Redirect',
         'api_available' => 'API Available',
         'outside_api' => 'Perform server external communication',
         'permission_available' => 'Use Role Management',
@@ -249,6 +259,9 @@ return [
         'userview_available' => 'Use User View',
         'template' => 'Install Template',
         'version_header' => 'System version infomation',
+        'version_current_label' => 'Current Version',
+        'version_latest_label' => 'Latest Version',
+        'version_compare_label' => 'Version Check Result',
         'version_progress' => 'Checking system version...',
         'version_latest' => 'This is latest version.',
         'version_develope' => 'This is developer version.',
@@ -275,6 +288,17 @@ return [
         'ip_filter' => 'IP Filter Setting',
         'web_ip_filters' => 'Web Page',
         'api_ip_filters' => 'API',
+
+        'release_note' => 'Release Note',
+        'call_update_header' => 'Execute Update(β)',
+        'call_update' => 'Execute Update',
+        'call_update_howto' => 'How To Update',
+        'call_update_description' => 'We will update the system to version %s. The update will take a very long time. It also switches to maintenance mode during the update. Do not close or update the screen during the update.',
+        'call_update_modal_confirm' => 'We will update the system to version %s.',
+        'call_update_success' => 'The update is complete!',
+        'call_update_success_text' => 'The update is complete. After 5 seconds, you will be automatically logged out.',
+        'call_update_cannot' => 'Cannot be updated',
+        'call_update_cannot_description' => 'It is not possible to update from the screen because the system requirements settings need to be changed. Check the following system requirements.',
 
         'site_skin_options' => [
             "skin-blue" => "Header:Blue&nbsp;&nbsp;&nbsp;&nbsp;SideBar:Black",
@@ -366,6 +390,7 @@ return [
             'site_layout' => 'On the left side of the page, select the layout of the site menu. *After saving, it will be reflected in reloading.',
             'filter_search_type' => 'Set the search method for registered data. *In the case of partial match, performance may be affected depending on the number of data.',
             'grid_filter_disable_flg' => 'The checked item will be hidden in the filter item of the data list screen.',
+            'data_submit_redirect' => 'You can set the default value for the screen to redirect after saving custom data. When this item is set, the check box for the data transition destination after saving will be checked on the data entry screen.',
             'api_available' => 'If set to YES, you can use the API.',
             'outside_api' => 'When set to YES, you can perform processing that performs external server communication, such as notification of the latest version of Exment. It only receives data. * If you do not perform communication, such as when using in an environment where you can not connect to an external network, set this to NO.',
             'grid_pager_count' => 'This is the default number of items displayed on the list page. It is reflected in the whole system.',
@@ -397,6 +422,52 @@ return [
             'filter_multi_orguser' => 'Set the range where the logged-in user can view other users/organizations. * Set this when you do not want to display other user information such as portal sites that are used across multiple companies.',
             'custom_value_save_autoshare' => 'Set the automatic sharing method when users create new custom data. The default is only the logged-in user, and it can be shared with your organization depending on the setting.',
             'ip_filter' => 'Set the IP address to allow communication. Fixed IP (example: 12.3.5.6) and range specification format (example: 123.4.5.0/24) can be used. If it is not set, all IP addresses are allowed. <br /> If you want to set more than one, please separate them with line breaks.',
+        ],
+    ],
+
+    'system_require' => [
+        'explain' => 'Check the server settings required to run Exment.',
+        'item_header' => '■:label ： :text ： :result',
+        'check_setting' => 'Check the setting method',
+        'warning_confirm' => 'Some items are warning. Are you sure you want to install?',
+
+        'type' => [
+            'memory' => [
+                'label' => 'Memory usage limit',
+                'explain' => 'The upper limit of memory usage allocated to run PHP.(Recommended value: 512MB or more)',
+                'warning' => 'The memory usage limit is below the recommended size. We recommend changing the upper limit setting.',
+            ],
+            'file_upload_size' => [
+                'label' => 'File upload size limit',
+                'explain' => 'The maximum file size for uploading files. The size you need depends on the requirements of the files you want to manage.(Recommended value: 5MB or more)',
+                'warning' => 'The file upload size limit is below the recommended size. We recommend changing the upper limit setting.',
+            ],
+            'backup_restore' => [
+                'label' => 'Backup/Restore',
+                'explain' => 'Confirm that the server settings for executing backup / restore are complete.',
+                'ng' => 'The settings required for Exment backup / restore have not been made. Please check the settings.',
+            ],
+            'timeout_time' => [
+                'label' => 'Timeout time',
+                'explain' => 'The number of seconds before the process waits and the time expires. If this time is short, it may exceed this time for time-consuming processes such as backup and import.(推奨値:180秒以上)',
+                'warning' => 'The timeout time is below the recommended setting. Time-consuming processes such as backup and import may time out in the middle.',
+            ],
+            'file_permission' => [
+                'label' => 'File permissions',
+                'explain' => 'Check the file permissions required to run Exment.',
+                'text_notwritable' => 'Insufficient write permission',
+                'ng' => 'Insufficient write permission for the specified path. Please check the procedure and add the permission.',
+            ],
+            'file_permission_installer' => [
+                'explain' => 'Check the file permissions required to install and run Exment.',
+            ],
+            'composer' => [
+                'label' => 'Install Composer',
+                'explain' => 'Check if you have Composer installed to update your Exment.',
+                'warning' => 'Could not confirm the installation of Composer. The Exment update may not complete successfully. Please check if Composer is installed normally.',
+                'warning_versionget' => 'The version of composer could not be obtained. Review the settings.',
+                'warning_versionmin' => 'The version of composer installed was :version. Exment currently recommends a composer version of 2.0.0 or higher. Please consider updating.',
+            ],
         ],
     ],
 
@@ -1622,6 +1693,10 @@ return [
         'role_type_option_plugin' => [
             'plugin_access' => ['label' => 'Access', 'help' => 'User can use this plugin.'],
             'plugin_setting' => ['label' => 'Manage Setting', 'help' => 'For plugins with configuration changes, user can change the setting of this plugin.'],
+        ],
+
+        'error' => [
+            'cannot_accessable_and_value' => 'The permissions "Browse all data" and "%s" cannot be set at the same time.',
         ],
     ],
 
