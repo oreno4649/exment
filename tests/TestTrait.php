@@ -4,9 +4,12 @@ namespace Exceedone\Exment\Tests;
 
 use Exceedone\Exment\Model\System;
 use Exceedone\Exment\Model\CustomTable;
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 
 trait TestTrait
 {
+    use ArraySubsetAsserts;
+
     /**
      * Assert that the response is a superset of the given JSON.
      *
@@ -17,9 +20,7 @@ trait TestTrait
      */
     public function assertJsonExment(array $data1, $data2, $strict = false)
     {
-        \PHPUnit\Framework\Assert::assertArraySubset(
-            $data1, $data2, $strict
-        );
+        self::assertArraySubset($data1, $data2, $strict);
 
         return $this;
     }
@@ -34,6 +35,25 @@ trait TestTrait
         return $this;
     }
 
+
+    /**
+     * Check post's Response
+     *
+     * @param mixed $response
+     * @param string|null $expectUrl
+     * @return void
+     */
+    protected function assertPostResponse($response, ?string $expectUrl)
+    {
+        $statusCode = $response->getStatusCode();
+        $this->assertTrue(in_array($statusCode, [200, 302]), "Status code is {$statusCode}.");
+
+        if($statusCode == 302){
+            $this->assertMatch($response->getTargetUrl(), $expectUrl);
+        }
+    }
+
+
     /**
      * Skip test temporarily.
      *
@@ -41,10 +61,31 @@ trait TestTrait
      * @param string $messsage showing message why this test is skipped.
      * @return void
      */
-    protected function skipTempTestIfTrue(\Closure $skipMatchFunc, string $messsage = null){
-        if($skipMatchFunc()){
+    protected function skipTempTestIfTrue($skipMatch, string $messsage = null){
+        $result = null;
+        if($skipMatch instanceof \Closure){
+            $result = $skipMatch();
+        }
+        elseif(is_bool($skipMatch)){
+            $result = $skipMatch;
+        }
+        else{
+            throw new \Exception('skipTempTestIfTrue is only bool or Closure');
+        }
+
+        if($result){
             $this->markTestSkipped('This function is temporarily skipped. ' . $messsage);
         }
+    }
+
+    /**
+     * Skip test everytime.
+     *
+     * @param string $messsage showing message why this test is skipped.
+     * @return void
+     */
+    protected function skipTempTest(string $messsage = null){
+        $this->markTestSkipped('This function is temporarily skipped. ' . $messsage);
     }
 
     /**
@@ -55,6 +96,7 @@ trait TestTrait
     protected function initAllTest(){
         System::clearCache();
         \Exceedone\Exment\Middleware\Morph::defineMorphMap();
+        \Exceedone\Exment\Middleware\ExmentDebug::handleLog();
     }
 
     

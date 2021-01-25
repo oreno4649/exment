@@ -9,15 +9,21 @@ class ExmentDebug
 {
     public function handle(Request $request, \Closure $next)
     {
-        if (boolval(config('exment.debugmode', false)) || boolval(config('exment.debugmode_sql', false))) {
-            $this->logDatabase();
-        }
-
-        if (boolval(config('exment.debugmode_request', false))) {
-            $this->logRequest($request);
-        }
+        static::handleLog($request);
 
         return $next($request);
+    }
+
+
+    public static function handleLog(?Request $request = null)
+    {
+        if (boolval(config('exment.debugmode', false)) || boolval(config('exment.debugmode_sql', false))) {
+            static::logDatabase();
+        }
+
+        if (isset($request) && boolval(config('exment.debugmode_request', false))) {
+            static::logRequest($request);
+        }
     }
 
     
@@ -26,7 +32,7 @@ class ExmentDebug
      *
      * @return void
      */
-    protected function logDatabase()
+    protected static function logDatabase()
     {
         \DB::listen(function ($query) {
             $sql = $query->sql;
@@ -59,19 +65,22 @@ class ExmentDebug
      *
      * @return void
      */
-    protected function logRequest($request)
+    protected static function logRequest($request)
     {
         $input = collect($request->input())->map(function ($value, $key) {
             if (in_array($key, LogOperation::getHideColumns())) {
                 return "$key:xxxx";
+            } elseif (is_array($value)) {
+                return "$key:" . json_encode($value);
             } else {
                 return "$key:$value";
             }
         })->implode(', ');
         $url = $request->fullUrl();
         $headers = $request->headers->__toString();
+        $ip = $request->ip();
 
-        \Log::debug("URL : $url\nInput : $input\nHeaders --------------------------------------\n$headers");
+        \Log::debug("\nIP : {$ip}\nURL : $url\nInput : $input\nHeaders --------------------------------------\n$headers");
     }
 
     protected static function getFunctionName($oneFunction = false)

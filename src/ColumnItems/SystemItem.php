@@ -9,6 +9,7 @@ use Exceedone\Exment\Form\Field;
 use Exceedone\Exment\Enums\SystemColumn;
 use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\FilterType;
+use Exceedone\Exment\Enums\GroupCondition;
 use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Model\CustomRelation;
 use Exceedone\Exment\Model\Traits\ColumnOptionQueryTrait;
@@ -63,6 +64,14 @@ class SystemItem implements ItemInterface
     }
 
     /**
+     * get sort name
+     */
+    public function getSortName()
+    {
+        return $this->getSqlColumnName();
+    }
+
+    /**
      * Get API column name
      *
      * @return string
@@ -97,10 +106,16 @@ class SystemItem implements ItemInterface
         $group_condition = array_get($this->options, 'group_condition');
 
         if (isset($summary_condition)) {
+            $column_name = \Exment::wrapColumn($column_name);
             $raw = "$summary_condition($column_name) AS ".$this->sqlAsName();
         } elseif (isset($group_condition)) {
             $raw = \DB::getQueryGrammar()->getDateFormatString($group_condition, $column_name, false) . " AS ".$this->sqlAsName();
+        }
+        // if sql server and created_at, set datetime cast
+        elseif (\Exment::isSqlServer() && array_get($this->getSystemColumnOption(), 'type') == 'datetime') {
+            $raw = \DB::getQueryGrammar()->getDateFormatString(GroupCondition::YMDHIS, $column_name, true);
         } else {
+            $column_name = \Exment::wrapColumn($column_name);
             $raw = "$column_name AS ".$this->sqlAsName();
         }
 
@@ -118,8 +133,12 @@ class SystemItem implements ItemInterface
 
         if (isset($group_condition)) {
             $raw = \DB::getQueryGrammar()->getDateFormatString($group_condition, $column_name, true);
+        }
+        // if sql server and created_at, set datetime cast
+        elseif (\Exment::isSqlServer() && array_get($this->getSystemColumnOption(), 'type') == 'datetime') {
+            $raw = \DB::getQueryGrammar()->getDateFormatString(GroupCondition::YMDHIS, $column_name, true);
         } else {
-            $raw = $column_name;
+            $raw = \Exment::wrapColumn($column_name);
         }
 
         return \DB::raw($raw);
@@ -151,6 +170,7 @@ class SystemItem implements ItemInterface
     public function index()
     {
         $option = $this->getSystemColumnOption();
+        //return getDBTableName($this->custom_table) .'-'. array_get($option, 'sqlname', $this->name());
         return array_get($option, 'sqlname', $this->name());
     }
 
@@ -216,7 +236,7 @@ class SystemItem implements ItemInterface
      */
     public function sortable()
     {
-        return true;
+        return !array_key_value_exists('view_pivot_column', $this->options);
     }
 
     /**
@@ -326,6 +346,19 @@ class SystemItem implements ItemInterface
         return in_array($value_type, ['day', 'datetime']);
     }
 
+    /**
+     * whether column is datetime
+     *
+     */
+    public function isDateTime()
+    {
+        $option = $this->getSystemColumnOption();
+        $value_type = array_get($option, 'type');
+
+        return in_array($value_type, ['datetime']);
+    }
+
+    
     /**
      * get view filter type
      */

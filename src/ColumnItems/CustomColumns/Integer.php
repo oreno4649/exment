@@ -77,11 +77,32 @@ class Integer extends CustomItem
         $validates[] = new Validator\IntegerCommaRule;
     }
 
+    protected function getRemoveValidates()
+    {
+        return ['integer', 'numeric'];
+    }
+
     /**
      * get cast Options
      */
     protected function getCastOptions()
     {
         return[DatabaseDataType::TYPE_INTEGER, true, []];
+    }
+    
+    
+    /**
+     * Convert filter value.
+     * Ex. If value is decimal and Column Type is decimal, return floatval.
+     *
+     * @param mixed $value
+     * @return mixed
+     */
+    public function convertFilterValue($value)
+    {
+        if (is_null($value)) {
+            return null;
+        }
+        return intval($value);
     }
 }

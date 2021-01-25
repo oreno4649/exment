@@ -8,12 +8,14 @@ use Exceedone\Exment\Enums\UrlTagType;
 use Exceedone\Exment\Enums\FilterSearchType;
 use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\SystemVersion;
+use Exceedone\Exment\Enums\ExportImportLibrary;
 use Exceedone\Exment\Model\Menu;
 use Exceedone\Exment\Model\System;
 use Exceedone\Exment\Model\Define;
 use Exceedone\Exment\Model\LoginUser;
 use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Model\CustomColumn;
+use Exceedone\Exment\Services\DataImportExport\Formats\FormatBase;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Collection;
@@ -425,43 +427,23 @@ class Exment
     /**
      * get Data from excel sheet
      */
-    public function getDataFromSheet($sheet, $skip_excel_row_no = 0, $keyvalue = false, $isGetMerge = false)
+    public function getDataFromSheet($sheet, $keyvalue = false, $isGetMerge = false)
     {
-        $data = [];
-        foreach ($sheet->getRowIterator() as $row_no => $row) {
-            // if index < $skip_excel_row_no, conitnue
-            if ($row_no <= $skip_excel_row_no) {
-                continue;
-            }
-
-            $cellIterator = $row->getCellIterator();
-            $cellIterator->setIterateOnlyExistingCells(false); // This loops through all cells,
-            $cells = [];
-            foreach ($cellIterator as $column_no => $cell) {
-                $value = getCellValue($cell, $sheet, $isGetMerge);
-
-                // if keyvalue, set array as key value
-                if ($keyvalue) {
-                    $key = getCellValue($column_no."1", $sheet, $isGetMerge);
-                    $cells[$key] = mbTrim($value);
-                }
-                // if false, set as array
-                else {
-                    $cells[] = mbTrim($value);
-                }
-            }
-            if (collect($cells)->filter(function ($v) {
-                return !is_nullorempty($v);
-            })->count() == 0) {
-                break;
-            }
-            $data[] = $cells;
-        }
-
-        return $data;
+        $format = FormatBase::getFormatClass('xlsx', ExportImportLibrary::PHP_SPREAD_SHEET, false);
+        return $format->getDataFromSheet($sheet, $keyvalue, $isGetMerge);
     }
 
-    
+
+    /**
+     * get cell value
+     */
+    public function getCellValue($cell, $sheet, $isGetMerge = false)
+    {
+        $format = FormatBase::getFormatClass('xlsx', ExportImportLibrary::PHP_SPREAD_SHEET, false);
+        return $format->getCellValue($cell, $sheet, $isGetMerge);
+    }
+
+
     /**
      * Get mark and value for search
      *
@@ -554,9 +536,9 @@ class Exment
      *
      * @param string|null $uri
      * @param string|null $id_transkey
-     * @return void
+     * @return string
      */
-    public function getMoreTag(?string $uri = null, ?string $id_transkey = null)
+    public function getMoreTag(?string $uri = null, ?string $id_transkey = null) : string
     {
         $url = $this->getManualUrl($uri);
 
@@ -634,5 +616,128 @@ class Exment
     {
         $basePath = ltrim(admin_base_path(), '/');
         return request()->is($basePath . '/api/*') || request()->is($basePath . '/webapi/*');
+    }
+
+    
+    /**
+     * get tmp folder path. Uses for
+     * @param string $type "plugin", "template", "backup", "data".
+     */
+    public function getTmpFolderPath($type, $fullpath = true)
+    {
+        $path = path_join('tmp', $type, short_uuid());
+        if (!$fullpath) {
+            return $path;
+        }
+        $tmppath = getFullpath($path, Define::DISKNAME_ADMIN_TMP);
+        if (!\File::exists($tmppath)) {
+            \File::makeDirectory($tmppath, 0755, true);
+        }
+
+        return $tmppath;
+    }
+
+
+    /**
+     * Set time limit long
+     */
+    public function setTimeLimitLong($time = 6000)
+    {
+        $max_execution_time = ini_get('max_execution_time');
+        if ($max_execution_time == 0 || $max_execution_time > $time) {
+            return;
+        }
+        set_time_limit($time);
+    }
+
+
+    /**
+     * get Upload Max File Size. get php.ini config
+     *
+     * @return int byte size.
+     */
+    public function getUploadMaxFileSize()
+    {
+        // get mega size
+        $post_max_size = $this->getFileMegaSizeValue(ini_get('post_max_size'));
+        $upload_max_filesize = $this->getFileMegaSizeValue(ini_get('upload_max_filesize'));
+
+        // return min size post_max_size or upload_max_filesize
+        $minsize = collect([$post_max_size, $upload_max_filesize])->min();
+
+        // return byte size
+        return $minsize * 1024 * 1024;
+    }
+
+
+    /**
+     * Get file size
+     *
+     * @param string $val
+     * @return int
+     */
+    public function getFileMegaSizeValue($val)
+    {
+        $val = strtolower(strval($val));
+        $val = str_replace('m', '', $val);
+
+        if (strpos($val, 'g') !== false) {
+            $val = str_replace('g', '', $val) * 1024;
+        }
+        return intval($val);
+    }
+    
+
+    /**
+     * Whether db is sqlserver.
+     *
+     * @return boolean
+     */
+    public function isSqlServer() : bool
+    {
+        return \DB::getSchemaBuilder() instanceof \Illuminate\Database\Schema\SqlServerBuilder;
+    }
+
+
+    /**
+     * Whether server os is Windows
+     *
+     * @return boolean
+     */
+    public function isWindows() : bool
+    {
+        return 0 === strpos(PHP_OS, 'WIN');
+    }
+
+
+    /**
+     * Get composer path. If env EXMENT_COMPOSER_PATH set, return this env value.
+     *
+     * @return string
+     */
+    public function getComposerPath() : string
+    {
+        $path = config('exment.composer_path');
+        if (!\is_nullorempty($path)) {
+            return $path;
+        }
+
+        return 'composer';
+    }
+
+
+    /**
+     * Convert to array for Carbon
+     *
+     * @param \Carbon\Carbon $carbon
+     * @return array
+     */
+    public function carbonToArray(\Carbon\Carbon $carbon) : array
+    {
+        return [
+            'date' => $carbon->format("Y-m-d H:i:s.u"),
+            'timezone_type' => 3,  // Directly set timezone type, because cannot get.
+            'timezone' => $carbon->getTimezone()->getName(),
+        ];
     }
 }

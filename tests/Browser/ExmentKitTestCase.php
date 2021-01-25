@@ -5,15 +5,12 @@ namespace Exceedone\Exment\Tests\Browser;
 use Exceedone\Exment\Tests\TestTrait;
 use Exceedone\Exment\Model\LoginUser;
 use Exceedone\Exment\Model\System;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
-//use Tests\CreatesApplication;
 
 abstract class ExmentKitTestCase extends BaseTestCase
 {
     use \Tests\CreatesApplication;
     use TestTrait;
-//    use DatabaseMigrations;
 
     protected $baseUrl;
 
@@ -21,7 +18,7 @@ abstract class ExmentKitTestCase extends BaseTestCase
     /**
      * pre-excecute process before test.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         // cannot call method "config", so call env function
         $this->baseUrl = env('APP_URL');

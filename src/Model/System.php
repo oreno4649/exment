@@ -37,6 +37,7 @@ use Cache;
 * @method static int|void grid_pager_count($arg = null)
 * @method static int|void datalist_pager_count($arg = null)
 * @method static array|void grid_filter_disable_flg($arg = null)
+* @method static string|void data_submit_redirect($arg = null)
 * @method static boolean|void complex_password($arg = null)
 * @method static int|void password_expiration_days($arg = null)
 * @method static boolean|void first_change_password($arg = null)
@@ -149,6 +150,20 @@ class System extends ModelBase
         } else {
             array_forget(static::$requestSession, $key);
         }
+    }
+
+    /**
+     * Get Request Settion key already setted.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public static function getRequestSessionKeys() : \Illuminate\Support\Collection
+    {
+        $result = collect();
+        foreach (static::$requestSession as $key => $value) {
+            $result->push($key);
+        }
+        return $result;
     }
 
     /**

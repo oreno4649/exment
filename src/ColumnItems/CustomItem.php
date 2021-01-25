@@ -299,6 +299,8 @@ abstract class CustomItem implements ItemInterface
                 $this->value = array_get($options, 'default');
                 $field->displayText($this->html())->escape(false)->prepareDefault();
                 $this->value = null;
+            } elseif ($this->viewonly($form_column_options)) {
+                $field->displayText($this->html())->escape(false)->prepareDefault();
             }
         }
 
@@ -407,6 +409,7 @@ abstract class CustomItem implements ItemInterface
             case ColumnType::SELECT:
             case ColumnType::SELECT_VALTEXT:
             case ColumnType::SELECT_TABLE:
+            case SystemTableName::ORGANIZATION:
                 return FilterType::SELECT;
             case ColumnType::DATE:
             case ColumnType::DATETIME:
@@ -419,6 +422,14 @@ abstract class CustomItem implements ItemInterface
             default:
                 return FilterType::DEFAULT;
         }
+    }
+
+    /**
+     * get sort name
+     */
+    public function getSortName()
+    {
+        return getDBTableName($this->custom_table) .'.'. $this->custom_column->getQueryKey();
     }
 
     /**
@@ -603,7 +614,7 @@ abstract class CustomItem implements ItemInterface
 
         // get removing fields.
         $field->removeRules($this->getRemoveValidates());
-
+        
         return $validates;
     }
 
@@ -655,11 +666,13 @@ abstract class CustomItem implements ItemInterface
         return boolval(array_get($options, 'required')) || boolval(array_get($form_column_options, 'required'));
     }
 
-    protected function isSetAdminOptions($form_column_options)
+    protected function isSetAdminOptions($form_column_options) : bool
     {
         if (boolval(array_get($form_column_options, 'hidden'))) {
             return false;
         } elseif ($this->initonly()) {
+            return false;
+        } elseif ($this->viewonly($form_column_options)) {
             return false;
         }
 

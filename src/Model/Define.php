@@ -15,6 +15,7 @@ use Exceedone\Exment\Enums\Permission;
 class Define
 {
     public const COMPOSER_PACKAGE_NAME = 'exceedone/exment';
+    public const COMPOSER_PACKAGE_NAME_LARAVEL_ADMIN = 'exceedone/laravel-admin';
     public const COMPOSER_VERSION_CHECK_URL = 'https://repo.packagist.org/p/exceedone/exment.json';
     public const EXMENT_NEWS_API_URL = 'https://exment.net/wp-json/wp/v2/posts';
     public const EXMENT_NEWS_LINK = 'https://exment.net/archives/category/news';
@@ -60,6 +61,7 @@ class Define
         'default_date_format' => ['default' => 'format_default', 'group' => 'advanced'],
         'grid_pager_count' => ['type' => 'int', 'default' => '20', 'group' => 'advanced'],
         'datalist_pager_count' => ['type' => 'int', 'default' => '5', 'group' => 'advanced'],
+        'data_submit_redirect' => ['type' => 'string', 'default' => null, 'group' => 'advanced'],
 
         // name is "flg", but array is OK.
         'grid_filter_disable_flg' => ['type' => 'array', 'default' => '', 'group' => 'advanced'] ,
@@ -142,9 +144,10 @@ class Define
         'format_local',
     ];
 
-    public const CACHE_CLEAR_MINUTE = 60;
+    public const CACHE_CLEAR_MINUTE = 3600;
     public const SYSTEM_KEY_SESSION_SYSTEM_CONFIG = "setting.%s";
     public const SYSTEM_KEY_SESSION_INITIALIZE = "initialize";
+    public const SYSTEM_KEY_SESSION_INITIALIZE_INPUTS = "initialize_inputs";
     public const SYSTEM_KEY_SESSION_AUTHORITY = "role";
     public const SYSTEM_KEY_SESSION_USER_SETTING = "user_setting";
     public const SYSTEM_KEY_SESSION_SYSTEM_VERSION = "system_version";
@@ -184,12 +187,15 @@ class Define
     public const SYSTEM_KEY_SESSION_WORLFLOW_FILTER_CHECK = "worlflow_filter_check";
     public const SYSTEM_KEY_SESSION_WORLFLOW_STATUS_CHECK = "worlflow_status_check";
     public const SYSTEM_KEY_SESSION_IMPORT_KEY_VALUE = "import_key_value_%s_%s_%s";
+    public const SYSTEM_KEY_SESSION_IMPORT_KEY_VALUE_PREFIX = "import_key_value_";
     public const SYSTEM_KEY_SESSION_ORGANIZATION_TREE = "organization_tree";
     public const SYSTEM_KEY_SESSION_GRID_AUTHORITABLE = "grid_authoritable_%s";
     public const SYSTEM_KEY_SESSION_ACCESSIBLE_TABLE = "accessible_table_%s_%s";
     public const SYSTEM_KEY_SESSION_DISABLE_DATA_URL_TAG = "disable_data_url_tag";
     public const SYSTEM_KEY_SESSION_FORM_DATA_TYPE = "form_data_type";
     public const SYSTEM_KEY_SESSION_FILE_NODELIST = "file_treelist";
+    public const SYSTEM_KEY_SESSION_COMPOSER_VERSION = "exment_composer_version";
+
 
     public const APPEND_QUERY_WORK_STATUS_SUB_QUERY = 'APPEND_QUERY_WORK_STATUS_SUB_QUERY';
     public const APPEND_QUERY_WORK_USERS_SUB_QUERY = 'APPEND_QUERY_WORK_USERS_SUB_QUERY';
@@ -382,7 +388,7 @@ class Define
     public static function FILE_OPTION()
     {
         // get max size
-        $maxSize = getUploadMaxFileSize();
+        $maxSize = \Exment::getUploadMaxFileSize();
 
         return [
             'showPreview' => true,
@@ -445,6 +451,7 @@ class Define
     public const DISKNAME_PLUGIN = 'plugin';
     public const DISKNAME_PLUGIN_SYNC = 'plugin_sync';
     public const DISKNAME_PLUGIN_LOCAL = 'plugin_local';
+    public const DISKNAME_PLUGIN_TEST = 'plugin_test';
     public const DISKNAME_TEMPLATE_SYNC = 'template_sync';
     public const DISKNAME_TEMP_UPLOAD = 'tmpupload';
 
