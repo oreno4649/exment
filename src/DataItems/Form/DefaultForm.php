@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Form;
 use Encore\Admin\Form\Field;
+use Exceedone\Exment\ColumnItems;
 use Exceedone\Exment\Form\Tools;
 use Exceedone\Exment\Model\CustomColumn;
 use Exceedone\Exment\Model\CustomRelation;
@@ -236,7 +237,8 @@ EOT;
                 continue;
             }
 
-            $field = $form_column->column_item->setCustomValue($target_custom_value)->getAdminField($form_column);
+            $column_item = ColumnItems\CustomItem::getItem($form_column->custom_column);
+            $field = $column_item->setCustomValue($target_custom_value)->getAdminField($form_column);
 
             // set $closures using $form_column->column_no
             if (isset($field)) {
