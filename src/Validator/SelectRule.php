@@ -30,6 +30,8 @@ class SelectRule implements Rule
             return true;
         }
 
+        $value = jsonToArray($value);
+        
         if (!is_array($value) && in_array($value, $this->keys)) {
             return true;
         }

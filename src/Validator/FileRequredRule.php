@@ -34,6 +34,8 @@ class FileRequredRule implements Rule
             return true;
         }
 
+        $value = jsonToArray($value);
+        
         // if has custom_value, checking value
         if (isset($this->custom_value) && $this->custom_value->exists) {
             $v = array_get($this->custom_value->value, $this->custom_column->column_name);

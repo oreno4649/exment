@@ -27,6 +27,8 @@ class SelectTableNumericRule implements Rule
             return true;
         }
 
+        $value = jsonToArray($value);
+        
         // if numeric, return true
         if (!is_list($value) && is_numeric($value)) {
             return true;

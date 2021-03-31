@@ -42,6 +42,8 @@ class CustomValueRule implements Rule
             return true;
         }
 
+        $value = jsonToArray($value);
+
         $value = array_unique(array_filter(stringToArray($value)));
 
         // check custom table's data

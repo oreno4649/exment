@@ -32,6 +32,8 @@ class FileRule implements Rule
             return true;
         }
 
+        $value = jsonToArray($value);
+        
         if (is_array($value)) {
             $value = array_filter($value);
             if (is_nullorempty($value)) {
