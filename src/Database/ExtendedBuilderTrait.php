@@ -19,6 +19,28 @@ trait ExtendedBuilderTrait
     protected $appendedQuery = [];
 
     /**
+     * Set not match query
+     *
+     * @return $this
+     */
+    public function whereNotMatch()
+    {
+        $this->whereRaw("1 = 0");
+        return $this;
+    }
+
+    /**
+     * Set not match query
+     *
+     * @return $this
+     */
+    public function orWhereNotMatch()
+    {
+        $this->orWhereRaw("1 = 0");
+        return $this;
+    }
+
+    /**
      * Whether appended query or sub query. If not appended, return false, and set query
      *
      * @param string $keyName
@@ -47,9 +69,9 @@ trait ExtendedBuilderTrait
      */
     public function updateRemovingJsonKey(string $key)
     {
-        $sql = $this->query->grammar->compileUpdateRemovingJsonKey($this->query, $key);
+        $sql = $this->_getQueryExment()->grammar->compileUpdateRemovingJsonKey($this->_getQueryExment(), $key);
 
-        return $this->query->connection->statement($sql);
+        return $this->_getQueryExment()->connection->statement($sql);
     }
 
 
@@ -115,13 +137,13 @@ trait ExtendedBuilderTrait
             throw new \Exception('Now whereInMultiple is only support 2 columns.');
         }
         if (boolval($zeroQueryIfEmpty) && empty($values)) {
-            return $this->whereRaw('1 = 0');
+            return $this->whereNotMatch();
         }
 
         // is suport where in multiple ----------------------------------------------------
-        if ($this->query->grammar->isSupportWhereInMultiple()) {
-            $columns = $this->query->grammar->wrapWhereInMultiple($columns);
-            list($bindStrings, $binds) = $this->query->grammar->bindValueWhereInMultiple($values);
+        if ($this->_getQueryExment()->grammar->isSupportWhereInMultiple()) {
+            $columns = $this->_getQueryExment()->grammar->wrapWhereInMultiple($columns);
+            list($bindStrings, $binds) = $this->_getQueryExment()->grammar->bindValueWhereInMultiple($values);
     
             return $this->whereRaw(
                 '('.implode(', ', $columns).') in ('.implode(', ', $bindStrings).')',
@@ -215,11 +237,11 @@ trait ExtendedBuilderTrait
     protected function _whereInArrayString($column, $values, bool $isOr = false, bool $isNot = false)
     {
         if (is_null($values)) {
-            return $this->whereRaw('1 = 0');
+            return $this->whereNotMatch();
         }
 
         $tableName = $this->model->getTable();
-        $this->query->grammar->whereInArrayString($this, $tableName, $column, $values, $isOr, $isNot);
+        $this->_getQueryExment()->grammar->whereInArrayString($this, $tableName, $column, $values, $isOr, $isNot);
 
         return $this;
     }
@@ -256,17 +278,17 @@ trait ExtendedBuilderTrait
         $values = array_values($values);
 
         if (count($values) < 2) {
-            return $this->whereRaw('1 = 0');
+            return $this->whereNotMatch();
         }
 
         if ($isOr) {
-            $this->query->orWhere(function ($query) use ($column, $startMark, $endMark, $values) {
-                $this->query->where($column, $startMark, $values[0]);
-                $this->query->where($column, $endMark, $values[1]);
+            $this->_getQueryExment()->orWhere(function ($query) use ($column, $startMark, $endMark, $values) {
+                $query->where($column, $startMark, $values[0]);
+                $query->where($column, $endMark, $values[1]);
             });
         } else {
-            $this->query->where($column, $startMark, $values[0]);
-            $this->query->where($column, $endMark, $values[1]);
+            $this->_getQueryExment()->where($column, $startMark, $values[0]);
+            $this->_getQueryExment()->where($column, $endMark, $values[1]);
         }
 
         return $this;
@@ -379,7 +401,7 @@ trait ExtendedBuilderTrait
     protected function _whereDate(string $column, $value, bool $isDatetime, bool $isOr = false)
     {
         if (is_null($value)) {
-            return $this->whereRaw('1 = 0');
+            return $this->whereNotMatch();
         }
 
         if (is_string($value)) {
@@ -395,7 +417,7 @@ trait ExtendedBuilderTrait
     protected function _whereYear(string $column, $value, bool $isDatetime, bool $isOr = false)
     {
         if (is_null($value)) {
-            return $this->whereRaw('1 = 0');
+            return $this->whereNotMatch();
         }
 
         if (preg_match("|^\d{4}$|", $value)) {
@@ -416,7 +438,7 @@ trait ExtendedBuilderTrait
     protected function _whereYearMonth(string $column, $value, bool $isDatetime, bool $isOr = false)
     {
         if (is_null($value)) {
-            return $this->whereRaw('1 = 0');
+            return $this->whereNotMatch();
         }
 
         if (is_string($value)) {
@@ -455,7 +477,7 @@ trait ExtendedBuilderTrait
     protected function _whereDateMark(string $column, $value, $mark, bool $isDatetime, bool $isOr = false)
     {
         if (is_null($value)) {
-            return $this->whereRaw('1 = 0');
+            return $this->whereNotMatch();
         }
 
         if (is_string($value)) {
@@ -468,5 +490,17 @@ trait ExtendedBuilderTrait
         }
 
         return $this->where($column, $mark, $value->format('Y-m-d'));
+    }
+
+    /**
+     * get query instance
+     * @return \Exceedone\Exment\Database\Query\ExtendedBuilder
+     */
+    protected function _getQueryExment()
+    {
+        if ($this instanceof \Illuminate\Database\Eloquent\Builder) {
+            return $this->query;
+        }
+        return $this;
     }
 }

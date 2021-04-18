@@ -7,6 +7,7 @@ use Encore\Admin\Auth\Permission as Checker;
 use Encore\Admin\Facades\Admin;
 use Encore\Admin\Layout\Content;
 use Encore\Admin\Layout\Row;
+use Encore\Admin\Widgets\Box;
 use Illuminate\Http\Request;
 use Exceedone\Exment\Model\Define;
 use Exceedone\Exment\Model\System;
@@ -193,6 +194,12 @@ class CustomValueController extends AdminControllerTableBase
             
             if ($request->has('filter_ajax')) {
                 return $grid_item->getFilterHtml();
+            }
+
+            // Append ----------------------------------------------------
+            if (boolval($this->custom_view->use_view_infobox)) {
+                $box = new Box($this->custom_view->view_infobox_title, html_clean($this->custom_view->view_infobox));
+                $content->row($box);
             }
 
             $grid = $grid_item->grid($callback);
@@ -589,8 +596,8 @@ class CustomValueController extends AdminControllerTableBase
             abort(404);
         }
 
-        $from_table_view_name = $this->custom_table->table_view_name;
-        $to_table_view_name = $copy->to_custom_table->table_view_name;
+        $from_table_view_name = esc_html($this->custom_table->table_view_name);
+        $to_table_view_name = esc_html($copy->to_custom_table->table_view_name);
         $path = admin_urls('data', $this->custom_table->table_name, $id, 'copyClick');
         
         // create form fields
@@ -603,7 +610,11 @@ class CustomValueController extends AdminControllerTableBase
         // add form
         $form->descriptionHtml(sprintf(exmtrans('custom_copy.dialog_description'), $from_table_view_name, $to_table_view_name, $to_table_view_name));
         foreach ($copy_input_columns as $copy_input_column) {
-            $field = FormHelper::getFormField($this->custom_table, $copy_input_column->to_custom_column, null);
+            $field = FormHelper::getFormFieldObj($this->custom_table, $copy_input_column->to_custom_column, [
+                'columnOptions' => [
+                    'as_modal' => true,
+                ]
+            ]);
             $form->pushField($field);
         }
         $form->hidden('uuid')->default($uuid);
@@ -643,7 +654,7 @@ class CustomValueController extends AdminControllerTableBase
         
         // execute copy
         $custom_value = getModelName($this->custom_table)::find($id);
-        $response = $copy->execute($custom_value, $request);
+        $response = $copy->executeRequest($custom_value, $request);
 
         if (isset($response)) {
             return getAjaxResponse($response);

@@ -38,15 +38,18 @@ trait UserTrait
     
     /**
      * get organizations that this_user joins.
-     * @return mixed
+     *
+     * IMPORTANT: Please look this topic.
+     * https://exment.net/docs/#/ja/developing_memo
+     * @return array
      */
-    public function getOrganizationIds($filterType = JoinedOrgFilterType::ALL)
+    public function getOrganizationIdsForQuery($filterType = JoinedOrgFilterType::ALL)
     {
         // if system doesn't use organization, return empty array.
         if (!System::organization_available()) {
             return [];
         }
-        return AuthUserOrgHelper::getOrganizationIds($filterType, $this->id);
+        return AuthUserOrgHelper::getOrganizationIdsForQuery($filterType, $this->id);
     }
 
     /**
@@ -62,7 +65,7 @@ trait UserTrait
     }
     
     /**
-     * get role_group user or org joined.
+     * get role_group user joined.
      *
      * @return void
      */
@@ -70,6 +73,24 @@ trait UserTrait
     {
         return Model\RoleGroup::whereHas('role_group_users', function ($query) {
             $query->where('role_group_target_id', $this->id);
+        })->get();
+    }
+    
+    /**
+     * get role_group user or org joined.
+     *
+     * @return void
+     */
+    public function belong_role_groups_all()
+    {
+        return Model\RoleGroup::whereHas('role_group_user_organizations', function ($query) {
+            $query->where(function ($qry) {
+                $qry->where('role_group_target_id', $this->id)
+                    ->where('role_group_user_org_type', 'user');
+            })->orWhere(function ($qry) {
+                $qry->whereIn('role_group_target_id', $this->getOrganizationIdsForQuery())
+                    ->where('role_group_user_org_type', 'organization');
+            });
         })->get();
     }
 

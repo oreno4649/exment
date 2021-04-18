@@ -5,6 +5,10 @@ namespace Exceedone\Exment\ColumnItems;
 use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Model\CustomColumn;
 use Exceedone\Exment\Model\CustomRelation;
+use Exceedone\Exment\Model\CustomForm;
+use Exceedone\Exment\Model\CustomFormColumn;
+use Exceedone\Exment\Enums\FormLabelType;
+use Encore\Admin\Show\Field as ShowField;
 
 /**
  *
@@ -14,6 +18,14 @@ use Exceedone\Exment\Model\CustomRelation;
 trait ItemTrait
 {
     /**
+     * This custom table.
+     * *If view_pivot_column, custom_table is pivot target table
+     *
+     * @var CustomTable
+     */
+    protected $custom_table;
+    
+    /**
      * this column's target custom_table
      */
     protected $value;
@@ -22,9 +34,44 @@ trait ItemTrait
 
     protected $id;
 
-    protected $options;
+    /**
+     * Custom form column options
+     *
+     * @var array
+     */
+    protected $form_column_options = [];
+    
+    /**
+     * Form items option
+     *
+     * [
+     *     'public_form': If this form is public_form, set publcform model
+     *     'as_confirm' : If this form is before confirm, set true.
+     * ]
+     * @var array
+     */
+    protected $options = [];
 
     protected $uniqueName;
+
+    public function getCustomTable()
+    {
+        return $this->custom_table;
+    }
+
+    public function setCustomTable(CustomTable $custom_table)
+    {
+        $this->custom_table = $custom_table;
+
+        return $this;
+    }
+
+    /**
+     * CustomForm
+     *
+     * @var CustomForm
+     */
+    protected $custom_form;
 
     /**
      * get value
@@ -56,7 +103,7 @@ trait ItemTrait
             return $this->_text($v);
         });
 
-        return is_list($text) ? collect($text)->implode(exmtrans('common.separate_word')) : $text;
+        return is_list($text) ? collect($text)->implode($this->getSeparateWord()) : $text;
     }
 
     /**
@@ -69,7 +116,7 @@ trait ItemTrait
             return $this->_html($v);
         });
 
-        return is_list($html) ? collect($html)->implode(exmtrans('common.separate_word')) : $html;
+        return is_list($html) ? collect($html)->implode($this->getSeparateWord()) : $html;
     }
 
     protected function _getMultipleValue($singleValueCallback)
@@ -82,11 +129,15 @@ trait ItemTrait
             $items[] = $singleValueCallback($value);
         }
         
+        $items = collect($items)->filter(function ($item) {
+            return !is_nullorempty($item);
+        });
+ 
         if ($isList) {
-            return collect($items);
+            return $items;
         }
-
-        return collect($items)->first();
+ 
+        return $items->first();
     }
 
     /**
@@ -268,6 +319,65 @@ trait ItemTrait
         })->toArray());
     }
 
+
+    protected function getLabelType() : string
+    {
+        $field_label_type = array_get($this->form_column_options, 'field_label_type') ?? FormLabelType::FORM_DEFAULT;
+        
+        // get form info
+        if ($field_label_type == FormLabelType::FORM_DEFAULT && isset($this->custom_form)) {
+            $field_label_type = $this->custom_form->getOption('form_label_type') ?? FormLabelType::HORIZONTAL;
+        }
+
+        return $field_label_type;
+    }
+
+    /**
+     * Set show field options
+     *
+     * @param mixed $field
+     * @return void
+     */
+    public function setShowFieldOptions(ShowField $field, array $options = [])
+    {
+        $options = array_merge([
+            'gridShows' => false,
+        ], $options);
+
+        $item = $this;
+        $field->as(function ($v) use ($item) {
+            if (is_null($this)) {
+                return '';
+            }
+            return $item->setCustomValue($this)->html();
+        })->setEscape(false);
+
+        // If grid shows, set label style
+        if ($options['gridShows'] && method_exists($this, 'setLabelType')) {
+            $this->setLabelType($field);
+        }
+    }
+
+    /**
+     * Set custom form column options
+     *
+     * @param  array  $form_column_options  Custom form column options
+     *
+     * @return  self
+     */
+    public function setFormColumnOptions($form_column_options)
+    {
+        if (is_null($form_column_options)) {
+            return;
+        }
+        if ($form_column_options instanceof CustomFormColumn) {
+            $form_column_options = $form_column_options->options;
+        }
+        $this->form_column_options = $form_column_options;
+
+        return $this;
+    }
+    
     /**
      * Get relation.
      *
@@ -310,6 +420,47 @@ trait ItemTrait
         return false;
     }
     
+
+    /**
+     * Whether this form is public form.
+     *
+     * @return boolean
+     */
+    public function isPublicForm() : bool
+    {
+        return !is_nullorempty(array_get($this->options, 'public_form'));
+    }
+
+    public function readonly()
+    {
+        return false;
+    }
+
+    public function viewonly()
+    {
+        return false;
+    }
+
+    public function hidden()
+    {
+        return false;
+    }
+
+    public function internal()
+    {
+        return false;
+    }
+
+    /**
+     * Hide when showing display
+     *
+     * @return bool
+     */
+    public function disableDisplayWhenShow() : bool
+    {
+        return false;
+    }
+
     /**
      * Get Search queries for free text search
      *
@@ -323,7 +474,7 @@ trait ItemTrait
     {
         list($mark, $pureValue) = $this->getQueryMarkAndValue($mark, $value, $q, $options);
 
-        $query = $this->custom_table->getValueModel()->query();
+        $query = $this->custom_table->getValueQuery();
         
         $query->whereOrIn($this->custom_column->getIndexColumnName(), $mark, $pureValue)->select('id');
         
@@ -400,5 +551,54 @@ trait ItemTrait
     public function convertFilterValue($value)
     {
         return $value;
+    }
+
+    /**
+     * Set customForm
+     *
+     * @param  CustomForm  $custom_form  CustomForm
+     *
+     * @return  self
+     */
+    public function setCustomForm(CustomForm $custom_form)
+    {
+        $this->custom_form = $custom_form;
+
+        return $this;
+    }
+
+    /**
+     * Whether the table in this column is different from the column in the form
+     *
+     * @return bool
+     */
+    public function isDefferentFormTable() : bool
+    {
+        if (!$this->custom_form) {
+            return false;
+        }
+
+        return !isMatchString($this->custom_form->custom_table_cache->id, $this->custom_table->id);
+    }
+
+    /**
+     * Get separate word for multiple
+     *
+     * @return string|null
+     */
+    protected function getSeparateWord() : ?string
+    {
+        return exmtrans('common.separate_word');
+    }
+
+
+    /**
+     * Get font awesome class
+     *
+     * @return string|null
+     */
+    public function getFontAwesomeClass() : ?string
+    {
+        return null;
     }
 }

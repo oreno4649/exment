@@ -11,11 +11,6 @@ class ParentItem implements ItemInterface
     use ItemTrait;
     
     /**
-     * this column's target custom_table. THIS IS CHILD TABLE.
-     */
-    protected $custom_table;
-
-    /**
      * this column's parent table
      */
     protected $parent_table;
@@ -111,7 +106,14 @@ class ParentItem implements ItemInterface
      */
     protected function _html($v)
     {
-        return isset($v) ? $v->getUrl(true) : null;
+        if (!isset($v)) {
+            return null;
+        // get text column
+        } elseif ($this->isPublicForm()) {
+            return $v->getLabel();
+        } else {
+            return $v->getUrl(true);
+        }
     }
 
     /**

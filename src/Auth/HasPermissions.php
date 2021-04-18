@@ -291,31 +291,21 @@ trait HasPermissions
     }
 
     /**
-     * filter target model
-     *
-     * @deprecated Please call $custom_view->filterModel($model, $callback);
-     */
-    public function filterModel($model, $custom_view = null, $callback = null)
-    {
-        if (isset($$custom_view)) {
-            return $custom_view->filterModel($model, ['callback' => $callback]);
-        }
-        return $model;
-    }
-
-    /**
      * get organizations that this_user joins.
-     * @return mixed
+     *
+     * IMPORTANT: Please look this topic.
+     * https://exment.net/docs/#/ja/developing_memo
+     * @return array
      */
-    public function getOrganizationIds($filterType = JoinedOrgFilterType::ALL)
+    public function getOrganizationIdsForQuery($filterType = JoinedOrgFilterType::ALL)
     {
         return System::requestSession(Define::SYSTEM_KEY_SESSION_ORGANIZATION_IDS . '_' . $filterType, function () use ($filterType) {
-            //return $this->base_user->getOrganizationIds($filterType);
+            //return $this->base_user->getOrganizationIdsForQuery($filterType);
             // if system doesn't use organization, return empty array.
             if (!System::organization_available()) {
                 return [];
             }
-            return AuthUserOrgHelper::getOrganizationIds($filterType, $this->base_user_id);
+            return AuthUserOrgHelper::getOrganizationIdsForQuery($filterType, $this->base_user_id);
         });
     }
 
@@ -331,7 +321,7 @@ trait HasPermissions
         $results = [[SystemTableName::USER, $this->getUserId()]];
 
         if (System::organization_available()) {
-            collect($this->getOrganizationIds($filterType))->each(function ($id) use (&$results) {
+            collect($this->getOrganizationIdsForQuery($filterType))->each(function ($id) use (&$results) {
                 $results[] = [SystemTableName::ORGANIZATION, $id];
             });
         }
@@ -492,7 +482,7 @@ trait HasPermissions
     protected function getPermissionItems()
     {
         $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_role_group(), JoinedOrgFilterType::ALL);
-        $organization_ids = $this->getOrganizationIds($enum);
+        $organization_ids = $this->getOrganizationIdsForQuery($enum);
         
         // get all permissons for system. --------------------------------------------------
         return RoleGroup::getHasPermissionRoleGroup($this->getUserId(), $organization_ids);

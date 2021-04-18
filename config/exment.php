@@ -63,6 +63,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | diable exment exception handler
+    |--------------------------------------------------------------------------
+    |
+    */
+    'disable_exment_exception_handler' => env('EXMENT_DISABLE_EXMENT_EXCEPTION_HANDLER', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | exment debug mode request
     |--------------------------------------------------------------------------
     |
@@ -100,6 +108,16 @@ return [
     |
     */
     'debugmode_sqlfunction1' => env('EXMENT_DEBUG_MODE_SQLFUNCTION1', false),
+
+    /*
+    |--------------------------------------------------------------------------
+    | exment debug mode schedule
+    |--------------------------------------------------------------------------
+    |
+    | if true, log schedule in laravel.log
+    |
+    */
+    'debugmode_schedule' => env('EXMENT_DEBUG_MODE_SCHEDULE', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -816,6 +834,15 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Delete force custom value
+    |--------------------------------------------------------------------------
+    | 
+    | Custom value delete always force
+    */
+    'delete_force_custom_value' => env('EXMENT_DELETE_FORCE_CUSTOM_VALUE', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Document upload max count one request
     |--------------------------------------------------------------------------
     | 
@@ -913,7 +940,33 @@ return [
     'diable_upload_images_editor' => env('EXMENT_DIABLE_UPLOAD_IMAGES_EDITOR', false),
 
 
+    /*
+    |--------------------------------------------------------------------------
+    | Public form route prefix
+    |--------------------------------------------------------------------------
+    |
+    | Publicform Route Prefix
+    |
+    */
+    'publicform_route_prefix' => env('EXMENT_PUBLICFORM_ROUTE_PREFIX', 'publicform'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Public form api route prefix
+    |--------------------------------------------------------------------------
+    |
+    | Publicform api Route Prefix
+    |
+    */
+    'publicformapi_route_prefix' => env('EXMENT_PUBLICFORMAPI_ROUTE_PREFIX', 'publicformapi'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Public form disable footer label
+    |--------------------------------------------------------------------------
+    |
+    */
+    'disable_publicform_use_footer_label' => env('EXMENT_DISABLE_PUBLICFORM_USE_FOOTER_LABEL', false),
 
 
   

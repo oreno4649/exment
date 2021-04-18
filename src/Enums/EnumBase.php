@@ -14,6 +14,14 @@ class EnumBase extends Enum
         return strtolower($this->getKey());
     }
     
+    /**
+     * get upper key Name
+     */
+    public function upperKey()
+    {
+        return strtoupper($this->getKey());
+    }
+    
     public function toString()
     {
         return $this->__toString();
@@ -57,6 +65,23 @@ class EnumBase extends Enum
     }
 
     /**
+     * convert trans Array.
+     * value is enum value.
+     * text translates using enum key.
+     */
+    public static function transKeyArrayFilter($base_key, $targetEnums, $isExment = true)
+    {
+        $array = [];
+        foreach (static::toArray() as $key => $value) {
+            if (!in_array($value, $targetEnums)) {
+                continue;
+            }
+            $array[$value] = strtolower($key);
+        }
+        return getTransArrayValue($array, $base_key, $isExment);
+    }
+
+    /**
      * convert trans. use enum key (and convert key snake_case)
      */
     public function transKey($base_key, $isExment = true)
@@ -86,7 +111,7 @@ class EnumBase extends Enum
             }
             
             $key = $enum->lowerKey();
-            if (strcmp($key, $value) == 0) {
+            if (isMatchString($key, $value)) {
                 return $enum;
             }
         }

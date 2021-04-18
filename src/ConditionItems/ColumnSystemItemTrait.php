@@ -48,6 +48,7 @@ trait ColumnSystemItemTrait
     
         // get column item
         $column_item = $this->getFormColumnItem();
+        $column_item->options(["changefield" => true]);
         if (isset($this->label)) {
             $column_item->setLabel($this->label);
         }
@@ -57,9 +58,9 @@ trait ColumnSystemItemTrait
 
     protected function getFormColumnItem()
     {
-        return CustomViewFilter::getColumnItem($this->target)
-        ->options([
-            'filterKind' => $this->filterKind,
-        ]);
+        return CustomViewFilter::getColumnItem($this->target, $this->custom_table)
+            ->options([
+                'filterKind' => $this->filterKind,
+            ]);
     }
 }

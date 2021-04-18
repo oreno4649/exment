@@ -3,7 +3,6 @@
 namespace Exceedone\Exment\Console;
 
 use Illuminate\Console\Command;
-use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Services\DataImportExport;
 
 class ImportCommand extends Command
@@ -110,40 +109,5 @@ class ImportCommand extends Command
         }
 
         return 0;
-    }
-
-    /**
-     * Get table from file name.
-     * Support such as:
-     *     information.csv
-     *     information#001.csv
-     *     information.001.csv
-     *
-     * @param string  $file_name
-     * @return CustomTable|null
-     */
-    protected function getTableFromFile(string $file_name) : ?CustomTable
-    {
-        $table_name = file_ext_strip($file_name);
-        // directry same name
-        if (!is_null($custom_table = CustomTable::getEloquent($table_name))) {
-            return $custom_table;
-        }
-
-        // If contains "#" in file name, throw exception
-        if (strpos($table_name, '#') !== false) {
-            throw new \Exception('File name that conatains "#" not supported over v3.8.0.');
-        }
-
-        // loop for regex
-        $regexes = ['(?<table_name>.+)\\.\d+', '\d+\\.(?<table_name>.+)'];
-        foreach ($regexes as $regex) {
-            $match_num = preg_match('/' . $regex . '/u', $table_name, $matches);
-            if ($match_num > 0 && !is_null($custom_table = CustomTable::getEloquent($matches['table_name']))) {
-                return $custom_table;
-            }
-        }
-
-        return null;
     }
 }

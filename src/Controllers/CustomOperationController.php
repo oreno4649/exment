@@ -96,7 +96,7 @@ class CustomOperationController extends AdminControllerTableBase
     {
         $grid = new Grid(new CustomOperation);
         $grid->column('operation_name', exmtrans("custom_operation.operation_name"))->sortable();
-        $grid->column('operation_type', exmtrans("custom_operation.operation_type"))->sortable()->displayEscape(function ($val) {
+        $grid->column('operation_type', exmtrans("custom_operation.operation_type"))->sortable()->display(function ($val) {
             return collect(toArray($val))->map(function ($v) {
                 return array_get(CustomOperationType::transArray("custom_operation.operation_type_options_short"), $v);
             })->implode(exmtrans('common.separate_word'));
@@ -151,7 +151,7 @@ class CustomOperationController extends AdminControllerTableBase
             $suuid = null;
         }
         
-        $form->hidden('custom_table_id')->default($this->custom_table->id);
+        $form->internal('custom_table_id')->default($this->custom_table->id);
         
         $form->display('custom_table.table_name', exmtrans("custom_table.table_name"))->default($this->custom_table->table_name);
         $form->display('custom_table.table_view_name', exmtrans("custom_table.table_view_name"))->default($this->custom_table->table_view_name);
@@ -204,9 +204,7 @@ class CustomOperationController extends AdminControllerTableBase
                 $form->select('operation_update_type', exmtrans('custom_operation.operation_update_type'))->required()
                     ->options(function ($val, $select, $model) use ($custom_table) {
                         $data = $select->data();
-                        $condition_target = array_get($data, 'view_column_target');
-
-                        $item = ConditionItemBase::getItem($custom_table, $condition_target);
+                        $item = ConditionItemBase::getItemByRequest($custom_table, array_get($data, 'view_column_target'));
                         if (is_null($item)) {
                             return null;
                         }
@@ -218,9 +216,7 @@ class CustomOperationController extends AdminControllerTableBase
                     ->removeRules(\Encore\Admin\Validator\HasOptionRule::class);
             },
             'valueCallback' => function ($data, $field) use ($custom_table) {
-                $condition_target = array_get($data, 'view_column_target');
-
-                $item = ConditionItemBase::getItem($custom_table, $condition_target);
+                $item = ConditionItemBase::getItemByRequest($custom_table, array_get($data, 'view_column_target'));
                 if (is_null($item)) {
                     return null;
                 }
@@ -242,7 +238,7 @@ class CustomOperationController extends AdminControllerTableBase
         $filterTable = new Tools\ConditionHasManyTable($form, [
             'ajax' => admin_urls('webapi', $custom_table->table_name, 'filter-value'),
             'name' => 'custom_operation_conditions',
-            'linkage' => json_encode(['condition_key' => admin_urls('webapi', $custom_table->table_name, 'filter-condition')]),
+            'linkage' => json_encode(['condition_key' => url_join($custom_table->table_name, 'filter-condition')]),
             'targetOptions' => $custom_table->getColumnsSelectOptions([
                 'include_system' => false,
                 'include_condition' => true,

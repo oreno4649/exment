@@ -13,6 +13,7 @@ use Exceedone\Exment\Enums\ViewKindType;
 use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\ViewType;
 use Exceedone\Exment\Enums\NotifyAction;
+use Exceedone\Exment\Enums\FileType;
 use Exceedone\Exment\Model;
 use Exceedone\Exment\Model\ApiClientRepository;
 use Exceedone\Exment\Model\Condition;
@@ -49,7 +50,7 @@ class TestDataSeeder extends Seeder
      */
     public function run()
     {
-        Config::set('exment.column_index_enabled_count', 25);
+        Config::set('exment.column_index_enabled_count', 100);
 
         $this->createSystem();
 
@@ -81,6 +82,7 @@ class TestDataSeeder extends Seeder
             'initialized' => true,
             'system_admin_users' => [1],
             'api_available' => true,
+            'publicform_available' => true,
         ];
         foreach ($systems as $key => $value) {
             System::{$key}($value);
@@ -226,7 +228,7 @@ class TestDataSeeder extends Seeder
                         return;
                     }
 
-                    $parent_custom_value = $parent_table->getValueModel()->query()
+                    $parent_custom_value = $parent_table->getValueQuery()
                         ->where('value->text', "test_$i")
                         ->first();
                     if (!isset($parent_custom_value)) {
@@ -246,7 +248,7 @@ class TestDataSeeder extends Seeder
                         return;
                     }
 
-                    $parent_custom_value_ids = $parent_table->getValueModel()->query()
+                    $parent_custom_value_ids = $parent_table->getValueQuery()
                         ->where('value->text', "test_$i")
                         ->get()
                         ->pluck('id');
@@ -468,6 +470,8 @@ class TestDataSeeder extends Seeder
                         ['column_name' => 'select_table_multiple', 'column_type' => ColumnType::SELECT_TABLE, 'options' => ['index_enabled' => '1', 'select_target_table' => $custom_table_view_all->id,'multiple_enabled' => '1']],
                         ['column_name' => 'user_multiple', 'column_type' => ColumnType::USER, 'options' => ['index_enabled' => '1','multiple_enabled' => '1', 'showing_all_user_organizations' => '1']],
                         ['column_name' => 'organization_multiple', 'column_type' => ColumnType::ORGANIZATION, 'options' => ['index_enabled' => '1', 'showing_all_user_organizations' => '1','multiple_enabled' => '1']],
+                        ['column_name' => 'image_multiple', 'column_type' => ColumnType::IMAGE, 'options' => ['multiple_enabled' => '1']],
+                        ['column_name' => 'file_multiple', 'column_type' => ColumnType::FILE, 'options' => ['multiple_enabled' => '1']],
                     ];
 
                     foreach ($columns as $column) {
@@ -495,21 +499,24 @@ class TestDataSeeder extends Seeder
             
                         for ($i = 1; $i <= 10; $i++) {
                             $index++;
+                            $new_id = ($custom_table->getValueModel()->orderBy('id', 'desc')->max('id') ?? 0) + 1;
+
                             $custom_value = $custom_table->getValueModel();
-                            $custom_value->setValue("text", rand(0, 1) == 0? null: 'text_'.$i);
-                            $custom_value->setValue("user", (rand(0, 5) == 0 ? null : $user_id));
-                            $custom_value->setValue("organization", rand(1, 7));
+                            // only use rand
+                            $custom_value->setValue("text", rand(0, 1) == 0 ? null: 'text_'.$i);
+                            $custom_value->setValue("user", ($new_id % 5 == 0 ? null : $user_id));
+                            $custom_value->setValue("organization", ($new_id % 7) + 1);
                             $custom_value->setValue("email", "foovartest{$i}@test.com.test");
-                            $custom_value->setValue("yesno", rand(0, 1));
-                            $custom_value->setValue("boolean", (rand(0, 3) == 0 ? 'ng' : 'ok'));
-                            $custom_value->setValue("date", $this->getDateValue($user_id, $i));
+                            $custom_value->setValue("yesno", $new_id % 2);
+                            $custom_value->setValue("boolean", ($new_id % 4 == 0 ? 'ng' : 'ok'));
+                            $custom_value->setValue("date", $this->getDateValue($user_id, $new_id));
                             $custom_value->setValue("time", \Carbon\Carbon::createFromTime($i, $i, $i)->format('H:i:s'));
-                            $custom_value->setValue("datetime", \Carbon\Carbon::now()->addSeconds(rand(-500000, 500000))->format('Y-m-d H:i:s'));
-                            $custom_value->setValue("integer", rand(-100, 100) * 100);
-                            $custom_value->setValue("decimal", rand(-100000, 100000) / 100);
-                            $custom_value->setValue("currency", rand(0, 1000000) / 10);
-                            $custom_value->setValue("select", array("foo", "bar", "baz")[rand(0, 2)]);
-                            $custom_value->setValue("select_valtext", array("foo", "bar", "baz")[rand(0, 2)]);
+                            $custom_value->setValue("datetime", \Carbon\Carbon::now()->addSeconds($new_id * ($new_id % 2 == 0 ? 1 : -1) * pow(10, ($new_id % 5) + 1))->format('Y-m-d H:i:s'));
+                            $custom_value->setValue("integer", $new_id * ($new_id % 2 == 0 ? 1 : -1) * pow(10, ($new_id % 2) + 1) * 100);
+                            $custom_value->setValue("decimal", $new_id * ($new_id % 2 == 0 ? 1 : -1) * pow(10, ($new_id % 5) + 1) / 100);
+                            $custom_value->setValue("currency", $new_id * pow(10, ($new_id % 5) + 1) / 10);
+                            $custom_value->setValue("select", array("foo", "bar", "baz")[$new_id % 3]);
+                            $custom_value->setValue("select_valtext", array("foo", "bar", "baz")[$new_id % 3]);
                             $custom_value->setValue("select_table", $index);
                             $custom_value->setValue("select_table_2", ceil($index / 2));
                             $custom_value->setValue("select_multiple", $this->getMultipleSelectValue());
@@ -771,42 +778,8 @@ class TestDataSeeder extends Seeder
             $createRelationCallback($custom_table);
         }
 
-        $custom_form_conditions = [
-            [
-                'condition_type' => ConditionType::CONDITION,
-                'condition_key' => 1,
-                'target_column_id' => ConditionTypeDetail::ORGANIZATION,
-                'condition_value' => ["2"], // dev
-            ],
-            []
-        ];
 
-        foreach ($custom_form_conditions as $index => $condition) {
-            // create form
-            $custom_form = CustomForm::create([
-                'custom_table_id' => $custom_table->id,
-                'form_view_name' => ($index === 1 ? 'form_default' : 'form'),
-                'default_flg' => ($index === 1),
-            ]);
-            CustomForm::getDefault($custom_table);
-        
-            if (count($condition) == 0) {
-                continue;
-            }
-            
-            $custom_form_priority = CustomFormPriority::create([
-                'custom_form_id' => $custom_form->id,
-                'order' => $index + 1,
-            ]);
-
-            $custom_form_condition = new Condition;
-            $custom_form_condition->morph_type = 'custom_form_priority';
-            $custom_form_condition->morph_id = $custom_form_priority->id;
-            foreach ($condition as $k => $c) {
-                $custom_form_condition->{$k} = $c;
-            }
-            $custom_form_condition->save();
-        }
+        $this->createForm($custom_table);
 
         $this->createView($custom_table, $custom_columns);
 
@@ -870,6 +843,8 @@ class TestDataSeeder extends Seeder
             $user_id = array_get($user, 'id');
 
             for ($i = 1; $i <= $options['count']; $i++) {
+                $new_id = ($custom_table->getValueModel()->orderBy('id', 'desc')->max('id') ?? 0) + 1;
+
                 $custom_value = $custom_table->getValueModel();
                 $custom_value->setValue("text", 'test_'.$user_id);
                 $custom_value->setValue("user", $user_id);
@@ -878,8 +853,9 @@ class TestDataSeeder extends Seeder
                 $custom_value->setValue("multiples_of_3", ($i % 3 == 0 ? 1 : 0));
                 $custom_value->setValue("date", \Carbon\Carbon::now());
                 $custom_value->setValue("init_text", 'init_text');
-                $custom_value->setValue("integer", rand(0, 1000));
-                $custom_value->setValue("currency", rand(0, 1000) * 100);
+                $custom_value->setValue("integer", $new_id * pow(10, ($new_id % 3) + 1));
+                $custom_value->setValue("decimal", $new_id * pow(10, ($new_id % 5) + 1) * ($new_id % 2 + 1) / 10000);
+                $custom_value->setValue("currency", $new_id * pow(10, ($new_id % 4) + 1));
                 $custom_value->setValue("email", "foovartest{$i}@test.com.test");
                 $custom_value->created_user_id = $user_id;
                 $custom_value->updated_user_id = $user_id;
@@ -905,7 +881,7 @@ class TestDataSeeder extends Seeder
 
                 // set attachment
                 if ($i === 1) {
-                    Model\File::storeAs(TestDefine::FILE_TESTSTRING, $custom_table->table_name, 'test.txt')
+                    Model\File::storeAs(FileType::CUSTOM_VALUE_DOCUMENT, TestDefine::FILE_TESTSTRING, $custom_table->table_name, 'test.txt')
                         ->saveCustomValue($custom_value->id, null, $custom_table)
                         ->saveDocumentModel($custom_value, 'test.txt');
                 }
@@ -945,30 +921,48 @@ class TestDataSeeder extends Seeder
      *
      * @return string ymd string
      */
-    protected function getDateValue($user_id, $index) : ?string
+    protected function getDateValue($user_id, $new_id) : ?string
     {
-        $now = \Carbon\Carbon::now();
+        //$date = \Carbon\Carbon::now();
+        // fixed date
+        $date = \Carbon\Carbon::create(2021, 1, 1, 0, 0, 0);
+        $today = \Carbon\Carbon::today();
         $result = null;
-        switch ($user_id % 7) {
+
+        $month = ($new_id % 12) + 1;
+        $day = ($new_id % 28) + 1;
+        switch ($new_id % 10) {
             case 0:
                 break;
             case 1:
-                $result = $now->addDays($index-4);
+                $result = $date->addDays($new_id-4);
                 break;
             case 2:
-                $result = \Carbon\Carbon::create($now->year+1, rand(1, 12), rand(1, 28));
+                $result = \Carbon\Carbon::create($today->year+1, $month, $day);
                 break;
             case 3:
-                $result = \Carbon\Carbon::create($now->year-1, rand(1, 12), rand(1, 28));
+                $result = \Carbon\Carbon::create($today->year-1, $month, $day);
                 break;
             case 4:
-                $result = \Carbon\Carbon::create($now->year, $now->month+1, rand(1, 28));
+                $result = \Carbon\Carbon::create($today->year, $today->month+1, $day);
                 break;
             case 5:
-                $result = \Carbon\Carbon::create($now->year, $now->month-1, rand(1, 28));
+                $result = \Carbon\Carbon::create($today->year, $today->month-1, $day);
+                break;
+            case 6:
+                $result = \Carbon\Carbon::now();
+                break;
+            case 7:
+                $result = \Carbon\Carbon::tomorrow();
+                break;
+            case 8:
+                $result = \Carbon\Carbon::yesterday();
+                break;
+            case 9:
+                $result = $date;
                 break;
             default:
-                $result = \Carbon\Carbon::create(2019, 12, 28)->addDays($index);
+                $result = \Carbon\Carbon::create(2019, 12, 28)->addDays($new_id);
                 break;
         }
 
@@ -987,7 +981,7 @@ class TestDataSeeder extends Seeder
     {
         $notify = new Notify;
         $notify->notify_view_name = $custom_table->table_name . '_notify';
-        $notify->custom_table_id = $custom_table->id;
+        $notify->target_id = $custom_table->id;
         $notify->notify_trigger = Enums\NotifyTrigger::CREATE_UPDATE_DATA;
         $notify->mail_template_id = 6;
         $notify->trigger_settings = [
@@ -1037,7 +1031,7 @@ class TestDataSeeder extends Seeder
         foreach ($items as $item) {
             $notify = new Notify;
             $notify->notify_view_name = $item['name'];
-            $notify->custom_table_id = $custom_table->id;
+            $notify->target_id = $custom_table->id;
             $notify->notify_trigger = Enums\NotifyTrigger::BUTTON;
             $notify->mail_template_id = 5;
             $notify->trigger_settings = [
@@ -1060,7 +1054,7 @@ class TestDataSeeder extends Seeder
         }
         $notify = new Notify;
         $notify->notify_view_name = $custom_table->table_name . '_notify_limit';
-        $notify->custom_table_id = $custom_table->id;
+        $notify->target_id = $custom_table->id;
         $notify->notify_trigger = 1;
         $notify->mail_template_id = 5;
         $notify->trigger_settings = [
@@ -1077,6 +1071,88 @@ class TestDataSeeder extends Seeder
         $notify->save();
         return $notify->id;
     }
+
+
+    /**
+     * Create Form (and priority, public)
+     *
+     * @return void
+     */
+    protected function createForm(CustomTable $custom_table)
+    {
+        $custom_form_conditions = [
+            [
+                'condition_type' => ConditionType::CONDITION,
+                'condition_key' => FilterOption::SELECT_EXISTS,
+                'target_column_id' => ConditionTypeDetail::ORGANIZATION,
+                'condition_value' => ["2"], // dev
+            ],
+            []
+        ];
+
+        foreach ($custom_form_conditions as $index => $condition) {
+            // create form
+            $custom_form = CustomForm::create([
+                'custom_table_id' => $custom_table->id,
+                'form_view_name' => ($index === 1 ? 'form_default' : 'form'),
+                'default_flg' => ($index === 1),
+            ]);
+            CustomForm::getDefault($custom_table);
+        
+            if (count($condition) == 0) {
+                continue;
+            }
+            
+            $custom_form_priority = CustomFormPriority::create([
+                'custom_form_id' => $custom_form->id,
+                'order' => $index + 1,
+            ]);
+
+            $custom_form_condition = new Condition;
+            $custom_form_condition->morph_type = 'custom_form_priority';
+            $custom_form_condition->morph_id = $custom_form_priority->id;
+            foreach ($condition as $k => $c) {
+                $custom_form_condition->{$k} = $c;
+            }
+            $custom_form_condition->save();
+        }
+
+        // Custom form public ----------------------------------------------------
+        // user type 2
+        foreach ([1, 2] as $user_id) {
+            Model\PublicForm::create([
+                'custom_form_id' => $custom_form->id,
+                'public_form_view_name' => "Public Form User : {$user_id}",
+                'active_flg' => 1,
+                'proxy_user_id' => $user_id,
+                'options' => [
+                    'error_text' => exmtrans('custom_form_public.error_text'),
+                    'use_footer' => '1',
+                    'use_header' => '1',
+                    'use_confirm' => '0',
+                    'confirm_text' => exmtrans('custom_form_public.confirm_text'),
+                    'header_label' => null,
+                    'analytics_tag' => null,
+                    'complete_text' => exmtrans('custom_form_public.complete_text'),
+                    'confirm_title' => exmtrans('custom_form_public.confirm_title'),
+                    'complete_title' => exmtrans('custom_form_public.complete_title'),
+                    'error_link_url' => null,
+                    'error_link_text' => null,
+                    'background_color' => '#ffffff',
+                    'use_notify_error' => '0',
+                    'complete_link_url' => null,
+                    'footer_text_color' => '#ffffff',
+                    'header_text_color' => '#ffffff',
+                    'complete_link_text' => null,
+                    'validity_period_end' => null,
+                    'validity_period_start' => null,
+                    'footer_background_color' => '#000000',
+                    'header_background_color' => '#3c8dbc',
+                ],
+            ]);
+        }
+    }
+
 
     /**
      * Create View

@@ -3,12 +3,12 @@
 namespace Exceedone\Exment\Controllers;
 
 use Exceedone\Exment\Validator\ImageRule;
-use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\ErrorCode;
 use Exceedone\Exment\Model\CustomTable;
 use Exceedone\Exment\Model\Define;
 use Exceedone\Exment\Model\System;
 use Exceedone\Exment\Model\File;
+use Exceedone\Exment\Model\PublicForm;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Response;
@@ -19,6 +19,14 @@ class FileController extends AdminControllerBase
      * Download file (call as web)
      */
     public function download(Request $request, $uuid)
+    {
+        return static::downloadFile($uuid);
+    }
+
+    /**
+     * Download file (call as publicform)
+     */
+    public function downloadPublicForm(Request $request, $publicFormUuid, $uuid)
     {
         return static::downloadFile($uuid);
     }
@@ -270,14 +278,9 @@ class FileController extends AdminControllerBase
         }
 
         // if has parent_id, check permission
-        if (isset($data->parent_id) && isset($data->parent_type)) {
-            $custom_value = CustomTable::getEloquent($data->parent_type)->getValueModel($data->parent_id);
-            if ($custom_value->enableDelete() !== true) {
-                if ($options['asApi']) {
-                    return abortJson(403, ErrorCode::PERMISSION_DENY());
-                }
-                abort(403);
-            }
+        $checkParentPermission = static::checkParentPermission($data, $options);
+        if ($checkParentPermission !== true) {
+            return $checkParentPermission;
         }
 
         $path = $data->path;
@@ -290,12 +293,7 @@ class FileController extends AdminControllerBase
 
         // if has document, remove document info
         if (boolval($options['removeDocumentInfo'])) {
-            $column_name = CustomTable::getEloquent(SystemTableName::DOCUMENT)->getIndexColumnName('file_uuid');
-        
-            // delete document info
-            getModelName(SystemTableName::DOCUMENT)
-                ::where($column_name, $uuid)
-                ->delete();
+            File::deleteDocumentModel($uuid, false);
         }
         
         // delete file info
@@ -348,13 +346,43 @@ class FileController extends AdminControllerBase
      */
     protected function uploadTempFile(Request $request)
     {
+        return $this->_uploadTempFile($request, false);
+    }
+
+    /**
+     *  upload Image as temporary
+     */
+    protected function uploadTempImage(Request $request)
+    {
+        return $this->_uploadTempFile($request, true);
+    }
+
+    /**
+     *  upload Image as temporary
+     */
+    protected function uploadTempImagePublicForm(Request $request, $publicFormUuid)
+    {
+        $public_form = PublicForm::getPublicFormByUuid($publicFormUuid);
+        return $this->_uploadTempFile($request, true, $public_form);
+    }
+
+    /**
+     *  upload file as temporary
+     */
+    protected function _uploadTempFile(Request $request, bool $isImage, ?PublicForm $public_form = null)
+    {
         // delete old temporary files
         $this->removeTempFiles();
         
-        // check image file. *NOW Only this endpoint is image*
-        $validator = \Validator::make($request->all(), [
-            'file' => ['required', new ImageRule],
-        ]);
+        // check image file.
+        $rules = [
+            'file' => ['required']
+        ];
+        if ($isImage) {
+            $rules['file'][] = new ImageRule;
+        }
+
+        $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json(array_get($validator->errors()->toArray(), 'file'), 400);
         }
@@ -369,7 +397,14 @@ class FileController extends AdminControllerBase
             $request->session()->put($uuid, $original_name);
         } catch (\Exception $e) {
         }
-        return json_encode(['location' => admin_urls('tmpfiles', basename($filename))]);
+
+        // If this request is as public_form, return as url
+        if ($public_form) {
+            $localtion = $public_form->getUrl('tmpfiles', basename($filename));
+        } else {
+            $localtion = admin_urls('tmpfiles', basename($filename));
+        }
+        return json_encode(['location' => $localtion]);
     }
 
     /**
@@ -381,6 +416,52 @@ class FileController extends AdminControllerBase
         $this->removeTempFiles();
 
         return static::downloadTemp($uuid);
+    }
+
+    /**
+     * Download temporary saved file
+     */
+    public function downloadTempFilePublicForm(Request $request, $publicFormUuid, $uuid)
+    {
+        // delete old temporary files
+        $this->removeTempFiles();
+
+        return static::downloadTemp($uuid);
+    }
+
+
+    /**
+     * Check parent table's permission
+     *
+     * @param mixed $data
+     * @return true|\Symfony\Component\HttpFoundation\Response
+     */
+    protected static function checkParentPermission($data, array $options = [])
+    {
+        $options = array_merge(
+            [
+                'asApi' => false,
+            ],
+            $options
+        );
+        if (!$data || is_nullorempty($data->parent_id) || is_nullorempty($data->parent_type)) {
+            return true;
+        }
+
+        // if has parent_id, check permission
+        $parent_custom_table = CustomTable::getEloquent($data->parent_type);
+        if (!$parent_custom_table) {
+            return true;
+        }
+        $custom_value = $parent_custom_table->getValueModel($data->parent_id);
+        if ($custom_value && $custom_value->enableDelete() !== true) {
+            if ($options['asApi']) {
+                return abortJson(403, ErrorCode::PERMISSION_DENY());
+            }
+            abort(403);
+        }
+
+        return true;
     }
 
     

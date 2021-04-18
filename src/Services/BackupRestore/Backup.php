@@ -121,6 +121,10 @@ class Backup
 
                 $files = $disk->allFiles('');
                 foreach ($files as $file) {
+                    // Check file exists
+                    if (!$disk->exists($file)) {
+                        continue;
+                    }
                     // copy from crowd to local
                     $stream = $disk->readStream($file);
                     $this->tmpDisk()->writeStream(path_join($to, $file), $stream);
@@ -134,7 +138,12 @@ class Backup
         }
             
         // if contains 'config' in $settings, copy env file
-        if (in_array('config', $settings)) {
+        if (collect($settings)->contains(function ($setting) {
+            if (is_array($setting)) {
+                return count($setting) >= 3 && $setting[2] == BackupTarget::CONFIG;
+            }
+            return $setting == BackupTarget::CONFIG;
+        })) {
             $envLines = $this->getMatchedEnv();
             $to_env = $this->tmpDisk()->path(path_join($this->diskService->tmpDiskItem()->dirName(), '.env'));
 
@@ -163,6 +172,7 @@ class Backup
                 }
                 $filePath = $file->getRealPath();
                 $relativePath = substr($filePath, strlen($this->diskService->tmpDiskItem()->dirFullPath()) + 1);
+                $relativePath = \Exment::replaceBackToSlash($relativePath);
                 $zip->addFile($filePath, $relativePath);
             }
             $zip->close();

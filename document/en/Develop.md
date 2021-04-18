@@ -87,6 +87,7 @@ git clone https://github.com/hirossyi73/exment.git
 ~~~
 composer update
 php artisan vendor:publish --provider="Exceedone\Exment\ExmentServiceProvider"
+php artisan passport:keys
 ~~~
 
 - Access exment website. And set up Exment.  
@@ -183,6 +184,7 @@ composer global require friendsofphp/php-cs-fixer
 php-cs-fixer fix ./vendor/exceedone/exment --rules=no_unused_imports
 #Fix all source
 php-cs-fixer fix ./vendor/exceedone/exment/src 
+php-cs-fixer fix ./vendor/exceedone/exment/tests
 ```
 
 

@@ -10,7 +10,10 @@ class TestDefine
     public const TESTDATA_USER_LOGINID_DEV_USERB = '6';  //dev-userB
     public const TESTDATA_USER_LOGINID_DEV1_USERC = '7'; //dev1-userC
 
+    public const TESTDATA_ORGANIZATION_COMPANY1 = '1'; // company1
     public const TESTDATA_ORGANIZATION_DEV = '2'; // dev
+
+    public const TESTDATA_ROLEGROUP_GENERAL = '4'; // 一般グループ
 
     public const TESTDATA_TABLE_NAME_VIEW_ALL = 'custom_value_view_all';
     public const TESTDATA_TABLE_NAME_EDIT_ALL = 'custom_value_edit_all';
@@ -48,10 +51,15 @@ class TestDefine
     public const TESTDATA_COLUMN_NAME_USER_RELATION_FILTER_AJAX = 'user_relation_filter_ajax';
     public const TESTDATA_COLUMN_NAME_USER_RELATION_FILTER_AJAX_VIEW = 'user_relation_filter_ajax_view';
     
+    public const FILE_TESTSTRING_TEST = 'test'; //"test"
     public const FILE_BASE64 = 'dGVzdA=='; //"test" text file.
     public const FILE_TESTSTRING = 'This is test file'; //text file.
 
+    public const FILE2_BASE64 = 'RXhtZW50IGlzIE9wZW4gU291cmNlIFNvZnR3YXJlLg=='; //FILE2_TESTSTRING text file.
+    public const FILE2_TESTSTRING = 'Exment is Open Source Software.'; //text file.
+
     public const TESTDATA_DUMMY_EMAIL = 'foobar@test.com';
+    public const TESTDATA_DUMMY_EMAIL2 = 'foobar2@test.com';
 
     public const TESTDATA_COLUMN_NAMES = [
         'default' => [
@@ -82,5 +90,4 @@ class TestDefine
             'ajax_view' => self::TESTDATA_COLUMN_NAME_USER_RELATION_FILTER_AJAX_VIEW,
         ],
     ];
-    
 }

@@ -8,8 +8,25 @@
 
 ```
 composer require symfony/css-selector=~4.2
-composer require laravel/browser-kit-testing=~4.2
+composer require laravel/browser-kit-testing=~5.2
+composer require dms/phpunit-arraysubset-asserts=~0.1
 ```
+
+### PHPUnitバージョン変更(初回のみ)
+- Exmentでは、PHPUnitにバージョン8.Xを採用しています。  
+ルートフォルダのcomposer.jsonの、require-devに、"phpunit/phpunit"に関する記述があれば、以下のように修正してください。
+
+```
+"phpunit/phpunit": "~8.5",
+```
+
+その後、以下のコマンドを実行してください。
+
+```
+composer update
+```
+
+
 
 ## テストデータ作成
 
@@ -39,14 +56,13 @@ Lint(PHPStan / Laratisan)を実行し、構文チェックなどを行います�
 
 ```
 # Lintのライブラリ
-composer require --dev nunomaduro/larastan=^0.4.*
+composer require --dev nunomaduro/larastan=^0.5
 
 # Exmentの関連ライブラリ
 composer require pragmarx/google2fa
 composer require simplesoftwareio/simple-qrcode=^2.0.0
-composer require laravel/socialite=~3.3.0
+composer require laravel/socialite=~5.1
 composer require aacotroneo/laravel-saml2
-composer require adldap2/adldap2-laravel
 composer require league/flysystem-sftp ~1.0
 composer require league/flysystem-aws-s3-v3 ~1.0
 composer require league/flysystem-azure-blob-storage ~0.1.6

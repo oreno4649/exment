@@ -12,6 +12,8 @@ use Exceedone\Exment\Model\CustomView;
 use Exceedone\Exment\Model\CustomViewColumn;
 use Exceedone\Exment\Model\CustomViewSummary;
 use Exceedone\Exment\Model\CustomViewSort;
+use Exceedone\Exment\Model\CustomForm;
+use Exceedone\Exment\Model\CustomFormBlock;
 use Exceedone\Exment\Model\CustomFormColumn;
 use Exceedone\Exment\Model\CustomValueAuthoritable;
 use Exceedone\Exment\Model\System;
@@ -32,6 +34,7 @@ use Exceedone\Exment\Enums\LoginType;
 use Exceedone\Exment\Enums\FormColumnType;
 use Exceedone\Exment\Services\DataImportExport;
 use Exceedone\Exment\Services\EnvService;
+use Exceedone\Exment\Services\TemplateImportExport\TemplateImporter;
 use Exceedone\Exment\Middleware\Morph;
 use Carbon\Carbon;
 
@@ -44,7 +47,7 @@ class PatchDataCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'exment:patchdata {action}';
+    protected $signature = 'exment:patchdata {action} {options1?} {options2?} {options3?}';
 
     /**
      * The console command description.
@@ -180,10 +183,154 @@ class PatchDataCommand extends Command
             case 'patch_view_only':
                 $this->patchViewOnly();
                 return;
+            case 'form_column_row_no':
+                $this->patchFormColumnRowNo();
+                return;
+            case 'patch_condition':
+                $this->updateCondition();
+                return;
+            case 'delete_junk_file':
+                $this->deleteJunkFile();
+                return;
+            case 'publicform_mail_template':
+                $this->importPublicformTemplate();
+                return;
+            case 'append_column_mail_from_view_name':
+                $this->appendColumnMailFromViewName();
+                return;
+            case 'notify_target_id':
+                $this->notifyTargetId();
+                return;
+            case 'select_table_user_org':
+                $this->patchSelectTableUserOrg();
+                return;
+            case 'set_file_type':
+                $this->setFileType();
+                return;
         }
 
         $this->error('patch name not found.');
     }
+
+    /**
+     * patch mail template
+     *
+     * @return void
+     */
+    protected function patchMailTemplate($mail_key_names = [])
+    {
+        // get vendor folder
+        $locale = \App::getLocale();
+        $templates_data_path = exment_package_path('system_template/data');
+        $path = path_join($templates_data_path, $locale, "mail_template.xlsx");
+        // if exists, execute data copy
+        if (!\File::exists($path)) {
+            $path = path_join($templates_data_path, "mail_template.xlsx");
+            // if exists, execute data copy
+            if (!\File::exists($path)) {
+                return;
+            }
+        }
+
+        $table_name = \File::name($path);
+        $format = \File::extension($path);
+        $custom_table = CustomTable::getEloquent($table_name);
+
+        // execute import
+        $service = (new DataImportExport\DataImportExportService())
+            ->importAction(new DataImportExport\Actions\Import\CustomTableAction([
+                'custom_table' => $custom_table,
+                'filter' => ['value.mail_key_name' => $mail_key_names],
+                'primary_key' => 'value.mail_key_name',
+            ]))
+            ->format($format);
+        $service->import($path);
+    }
+    
+    /**
+     * append custom column
+     *
+     * @return void
+     */
+    protected function appendCustomColumn(string $target_table_name, string $target_column_name)
+    {
+        // get system template
+        $template = new TemplateImporter;
+        $json = $template->getMergeJson();
+
+        try {
+            \DB::transaction(function () use ($json, $target_column_name, $target_table_name) {
+                // re-loop columns. because we have to get other column id --------------------------------------------------
+                foreach (array_get($json, "custom_tables", []) as $table) {
+                    // find tables. --------------------------------------------------
+                    $table_name = array_get($table, 'table_name');
+                    if (!isMatchString($target_table_name, $table_name)) {
+                        continue;
+                    }
+                    $obj_table = CustomTable::getEloquent($table_name);
+                    if (!$obj_table) {
+                        continue;
+                    }
+    
+                    // get all custom columns
+                    $current_columns = $obj_table->custom_columns;
+    
+                    // get columns. --------------------------------------------------
+                    if (array_key_exists('custom_columns', $table)) {
+                        foreach (array_get($table, 'custom_columns') as $column) {
+                            // find tables. --------------------------------------------------
+                            $column_name = array_get($column, 'column_name');
+                            if (!isMatchString($target_column_name, $column_name)) {
+                                continue;
+                            }
+    
+                            // Check already exists, if already setted, continue
+                            $obj_column = CustomColumn::getEloquent($column_name, $obj_table);
+                            if (isset($obj_column)) {
+                                continue;
+                            }
+    
+                            // Import column
+                            $obj_column = CustomColumn::importTemplate($column, false, [
+                                'system_flg' => true,
+                                'parent' => $obj_table,
+                            ]);
+    
+                            // Append custom folumn column
+                            // get custom form
+                            $custom_form = CustomForm::where('custom_table_id', $obj_table->id)->first();
+                            if (!$custom_form) {
+                                continue;
+                            }
+                            $custom_form_block = CustomFormBlock::where('custom_form_id', $custom_form->id)->first();
+                            if (!$custom_form_block) {
+                                continue;
+                            }
+
+                            // create dummy json array
+                            $count = $custom_form_block->custom_form_columns->count();
+                            $form_column = [
+                                'form_column_type' => Enums\FormColumnType::COLUMN,
+                                'options' => null,
+                                'form_column_target_name' => $obj_column->column_name,
+                                'order' => $count + 1,
+                            ];
+                            CustomFormColumn::importTemplate($form_column, false, [
+                                'system_flg' => true,
+                                'parent' => $custom_form_block,
+                            ]);
+                        }
+                    }
+                }
+            });
+        } catch (\Exception $ex) {
+            \Log::error($ex);
+        }
+    }
+    
+
+
+
 
     /**
      * Remove decimal comma
@@ -605,41 +752,6 @@ class PatchDataCommand extends Command
     }
     
     /**
-     * patch mail template
-     *
-     * @return void
-     */
-    protected function patchMailTemplate($mail_key_names = [])
-    {
-        // get vendor folder
-        $locale = \App::getLocale();
-        $templates_data_path = exment_package_path('system_template/data');
-        $path = path_join($templates_data_path, $locale, "mail_template.xlsx");
-        // if exists, execute data copy
-        if (!\File::exists($path)) {
-            $path = path_join($templates_data_path, "mail_template.xlsx");
-            // if exists, execute data copy
-            if (!\File::exists($path)) {
-                return;
-            }
-        }
-
-        $table_name = \File::name($path);
-        $format = \File::extension($path);
-        $custom_table = CustomTable::getEloquent($table_name);
-
-        // execute import
-        $service = (new DataImportExport\DataImportExportService())
-            ->importAction(new DataImportExport\Actions\Import\CustomTableAction([
-                'custom_table' => $custom_table,
-                'filter' => ['value.mail_key_name' => $mail_key_names],
-                'primary_key' => 'value.mail_key_name',
-            ]))
-            ->format($format);
-        $service->import($path);
-    }
-    
-    /**
      * remove deleted table notify
      *
      * @return void
@@ -867,7 +979,7 @@ class PatchDataCommand extends Command
             });
 
             foreach ($custom_columns as $custom_column) {
-                $func($custom_table->getValueModel()->query(), $custom_column->getQueryKey(), function ($item) use ($custom_column) {
+                $func($custom_table->getValueQuery(), $custom_column->getQueryKey(), function ($item) use ($custom_column) {
                     $value = array_get($item, "value.{$custom_column->column_name}");
                     $item->setValue($custom_column->column_name, str_replace('\\', '/', $value));
                     $item->disable_saved_event(true);
@@ -884,7 +996,7 @@ class PatchDataCommand extends Command
 
         $func($query, 'system_value', function ($item) {
             $value = array_get($item, "system_value");
-            $item->system_value = str_replace('\\', '/', $value);
+            $item->system_value = \Exment::replaceBackToSlash($value);
         });
     }
 
@@ -1406,6 +1518,308 @@ class PatchDataCommand extends Command
 
             $custom_column->setOption('calc_formula', $calcString);
             $custom_column->save();
+        });
+    }
+
+    protected function patchFormColumnRowNo()
+    {
+        $columns = CustomFormColumn::all();
+
+        // group by group
+        $columnGroups = $columns->groupBy('custom_form_block_id');
+        $columnGroups->each(function ($columnGroup) {
+            $columnGroupInners = $columnGroup->groupBy('column_no');
+            $columnGroupInners->each(function ($columns) {
+                $columns->sortBy('order')->each(function ($column, $index) {
+                    if (!is_null($column->width)) {
+                        return;
+                    }
+                    $column->row_no = 1;
+                    $column->width = 2;
+                    $column->order = $index + 1;
+                    $column->save();
+                });
+            });
+        });
+    }
+
+    /**
+     * Update Condition
+     *
+     * @return void
+     */
+    protected function updateCondition()
+    {
+        $items = [
+            [
+                'classname' => Model\Condition::class,
+                'condition_type' => 'condition_type',
+                'condition_key' => 'condition_key',
+                'target_column_id' => 'target_column_id',
+                'condition_value' => 'condition_value',
+            ],
+            [
+                'classname' => Model\CustomViewFilter::class,
+                'condition_type' => 'view_column_type',
+                'condition_key' => 'view_filter_condition',
+                'target_column_id' => 'view_column_target_id',
+                'condition_value' => 'view_filter_condition_value_text',
+            ],
+        ];
+        foreach ($items as $item) {
+            $item['classname']::get()
+            ->each(function ($model) use ($item) {
+                $isUpdate = false;
+                // get type, key, target value
+                $condition_type = $item['condition_type'];
+                $condition_key = $item['condition_key'];
+                $target_column_id = $item['target_column_id'];
+                $condition_value = $item['condition_value'];
+
+                $condition_type_value = $model->{$condition_type};
+                $condition_key_value = $model->{$condition_key};
+                $target_column_id_value = $model->{$target_column_id};
+                $condition_value_value = $model->{$condition_value};
+
+                // for condition ----------------------------------------------------
+                if (isMatchString($condition_type_value, Enums\ConditionType::CONDITION)) {
+                    // $target_column_id_value is not check.
+                    // convert FilterOption::EQ to FilterOption::SELECT_EXISTS
+                    // convert FilterOption::NQ to FilterOption::SELECT_NOT_EXISTS
+                    if (isMatchString($condition_key_value, Enums\FilterOption::EQ)) {
+                        $model->{$condition_key} = Enums\FilterOption::SELECT_EXISTS;
+                        $isUpdate = true;
+                    } elseif (isMatchString($condition_key_value, Enums\FilterOption::NE)) {
+                        $model->{$condition_key} = Enums\FilterOption::SELECT_NOT_EXISTS;
+                        $isUpdate = true;
+                    }
+                }
+
+                // for column ----------------------------------------------------
+                elseif (isMatchString($condition_type_value, Enums\ConditionType::COLUMN)) {
+                    // get custom column.
+                    $custom_column = CustomColumn::getEloquent($target_column_id_value);
+                    if ($custom_column) {
+                        if (Enums\ColumnType::is2ValueSelect($custom_column->column_type)) {
+                            // convert FilterOption::LIKE to FilterOption::EQ
+                            // convert FilterOption::NOT_LIKE or FilterOption::NE to FilterOption::EQ and toggle value
+                            // convert FilterOption::NOT_NULL to FilterOption::EQ and set true value
+                            // convert FilterOption::NULL to FilterOption::EQ and set false value
+                            if (isMatchString($condition_key_value, Enums\FilterOption::LIKE)) {
+                                $model->{$condition_key} = Enums\FilterOption::EQ;
+                                $isUpdate = true;
+                            } elseif (isMatchString($condition_key_value, Enums\FilterOption::NOT_NULL)) {
+                                $model->{$condition_key} = Enums\FilterOption::EQ;
+                                $model->{$condition_value} = $custom_column->column_item->getTrueValue();
+                                $isUpdate = true;
+                            } elseif (isMatchString($condition_key_value, Enums\FilterOption::NULL)) {
+                                $model->{$condition_key} = Enums\FilterOption::EQ;
+                                $model->{$condition_value} = $custom_column->column_item->getFalseValue();
+                                $isUpdate = true;
+                            } elseif (isMatchString($condition_key_value, Enums\FilterOption::NE) || isMatchString($condition_key_value, Enums\FilterOption::NOT_LIKE)) {
+                                $model->{$condition_key} = Enums\FilterOption::EQ;
+                                $model->{$condition_value} = isMatchString($condition_value_value, $custom_column->column_item->getTrueValue()) ? $custom_column->column_item->getFalseValue() : $custom_column->column_item->getTrueValue();
+                                $isUpdate = true;
+                            }
+                        }
+                    }
+                }
+                
+                // for workflow ----------------------------------------------------
+                elseif (isMatchString($condition_type_value, Enums\ConditionType::WORKFLOW)) {
+                    // $target_column_id_value is not check.
+                    // convert FilterOption::EQ to FilterOption::WORKFLOW_EQ_STATUS
+                    // convert FilterOption::NQ to FilterOption::WORKFLOW_NE_STATUS
+                    // convert FilterOption::USER_EQ_USER to FilterOption::WORKFLOW_EQ_WORK_USER
+                    if (isMatchString($condition_key_value, Enums\FilterOption::EQ)) {
+                        $model->{$condition_key} = Enums\FilterOption::WORKFLOW_EQ_STATUS;
+                        $isUpdate = true;
+                    } elseif (isMatchString($condition_key_value, Enums\FilterOption::NE)) {
+                        $model->{$condition_key} = Enums\FilterOption::WORKFLOW_NE_STATUS;
+                        $isUpdate = true;
+                    } elseif (isMatchString($condition_key_value, Enums\FilterOption::USER_EQ_USER)) {
+                        $model->{$condition_key} = Enums\FilterOption::WORKFLOW_EQ_WORK_USER;
+                        $isUpdate = true;
+                    }
+                }
+
+                if (!$isUpdate) {
+                    return true;
+                }
+
+                $model->save();
+            });
+        }
+    }
+    
+
+    /**
+     * Delete junk file
+     *
+     * @return void
+     */
+    protected function deleteJunkFile()
+    {
+        $table_name = $this->argument('options1');
+        if (!$table_name) {
+            $this->error('Please input argument Table name.');
+            return;
+        }
+        
+        $custom_table = CustomTable::getEloquent($table_name);
+        if (!$custom_table) {
+            $this->error("Table name {$table_name} is not found.");
+            return;
+        }
+        
+        $disk = \Storage::disk(config('admin.upload.disk'));
+        
+        // Remove file eloquent, If not contains custom value data.
+        Model\File::where('parent_type', $custom_table->table_name)
+            ->chunk(1000, function ($files) use ($custom_table) {
+                foreach ($files as $file) {
+                    $exists = $custom_table->getValueModel()->query()
+                        ->where('id', $file->parent_id)
+                        ->withoutGlobalScopes()
+                        ->withTrashed()
+                        ->exists();
+                    if ($exists) {
+                        continue;
+                    }
+        
+                    Model\File::deleteFileInfo($file);
+                }
+            });
+
+
+        // get file list, and remove if not exists file model
+        $storageFiles = $disk->files($custom_table->table_name);
+
+        foreach ($storageFiles as $storageFile) {
+            $file = Model\File::getData($storageFile);
+            // Exists file model, continue
+            if ($file) {
+                continue;
+            }
+
+            try {
+                $disk->delete($storageFile);
+            } catch (\Exception $ex) {
+            }
+        }
+    }
+
+    
+    /**
+     * import mail template for workflow
+     *
+     * @return void
+     */
+    protected function importPublicformTemplate()
+    {
+        $this->patchMailTemplate([
+            MailKeyName::PUBLICFORM_COMPLETE_USER,
+            MailKeyName::PUBLICFORM_COMPLETE_ADMIN,
+            MailKeyName::PUBLICFORM_ERROR,
+        ]);
+    }
+    
+    /**
+     * appendColumnMailFromViewName
+     *
+     * @return void
+     */
+    protected function appendColumnMailFromViewName()
+    {
+        $this->appendCustomColumn('mail_template', 'mail_from_view_name');
+    }
+    
+
+    public function notifyTargetId()
+    {
+        Model\Notify::get()
+            ->each(function ($notify) {
+                $target_id = $notify->custom_table_id;
+                if (is_null($target_id) || isMatchString($target_id, 0)) {
+                    $target_id = $notify->workflow_id;
+                }
+                if (is_null($target_id) || isMatchString($target_id, 0)) {
+                    return;
+                }
+                
+                $notify->target_id = $target_id;
+                $notify->save();
+            });
+    }
+    
+    /**
+     * Convert select table and user-organization, convert type to USER and ORGANIZATION
+     *
+     * @return void
+     */
+    protected function patchSelectTableUserOrg()
+    {
+        // get user and ORG table's id
+        $custom_table_user = CustomTable::getEloquent(SystemTableName::USER);
+        $custom_table_organization = CustomTable::getEloquent(SystemTableName::ORGANIZATION);
+
+        \DB::transaction(function () use ($custom_table_user, $custom_table_organization) {
+            CustomColumn::get()
+            ->each(function ($custom_column) use ($custom_table_user, $custom_table_organization) {
+                if ($custom_column->column_type != Enums\ColumnType::SELECT_TABLE) {
+                    return;
+                }
+                $select_target_table = $custom_column->getOption('select_target_table');
+                if (is_nullorempty($select_target_table)) {
+                    return;
+                }
+                if (!in_array($select_target_table, [$custom_table_user->id, $custom_table_organization->id])) {
+                    return;
+                }
+
+                // set new column_type
+                if ($select_target_table == $custom_table_user->id) {
+                    $custom_column->column_type = Enums\ColumnType::USER;
+                } elseif ($select_target_table == $custom_table_organization->id) {
+                    $custom_column->column_type = Enums\ColumnType::ORGANIZATION;
+                }
+                $custom_column->forgetOption('select_target_table');
+                $custom_column->save();
+            });
+        });
+    }
+    
+    /**
+     * Set file type for update.
+     *
+     * @return void
+     */
+    protected function setFileType()
+    {
+        \DB::transaction(function () {
+            // get file_type is null
+            Model\File::whereNull('file_type')->get()
+            ->each(function ($file) {
+                $file_type = null;
+                // if set custom_column_id, set file_type is COLUMN
+                if(isset($file->custom_column_id)){
+                    $file_type = Enums\FileType::CUSTOM_VALUE_COLUMN;
+                }
+                // if local_dirname is 'system' and parent_type is null, set SYSTEM
+                elseif(isMatchString($file->local_dirname, 'system') && !isset($file->parent_type)){
+                    $file_type = Enums\FileType::SYSTEM;
+                }
+                // if local_dirname is 'avatar' and parent_type is null, set AVATAR
+                elseif(isMatchString($file->local_dirname, 'avatar') && !isset($file->parent_type)){
+                    $file_type = Enums\FileType::AVATAR;
+                }
+                // else, set as document
+                else{
+                    $file_type = Enums\FileType::CUSTOM_VALUE_DOCUMENT;
+                }
+                $file->file_type = $file_type;
+                $file->save();
+            });
         });
     }
 }

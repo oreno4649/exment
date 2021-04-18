@@ -9,13 +9,16 @@ use Encore\Admin\AdminServiceProvider as ServiceProvider;
 use Exceedone\Exment\Providers as ExmentProviders;
 use Exceedone\Exment\Model\Define;
 use Exceedone\Exment\Model\Plugin;
+use Exceedone\Exment\Model\PublicForm;
 use Exceedone\Exment\Model\CustomTable;
+use Exceedone\Exment\Model\LoginUser;
 use Exceedone\Exment\Services\Plugin\PluginPublicBase;
 use Exceedone\Exment\Services\Plugin\PluginApiBase;
 use Exceedone\Exment\Enums\Driver;
 use Exceedone\Exment\Enums\ApiScope;
 use Exceedone\Exment\Enums\SystemTableName;
 use Exceedone\Exment\Enums\PluginType;
+use Exceedone\Exment\Auth\PublicFormGuard;
 use Exceedone\Exment\Validator\ExmentCustomValidator;
 use Exceedone\Exment\Middleware\Initialize;
 use Exceedone\Exment\Database as ExmentDatabase;
@@ -23,6 +26,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Database\Connection;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Auth\RequestGuard;
 use Illuminate\Contracts\Http\Kernel;
 use Laravel\Passport\Passport;
 use Laravel\Passport\Client;
@@ -50,6 +54,7 @@ class ExmentServiceProvider extends ServiceProvider
         ExmentProviders\Route2factorServiceProvider::class,
         ExmentProviders\RouteOAuthServiceProvider::class,
         ExmentProviders\PasswordResetServiceProvider::class,
+        ExmentProviders\RoutePublicFormServiceProvider::class,
         ExmentProviders\PluginServiceProvider::class,
     ];
 
@@ -57,11 +62,13 @@ class ExmentServiceProvider extends ServiceProvider
      * @var array commands
      */
     protected $commands = [
+        'Exceedone\Exment\Console\VersionCommand',
         'Exceedone\Exment\Console\InstallCommand',
         'Exceedone\Exment\Console\UpdateCommand',
         'Exceedone\Exment\Console\PublishCommand',
         'Exceedone\Exment\Console\ScheduleCommand',
         'Exceedone\Exment\Console\NotifyScheduleCommand',
+        'Exceedone\Exment\Console\NotifyCommand',
         'Exceedone\Exment\Console\BatchCommand',
         'Exceedone\Exment\Console\BackupCommand',
         'Exceedone\Exment\Console\RestoreCommand',
@@ -80,6 +87,8 @@ class ExmentServiceProvider extends ServiceProvider
         'Exceedone\Exment\Console\ResetPasswordCommand',
         'Exceedone\Exment\Console\CheckConnectionCommand',
         'Exceedone\Exment\Console\TotalUpdateCommand',
+        'Exceedone\Exment\Console\FileColumnImportCommand',
+        'Exceedone\Exment\Console\DocumentImportCommand',
     ];
 
     
@@ -110,6 +119,7 @@ class ExmentServiceProvider extends ServiceProvider
         'admin.login'  => \Exceedone\Exment\Middleware\Login::class,
         'admin.morph'  => \Exceedone\Exment\Middleware\Morph::class,
         'adminapi.auth'       => \Exceedone\Exment\Middleware\AuthenticateApi::class,
+        'adminwebapi.auth'       => \Exceedone\Exment\Middleware\AuthenticateWebApi::class,
         'admin.browser'  => \Exceedone\Exment\Middleware\Browser::class,
         'admin.web-ipfilter'  => \Exceedone\Exment\Middleware\WebIPFilter::class,
         'admin.api-ipfilter'  => \Exceedone\Exment\Middleware\ApiIPFilter::class,
@@ -121,11 +131,16 @@ class ExmentServiceProvider extends ServiceProvider
         'admin.session'    => AdminMiddleware\Session::class,
         
         'pluginapi.auth'       => \Exceedone\Exment\Middleware\AuthenticatePluginApi::class,
-
+        
+        'publicform.auth'       => \Exceedone\Exment\Middleware\AuthenticatePublicForm::class,
+        'publicform.bootstrap'       => \Exceedone\Exment\Middleware\BootstrapPublicForm::class,
+        'publicformapi.auth'       => \Exceedone\Exment\Middleware\AuthenticatePublicFormApi::class,
+        'publicform.session'    => \Exceedone\Exment\Middleware\PublicFormSession::class,
+        
         'scope' => \Exceedone\Exment\Middleware\CheckForAnyScope::class,
 
         'laravel-page-speed.space' => \Exceedone\Exment\Middleware\CollapseWhitespace::class,
-        'laravel-page-speed.jscomments' => \Exceedone\Exment\Middleware\InlineJsRemoveComments::class,
+        //'laravel-page-speed.jscomments' => \Exceedone\Exment\Middleware\InlineJsRemoveComments::class,
         'laravel-page-speed.comments' => \RenatoMarinho\LaravelPageSpeed\Middleware\RemoveComments::class,
 
     ];
@@ -147,7 +162,7 @@ class ExmentServiceProvider extends ServiceProvider
             'admin.morph',
             'admin.bootstrap2',
             'laravel-page-speed.space',
-            'laravel-page-speed.jscomments',
+            //'laravel-page-speed.jscomments',
             'laravel-page-speed.comments',
             'admin.pjax',
             'admin.log',
@@ -222,6 +237,26 @@ class ExmentServiceProvider extends ServiceProvider
             'admin.initialize',
             'admin.morph',
         ],
+        // Exment public form page.
+        'publicform' => [
+            'publicform.auth',
+            'admin.browser',
+            'admin.initialize',
+            'admin.morph',
+            'admin.pjax',
+            'admin.bootstrap',
+            'publicform.bootstrap',
+            'publicform.session',
+        ],
+        // Exment plugin's css and js for publicform.
+        'publicform_plugin_public' => [
+            'publicform.auth',
+            'admin.bootstrap2',
+        ],
+
+        // Dynamic append ----------------------------------------------------
+        //'adminwebapi' : web api middleware. Alomost same "adminapi", but difference Auth and ip-filter.
+        //'publicformapi' : Publicofmr api middleware. Alomost same "adminapi", but difference Auth, and not use ip-filter.
     ];
 
     /**
@@ -291,10 +326,28 @@ class ExmentServiceProvider extends ServiceProvider
         $this->app->bind(PluginApiBase::class, function ($app) {
             return Plugin::getPluginPageModel();
         });
+        $this->app->bind(PublicForm::class, function ($app) {
+            return PublicForm::getPublicFormByRequest();
+        });
         $this->app->bind(CustomTable::class, function ($app) {
             return CustomTable::findByEndpoint();
         });
         
+        // guard provider
+        Auth::extend('publicformtoken', function ($app, $name, array $config) {
+            return tap($this->makeGuard($config), function ($guard) {
+                $this->app->refresh('request', $guard, 'setRequest');
+            });
+        });
+
+        // Set error page
+        if (!boolval(config('exment.disable_exment_exception_handler', false))) {
+            $this->app->singleton(
+                \Illuminate\Contracts\Debug\ExceptionHandler::class,
+                \Exceedone\Exment\Exceptions\Handler::class
+            );
+        }
+
         Passport::ignoreMigrations();
     }
 
@@ -350,6 +403,10 @@ class ExmentServiceProvider extends ServiceProvider
 
     protected function bootSchedule()
     {
+        if (!$this->app->runningInConsole()) {
+            return;
+        }
+
         // set hourly event
         $this->app->booted(function () {
             $schedule = $this->app->make(Schedule::class);
@@ -366,6 +423,9 @@ class ExmentServiceProvider extends ServiceProvider
                 }
             } catch (\Exception $ex) {
             }
+
+            // Log debug
+            \Exceedone\Exment\Middleware\ExmentDebug::logSchedule($schedule);
         });
     }
 
@@ -390,7 +450,11 @@ class ExmentServiceProvider extends ServiceProvider
         // Extend --------------------------------------------------
         Auth::provider('exment-auth', function ($app, array $config) {
             // Return an instance of Illuminate\Contracts\Auth\UserProvider...
-            return new Providers\LoginUserProvider($app['hash'], \Exceedone\Exment\Model\LoginUser::class);
+            return new Providers\LoginUserProvider($app['hash'], LoginUser::class);
+        });
+        Auth::provider('publicform-provider-driver', function ($app, array $config) {
+            // Return an instance of Illuminate\Contracts\Auth\UserProvider...
+            return new Providers\PublicFormUserProvider($app['hash'], LoginUser::class);
         });
         
         \Validator::resolver(function ($translator, $data, $rules, $messages, $customAttributes) {
@@ -475,15 +539,43 @@ class ExmentServiceProvider extends ServiceProvider
         }
         $middlewareGroups['adminapioauth'] = $middleware;
 
-        // append adminwebapi
+        // append adminwebapi and publicformapi
         $middleware = $middlewareGroups['adminapi'];
         foreach ($middleware as &$m) {
             if ($m == 'admin.api-ipfilter') {
                 $m = 'admin.web-ipfilter';
             }
+            if ($m == 'adminapi.auth') {
+                $m = 'adminwebapi.auth';
+            }
         }
         $middlewareGroups['adminwebapi'] = $middleware;
 
+        $middleware = $middlewareGroups['adminapi'];
+        foreach ($middleware as &$m) {
+            if ($m == 'adminapi.auth') {
+                $m = 'publicformapi.auth';
+            }
+        }
+        $middlewareGroups['publicformapi'] = $middleware;
+
         return $middlewareGroups;
+    }
+
+    
+    /**
+     * Make an instance of the token guard.
+     *
+     * @param  array  $config
+     * @return \Illuminate\Auth\RequestGuard
+     */
+    protected function makeGuard(array $config)
+    {
+        return new RequestGuard(function ($request) use ($config) {
+            return (new PublicFormGuard(
+                Auth::createUserProvider($config['provider']),
+                $this->app['request']
+            ))->user($request);
+        }, $this->app['request']);
     }
 }
