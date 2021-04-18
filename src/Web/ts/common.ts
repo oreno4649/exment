@@ -650,7 +650,7 @@ namespace Exment {
                 var link = linkages[key];
                 var uri = link.uri;
                 var expand = link.expand;
-                var $target = $parent.find(CommonEvent.getClassKey(link.to));
+                var $target = $parent.find(CommonEvent.getClassKey(link.to)).filter('select');
 
                 // if has 'widgetmodal_expand' on button, append linkage_value_id
                 CommonEvent.setLinkgaeExpandToSearchButton(expand, $target, $base.val());
@@ -936,7 +936,19 @@ namespace Exment {
             
             // set value and trigger next
             let isChange = !isMatchString(value, $target.val());
-            $target.val(value);
+            
+            // If editor, call tinymce event
+            if (column_type == 'editor') {
+                let t = tinyMCE.get($target.attr('id'));
+                if(hasValue(t)){
+                    t.setContent(hasValue(value) ? value : '');
+                }
+            }
+            // default 
+            else {
+                $target.val(value);
+            }
+
             if(isChange){
                 $target.trigger('change');
             }

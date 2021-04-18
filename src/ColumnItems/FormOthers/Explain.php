@@ -20,7 +20,7 @@ class Explain extends FormOtherItem
     public function _html($v)
     {
         // default escapes text
-        return esc_html($this->_text($v));
+        return replaceBreakEsc($this->_text($v));
     }
     
     protected function setAdminOptions(&$field)
@@ -33,7 +33,7 @@ class Explain extends FormOtherItem
         if ($this->getLabelType() != FormLabelType::HORIZONTAL) {
             $field->attribute('style', 'margin-left: 15px;');
         }
-        if($this->getLabelType() == FormLabelType::HIDDEN){
+        if ($this->getLabelType() == FormLabelType::HIDDEN) {
             $field->enableLabel();
         }
     }
