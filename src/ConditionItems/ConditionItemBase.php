@@ -103,10 +103,9 @@ abstract class ConditionItemBase implements ConditionItemInterface
     /**
      * Get condition item by request
      */
-    // @phpstan-ignore-next-line
     public static function getItemByRequest(?CustomTable $custom_table, ?string $target_query)
     {
-        if (is_nullorempty($target_query)) {
+        if (is_nullorempty($target_query) || $target_query === null) {
             return null;
         }
 
@@ -121,6 +120,9 @@ abstract class ConditionItemBase implements ConditionItemInterface
 
         // convert enum using target_query
         $enum = ConditionType::getEnumByTargetKey(strtolower($target));
+        if ($enum === null) {
+            return null;
+        }
         return static::getConditionItem($custom_table, $enum, $target);
     }
 
@@ -130,7 +132,7 @@ abstract class ConditionItemBase implements ConditionItemInterface
      *
      * @param CustomTable|null $custom_table
      * @param WorkflowAuthority|WorkflowValueAuthority $authority
-     * @return \Exceedone\Exment\ConditionItems\ConditionItemBase
+     * @return \Exceedone\Exment\ConditionItems\ConditionItemBase|null
      */
     public static function getDetailItemByAuthority(?CustomTable $custom_table, $authority)
     {
@@ -159,7 +161,7 @@ abstract class ConditionItemBase implements ConditionItemInterface
             case ConditionType::WORKFLOW:
                 return new WorkflowItem($custom_table, $target_column_id);
             case ConditionType::CONDITION:
-                return static::getConditionDetailItem($custom_table, $target_column_id);
+                return $target_column_id !== null ? static::getConditionDetailItem($custom_table, $target_column_id) : null;
         }
         return null;
     }
@@ -197,8 +199,9 @@ abstract class ConditionItemBase implements ConditionItemInterface
 
     /**
      * get filter condition
+     *
+     * @return \Illuminate\Support\Collection<int|string, array{id: mixed, text: mixed}>
      */
-    // @phpstan-ignore-next-line
     public function getFilterCondition()
     {
         $options = $this->getFilterOption();
@@ -291,6 +294,9 @@ abstract class ConditionItemBase implements ConditionItemInterface
     protected function compareValue(Condition $condition, $value)
     {
         $viewFilterItem = ViewFilterBase::makeForCondition($condition);
+        if ($viewFilterItem === null) {
+            return false;
+        }
         return $viewFilterItem->compareValue($value, $condition->condition_value);
     }
 

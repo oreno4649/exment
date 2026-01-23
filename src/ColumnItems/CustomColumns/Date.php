@@ -284,10 +284,12 @@ class Date extends CustomItem
     public function setCustomColumnOptionForm(&$form)
     {
         // date, time, datetime
+        // @phpstan-ignore-next-line
         $form->switchbool('datetime_now_saving', exmtrans("custom_column.options.datetime_now_saving"))
             ->help(exmtrans("custom_column.help.datetime_now_saving"))
             ->default("0");
 
+        // @phpstan-ignore-next-line
         $form->switchbool('datetime_now_creating', exmtrans("custom_column.options.datetime_now_creating"))
             ->help(exmtrans("custom_column.help.datetime_now_creating"))
             ->default("0");

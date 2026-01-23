@@ -108,11 +108,15 @@ class Time extends Date
     {
         if (array_key_value_exists('start', $input)) {
             $viewFilterItem = ViewFilterBase::make(FilterOption::TIME_ON_OR_AFTER, $this);
-            $viewFilterItem->setFilter($query, $input['start']);
+            if ($viewFilterItem !== null) {
+                $viewFilterItem->setFilter($query, $input['start']);
+            }
         }
         if (array_key_value_exists('end', $input)) {
             $viewFilterItem = ViewFilterBase::make(FilterOption::TIME_ON_OR_BEFORE, $this);
-            $viewFilterItem->setFilter($query, $input['end']);
+            if ($viewFilterItem !== null) {
+                $viewFilterItem->setFilter($query, $input['end']);
+            }
         }
     }
 }

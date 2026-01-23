@@ -89,9 +89,10 @@ class WorkflowItem extends SystemItem
     {
         if (boolval(array_get($this->options, 'summary'))) {
             if (isset($val)) {
+                /** @var WorkflowStatus|null $model */
                 $model = WorkflowStatus::find($val);
 
-                $status_name = array_get($model, 'status_name');
+                $status_name = $model !== null ? $model->status_name : null;
 
                 return $html ? esc_html($status_name) : $status_name;
             }
@@ -115,14 +116,13 @@ class WorkflowItem extends SystemItem
         }
     }
 
-    // @phpstan-ignore-next-line
     public function getFilterField($value_type = null)
     {
         $field = new MultipleSelect($this->name(), [$this->label()]);
 
         // get workflow statuses
         $workflow = Workflow::getWorkflowByTable($this->custom_table);
-        $options = $workflow->getStatusOptions() ?? [];
+        $options = $workflow !== null ? ($workflow->getStatusOptions() ?? []) : [];
 
         $field->options($options);
         $field->default($this->value);

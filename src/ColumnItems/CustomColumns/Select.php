@@ -202,14 +202,17 @@ class Select extends CustomItem
             ->required()
             ->help(exmtrans("custom_column.help.select_item"));
 
+        // @phpstan-ignore-next-line
         $form->switchbool('multiple_enabled', exmtrans("custom_column.options.multiple_enabled"))
             ->attribute(['data-filtertrigger' =>true])
             ->help(exmtrans("custom_column.help.multiple_enabled"));
 
+        // @phpstan-ignore-next-line
         $form->switchbool('check_radio_enabled', exmtrans("custom_column.options.check_radio_enabled"))
             ->attribute(['data-filtertrigger' =>true])
             ->help(exmtrans("custom_column.help.check_radio_enabled"));
 
+        // @phpstan-ignore-next-line
         $form->switchbool('free_input', exmtrans("custom_column.options.free_input"))
             ->attribute(['data-filter' => json_encode(['parent' => 1, 'key' => 'options_check_radio_enabled', 'value' => '0'])])
             ->help(exmtrans("custom_column.help.free_input"));

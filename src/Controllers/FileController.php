@@ -320,7 +320,9 @@ class FileController extends AdminControllerBase
         // delete file info
         if (boolval($options['removeFileInfo'])) {
             $file = File::getData($uuid);
-            File::deleteFileInfo($file);
+            if ($file !== null) {
+                File::deleteFileInfo($file);
+            }
         }
 
         if ($options['asApi']) {

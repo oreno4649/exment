@@ -31,10 +31,9 @@ class SelectTable extends CustomItem
 
     // @phpstan-ignore-next-line
     protected $target_table;
-    // @phpstan-ignore-next-line
+    /** @var mixed */
     protected $target_view;
 
-    // @phpstan-ignore-next-line
     public function __construct($custom_column, $custom_value, $view_column_target = null)
     {
         parent::__construct($custom_column, $custom_value, $view_column_target);
@@ -51,7 +50,7 @@ class SelectTable extends CustomItem
         }
 
         // convert array or not, using multiple_enabled
-        $v = toArray($this->value);
+        $v = toArray($this->value) ?? [];
         $v = array_map(function ($n) {
             return strval($n);
         }, $v);
@@ -582,7 +581,7 @@ class SelectTable extends CustomItem
         } else {
             // split $label space. zen-han
             $label = str_replace('　', ' ', $label);
-            $label = preg_replace('/\s+/', ' ', $label);
+            $label = preg_replace('/\s+/', ' ', $label) ?? '';
             $items = preg_split('/[\s|\x{3000}]+/u', $label);
 
             // @phpstan-ignore-next-line
@@ -780,7 +779,11 @@ class SelectTable extends CustomItem
                     return [];
                 }
 
-                return CustomTable::getEloquent($custom_table)->custom_views
+                $tableEloquent = CustomTable::getEloquent($custom_table);
+                if ($tableEloquent === null) {
+                    return [];
+                }
+                return $tableEloquent->custom_views
                     ->filter(function ($value) {
                         return array_get($value, 'view_kind_type') == ViewKindType::FILTER;
                     })->pluck('view_view_name', 'id');
@@ -832,7 +835,11 @@ class SelectTable extends CustomItem
             $column_type = $model->column_type;
         }
         if (isset($column_type) && in_array($column_type, [ColumnType::USER, ColumnType::ORGANIZATION])) {
-            return CustomTable::getEloquent($column_type)->getColumnsSelectOptions([
+            $tableEloquent = CustomTable::getEloquent($column_type);
+            if ($tableEloquent === null) {
+                return [];
+            }
+            return $tableEloquent->getColumnsSelectOptions([
                 'index_enabled_only' => $isImport,
                 'include_system' => false,
             ]) ?? [];

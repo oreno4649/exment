@@ -197,6 +197,10 @@ class Permission
             return true;
         }
 
+        if ($endpoint === null) {
+            return false;
+        }
+
         return $this->hasPermissionByEndpoint($endpoint, $isMenu);
     }
 
@@ -469,7 +473,7 @@ class Permission
         }
 
         // if request has id, permission contains CUSTOM_VALUE_ACCESS
-        if (!$isMenu && $this->checkAsAccessCustomValue($endpoint)) {
+        if (!$isMenu && $endpoint !== null && $this->checkAsAccessCustomValue($endpoint)) {
             $permissions = PermissionEnum::AVAILABLE_ACCESS_CUSTOM_VALUE;
         } else {
             $permissions = PermissionEnum::AVAILABLE_VIEW_CUSTOM_VALUE;

@@ -1716,7 +1716,7 @@ abstract class CustomValue extends ModelBase
         for ($i = 0; $i < count($searchColumns) - 1; $i++) {
             $searchColumn = collect($searchColumns)->values()->get($i);
 
-            foreach ($getQueryFunc($searchColumn, $options) as $query) {
+            foreach ($getQueryFunc($searchColumn, $options) ?? [] as $query) {
                 $queries[] = $query;
             }
         }

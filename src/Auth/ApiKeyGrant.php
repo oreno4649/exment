@@ -49,7 +49,9 @@ class ApiKeyGrant extends AbstractGrant
 
         // Inject tokens into response
         $responseType->setAccessToken($accessToken);
-        $responseType->setRefreshToken($refreshToken);
+        if ($refreshToken !== null) {
+            $responseType->setRefreshToken($refreshToken);
+        }
 
         return $responseType;
     }
@@ -90,9 +92,9 @@ class ApiKeyGrant extends AbstractGrant
      */
     public function getUserEntityByUserCredentials($api_key)
     {
-        /** @var ApiKey $api_key */
+        /** @var ApiKey|null $api_key */
         $api_key = ApiKey::where('key', $api_key)->first();
-        // @phpstan-ignore-next-line
+        // @phpstan-ignore-next-line client may be null in practice
         if (is_null($api_key) || is_null($api_key->client)) {
             throw OAuthServerException::invalidCredentials();
         }
@@ -100,7 +102,11 @@ class ApiKeyGrant extends AbstractGrant
         // this "user_id" is user table's id. not login user tbale's id.
         $user_id = $api_key->client->user_id;
 
-        $user = getModelName(SystemTableName::USER)::find($user_id);
+        $modelName = getModelName(SystemTableName::USER);
+        if ($modelName === null) {
+            return null;
+        }
+        $user = $modelName::find($user_id);
         $login_user = $user->login_user ?? null;
         if (is_null($login_user)) {
             return null;

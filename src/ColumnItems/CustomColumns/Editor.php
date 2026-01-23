@@ -103,11 +103,14 @@ class Editor extends CustomItem
      * Replace "src" value
      *
      * @param ?string $v
+     * @param array $options
      * @return string
      */
-    // @phpstan-ignore-next-line
     public static function replaceImgUrl($v, $options = [])
     {
+        if ($v === null) {
+            return '';
+        }
         // replace img html
         preg_match_all('/\<img(.*?)data-exment-file-uuid="(?<file_uuid>.*?)"(.*?)\>/u', $v, $matches);
         if (is_nullorempty($matches)) {
@@ -121,12 +124,12 @@ class Editor extends CustomItem
                 continue;
             }
             $url = ExmentFile::getUrl($file_uuid, $options);
- 
+
             //replace src
             $replaceValue = preg_replace('/src="(.*?)"/u', 'src="' . $url . '"', $replaceValue);
             //$replaceValue = preg_replace('/data-exment-file-uuid="(.*?)"/u', "", $replaceValue);
 
-            $v = str_replace($matches[0][$index], $replaceValue, $v);
+            $v = str_replace($matches[0][$index], $replaceValue ?? '', $v);
         }
 
         return $v;
@@ -280,6 +283,7 @@ class Editor extends CustomItem
      */
     public function setCustomColumnDefaultValueForm(&$form, bool $asCustomForm = false)
     {
+        // @phpstan-ignore-next-line
         $form->tinymce('default', exmtrans("custom_column.options.default"))
             ->help(exmtrans("custom_column.help.default"))
             ->attribute(['data-default_timymce' => 1])

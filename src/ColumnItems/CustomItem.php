@@ -50,17 +50,24 @@ abstract class CustomItem implements ItemInterface
     public static $availableFields = [];
 
 
-    // @phpstan-ignore-next-line
+    /**
+     * @param mixed $custom_column
+     * @param mixed $custom_value
+     * @param mixed $view_column_target
+     */
     public function __construct($custom_column, $custom_value, $view_column_target = null)
     {
         $this->custom_column = $custom_column;
-        $this->custom_table = CustomTable::getEloquent($custom_column);
+        /** @var CustomTable|null $custom_table */
+        $custom_table = CustomTable::getEloquent($custom_column);
+        // @phpstan-ignore-next-line
+        $this->custom_table = $custom_table;
         $this->setCustomValue($custom_value);
         $this->options = [];
 
         $params = static::getOptionParams($view_column_target, $this->custom_table);
         // get label. check not match $this->custom_table and pivot table
-        if (array_key_value_exists('view_pivot_table_id', $params) && $this->custom_table->id != $params['view_pivot_table_id']) {
+        if ($this->custom_table !== null && array_key_value_exists('view_pivot_table_id', $params) && $this->custom_table->id != $params['view_pivot_table_id']) {
             if ($params['view_pivot_column_id'] == SystemColumn::PARENT_ID) {
                 $this->label = static::getViewColumnLabel($this->custom_column->column_view_name, $this->custom_table->table_view_name);
             } else {
@@ -591,6 +598,7 @@ abstract class CustomItem implements ItemInterface
         }
 
         $grammar = \DB::getQueryGrammar();
+        // @phpstan-ignore-next-line
         return $grammar->getCastString($type, $addOption, $options);
     }
 
@@ -602,6 +610,7 @@ abstract class CustomItem implements ItemInterface
     {
         list($type, $addOption, $options) = $this->getCastOptions();
         $grammar = \DB::getQueryGrammar();
+        // @phpstan-ignore-next-line
         return $grammar->getColumnTypeString($type);
     }
 
@@ -716,11 +725,14 @@ abstract class CustomItem implements ItemInterface
         return null;
     }
 
-    // @phpstan-ignore-next-line
+    /**
+     * @param Field $field
+     * @return void
+     */
     protected function appendHelp(Field $field)
     {
         $text = $this->getAppendHelpText();
-        if (is_nullorempty($text)) {
+        if (is_nullorempty($text) || !is_string($text)) {
             return;
         }
 

@@ -777,8 +777,8 @@ class RoleGroupController extends AdminControllerBase
     {
         try {
             collect(explode(',', $id))->filter()->each(function ($id) {
+                /** @var RoleGroup $model */
                 $model = RoleGroup::findOrFail($id);
-                // @phpstan-ignore-next-line
                 $model->delete();
             });
 

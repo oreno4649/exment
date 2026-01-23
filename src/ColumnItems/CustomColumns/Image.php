@@ -13,7 +13,6 @@ class Image extends File
     /**
      * get html. show link to image
      */
-    // @phpstan-ignore-next-line
     protected function _html($v)
     {
         // If public form tmp file, return Only file name.
@@ -22,7 +21,11 @@ class Image extends File
         }
 
         // get image url
-        $url = ExmentFile::getUrl($this->fileValue($v));
+        $fileValue = $this->fileValue($v);
+        if ($fileValue === null) {
+            return null;
+        }
+        $url = ExmentFile::getUrl($fileValue);
         if (!isset($url)) {
             return $url;
         }

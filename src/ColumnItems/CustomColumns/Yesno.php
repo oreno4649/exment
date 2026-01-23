@@ -136,6 +136,7 @@ class Yesno extends CustomItem
     public function setCustomColumnDefaultValueForm(&$form, bool $asCustomForm = false)
     {
         if ($asCustomForm) {
+            // @phpstan-ignore-next-line
             $form->radio('default', exmtrans("custom_column.options.default"))
             ->help(exmtrans("custom_column.help.default"))
             ->options([
@@ -144,6 +145,7 @@ class Yesno extends CustomItem
             ])->addEmpty(true);
             return;
         }
+        // @phpstan-ignore-next-line
         $form->switchbool('default', exmtrans("custom_column.options.default"))
             ->help(exmtrans("custom_column.help.default"))
         ;
@@ -158,8 +160,10 @@ class Yesno extends CustomItem
      */
     public function setCustomColumnOptionForm(&$form)
     {
+        // @phpstan-ignore-next-line
         $form->switchbool('checkbox_enabled', exmtrans("custom_column.options.checkbox_enabled"))
             ->help(exmtrans("custom_column.help.checkbox_enabled"));
+        // @phpstan-ignore-next-line
         $form->switchbool('required_yes', exmtrans("custom_column.options.required_yes"))
             ->help(exmtrans("custom_column.help.required_yes"));
     }

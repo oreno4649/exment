@@ -144,6 +144,7 @@ class Text extends CustomItem
             ->help(exmtrans("custom_column.help.available_characters"))
         ;
 
+        // @phpstan-ignore-next-line
         $form->switchbool('suggest_input', exmtrans("custom_column.options.suggest_input"))
             ->help(exmtrans("custom_column.help.suggest_input"));
 

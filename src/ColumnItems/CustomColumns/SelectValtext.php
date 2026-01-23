@@ -87,10 +87,12 @@ class SelectValtext extends Select
             ->rules([new Validator\SelectValTextSettingRule()]);
 
         // enable multiple
+        // @phpstan-ignore-next-line
         $form->switchbool('multiple_enabled', exmtrans("custom_column.options.multiple_enabled"))
             ->attribute(['data-filtertrigger' =>true])
             ->help(exmtrans("custom_column.help.multiple_enabled"));
 
+        // @phpstan-ignore-next-line
         $form->switchbool('check_radio_enabled', exmtrans("custom_column.options.check_radio_enabled"))
             ->help(exmtrans("custom_column.help.check_radio_enabled"));
     }

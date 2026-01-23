@@ -52,6 +52,11 @@ class ClassLoader
      */
     public function loadClass($class)
     {
+        // Skip plugin loading during PHPStan analysis to prevent class redeclaration errors
+        if (getenv('EXMENT_SKIP_PLUGIN_LOAD') === 'true' || defined('PHPSTAN_RUNNING')) {
+            return;
+        }
+
         // if already has called, exit,
         if (in_array($class, $this->called)) {
             return;

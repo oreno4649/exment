@@ -29,30 +29,37 @@ class File extends CustomItem
 
     /**
      * get file info
+     *
+     * @return \Exceedone\Exment\Model\File|null
      */
-    // @phpstan-ignore-next-line
     public function file()
     {
-        return ExmentFile::getFile($this->fileValue($this->value));
+        $fileValue = $this->fileValue($this->value);
+        return $fileValue !== null ? ExmentFile::getFile($fileValue) : null;
     }
 
     /**
      * get text
+     *
+     * @param mixed $v
+     * @return string|null
      */
-    // @phpstan-ignore-next-line
     protected function _text($v)
     {
         if (!is_null($name = $this->getPublicFileName($v))) {
             return $name;
         }
         // get image url
-        return ExmentFile::getUrl($this->fileValue($v), boolval(array_get($this->options, 'asApi')));
+        $fileValue = $this->fileValue($v);
+        return $fileValue !== null ? ExmentFile::getUrl($fileValue, boolval(array_get($this->options, 'asApi'))) : null;
     }
 
     /**
      * get html. show link to file
+     *
+     * @param mixed $v
+     * @return string|null
      */
-    // @phpstan-ignore-next-line
     protected function _html($v)
     {
         if (!is_null($name = $this->getPublicFileName($v))) {
@@ -60,9 +67,13 @@ class File extends CustomItem
         }
 
         // get image url
-        $url = ExmentFile::getUrl($this->fileValue($v));
-        $file = ExmentFile::getData($this->fileValue($v));
-        if (!isset($url)) {
+        $fileValue = $this->fileValue($v);
+        if ($fileValue === null) {
+            return null;
+        }
+        $url = ExmentFile::getUrl($fileValue);
+        $file = ExmentFile::getData($fileValue);
+        if (!isset($url) || !isset($file)) {
             return $url;
         }
 
@@ -500,6 +511,7 @@ class File extends CustomItem
     public function setCustomColumnOptionForm(&$form)
     {
         // enable multiple
+        // @phpstan-ignore-next-line
         $form->switchbool('multiple_enabled', exmtrans("custom_column.options.multiple_enabled"))
             ->help(exmtrans("custom_column.help.multiple_enabled_file"));
 
@@ -561,6 +573,9 @@ class File extends CustomItem
             return null;
         }
         $content = $disk->get($localFileName);
+        if ($content === null) {
+            return null;
+        }
 
         // Set admin tmp
         $tmpDisk = \Storage::disk(Define::DISKNAME_ADMIN_TMP);

@@ -166,7 +166,7 @@ trait ItemTrait
             return $this->_text($v);
         });
 
-        return is_list($text) ? collect($text)->implode($this->getSeparateWord()) : $text;
+        return is_list($text) ? collect($text)->implode($this->getSeparateWord() ?? exmtrans('common.separate_word')) : $text;
     }
 
     /**
@@ -180,7 +180,7 @@ trait ItemTrait
             return $this->_html($v);
         });
 
-        return is_list($html) ? collect($html)->implode($this->getSeparateWord()) : $html;
+        return is_list($html) ? collect($html)->implode($this->getSeparateWord() ?? exmtrans('common.separate_word')) : $html;
     }
 
     /**
@@ -244,7 +244,7 @@ trait ItemTrait
         $this->options = array_merge(
             // @phpstan-ignore-next-line
             $this->options ?? [],
-            $options
+            $options ?? []
         );
 
         return $this;
@@ -335,7 +335,7 @@ trait ItemTrait
         if (is_nullorempty($this->uniqueName)) {
             $this->uniqueName = make_randomstr(20, true, false);
         }
-        return $this->uniqueName;
+        return $this->uniqueName ?? '';
     }
 
     /**
@@ -374,7 +374,7 @@ trait ItemTrait
      */
     public function sqlUniqueTableName()
     {
-        if (!is_nullorempty($this->uniqueTableName)) {
+        if (!is_nullorempty($this->uniqueTableName) && is_string($this->uniqueTableName)) {
             return $this->uniqueTableName;
         }
         return $this->sqlRealTableName();
@@ -961,13 +961,17 @@ trait ItemTrait
      * @param mixed $input
      * @return void
      */
-    // @phpstan-ignore-next-line
     public function getAdminFilterWhereQuery($query, $input)
     {
         // get vieww filter item
-        $viewFilterItem = ViewFilterBase::make($this->getGridFilterOption(), $this);
-        // @phpstan-ignore-next-line
-        $viewFilterItem->setFilter($query, $input);
+        $filterOption = $this->getGridFilterOption();
+        if ($filterOption === null) {
+            return;
+        }
+        $viewFilterItem = ViewFilterBase::make($filterOption, $this);
+        if ($viewFilterItem !== null) {
+            $viewFilterItem->setFilter($query, $input);
+        }
     }
 
     /**
@@ -980,7 +984,9 @@ trait ItemTrait
     {
         // get vieww filter item
         $viewFilterItem = ViewFilterBase::make(FilterOption::NULL, $this);
-        $viewFilterItem->setFilter($query, null);
+        if ($viewFilterItem !== null) {
+            $viewFilterItem->setFilter($query, null);
+        }
     }
 
     /**
@@ -994,11 +1000,15 @@ trait ItemTrait
     {
         if (array_key_value_exists('start', $input)) {
             $viewFilterItem = ViewFilterBase::make(FilterOption::NUMBER_GTE, $this);
-            $viewFilterItem->setFilter($query, $input['start']);
+            if ($viewFilterItem !== null) {
+                $viewFilterItem->setFilter($query, $input['start']);
+            }
         }
         if (array_key_value_exists('end', $input)) {
             $viewFilterItem = ViewFilterBase::make(FilterOption::NUMBER_LTE, $this);
-            $viewFilterItem->setFilter($query, $input['end']);
+            if ($viewFilterItem !== null) {
+                $viewFilterItem->setFilter($query, $input['end']);
+            }
         }
     }
     /**
@@ -1012,11 +1022,15 @@ trait ItemTrait
     {
         if (array_key_value_exists('start', $input)) {
             $viewFilterItem = ViewFilterBase::make(FilterOption::DAY_ON_OR_AFTER, $this);
-            $viewFilterItem->setFilter($query, $input['start']);
+            if ($viewFilterItem !== null) {
+                $viewFilterItem->setFilter($query, $input['start']);
+            }
         }
         if (array_key_value_exists('end', $input)) {
             $viewFilterItem = ViewFilterBase::make(FilterOption::DAY_ON_OR_BEFORE, $this);
-            $viewFilterItem->setFilter($query, $input['end']);
+            if ($viewFilterItem !== null) {
+                $viewFilterItem->setFilter($query, $input['end']);
+            }
         }
     }
 

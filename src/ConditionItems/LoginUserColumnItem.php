@@ -148,6 +148,9 @@ class LoginUserColumnItem extends ColumnItem
         $custom_column = CustomColumn::getEloquent($workflow_authority->related_id);
         $workflow_action = WorkflowAction::getEloquent($workflow_authority->workflow_action_id);
 
+        if ($custom_value === null) {
+            return false;
+        }
         $userAndOrgs = static::getTargetUserAndOrg($custom_value, $workflow_action, $workflow_authority->related_id);
 
         switch ($custom_column->column_type) {

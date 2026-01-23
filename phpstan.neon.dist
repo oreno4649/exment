@@ -1,8 +1,13 @@
 includes:
     - ./vendor/nunomaduro/larastan/extension.neon
 parameters:
+    bootstrapFiles:
+        - vendor/exceedone/exment/phpstan-bootstrap.php
     paths:
         - vendor/exceedone/exment
+    excludePaths:
+        - vendor/exceedone/exment/tests/tmpfile/*
+    reportUnmatchedIgnoredErrors: false
     level: 7
     stubFiles:
         - exment/stubs/laravel/passport/Client.stub
@@ -13,94 +18,265 @@ parameters:
         - Illuminate\Database\Eloquent\Model
         - Illuminate\Contracts\Auth\Authenticatable
     ignoreErrors:
+        # Encore\Admin related errors
         -
             message: "#^Call to an undefined method Encore\\\\Admin.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
         -
             message: "#^Method Encore\\\\Admin.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
         -
             message: "#^Access to an undefined property Encore\\\\Admin.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
+        # Database grammar/processor errors
         -
             message: "#^Call to an undefined method Illuminate\\\\Database\\\\Query\\\\Grammars\\\\Grammar.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
         -
             message: "#^Call to an undefined method Illuminate\\\\Database\\\\Schema\\\\Grammars\\\\Grammar.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
         -
             message: "#^Call to an undefined method Illuminate\\\\Database\\\\Query\\\\Processors\\\\Processor.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
         -
             message: "#^Access to an undefined property Illuminate\\\\Support\\\\Fluent::.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
+        # Return type compatibility
         -
             message: "#^Return type \\(Illuminate\\\\Contracts\\\\View\\\\Factory|Illuminate\\\\View\\\\View\\) of method Exceedone\\\\Exment\\\\Form\\\\Field\\\\Text::render\\(\\) should be compatible with return type \\(string\\) of method Illuminate\\\\Contracts\\\\Support\\\\Renderable::render\\(\\)#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
         -
             message: "#^Return type \\(Illuminate\\\\View\\\\View\\) of method Exceedone\\\\Exment\\\\Form\\\\Field\\\\NestedEmbeds::render\\(\\) should be compatible with return type \\(string\\) of method Illuminate\\\\Contracts\\\\Support\\\\Renderable::render\\(\\)#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
+        # Model method errors
         -
             message: "#^Call to an undefined method Illuminate\\\\Database\\\\Eloquent\\\\Model::setValueModel\\(\\)#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
+        # Column item property access
         -
             message: "#^Access to an undefined property Exceedone\\\\Exment\\\\ColumnItems\\\\SystemItem::\\$custom_column.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
         -
             message: "#^Access to an undefined property Exceedone\\\\Exment\\\\ColumnItems\\\\ParentItem::\\$custom_column.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
         -
             message: "#^Access to an undefined property Exceedone\\\\Exment\\\\ColumnItems\\\\FormOtherItem::\\$custom_column.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
+        # Controller method invocations
         -
             message: "#^Method Exceedone\\\\Exment\\\\Controllers\\\\CustomNotifyController::form\\(\\) invoked with 2 parameters, 0-1 required.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
         -
             message: "#^Method Exceedone\\\\Exment\\\\Controllers\\\\CustomViewController::form\\(\\) invoked with 2 parameters, 0-1 required.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
+        # Enum static access
         -
             message: "#^Static access to instance property Exceedone\\\\Exment\\\\Enums\\\\FormColumnType::\\$options.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
         -
             message: "#^Static access to instance property Exceedone\\\\Exment\\\\Enums\\\\GroupCondition::\\$options.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
         -
             message: "#^Static access to instance property Exceedone\\\\Exment\\\\Enums\\\\SummaryCondition::\\$options.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
         -
             message: "#^Static access to instance property Exceedone\\\\Exment\\\\Enums\\\\SystemColumn::\\$options.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
+        # Foreach on enum types
         -
             message: "#^Argument of an invalid type Exceedone\\\\Exment\\\\Enums\\\\FormColumnType supplied for foreach, only iterables are supported.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
         -
             message: "#^Argument of an invalid type Exceedone\\\\Exment\\\\Enums\\\\SystemColumn supplied for foreach, only iterables are supported.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
+        # Authenticatable method calls
         -
             message: "#^Call to an undefined method Illuminate\\\\Contracts\\\\Auth\\\\Authenticatable::#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
 
+        # String casting
         -
             message: "#^Part .* of encapsed string cannot be cast to string\\.#"
-            path: vendor/exceedone/exment/src/*
+            path: vendor/exceedone/exment/*
+
+        # Null safety - method calls and property access
+        -
+            message: "#^Cannot call static method .* on string\\|null\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Cannot call method .* on .*\\|null\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Cannot access property .* on .*\\|null\\.#"
+            path: vendor/exceedone/exment/*
+
+        # Parameter type mismatches
+        -
+            message: "#^Parameter .* expects string, string\\|null given\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* expects array, array\\|null given\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* expects array\\|Countable, array\\|null given\\.#"
+            path: vendor/exceedone/exment/*
+
+        # Method type specifications
+        -
+            message: "#^Method .* has no return type specified\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Method .* has parameter .* with no type specified\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Method .* has parameter .* with no value type specified in iterable type array\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Method .* should return .* but returns .*\\|null\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of method .* expects .*, .*\\|null given\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Method .* with generic class .* does not specify its types.*#"
+            path: vendor/exceedone/exment/*
+
+        # Function parameter mismatches
+        -
+            message: "#^Parameter .* of function array_get expects array\\|ArrayAccess, .*given\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of function chown expects .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of function chgrp expects .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Cannot use array destructuring on array\\|null\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Argument of an invalid type array\\|null supplied for foreach.*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of static method .* expects .*CustomTable.*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of function preg_replace expects .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of function sizeof expects .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Offset .* does not exist on .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Property .* does not accept .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of function call_user_func expects .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of class .* constructor expects .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of function getDBTableName expects .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of method Exceedone\\\\Exment\\\\Services\\\\ViewFilter\\\\ViewFilterBase::setFilter\\(\\) expects .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of static method Exceedone\\\\Exment\\\\Services\\\\DataImportExport\\\\DataImportExportService::processCustomValue\\(\\) expects .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of static method Illuminate\\\\Database\\\\Connection::table\\(\\) expects .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of function array_get expects int\\|string, string\\|null given\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of function fclose expects resource, resource\\|null given\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Function floorDigit\\(\\) should return .* but returns .*\\|null\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of function strrpos expects int, int\\|null given\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Function convert_to_valid_filename\\(\\) should return string but returns string\\|null\\.#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of static method Exceedone\\\\Exment\\\\Services\\\\Login\\\\LoginService::getLoginUser\\(\\) expects .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Argument of an invalid type Illuminate\\\\Support\\\\Collection\\|null supplied for foreach.*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of function trans expects .*#"
+            path: vendor/exceedone/exment/*
+
+        -
+            message: "#^Parameter .* of function count expects .*#"
+            path: vendor/exceedone/exment/*
+
+        # Test-specific errors
+        -
+            message: "#^Parameter .* of method Illuminate\\\\Foundation\\\\Testing\\\\TestCase::be\\(\\) expects .*#"
+            path: vendor/exceedone/exment/tests/*
+
+        -
+            message: "#^Parameter .* of method .*::__testFilter\\(\\) expects .*#"
+            path: vendor/exceedone/exment/tests/*

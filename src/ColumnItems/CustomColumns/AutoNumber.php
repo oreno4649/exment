@@ -76,7 +76,8 @@ class AutoNumber extends CustomItem
         // get format
         $format = array_get($options, "auto_number_format");
         // get value
-        $value = getModelName($this->custom_column->custom_table)::withoutGlobalScopes()->find($this->id);
+        $modelName = getModelName($this->custom_column->custom_table);
+        $value = $modelName !== null ? $modelName::withoutGlobalScopes()->find($this->id) : null;
         $auto_number = replaceTextFromFormat($format, $value);
         return $auto_number;
     }

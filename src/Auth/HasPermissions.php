@@ -436,6 +436,9 @@ trait HasPermissions
         $permission_details = [];
         $permissions = [];
         $plugins = Plugin::allRecords();
+        if (!($plugins instanceof \Illuminate\Support\Collection)) {
+            $plugins = collect($plugins ? [$plugins] : []);
+        }
 
         foreach ($roles as $role) {
             /** @var RoleGroupPermission $role_group_permission */

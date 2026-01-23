@@ -366,13 +366,16 @@ class SystemItem implements ItemInterface
                 $field = new MultipleSelect($this->name(), [$this->label()]);
                 $field->options(function ($value) {
                     // get DB option value
-                    return CustomTable::getEloquent(SystemTableName::USER)
-                        ->getSelectOptions(
-                            [
-                                'selected_value' => $value,
-                                'display_table' => SystemTableName::USER,
-                            ]
-                        );
+                    $userTable = CustomTable::getEloquent(SystemTableName::USER);
+                    if ($userTable === null) {
+                        return [];
+                    }
+                    return $userTable->getSelectOptions(
+                        [
+                            'selected_value' => $value,
+                            'display_table' => SystemTableName::USER,
+                        ]
+                    );
                 });
                 $field->default($this->value);
                 break;
@@ -511,11 +514,14 @@ class SystemItem implements ItemInterface
             $filter->date();
         } elseif (array_get($option, 'type') == 'user') {
             $target_table = CustomTable::getEloquent(SystemTableName::USER);
+            if ($target_table === null) {
+                return;
+            }
             $selectOption = [
                 'display_table' => $target_table
             ];
             $ajax = $target_table->getOptionAjaxUrl($selectOption);
-    
+
             $filter->multipleSelect(function ($value) use ($target_table, $selectOption) {
                 $selectOption['selected_value'] = $value;
                 // get DB option value
