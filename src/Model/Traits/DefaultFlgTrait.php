@@ -57,7 +57,7 @@ trait DefaultFlgTrait
         // and if this model default flg is 1, set other id's default_flg is 1
         elseif (boolval($this->default_flg)) {
             static::whereIn('id', $idlist)->update([
-                'default_flg' => false
+                'default_flg' => false,
             ]);
         }
     }

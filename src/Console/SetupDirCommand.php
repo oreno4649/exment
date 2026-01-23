@@ -167,26 +167,26 @@ class SetupDirCommand extends AdminInstallCommand
                 chown($dir, $user);
                 chgrp($dir, $group);
                 if ($isMod) {
-                    chmod($dir, 02775);
+                    chmod($dir, 0o2775);
                 }
             }
 
             // Change mod self
-            chmod($path, 02775);
+            chmod($path, 0o2775);
 
             $files = \File::allFiles($path, true);
             foreach ($files as $file) {
                 chown($file, $user);
                 chgrp($file, $group);
                 if ($isMod) {
-                    chmod($file, 0664);
+                    chmod($file, 0o664);
                 }
             }
         } elseif (\File::exists($path)) {
             chown($path, $user);
             chgrp($path, $group);
             if ($isMod) {
-                chmod($path, 0664);
+                chmod($path, 0o664);
             }
         }
     }
@@ -204,18 +204,18 @@ class SetupDirCommand extends AdminInstallCommand
         if (\File::isDirectory($path)) {
             $dirs = \Exment::allDirectories($path);
             foreach ($dirs as $dir) {
-                chmod($dir, 02755);
+                chmod($dir, 0o2755);
             }
 
             // Change mod self
-            chmod($path, 02755);
+            chmod($path, 0o2755);
 
             $files = \File::allFiles($path);
             foreach ($files as $file) {
-                chmod($file, 0644);
+                chmod($file, 0o644);
             }
         } elseif (\File::exists($path)) {
-            chmod($path, 0644);
+            chmod($path, 0o644);
         }
     }
 }

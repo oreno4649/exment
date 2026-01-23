@@ -14,13 +14,13 @@ class ExmentAdapterLocal extends LocalFilesystemAdapter implements ExmentAdapter
     // @phpstan-ignore-next-line
     protected static $permissions = [
         'file' => [
-            'public' => 0644,
-            'private' => 0600,
+            'public' => 0o644,
+            'private' => 0o600,
         ],
         'dir' => [
             // Change public permission 0755 to 0775
-            'public' => 0775,
-            'private' => 0700,
+            'public' => 0o775,
+            'private' => 0o700,
         ],
     ];
 

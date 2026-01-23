@@ -83,8 +83,8 @@ class RelationPivotTableProvider extends ProviderBase
         $rows[] = $columnDefines;
         // column_view_names
         $column_view_names =  [
-            $this->relation->parent_custom_table->table_view_name . '_'. exmtrans("common.id"),
-            $this->relation->child_custom_table->table_view_name . '_'. exmtrans("common.id"),
+            $this->relation->parent_custom_table->table_view_name . '_' . exmtrans("common.id"),
+            $this->relation->child_custom_table->table_view_name . '_' . exmtrans("common.id"),
         ];
         if ($this->template) {
             $column_view_names[] = trans('admin.delete');
@@ -115,8 +115,8 @@ class RelationPivotTableProvider extends ProviderBase
             foreach ($datalist as $d) {
                 foreach ($d as $record) {
                     if ($records->contains(function ($value) use ($record) {
-                        return array_get($value, 'pivot.parent_id') == array_get($record, 'pivot.parent_id') &&
-                               array_get($value, 'pivot.child_id') == array_get($record, 'pivot.child_id');
+                        return array_get($value, 'pivot.parent_id') == array_get($record, 'pivot.parent_id')
+                               && array_get($value, 'pivot.child_id') == array_get($record, 'pivot.child_id');
                     })) {
                         continue;
                     };
@@ -160,7 +160,7 @@ class RelationPivotTableProvider extends ProviderBase
         $body_items = [];
         foreach ($columns as $column) {
             // get key.
-            $key = (isset($array_header_key) ? $array_header_key : "").$column;
+            $key = ($array_header_key ?? "") . $column;
             $value = array_get($record, $key);
             if (is_array($value)) {
                 $value = implode(",", $value);

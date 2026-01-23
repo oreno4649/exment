@@ -157,7 +157,7 @@ class SelectTable extends CustomItem
     {
         if ($text === false) {
             return $model;
-        // get text column
+            // get text column
         } elseif ($html && !$this->isPublicForm()) {
             return $model->getUrl(true);
         } else {
@@ -182,7 +182,7 @@ class SelectTable extends CustomItem
      */
     protected function getGridFilterOption(): ?string
     {
-        return (string)FilterOption::SELECT_EXISTS;
+        return (string) FilterOption::SELECT_EXISTS;
     }
 
     // @phpstan-ignore-next-line
@@ -731,7 +731,7 @@ class SelectTable extends CustomItem
                         'options_select_target_view' => [
                             'url' => admin_url('webapi/table/filterviews'),
                             'text' => 'view_view_name',
-                        ]
+                        ],
                     ]),
                 ]);
             } else {
@@ -790,7 +790,7 @@ class SelectTable extends CustomItem
             });
 
         $custom_table = $this->custom_table;
-        $manual_url = getManualUrl('data_import_export?id='.exmtrans('custom_column.help.select_import_column_id_key'));
+        $manual_url = getManualUrl('data_import_export?id=' . exmtrans('custom_column.help.select_import_column_id_key'));
         $form->select('select_import_column_id', exmtrans("custom_column.options.select_import_column_id"))
             ->help(exmtrans("custom_column.help.select_import_column_id", $manual_url))
             ->options(function ($select_table, $field) use ($id, $custom_table, $user_org) {
@@ -827,7 +827,7 @@ class SelectTable extends CustomItem
         // whether column_type is user or org
         if (!is_null(old('column_type'))) {
             $model = CustomColumn::getEloquent(old('column_type'), $custom_table);
-        // @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
         } elseif (isset($id) || old('column_type')) {
             $model = CustomColumn::getEloquent($id);
         }

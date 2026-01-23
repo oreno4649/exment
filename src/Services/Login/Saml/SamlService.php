@@ -37,7 +37,7 @@ class SamlService implements LoginServiceInterface
     // @phpstan-ignore-next-line
     public static function retrieveByCredential(array $credentials)
     {
-        list($result, $message, $adminMessage, $custom_login_user) = static::loginCallback(request(), array_get($credentials, 'login_setting') ?? LoginSetting::getSamlSetting(array_get($credentials, 'provider_name')));
+        [$result, $message, $adminMessage, $custom_login_user] = static::loginCallback(request(), array_get($credentials, 'login_setting') ?? LoginSetting::getSamlSetting(array_get($credentials, 'provider_name')));
 
         if ($result === true) {
             return LoginService::executeLogin(request(), $custom_login_user);
@@ -95,7 +95,7 @@ class SamlService implements LoginServiceInterface
             $form->text('saml_name', exmtrans('login.saml_name'))
             ->help(sprintf(exmtrans('common.help.max_length'), 30) . exmtrans('common.help_code'))
             ->required()
-            ->rules(["max:30", "regex:/".Define::RULES_REGEX_SYSTEM_NAME."/", new \Exceedone\Exment\Validator\SamlNameUniqueRule()])
+            ->rules(["max:30", "regex:/" . Define::RULES_REGEX_SYSTEM_NAME . "/", new \Exceedone\Exment\Validator\SamlNameUniqueRule()])
             ->attribute(['data-filter' => json_encode(['key' => 'login_type', 'parent' => 1, 'value' => [LoginType::SAML]])]);
         } else {
             $form->display('saml_name_text', exmtrans('login.saml_name'))->default(function () use ($login_setting) {
@@ -122,8 +122,8 @@ class SamlService implements LoginServiceInterface
         ->attribute(['data-filter' => json_encode(['key' => 'login_type', 'parent' => 1, 'value' => [LoginType::SAML]])]);
 
         $form->textarea('saml_idp_x509', exmtrans('login.saml_idp_x509'))
-        ->help(exmtrans('login.help.saml_idp_x509') .
-            (isset($login_setting) ? exmtrans('login.help.saml_key_path', static::getCerKeysPath('saml_idp_x509', $login_setting)) : null))
+        ->help(exmtrans('login.help.saml_idp_x509')
+            . (isset($login_setting) ? exmtrans('login.help.saml_key_path', static::getCerKeysPath('saml_idp_x509', $login_setting)) : null))
         ->rows(4)
         ->customFormat(function ($value) {
             return trydecrypt($value);
@@ -145,8 +145,8 @@ class SamlService implements LoginServiceInterface
         ->attribute(['data-filter' => json_encode(['key' => 'login_type', 'parent' => 1, 'value' => [LoginType::SAML]])]);
 
         $form->textarea('saml_sp_x509', exmtrans('login.saml_sp_x509'))
-        ->help(exmtrans('login.help.saml_sp_x509') .
-            (isset($login_setting) ? exmtrans('login.help.saml_key_path', static::getCerKeysPath('saml_sp_x509', $login_setting)) : null))
+        ->help(exmtrans('login.help.saml_sp_x509')
+            . (isset($login_setting) ? exmtrans('login.help.saml_key_path', static::getCerKeysPath('saml_sp_x509', $login_setting)) : null))
         ->rows(4)
         ->customFormat(function ($value) {
             return trydecrypt($value);
@@ -154,8 +154,8 @@ class SamlService implements LoginServiceInterface
         ->attribute(['data-filter' => json_encode(['key' => 'login_type', 'parent' => 1, 'value' => [LoginType::SAML]])]);
 
         $form->textarea('saml_sp_privatekey', exmtrans('login.saml_sp_privatekey'))
-        ->help(exmtrans('login.help.saml_privatekey') .
-            (isset($login_setting) ? exmtrans('login.help.saml_key_path', static::getCerKeysPath('saml_sp_privatekey', $login_setting)) : null))
+        ->help(exmtrans('login.help.saml_privatekey')
+            . (isset($login_setting) ? exmtrans('login.help.saml_key_path', static::getCerKeysPath('saml_sp_privatekey', $login_setting)) : null))
         ->rows(4)
         ->customFormat(function ($value) {
             return trydecrypt($value);
@@ -240,8 +240,8 @@ class SamlService implements LoginServiceInterface
             $validator = LoginService::validateCustomLoginSync($custom_login_user);
             if ($validator->fails()) {
                 return LoginService::getLoginResult(
-                // @phpstan-ignore-next-line
-                SsoLoginErrorType::SYNC_VALIDATION_ERROR,
+                    // @phpstan-ignore-next-line
+                    SsoLoginErrorType::SYNC_VALIDATION_ERROR,
                     exmtrans('login.sso_provider_error_validate', ['errors' => implode(' ', $validator->getMessageStrings())]),
                     // @phpstan-ignore-next-line
                     $validator->errors(),

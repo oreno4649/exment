@@ -38,7 +38,7 @@ class Url extends CustomItem
      */
     protected function getGridFilterOption(): ?string
     {
-        return (string)FilterOption::LIKE;
+        return (string) FilterOption::LIKE;
     }
 
     /**

@@ -37,7 +37,7 @@ class Google
         // if not available, send email
         if (!boolval($loginUser->auth2fa_available)) {
             return view('exment::auth.2factor.2factor-google-email', $this->getLoginPageData([
-                'message_available' => exmtrans('2factor.message.google.message_available')
+                'message_available' => exmtrans('2factor.message.google.message_available'),
             ]));
         }
 
@@ -166,7 +166,7 @@ class Google
             $this->incrementLoginAttempts($request);
 
             return back()->withInput()->withErrors([
-                'verify_code' => exmtrans('2factor.message.verify_failed')
+                'verify_code' => exmtrans('2factor.message.verify_failed'),
             ]);
         }
 
@@ -188,9 +188,7 @@ class Google
     }
 
     // @phpstan-ignore-next-line
-    public function insertVerify()
-    {
-    }
+    public function insertVerify() {}
 
     // @phpstan-ignore-next-line
     protected function getG2fa()

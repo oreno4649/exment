@@ -76,7 +76,7 @@ class Where extends BaseWhere
      */
     public function getCondition($inputs)
     {
-        $isnull = Arr::get($inputs, 'isnull-'. $this->column);
+        $isnull = Arr::get($inputs, 'isnull-' . $this->column);
 
         if (isset($isnull)) {
             return $this->whereNullCondition();

@@ -4,6 +4,4 @@ namespace Exceedone\Exment\Services\FormSetting;
 
 /**
  */
-class FormService
-{
-}
+class FormService {}

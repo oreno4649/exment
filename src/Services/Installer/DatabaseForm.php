@@ -175,7 +175,7 @@ class DatabaseForm
             // @phpstan-ignore-next-line
             'max_lt' => ($message_lt ? $database_version['max_lt'] : null),
             'database' => Define::DATABASE_TYPE[$this->database_default],
-            'current' => $version
+            'current' => $version,
         ]);
 
         return $errorMessage;
@@ -224,7 +224,7 @@ class DatabaseForm
         $errorMessage = exmtrans('install.error.not_require_php_version', [
             'min' => Define::PHP_VERSION[0],
             'max' => Define::PHP_VERSION[1],
-            'current' => $version
+            'current' => $version,
         ]);
         if (version_compare($version, Define::PHP_VERSION[0]) < 0) {
             return $errorMessage;

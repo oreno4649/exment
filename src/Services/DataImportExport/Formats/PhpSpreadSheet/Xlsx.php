@@ -43,7 +43,7 @@ class Xlsx extends PhpSpreadSheet
     protected function _getData($request, $callback)
     {
         // get file
-        list($path, $extension, $originalName, $file) = $this->getFileInfo($request);
+        [$path, $extension, $originalName, $file] = $this->getFileInfo($request);
 
         $reader = $this->createReader();
         $spreadsheet = $reader->load($path);

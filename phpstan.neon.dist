@@ -8,7 +8,7 @@ parameters:
     excludePaths:
         - vendor/exceedone/exment/tests/tmpfile/*
     reportUnmatchedIgnoredErrors: false
-    level: 7
+    level: 8
     stubFiles:
         - exment/stubs/laravel/passport/Client.stub
     universalObjectCratesClasses:

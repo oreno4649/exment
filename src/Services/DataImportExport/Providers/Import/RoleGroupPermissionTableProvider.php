@@ -23,18 +23,18 @@ class RoleGroupPermissionTableProvider extends RoleGroupPermissionProvider
     {
         return 'role_group_permission_table';
     }
-    
+
 
     /**
      * add data row validate rules for each role type
-     * 
+     *
      * @param $rules
      */
     // @phpstan-ignore-next-line
-    protected function addValidateTypeRules(&$rules) : void
+    protected function addValidateTypeRules(&$rules): void
     {
-        $ids = CustomTable::whereIn('table_name', SystemTableName::SYSTEM_TABLE_NAME_MASTER())->pluck('id')->toArray();        
+        $ids = CustomTable::whereIn('table_name', SystemTableName::SYSTEM_TABLE_NAME_MASTER())->pluck('id')->toArray();
         $model = new CustomTable();
-        $rules['role_group_target_id'] = 'required|exists:' . $model->getTable() . ',id|not_in:'. implode(',', $ids);
+        $rules['role_group_target_id'] = 'required|exists:' . $model->getTable() . ',id|not_in:' . implode(',', $ids);
     }
 }

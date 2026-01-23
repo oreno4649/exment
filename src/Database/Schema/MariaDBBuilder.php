@@ -2,6 +2,4 @@
 
 namespace Exceedone\Exment\Database\Schema;
 
-class MariaDBBuilder extends MySqlBuilder
-{
-}
+class MariaDBBuilder extends MySqlBuilder {}

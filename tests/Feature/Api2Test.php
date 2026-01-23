@@ -83,7 +83,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'version'))
             ->assertStatus(200)
             ->assertJson([
-                'version' => \Exment::getExmentCurrentVersion()
+                'version' => \Exment::getExmentCurrentVersion(),
             ]);
     }
 
@@ -99,7 +99,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'version'))
             ->assertStatus(200)
             ->assertJson([
-                'version' => \Exment::getExmentCurrentVersion()
+                'version' => \Exment::getExmentCurrentVersion(),
             ]);
     }
 
@@ -129,7 +129,7 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'table').'?count=3')
+        ])->get(admin_urls('api', 'table') . '?count=3')
             ->assertStatus(200)
             ->assertJsonCount(3, 'data');
     }
@@ -143,7 +143,7 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'table').'?id=7')
+        ])->get(admin_urls('api', 'table') . '?id=7')
             ->assertStatus(200)
             ->assertJsonCount(1, 'data')
             ->assertJsonFragment([
@@ -160,7 +160,7 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'table').'?id=3,5,8')
+        ])->get(admin_urls('api', 'table') . '?id=3,5,8')
             ->assertStatus(200)
             ->assertJsonCount(3, 'data');
     }
@@ -174,26 +174,26 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'table').'?id=5&expands=columns')
+        ])->get(admin_urls('api', 'table') . '?id=5&expands=columns')
             ->assertStatus(200)
             ->assertJsonFragment([
                 'column_name' => 'parent_organization',
                 'column_view_name' => '親組織',
                 'column_type' => 'organization',
-                "system_flg"=> "1",
-                "order"=> "0",
+                "system_flg" => "1",
+                "order" => "0",
                 'options' => [
-                    "index_enabled"=> "1",
-                    "freeword_search"=> "1",
-                ]
+                    "index_enabled" => "1",
+                    "freeword_search" => "1",
+                ],
             ])
             ->assertJsonStructure([
                 'data' => [
                     '*' => [
                         'custom_columns',
-                        ],
                     ],
-                ]);
+                ],
+            ]);
     }
 
     /**
@@ -235,7 +235,7 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'table').'?id=999999')
+        ])->get(admin_urls('api', 'table') . '?id=999999')
             ->assertStatus(200)
             ->assertJsonCount(0, 'data');
     }
@@ -252,7 +252,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'table'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -307,7 +307,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'table', 'no_permission'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -323,7 +323,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'table', 'fufhiuviveju'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -339,7 +339,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'table', 'information'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -359,15 +359,15 @@ class Api2Test extends ApiTestBase
                 'column_name' => 'view_flg',
                 'column_view_name' => '表示フラグ',
                 'column_type' => 'yesno',
-                'system_flg'=> '0',
-                'order'=> '0',
+                'system_flg' => '0',
+                'order' => '0',
                 'options' => [
-                    'index_enabled'=> '1',
-                    'freeword_search'=> '1',
-                    'default'=> '1',
-                    'required'=> '1',
-                    'help'=> '一覧表示したい場合、YESに設定してください。',
-                ]
+                    'index_enabled' => '1',
+                    'freeword_search' => '1',
+                    'default' => '1',
+                    'required' => '1',
+                    'help' => '一覧表示したい場合、YESに設定してください。',
+                ],
             ]);
     }
 
@@ -413,12 +413,12 @@ class Api2Test extends ApiTestBase
                 'column_name' => 'user',
                 'column_view_name' => '送信対象ユーザー',
                 'column_type' => 'user',
-                'system_flg'=> '1',
-                'order'=> '0',
+                'system_flg' => '1',
+                'order' => '0',
                 'options' => [
-                    'index_enabled'=> '1',
+                    'index_enabled' => '1',
                     'freeword_search' => '1',
-                ]
+                ],
             ]);
     }
 
@@ -434,7 +434,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'column', 999999999))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -450,7 +450,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'column', 5))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -498,10 +498,10 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-            ])->get(admin_urls('api', 'table', 'information', 'column', 'foobar'))
+        ])->get(admin_urls('api', 'table', 'information', 'column', 'foobar'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -517,7 +517,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'table', 'information', 'column', 'title'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -563,7 +563,7 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_access_all').'?page=3')
+        ])->get(admin_urls('api', 'data', 'custom_value_access_all') . '?page=3')
             ->assertStatus(200)
             ->assertJsonCount(20, 'data');
     }
@@ -577,7 +577,7 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_access_all').'?count=3')
+        ])->get(admin_urls('api', 'data', 'custom_value_access_all') . '?count=3')
             ->assertStatus(200)
             ->assertJsonCount(3, 'data');
     }
@@ -591,7 +591,7 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_access_all').'?orderby=user%20desc,id%20asc')
+        ])->get(admin_urls('api', 'data', 'custom_value_access_all') . '?orderby=user%20desc,id%20asc')
             ->assertStatus(200);
 
         // @phpstan-ignore-next-line
@@ -611,7 +611,7 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_edit').'?id=1,2,4')
+        ])->get(admin_urls('api', 'data', 'custom_value_edit') . '?id=1,2,4')
             ->assertStatus(200)
             ->assertJsonCount(3, 'data');
     }
@@ -628,7 +628,7 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', TestDefine::TESTDATA_TABLE_NAME_PARENT_TABLE).'?children=1&count=5')
+        ])->get(admin_urls('api', 'data', TestDefine::TESTDATA_TABLE_NAME_PARENT_TABLE) . '?children=1&count=5')
             ->assertStatus(200)
             ->assertJsonCount(5, 'data');
 
@@ -654,8 +654,8 @@ class Api2Test extends ApiTestBase
         $token = $this->getAdminAccessToken([ApiScope::VALUE_READ]);
 
         $response = $this->withHeaders([
-           'Authorization' => "Bearer $token",
-       ])->get(admin_urls('api', 'data', TestDefine::TESTDATA_TABLE_NAME_PARENT_TABLE_MANY_TO_MANY).'?children=1&count=5')
+            'Authorization' => "Bearer $token",
+        ])->get(admin_urls('api', 'data', TestDefine::TESTDATA_TABLE_NAME_PARENT_TABLE_MANY_TO_MANY) . '?children=1&count=5')
            ->assertStatus(200)
            ->assertJsonCount(5, 'data');
 
@@ -682,7 +682,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'data', 'custom_value_edit'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -695,10 +695,10 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_access_all').'?orderby=id%20besc')
+        ])->get(admin_urls('api', 'data', 'custom_value_access_all') . '?orderby=id%20besc')
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::INVALID_PARAMS
+                'code' => ErrorCode::INVALID_PARAMS,
             ]);
     }
 
@@ -711,10 +711,10 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_access_all').'?orderby=text')
+        ])->get(admin_urls('api', 'data', 'custom_value_access_all') . '?orderby=text')
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::NOT_INDEX_ENABLED
+                'code' => ErrorCode::NOT_INDEX_ENABLED,
             ]);
     }
 
@@ -729,7 +729,7 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_edit').'?count=1000')
+        ])->get(admin_urls('api', 'data', 'custom_value_edit') . '?count=1000')
             ->assertStatus(200);
         // @phpstan-ignore-next-line
         $json = json_decode_ex($response->baseResponse->getContent(), true);
@@ -768,7 +768,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'data', 'information', 1))
             ->assertStatus(200)
             ->assertJsonFragment([
-                'id' => 1
+                'id' => 1,
             ]);
     }
 
@@ -787,7 +787,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'data', TestDefine::TESTDATA_TABLE_NAME_PARENT_TABLE, '1?children=1'))
             ->assertStatus(200)
             ->assertJsonFragment([
-                'id' => 1
+                'id' => 1,
             ]);
 
         // check children
@@ -812,7 +812,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'data', TestDefine::TESTDATA_TABLE_NAME_PARENT_TABLE_MANY_TO_MANY, '1?children=1'))
             ->assertStatus(200)
             ->assertJsonFragment([
-                'id' => 1
+                'id' => 1,
             ]);
 
         // check children
@@ -834,7 +834,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'data', 'information', 1))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -863,7 +863,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'data', 'information', 99999))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -896,6 +896,7 @@ class Api2Test extends ApiTestBase
         $user_key = collect($column_definitions)->filter(function ($val) {
             return array_get($val, 'column_name') == 'user';
         })->keys()->first();
+        // @phpstan-ignore-next-line
         $this->assertMatch(array_get($data[0], $user_key), '1');
     }
 
@@ -910,7 +911,7 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'viewdata', TestDefine::TESTDATA_TABLE_NAME_VIEW_ALL, $custom_view->suuid).'?page=3')
+        ])->get(admin_urls('api', 'viewdata', TestDefine::TESTDATA_TABLE_NAME_VIEW_ALL, $custom_view->suuid) . '?page=3')
             ->assertStatus(200)
             ->assertJsonCount(20, 'data');
     }
@@ -926,7 +927,7 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'viewdata', TestDefine::TESTDATA_TABLE_NAME_VIEW_ALL, $custom_view->suuid).'?count=3')
+        ])->get(admin_urls('api', 'viewdata', TestDefine::TESTDATA_TABLE_NAME_VIEW_ALL, $custom_view->suuid) . '?count=3')
             ->assertStatus(200)
             ->assertJsonCount(3, 'data');
     }
@@ -942,7 +943,7 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'viewdata', TestDefine::TESTDATA_TABLE_NAME_VIEW_ALL, $custom_view->suuid).'?valuetype=text')
+        ])->get(admin_urls('api', 'viewdata', TestDefine::TESTDATA_TABLE_NAME_VIEW_ALL, $custom_view->suuid) . '?valuetype=text')
             ->assertStatus(200);
 
         // @phpstan-ignore-next-line
@@ -954,6 +955,7 @@ class Api2Test extends ApiTestBase
         $user_key = collect($column_definitions)->filter(function ($val) {
             return array_get($val, 'column_name') == 'user';
         })->keys()->first();
+        // @phpstan-ignore-next-line
         $this->assertMatch(array_get($data[0], $user_key), 'admin');
     }
 
@@ -985,6 +987,7 @@ class Api2Test extends ApiTestBase
             return array_get($val, 'column_name') == 'id';
         })->keys()->first();
         foreach ($data as $index => $row) {
+            // @phpstan-ignore-next-line
             $this->assertMatch(array_get($row, $id_key), array_get($check_data[$index], 'id'));
         }
     }
@@ -1012,6 +1015,7 @@ class Api2Test extends ApiTestBase
         $id_key = collect($column_definitions)->filter(function ($val) {
             return array_get($val, 'column_name') == 'id';
         })->keys()->first();
+        // @phpstan-ignore-next-line
         $this->assertMatch(array_get($data, $id_key), '3');
     }
 
@@ -1029,7 +1033,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'viewdata', TestDefine::TESTDATA_TABLE_NAME_VIEW_ALL, $custom_view->suuid))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -1060,7 +1064,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'viewdata', TestDefine::TESTDATA_TABLE_NAME_VIEW_ALL, $custom_view->suuid, 99999))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -1082,17 +1086,17 @@ class Api2Test extends ApiTestBase
         ])->post(admin_urls('api', 'data', 'custom_value_edit'), [
             'value' => [
                 'text' => $text,
-                'user' => 2
-            ]
+                'user' => 2,
+            ],
         ])
         ->assertStatus(201);
 
         $this->assertJsonTrue($response, [
             'value' => [
                 'text' => $text,
-                'user' => 2
+                'user' => 2,
             ],
-            'created_user_id' => "1" //ADMIN
+            'created_user_id' => "1", //ADMIN
         ]);
     }
 
@@ -1112,8 +1116,8 @@ class Api2Test extends ApiTestBase
             'value' => [
                 'text' => $text,
                 'index_text' => $text,
-                'user' => 2
-            ]
+                'user' => 2,
+            ],
         ])
         ->assertStatus(201);
         $this->assertJsonTrue($response, [
@@ -1122,9 +1126,9 @@ class Api2Test extends ApiTestBase
             'value' => [
                 'text' => $text,
                 'index_text' => $text,
-                'user' => 2
+                'user' => 2,
             ],
-            'created_user_id' => "1" //ADMIN
+            'created_user_id' => "1", //ADMIN
         ]);
     }
 
@@ -1143,12 +1147,12 @@ class Api2Test extends ApiTestBase
             'parent_type' => 'parent_table',
             'value' => [
                 'text' => $text,
-                'user' => 2
-            ]
+                'user' => 2,
+            ],
         ])
         ->assertStatus(400)
         ->assertJsonFragment([
-            'code' => ErrorCode::VALIDATION_ERROR
+            'code' => ErrorCode::VALIDATION_ERROR,
         ]);
     }
 
@@ -1184,7 +1188,7 @@ class Api2Test extends ApiTestBase
             $values[] = [
                 'parent_id' => 4,
                 'parent_type' => 'parent_table',
-                'text' => 'test' . date('YmdHis') . $i
+                'text' => 'test' . date('YmdHis') . $i,
             ];
         }
         $this->withHeaders([
@@ -1207,7 +1211,7 @@ class Api2Test extends ApiTestBase
             $values[] = [
                 'parent_id' => 4,
                 'parent_type' => $i == 2 ? 'user' : 'parent_table',
-                'text' => 'test' . date('YmdHis') . $i
+                'text' => 'test' . date('YmdHis') . $i,
             ];
         }
         $this->withHeaders([
@@ -1215,7 +1219,7 @@ class Api2Test extends ApiTestBase
         ])->post(admin_urls('api', 'data', 'child_table'), ['value' => $values])
         ->assertStatus(400)
         ->assertJsonFragment([
-            'code' => ErrorCode::VALIDATION_ERROR
+            'code' => ErrorCode::VALIDATION_ERROR,
         ]);
     }
 
@@ -1236,8 +1240,8 @@ class Api2Test extends ApiTestBase
                 'parent_id' => $i,
                 'parent_type' => 'parent_table',
                 'value' => [
-                    'text' => 'test' . date('YmdHis') . $i
-                ]
+                    'text' => 'test' . date('YmdHis') . $i,
+                ],
             ];
         }
         $this->withHeaders([
@@ -1264,20 +1268,20 @@ class Api2Test extends ApiTestBase
         ])->post(admin_urls('api', 'data', 'custom_value_edit'), [
             'value' => [
                 'text' => $text,
-                'user' => 'user3'
+                'user' => 'user3',
             ],
             'findKeys' => [
-                'user' => 'user_name'
-            ]
+                'user' => 'user_name',
+            ],
         ])
         ->assertStatus(201);
 
         $this->assertJsonTrue($response, [
             'value' => [
                 'text' => $text,
-                'user' => 4
+                'user' => 4,
             ],
-            'created_user_id' => "1" //ADMIN
+            'created_user_id' => "1", //ADMIN
         ]);
     }
 
@@ -1293,12 +1297,12 @@ class Api2Test extends ApiTestBase
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'data', 'custom_value_edit'), [
             'novalue' => [
-                'text' => $text
-            ]
+                'text' => $text,
+            ],
         ])
         ->assertStatus(400)
         ->assertJsonFragment([
-            'code' => ErrorCode::VALIDATION_ERROR
+            'code' => ErrorCode::VALIDATION_ERROR,
         ]);
     }
 
@@ -1330,12 +1334,12 @@ class Api2Test extends ApiTestBase
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'data', 'custom_value_edit'), [
             'value' => [
-                'text' => $text
-            ]
+                'text' => $text,
+            ],
         ])
         ->assertStatus(403)
         ->assertJsonFragment([
-            'code' => ErrorCode::WRONG_SCOPE
+            'code' => ErrorCode::WRONG_SCOPE,
         ]);
     }
 
@@ -1352,11 +1356,11 @@ class Api2Test extends ApiTestBase
         ])->post(admin_urls('api', 'data', 'custom_value_edit'), [
             'value' => [
                 'text' => $text,
-                'user' => 'user3'
+                'user' => 'user3',
             ],
             'findKeys' => [
-                'user' => 'user_column'
-            ]
+                'user' => 'user_column',
+            ],
         ])
         ->assertStatus(400);
     }
@@ -1374,11 +1378,11 @@ class Api2Test extends ApiTestBase
         ])->post(admin_urls('api', 'data', 'custom_value_edit'), [
             'value' => [
                 'text' => $text,
-                'user' => 'bjlfjadflvjlav'
+                'user' => 'bjlfjadflvjlav',
             ],
             'findKeys' => [
-                'user' => 'user_name'
-            ]
+                'user' => 'user_name',
+            ],
         ])
         ->assertStatus(400);
     }
@@ -1395,12 +1399,12 @@ class Api2Test extends ApiTestBase
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'data', 'custom_value_edit'), [
             'value' => [
-                'user' => 3
-            ]
+                'user' => 3,
+            ],
         ])
         ->assertStatus(400)
         ->assertJsonFragment([
-            'code' => ErrorCode::VALIDATION_ERROR
+            'code' => ErrorCode::VALIDATION_ERROR,
         ]);
     }
 
@@ -1418,13 +1422,13 @@ class Api2Test extends ApiTestBase
 
         $text = 'test' . date('YmdHis') . '_update';
 
-        $response =$this->withHeaders([
+        $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->put(admin_urls('api', 'data', 'custom_value_edit', $data->id), [
             'value' => [
                 'text' => $text,
                 'user' => 3,
-            ]
+            ],
         ])->assertStatus(200);
 
         $this->assertJsonTrue($response, [
@@ -1433,7 +1437,7 @@ class Api2Test extends ApiTestBase
                 'user' => 3,
                 'index_text' => $index_text,
             ],
-            'updated_user_id' => '1' //ADMIN
+            'updated_user_id' => '1', //ADMIN
         ]);
     }
 
@@ -1459,8 +1463,8 @@ class Api2Test extends ApiTestBase
                 'user' => 'dev1-userD',
             ],
             'findKeys' => [
-                'user' => 'user_code'
-            ]
+                'user' => 'user_code',
+            ],
         ])
         ->assertStatus(200);
 
@@ -1470,7 +1474,7 @@ class Api2Test extends ApiTestBase
                 'user' => 8,
                 'index_text' => $index_text,
             ],
-            'updated_user_id' => '2' //ADMIN
+            'updated_user_id' => '2', //ADMIN
         ]);
     }
 
@@ -1492,7 +1496,7 @@ class Api2Test extends ApiTestBase
             'parent_id' => 6,
             'value' => [
                 'text' => $text,
-            ]
+            ],
         ])
         ->assertStatus(200);
 
@@ -1502,7 +1506,7 @@ class Api2Test extends ApiTestBase
             'value' => [
                 'text' => $text,
             ],
-            'updated_user_id' => '2' //ADMIN
+            'updated_user_id' => '2', //ADMIN
         ]);
     }
 
@@ -1523,16 +1527,16 @@ class Api2Test extends ApiTestBase
             'value' => [
                 'parent_id' => 8,
                 'parent_type' => 'parent_table',
-            ]
+            ],
         ])
         ->assertStatus(200);
 
         $this->assertJsonTrue($response, [
-                'parent_id' => '8',
-                'parent_type' => 'parent_table',
-                'value' => $data->value,
-                'updated_user_id' => '2' //ADMIN
-            ]);
+            'parent_id' => '8',
+            'parent_type' => 'parent_table',
+            'value' => $data->value,
+            'updated_user_id' => '2', //ADMIN
+        ]);
     }
 
     /**
@@ -1555,7 +1559,7 @@ class Api2Test extends ApiTestBase
                 'parent_id' => 7,
                 'parent_type' => 'parent_table',
                 'text' => $text,
-            ]
+            ],
         ])
         ->assertStatus(200);
 
@@ -1565,7 +1569,7 @@ class Api2Test extends ApiTestBase
             'value' => [
                 'text' => $text,
             ],
-            'updated_user_id' => '2' //ADMIN
+            'updated_user_id' => '2', //ADMIN
         ]);
     }
 
@@ -1583,11 +1587,11 @@ class Api2Test extends ApiTestBase
         ])->put(admin_urls('api', 'data', 'custom_value_edit', '99999'), [
             'value' => [
                 'text' => $text,
-            ]
+            ],
         ])
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -1608,11 +1612,11 @@ class Api2Test extends ApiTestBase
         ])->put(admin_urls('api', 'data', 'custom_value_edit', $data->id), [
             'value' => [
                 'text' => 'test' . date('YmdHis') . '_update',
-            ]
+            ],
         ])
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -1630,12 +1634,12 @@ class Api2Test extends ApiTestBase
 
         $text = 'test' . date('YmdHis') . '_update';
 
-        $response =$this->withHeaders([
+        $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->put(admin_urls('api', 'data', 'custom_value_edit', $data->id), [
             'value' => [
                 'init_text' => $text,
-            ]
+            ],
         ])->assertStatus(400);
     }
 
@@ -1747,7 +1751,7 @@ class Api2Test extends ApiTestBase
         ])->delete(admin_urls('api', 'data', 'custom_value_edit', '99999'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -1769,7 +1773,7 @@ class Api2Test extends ApiTestBase
         ])->delete(admin_urls('api', 'data', 'custom_value_edit', $data->id))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -1784,7 +1788,7 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query').'?q=index_002')
+        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query') . '?q=index_002')
             ->assertStatus(200)
             ->assertJsonCount(10, 'data');
     }
@@ -1798,7 +1802,7 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query').'?q=index&page=3')
+        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query') . '?q=index&page=3')
             ->assertStatus(200)
             ->assertJsonCount(20, 'data');
     }
@@ -1812,7 +1816,7 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query').'?q=index_001&count=5')
+        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query') . '?q=index_001&count=5')
             ->assertStatus(200)
             ->assertJsonCount(5, 'data');
     }
@@ -1829,7 +1833,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::VALIDATION_ERROR
+                'code' => ErrorCode::VALIDATION_ERROR,
             ]);
     }
 
@@ -1842,10 +1846,10 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'no_permission', 'query').'?q=index_003')
+        ])->get(admin_urls('api', 'data', 'no_permission', 'query') . '?q=index_003')
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -1859,7 +1863,7 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_edit', 'query').'?q=index_001&count=100')
+        ])->get(admin_urls('api', 'data', 'custom_value_edit', 'query') . '?q=index_001&count=100')
             ->assertStatus(200);
         // @phpstan-ignore-next-line
         $json = json_decode_ex($response->baseResponse->getContent(), true);
@@ -1886,7 +1890,7 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_edit_all', 'query-column').'?q=index_text%20ne%20index_002_001,id%20gte%20100,id%20lte%201000')
+        ])->get(admin_urls('api', 'data', 'custom_value_edit_all', 'query-column') . '?q=index_text%20ne%20index_002_001,id%20gte%20100,id%20lte%201000')
             ->assertStatus(200)
             ->assertJsonCount(2, 'data');
     }
@@ -1900,7 +1904,7 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_edit_all', 'query-column').'?q=id%20lt%2050&page=2')
+        ])->get(admin_urls('api', 'data', 'custom_value_edit_all', 'query-column') . '?q=id%20lt%2050&page=2')
             ->assertStatus(200)
             ->assertJsonCount(20, 'data');
     }
@@ -1914,7 +1918,7 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_edit_all', 'query-column').'?q=created_user_id%20eq%202&count=4')
+        ])->get(admin_urls('api', 'data', 'custom_value_edit_all', 'query-column') . '?q=created_user_id%20eq%202&count=4')
             ->assertStatus(200)
             ->assertJsonCount(4, 'data');
     }
@@ -1931,7 +1935,7 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_edit', 'query-column').'?q=odd_even%20eq%20odd&count=1000')
+        ])->get(admin_urls('api', 'data', 'custom_value_edit', 'query-column') . '?q=odd_even%20eq%20odd&count=1000')
             ->assertStatus(200);
         // @phpstan-ignore-next-line
         $json = json_decode_ex($response->baseResponse->getContent(), true);
@@ -1956,7 +1960,7 @@ class Api2Test extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query-column').'?q=index_text%20eq%20index_002_001,created_user_id%20ne%202')
+        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query-column') . '?q=index_text%20eq%20index_002_001,created_user_id%20ne%202')
             ->assertStatus(200)
             ->assertJsonCount(0, 'data');
     }
@@ -1973,7 +1977,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query-column'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::VALIDATION_ERROR
+                'code' => ErrorCode::VALIDATION_ERROR,
             ]);
     }
 
@@ -1986,10 +1990,10 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query-column').'?q=no_column%20eq%20123')
+        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query-column') . '?q=no_column%20eq%20123')
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::INVALID_PARAMS
+                'code' => ErrorCode::INVALID_PARAMS,
             ]);
     }
 
@@ -2002,10 +2006,10 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query-column').'?q=id%20in%20123')
+        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query-column') . '?q=id%20in%20123')
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::INVALID_PARAMS
+                'code' => ErrorCode::INVALID_PARAMS,
             ]);
     }
 
@@ -2018,10 +2022,10 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query-column').'?q=text%20eq%20123')
+        ])->get(admin_urls('api', 'data', 'custom_value_access_all', 'query-column') . '?q=text%20eq%20123')
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::NOT_INDEX_ENABLED
+                'code' => ErrorCode::NOT_INDEX_ENABLED,
             ]);
     }
 
@@ -2034,10 +2038,10 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'data', 'no_permission', 'query-column').'?q=index_text%20eq%20index_002_001')
+        ])->get(admin_urls('api', 'data', 'no_permission', 'query-column') . '?q=index_text%20eq%20index_002_001')
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -2082,7 +2086,7 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'notify').'?count=4')
+        ])->get(admin_urls('api', 'notify') . '?count=4')
             ->assertStatus(200)
             ->assertJsonCount(4, 'data');
     }
@@ -2114,7 +2118,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'notify'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -2142,16 +2146,16 @@ class Api2Test extends ApiTestBase
                     'name' => 'test.txt',
                     'base64' => TestDefine::FILE_BASE64,
                 ],
-            ]
+            ],
         ])
         ->assertStatus(201);
 
         $this->assertJsonTrue($response, [
             'value' => [
                 'text' => $text,
-                'user' => 2
+                'user' => 2,
             ],
-            'created_user_id' => "1" //ADMIN
+            'created_user_id' => "1", //ADMIN
         ]);
 
         $this->assertFileUrl($token, $response);
@@ -2173,7 +2177,7 @@ class Api2Test extends ApiTestBase
                     'name' => 'test.txt',
                     'base64' => TestDefine::FILE_BASE64,
                 ],
-            ]
+            ],
         ])
         ->assertStatus(200);
 
@@ -2204,16 +2208,16 @@ class Api2Test extends ApiTestBase
                         'base64' => TestDefine::FILE2_BASE64,
                     ],
                 ],
-            ]
+            ],
         ])
         ->assertStatus(201);
 
         $this->assertJsonTrue($response, [
             'value' => [
                 'text' => $text,
-                'user' => 2
+                'user' => 2,
             ],
-            'created_user_id' => "1" //ADMIN
+            'created_user_id' => "1", //ADMIN
         ]);
 
         $this->assertFilesUrl($token, $response, ['test', TestDefine::FILE2_TESTSTRING]);
@@ -2250,7 +2254,7 @@ class Api2Test extends ApiTestBase
                         'base64' => TestDefine::FILE2_BASE64,
                     ],
                 ],
-            ]
+            ],
         ])
         ->assertStatus(200);
 
@@ -2284,7 +2288,7 @@ class Api2Test extends ApiTestBase
                         'base64' => TestDefine::FILE2_BASE64,
                     ],
                 ],
-            ]
+            ],
         ])
         ->assertStatus(200);
         $this->assertFilesUrl($token, $response, [TestDefine::FILE2_TESTSTRING]);
@@ -2301,7 +2305,7 @@ class Api2Test extends ApiTestBase
                         'base64' => TestDefine::FILE_BASE64,
                     ],
                 ],
-            ]
+            ],
         ])
         ->assertStatus(200);
 
@@ -2419,7 +2423,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'document', 'custom_value_edit', 1))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -2436,7 +2440,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'document', 'custom_value_edit', 1))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -2456,7 +2460,7 @@ class Api2Test extends ApiTestBase
         ])->get($document->api_url)
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -2476,7 +2480,7 @@ class Api2Test extends ApiTestBase
         ])->delete($document->api_url)
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -2496,7 +2500,7 @@ class Api2Test extends ApiTestBase
         ])
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -2513,7 +2517,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'document', 'custom_value_edit', 1))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -2533,7 +2537,7 @@ class Api2Test extends ApiTestBase
         ])->get($document->api_url)
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -2553,7 +2557,7 @@ class Api2Test extends ApiTestBase
         ])->delete($document->api_url)
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -2590,7 +2594,7 @@ class Api2Test extends ApiTestBase
         ])->post(admin_urls('api', 'notify'), [
             'target_users' => 10,
             'notify_subject' => $subject,
-            'notify_body' => $body
+            'notify_body' => $body,
         ])
             ->assertStatus(201)
             ->assertSeeText($subject)
@@ -2612,7 +2616,7 @@ class Api2Test extends ApiTestBase
         ])->post(admin_urls('api', 'notify'), [
             'target_users' => '4,6,8',
             'notify_subject' => $subject,
-            'notify_body' => $body
+            'notify_body' => $body,
         ])
             ->assertStatus(200)
             ->assertJsonCount(3);
@@ -2632,11 +2636,11 @@ class Api2Test extends ApiTestBase
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'notify'), [
             'target_users' => 1,
-            'notify_subject' => $subject
+            'notify_subject' => $subject,
         ])
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::VALIDATION_ERROR
+                'code' => ErrorCode::VALIDATION_ERROR,
             ]);
     }
 
@@ -2655,11 +2659,11 @@ class Api2Test extends ApiTestBase
         ])->post(admin_urls('api', 'notify'), [
             'target_users' => [4,6,999],
             'notify_subject' => $subject,
-            'notify_body' => $body
+            'notify_body' => $body,
         ])
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::VALIDATION_ERROR
+                'code' => ErrorCode::VALIDATION_ERROR,
             ]);
     }
 
@@ -2678,11 +2682,11 @@ class Api2Test extends ApiTestBase
         ])->post(admin_urls('api', 'notify'), [
             'target_users' => 3,
             'notify_subject' => $subject,
-            'notify_body' => $body
+            'notify_body' => $body,
         ])
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -2725,7 +2729,7 @@ class Api2Test extends ApiTestBase
 
         $this->withHeaders([
             'Authorization' => "Bearer $token",
-        ])->get(admin_urls('api', 'log').'?count=3')
+        ])->get(admin_urls('api', 'log') . '?count=3')
             ->assertStatus(200)
             ->assertJsonCount(3, 'data');
     }
@@ -2858,7 +2862,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'log'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -2874,7 +2878,7 @@ class Api2Test extends ApiTestBase
         ])->get(admin_urls('api', 'log'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 

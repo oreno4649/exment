@@ -82,7 +82,7 @@ class Select extends CustomItem
      */
     protected function getGridFilterOption(): ?string
     {
-        return (string)FilterOption::SELECT_EXISTS;
+        return (string) FilterOption::SELECT_EXISTS;
     }
 
     /**
@@ -204,12 +204,12 @@ class Select extends CustomItem
 
         // @phpstan-ignore-next-line
         $form->switchbool('multiple_enabled', exmtrans("custom_column.options.multiple_enabled"))
-            ->attribute(['data-filtertrigger' =>true])
+            ->attribute(['data-filtertrigger' => true])
             ->help(exmtrans("custom_column.help.multiple_enabled"));
 
         // @phpstan-ignore-next-line
         $form->switchbool('check_radio_enabled', exmtrans("custom_column.options.check_radio_enabled"))
-            ->attribute(['data-filtertrigger' =>true])
+            ->attribute(['data-filtertrigger' => true])
             ->help(exmtrans("custom_column.help.check_radio_enabled"));
 
         // @phpstan-ignore-next-line

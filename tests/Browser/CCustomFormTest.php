@@ -23,7 +23,7 @@ class CCustomFormTest extends ExmentKitTestCase
         parent::setUp();
         $this->login();
         $this->prepareTestTables();
-     }
+    }
 
     /**
      * prepare test table and columns.
@@ -105,7 +105,7 @@ class CCustomFormTest extends ExmentKitTestCase
         $id = array_get($raw, 'id');
 
         // Update custom form
-        $this->visit(admin_url('form/exmenttest_form/'. $id . '/edit'))
+        $this->visit(admin_url('form/exmenttest_form/' . $id . '/edit'))
                 ->seeInField('form_view_name', '新しいフォーム')
                 ->type('更新したフォーム', 'form_view_name')
                 ->press('admin-submit')
@@ -118,7 +118,7 @@ class CCustomFormTest extends ExmentKitTestCase
         $columns = CustomColumn::where('custom_table_id', $custom_table_id)->get();
 
         // add field column
-        foreach($columns as $idx => $column) {
+        foreach ($columns as $idx => $column) {
             $form_column = new CustomFormColumn();
             $form_column->custom_form_block_id = $block_id;
             $form_column->form_column_type = 0;
@@ -158,7 +158,7 @@ class CCustomFormTest extends ExmentKitTestCase
 
         $relations = CustomRelation::getRelationsByParent($custom_table);
         foreach ($relations as $idx => $relation) {
-            $block = $blocks->first(function ($val) use($relation) {
+            $block = $blocks->first(function ($val) use ($relation) {
                 return $val->form_block_target_table_id == $relation->child_custom_table_id;
             });
             if (!$block) {
@@ -174,21 +174,21 @@ class CCustomFormTest extends ExmentKitTestCase
 
         $block_ids = CustomFormBlock::where('custom_form_id', $id)->pluck('id');
 
-        $this->visit(admin_url('form/parent_table/'. $id . '/edit'))
+        $this->visit(admin_url('form/parent_table/' . $id . '/edit'))
             ->seeInElement('h3[class=box-title]', 'テーブル - parent_table')
             ->seeInElement('h3[class=box-title]', '子テーブル - child_table')
             ->seeInElement('h3[class=box-title]', '子テーブル - child_table_2')
-            ->type('親テーブルのブロック', 'custom_form_blocks[' . $block_ids[0] .'][form_block_view_name]')
-            ->type('子テーブル１のブロック', 'custom_form_blocks[' . $block_ids[1] .'][form_block_view_name]')
-            ->type('子テーブル２のブロック', 'custom_form_blocks[' . $block_ids[2] .'][form_block_view_name]')
+            ->type('親テーブルのブロック', 'custom_form_blocks[' . $block_ids[0] . '][form_block_view_name]')
+            ->type('子テーブル１のブロック', 'custom_form_blocks[' . $block_ids[1] . '][form_block_view_name]')
+            ->type('子テーブル２のブロック', 'custom_form_blocks[' . $block_ids[2] . '][form_block_view_name]')
             ->press('admin-submit')
             ->seePageIs(admin_url('form/parent_table'))
         ;
 
-        $this->visit(admin_url('form/parent_table/'. $id . '/edit'))
-            ->seeInField('custom_form_blocks[' . $block_ids[0] .'][form_block_view_name]', '親テーブルのブロック')
-            ->seeInField('custom_form_blocks[' . $block_ids[1] .'][form_block_view_name]', '子テーブル１のブロック')
-            ->seeInField('custom_form_blocks[' . $block_ids[2] .'][form_block_view_name]', '子テーブル２のブロック')
+        $this->visit(admin_url('form/parent_table/' . $id . '/edit'))
+            ->seeInField('custom_form_blocks[' . $block_ids[0] . '][form_block_view_name]', '親テーブルのブロック')
+            ->seeInField('custom_form_blocks[' . $block_ids[1] . '][form_block_view_name]', '子テーブル１のブロック')
+            ->seeInField('custom_form_blocks[' . $block_ids[2] . '][form_block_view_name]', '子テーブル２のブロック')
         ;
 
         // check before update
@@ -199,9 +199,9 @@ class CCustomFormTest extends ExmentKitTestCase
         $element = $crawler->eq(1);
         $this->assertEquals('子テーブル２のブロック', $element->text());
 
-        $this->visit(admin_url('form/parent_table/'. $id . '/edit'))
-                ->type('2', 'custom_form_blocks[' . $block_ids[1] .'][options][form_block_order]')
-                ->type('1', 'custom_form_blocks[' . $block_ids[2] .'][options][form_block_order]')
+        $this->visit(admin_url('form/parent_table/' . $id . '/edit'))
+                ->type('2', 'custom_form_blocks[' . $block_ids[1] . '][options][form_block_order]')
+                ->type('1', 'custom_form_blocks[' . $block_ids[2] . '][options][form_block_order]')
                 ->press('admin-submit')
                 ->seePageIs(admin_url('form/parent_table'))
         ;

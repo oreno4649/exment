@@ -2,6 +2,4 @@
 
 namespace Exceedone\Exment\DataItems\Grid;
 
-class AllDataGrid extends DefaultGrid
-{
-}
+class AllDataGrid extends DefaultGrid {}

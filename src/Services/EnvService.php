@@ -57,7 +57,7 @@ class EnvService
 
 
         // Loop through given data
-        foreach ((array)$data as $key => $value) {
+        foreach ((array) $data as $key => $value) {
             if (array_has($newEnvs, $key)) {
                 continue;
             }

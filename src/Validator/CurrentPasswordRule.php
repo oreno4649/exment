@@ -10,9 +10,7 @@ use Exceedone\Exment\Providers\LoginUserProvider;
  */
 class CurrentPasswordRule implements Rule
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
     * Check Validation
@@ -36,6 +34,6 @@ class CurrentPasswordRule implements Rule
      */
     public function message()
     {
-        return (string)exmtrans('validation.current_password');
+        return (string) exmtrans('validation.current_password');
     }
 }

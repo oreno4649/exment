@@ -187,7 +187,7 @@ class CustomTableController extends AdminControllerBase
 
             // add new multiple columns
             $linker = (new Linker())
-                ->url(admin_urls('table', $actions->getKey(), 'edit').'?columnmulti=1')
+                ->url(admin_urls('table', $actions->getKey(), 'edit') . '?columnmulti=1')
                 ->icon('fa-cogs')
                 ->tooltip(exmtrans('custom_table.expand_setting'));
             $actions->append($linker);
@@ -214,8 +214,8 @@ class CustomTableController extends AdminControllerBase
                 $actions->append($linker);
             }
 
-            if (\Exment::user()->hasPermission(Permission::CUSTOM_TABLE) &&
-                !in_array($custom_table->table_name, SystemTableName::SYSTEM_TABLE_NAME_MASTER())) {
+            if (\Exment::user()->hasPermission(Permission::CUSTOM_TABLE)
+                && !in_array($custom_table->table_name, SystemTableName::SYSTEM_TABLE_NAME_MASTER())) {
                 $actions->append((new Tools\ModalLink(
                     admin_urls('table', $actions->getKey(), 'copyModal'),
                     [
@@ -253,7 +253,7 @@ class CustomTableController extends AdminControllerBase
         if (!isset($id)) {
             $form->text('table_name', exmtrans("custom_table.table_name"))
                 ->required()
-                ->rules("max:30|unique:".CustomTable::getTableName()."|regex:/".Define::RULES_REGEX_SYSTEM_NAME."/")
+                ->rules("max:30|unique:" . CustomTable::getTableName() . "|regex:/" . Define::RULES_REGEX_SYSTEM_NAME . "/")
                 ->help(sprintf(exmtrans('common.help.max_length'), 30) . exmtrans('common.help_code'));
         } else {
             $form->display('table_name', exmtrans("custom_table.table_name"));
@@ -280,7 +280,7 @@ class CustomTableController extends AdminControllerBase
             $form->switchbool('search_enabled', exmtrans("custom_table.search_enabled"))->help(exmtrans("custom_table.help.search_enabled"))->default("1")
             ;
             $form->switchbool('use_label_id_flg', exmtrans("custom_table.use_label_id_flg"))
-                ->help(sprintf(exmtrans("custom_table.help.use_label_id_flg"), getManualUrl('column?id='.exmtrans('custom_column.options.use_label_flg'))))
+                ->help(sprintf(exmtrans("custom_table.help.use_label_id_flg"), getManualUrl('column?id=' . exmtrans('custom_column.options.use_label_flg'))))
                 ->default("0")
             ;
             $form->switchbool('one_record_flg', exmtrans("custom_table.one_record_flg"))
@@ -296,7 +296,7 @@ class CustomTableController extends AdminControllerBase
             ;
             $form->switchbool('revision_flg', exmtrans("custom_table.revision_flg"))->help(exmtrans("custom_table.help.revision_flg"))
                 ->default("1")
-                ->attribute(['data-filtertrigger' =>true])
+                ->attribute(['data-filtertrigger' => true])
             ;
             $form->number('revision_count', exmtrans("custom_table.revision_count"))->help(exmtrans("custom_table.help.revision_count"))
                 ->min(0)
@@ -333,7 +333,7 @@ class CustomTableController extends AdminControllerBase
 
             $form->switchbool('add_parent_menu_flg', exmtrans("custom_table.add_parent_menu_flg"))->help(exmtrans("custom_table.help.add_parent_menu_flg"))
                 ->default("0")
-                ->attribute(['data-filtertrigger' =>true])
+                ->attribute(['data-filtertrigger' => true])
             ;
             $form->select('add_parent_menu', exmtrans("custom_table.add_parent_menu"))->help(exmtrans("custom_table.help.add_parent_menu"))
             ->options(function ($value) {
@@ -433,36 +433,36 @@ class CustomTableController extends AdminControllerBase
 
         $script = <<<SCRIPT
 
-$('.{$class}-delete').unbind('click').click(function() {
-    Exment.CommonEvent.ShowSwal("$url", {
-        title: "{$trans['delete_confirm']}",
-        text: "{$trans['delete_guide']}",
-        input: 'text',
-        method: 'delete',
-        confirm:"{$trans['confirm']}",
-        cancel:"{$trans['cancel']}",
-        redirect: "$listUrl",
-        preConfirmValidate: function(input){
-            if (input != "$keyword") {
-                return "{$trans['delete_keyword']}";
-            }
+            $('.{$class}-delete').unbind('click').click(function() {
+                Exment.CommonEvent.ShowSwal("$url", {
+                    title: "{$trans['delete_confirm']}",
+                    text: "{$trans['delete_guide']}",
+                    input: 'text',
+                    method: 'delete',
+                    confirm:"{$trans['confirm']}",
+                    cancel:"{$trans['cancel']}",
+                    redirect: "$listUrl",
+                    preConfirmValidate: function(input){
+                        if (input != "$keyword") {
+                            return "{$trans['delete_keyword']}";
+                        }
 
-            return true;
-        }
-    });
-});
+                        return true;
+                    }
+                });
+            });
 
-SCRIPT;
+            SCRIPT;
 
         Admin::script($script);
 
         return <<<HTML
-<div class="btn-group pull-right" style="margin-right: 5px">
-    <a href="javascript:void(0);" class="btn btn-sm btn-danger {$class}-delete" title="{$trans['delete']}">
-        <i class="fa fa-trash"></i><span class="hidden-xs">  {$trans['delete']}</span>
-    </a>
-</div>
-HTML;
+            <div class="btn-group pull-right" style="margin-right: 5px">
+                <a href="javascript:void(0);" class="btn btn-sm btn-danger {$class}-delete" title="{$trans['delete']}">
+                    <i class="fa fa-trash"></i><span class="hidden-xs">  {$trans['delete']}</span>
+                </a>
+            </div>
+            HTML;
     }
 
     /**
@@ -492,26 +492,26 @@ HTML;
             $form->hidden('multisetting_type')->default(MultisettingType::TABLE_LABELS);
         })->setTableColumnWidth(10, 2)
         ->rowUpDown('priority')
-        ->descriptionHtml(sprintf(exmtrans("custom_table.custom_column_multi.help.table_labels"), getManualUrl('table?id='.exmtrans('custom_table.custom_column_multi.table_labels'))));
+        ->descriptionHtml(sprintf(exmtrans("custom_table.custom_column_multi.help.table_labels"), getManualUrl('table?id=' . exmtrans('custom_table.custom_column_multi.table_labels'))));
 
         $form->hasManyTable('multi_uniques', exmtrans("custom_table.custom_column_multi.uniques"), function ($form) use ($custom_table) {
             $form->select('unique1', exmtrans("custom_table.custom_column_multi.unique1"))->required()
                 ->options($custom_table->getColumnsSelectOptions([
                     'include_system' => false,
                     'include_parent_id' => true,
-                    'ignore_many_to_many' => true
+                    'ignore_many_to_many' => true,
                 ]));
             $form->select('unique2', exmtrans("custom_table.custom_column_multi.unique2"))->required()
                 ->options($custom_table->getColumnsSelectOptions([
                     'include_system' => false,
                     'include_parent_id' => true,
-                    'ignore_many_to_many' => true
+                    'ignore_many_to_many' => true,
                 ]));
             $form->select('unique3', exmtrans("custom_table.custom_column_multi.unique3"))
                 ->options($custom_table->getColumnsSelectOptions([
                     'include_system' => false,
                     'include_parent_id' => true,
-                    'ignore_many_to_many' => true
+                    'ignore_many_to_many' => true,
                 ]));
             $form->hidden('multisetting_type')->default(MultisettingType::MULTI_UNIQUES);
         })->setTableColumnWidth(4, 4, 3, 1)
@@ -581,7 +581,7 @@ HTML;
             if (boolval(config('exment.expart_mode', false))) {
                 $form->text('table_label_format', exmtrans("custom_table.custom_column_multi.table_label_format"))
                 ->rules("max:200")
-                ->help(sprintf(exmtrans("custom_table.custom_column_multi.help.table_label_format"), getManualUrl('table?id='.exmtrans('custom_table.custom_column_multi.table_label_format'))));
+                ->help(sprintf(exmtrans("custom_table.custom_column_multi.help.table_label_format"), getManualUrl('table?id=' . exmtrans('custom_table.custom_column_multi.table_label_format'))));
             }
         });
 
@@ -619,7 +619,7 @@ HTML;
     {
         $form = new Form(new CustomTable());
         $custom_table = CustomTable::getEloquent($id);
-        $manualUrl = getManualUrl('2d_barcode?id='.exmtrans('custom_table.qr_code.image_size'));
+        $manualUrl = getManualUrl('2d_barcode?id=' . exmtrans('custom_table.qr_code.image_size'));
         $form->setTitle(exmtrans("custom_table.qr_code.setting"));
         $form->embeds('options', exmtrans("custom_column.options.header"), function ($form) use ($id, $manualUrl) {
             $form->exmheader(exmtrans("custom_table.qr_code.content"))->hr();
@@ -658,7 +658,7 @@ HTML;
                 ->options(DataScanSubmitRedirect::transKeyArray("custom_table.data_qr_redirect_options"))
                 ->default(DataScanSubmitRedirect::TOP);
         })->disableHeader();
-        
+
 
         $form->hidden('qrcodesetting')->default(1);
         $form->ignore('qrcodesetting');
@@ -886,11 +886,11 @@ HTML;
         $notify->target_id = $model->id;
         $notify->mail_template_id = $mail_template_id;
         $notify->trigger_settings = [
-            'notify_saved_trigger' =>  NotifySavedType::arrays()
+            'notify_saved_trigger' =>  NotifySavedType::arrays(),
         ];
         $notify->action_settings = [[
             'notify_action' => NotifyAction::SHOW_PAGE,
-            'notify_action_target' =>  [NotifyActionTarget::HAS_ROLES]
+            'notify_action_target' =>  [NotifyActionTarget::HAS_ROLES],
         ]];
         $notify->save();
     }
@@ -947,7 +947,7 @@ HTML;
 
         $form->text('table_name', exmtrans("custom_table.table_name"))
             ->required()
-            ->rules("max:30|unique:".CustomTable::getTableName()."|regex:/".Define::RULES_REGEX_SYSTEM_NAME."/")
+            ->rules("max:30|unique:" . CustomTable::getTableName() . "|regex:/" . Define::RULES_REGEX_SYSTEM_NAME . "/")
             ->help(sprintf(exmtrans('common.help.max_length'), 30) . exmtrans('common.help_code'));
 
         $form->text('table_view_name', exmtrans("custom_table.table_view_name"))
@@ -968,7 +968,7 @@ HTML;
         return getAjaxResponse([
             'body'  => $form->render(),
             'script' => $form->getScript(),
-            'title' => exmtrans('custom_table.copy_custom_table')
+            'title' => exmtrans('custom_table.copy_custom_table'),
         ]);
     }
 
@@ -984,11 +984,11 @@ HTML;
     {
         /** @var ExmentCustomValidator $validator */
         $validator = \Validator::make($request->all(), [
-            'table_name' => "max:30|unique:".CustomTable::getTableName()."|regex:/".Define::RULES_REGEX_SYSTEM_NAME."/",
-            'table_view_name' => "max:40"
+            'table_name' => "max:30|unique:" . CustomTable::getTableName() . "|regex:/" . Define::RULES_REGEX_SYSTEM_NAME . "/",
+            'table_view_name' => "max:40",
         ], [], [
             'table_name' => exmtrans("custom_table.table_name"),
-            'table_view_name' => exmtrans("custom_table.table_view_name")
+            'table_view_name' => exmtrans("custom_table.table_view_name"),
         ]);
 
         if (!$validator->passes()) {

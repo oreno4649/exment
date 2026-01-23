@@ -105,7 +105,7 @@ class CustomViewTest extends UnitTestBase
             'filter_settings' => [[
                 'column_name' => 'user',
                 'filter_condition' => FilterOption::USER_EQ_USER,
-            ]]
+            ]],
         ];
         $custom_table = CustomTable::getEloquent(TestDefine::TESTDATA_TABLE_NAME_CHILD_TABLE);
         $relations = CustomRelation::with('parent_custom_table')->where('child_custom_table_id', $custom_table->id)->get();
@@ -130,7 +130,7 @@ class CustomViewTest extends UnitTestBase
                 }
             }
         }
-        list($custom_view, $array) = $this->getCustomView($options);
+        [$custom_view, $array] = $this->getCustomView($options);
 
         $this->checkSelectColumns($custom_table, $custom_view, $array, $relations->first());
     }
@@ -150,7 +150,7 @@ class CustomViewTest extends UnitTestBase
             'filter_settings' => [[
                 'column_name' => 'user',
                 'filter_condition' => FilterOption::USER_EQ_USER,
-            ]]
+            ]],
         ];
         $custom_table = CustomTable::getEloquent(TestDefine::TESTDATA_TABLE_NAME_CHILD_TABLE_MANY_TO_MANY);
         $relations = CustomRelation::with('parent_custom_table')->where('child_custom_table_id', $custom_table->id)->get();
@@ -175,7 +175,7 @@ class CustomViewTest extends UnitTestBase
                 }
             }
         }
-        list($custom_view, $array) = $this->getCustomView($options);
+        [$custom_view, $array] = $this->getCustomView($options);
 
         $this->checkSelectColumns($custom_table, $custom_view, $array, $relations->first());
     }
@@ -261,8 +261,8 @@ class CustomViewTest extends UnitTestBase
             'filter_settings' => [[
                 'column_name' => 'user',
                 'filter_condition' => FilterOption::USER_EQ,
-                'filter_value_text' => 1
-            ]]
+                'filter_value_text' => 1,
+            ]],
         ];
         $custom_table = CustomTable::getEloquent(TestDefine::TESTDATA_TABLE_NAME_ALL_COLUMNS_FORTEST);
         foreach (SystemColumn::getOptions() as $option) {
@@ -289,7 +289,7 @@ class CustomViewTest extends UnitTestBase
                 ];
             }
         }
-        list($custom_view, $array) = $this->getCustomView($options);
+        [$custom_view, $array] = $this->getCustomView($options);
 
         $this->checkSelectColumns($custom_table, $custom_view, $array);
     }
@@ -321,7 +321,7 @@ class CustomViewTest extends UnitTestBase
             ]],
         ];
 
-        list($custom_view, $array) = $this->getCustomView($options);
+        [$custom_view, $array] = $this->getCustomView($options);
 
         foreach ($custom_view->custom_view_columns as $colno => $custom_view_column) {
             foreach ($array as $index => $data) {
@@ -366,7 +366,7 @@ class CustomViewTest extends UnitTestBase
             ]],
         ];
 
-        list($custom_view, $array) = $this->getCustomView($options);
+        [$custom_view, $array] = $this->getCustomView($options);
 
         $null_exists = false;
 
@@ -423,7 +423,7 @@ class CustomViewTest extends UnitTestBase
             ]],
         ];
 
-        list($custom_view, $array) = $this->getCustomView($options);
+        [$custom_view, $array] = $this->getCustomView($options);
 
         foreach ($array as $index => $data) {
             $list = [];
@@ -473,9 +473,9 @@ class CustomViewTest extends UnitTestBase
      */
     protected function andWhere($data)
     {
-        return array_get($data, 'value.odd_even') != 'odd' &&
-        array_get($data, 'value.multiples_of_3') == 1 &&
-        array_get($data, 'value.user') == 2;
+        return array_get($data, 'value.odd_even') != 'odd'
+        && array_get($data, 'value.multiples_of_3') == 1
+        && array_get($data, 'value.user') == 2;
     }
 
     /**
@@ -484,9 +484,9 @@ class CustomViewTest extends UnitTestBase
      */
     protected function orWhere($data)
     {
-        return array_get($data, 'value.odd_even') != 'odd' ||
-        array_get($data, 'value.multiples_of_3') == 1 ||
-        array_get($data, 'value.user') == 2;
+        return array_get($data, 'value.odd_even') != 'odd'
+        || array_get($data, 'value.multiples_of_3') == 1
+        || array_get($data, 'value.user') == 2;
     }
 
     /**
@@ -500,9 +500,9 @@ class CustomViewTest extends UnitTestBase
         $parent = $data->getParentValue();
 
         if (isset($prev_parent) && isset($parent)) {
-            return array_get($prev_parent, 'value.date') < array_get($parent, 'value.date') ||
-            array_get($prev_parent, 'value.date') == array_get($parent, 'value.date') &&
-            array_get($prev_parent, 'value.odd_even') >= array_get($parent, 'value.odd_even');
+            return array_get($prev_parent, 'value.date') < array_get($parent, 'value.date')
+            || array_get($prev_parent, 'value.date') == array_get($parent, 'value.date')
+            && array_get($prev_parent, 'value.odd_even') >= array_get($parent, 'value.odd_even');
         }
 
         return false;
@@ -519,12 +519,12 @@ class CustomViewTest extends UnitTestBase
         $parent = $data->getParentValue();
 
         if (isset($prev_parent) && isset($parent)) {
-            return array_get($prev_data, 'value.odd_even') < array_get($data, 'value.odd_even') ||
-            (array_get($prev_data, 'value.odd_even') == array_get($data, 'value.odd_even') &&
-            array_get($prev_parent, 'value.odd_even') > array_get($parent, 'value.odd_even')) ||
-            (array_get($prev_data, 'value.odd_even') == array_get($data, 'value.odd_even') &&
-            array_get($prev_parent, 'value.odd_even') == array_get($parent, 'value.odd_even') &&
-            array_get($prev_parent, 'created_user_id') <= array_get($parent, 'created_user_id'));
+            return array_get($prev_data, 'value.odd_even') < array_get($data, 'value.odd_even')
+            || (array_get($prev_data, 'value.odd_even') == array_get($data, 'value.odd_even')
+            && array_get($prev_parent, 'value.odd_even') > array_get($parent, 'value.odd_even'))
+            || (array_get($prev_data, 'value.odd_even') == array_get($data, 'value.odd_even')
+            && array_get($prev_parent, 'value.odd_even') == array_get($parent, 'value.odd_even')
+            && array_get($prev_parent, 'created_user_id') <= array_get($parent, 'created_user_id'));
         }
 
         return false;
@@ -546,15 +546,15 @@ class CustomViewTest extends UnitTestBase
         $organization_prev = $prev_data->getValue('organization');
         $organization = $data->getValue('organization');
 
-        return array_get($select_table_prev, 'date') < array_get($select_table, 'date') ||
-            (array_get($select_table_prev, 'date') == array_get($select_table, 'date') &&
-            array_get($select_table_2_prev, 'date') < array_get($select_table_2, 'date')) ||
-            (array_get($select_table_prev, 'date') == array_get($select_table, 'date') &&
-            array_get($select_table_2_prev, 'date') == array_get($select_table_2, 'date') &&
-            array_get($user_prev, 'user_name') < array_get($user, 'user_name')) ||
-            (array_get($select_table_prev, 'date') == array_get($select_table, 'date') &&
-            array_get($select_table_2_prev, 'date') == array_get($select_table_2, 'date') &&
-            array_get($user_prev, 'user_name') == array_get($user, 'user_name') &&
-            array_get($organization_prev, 'organization_name') <= array_get($organization, 'organization_name'));
+        return array_get($select_table_prev, 'date') < array_get($select_table, 'date')
+            || (array_get($select_table_prev, 'date') == array_get($select_table, 'date')
+            && array_get($select_table_2_prev, 'date') < array_get($select_table_2, 'date'))
+            || (array_get($select_table_prev, 'date') == array_get($select_table, 'date')
+            && array_get($select_table_2_prev, 'date') == array_get($select_table_2, 'date')
+            && array_get($user_prev, 'user_name') < array_get($user, 'user_name'))
+            || (array_get($select_table_prev, 'date') == array_get($select_table, 'date')
+            && array_get($select_table_2_prev, 'date') == array_get($select_table_2, 'date')
+            && array_get($user_prev, 'user_name') == array_get($user, 'user_name')
+            && array_get($organization_prev, 'organization_name') <= array_get($organization, 'organization_name'));
     }
 }

@@ -118,7 +118,7 @@ class Notify extends ModelBase
         $notify_target_date = array_get($value, 'notify_target_date');
 
         if (isset($notify_target_date)) {
-            list($column_type, $column_table_id, $column_type_target, $view_pivot_column, $view_pivot_table) = $this->getViewColumnTargetItems($notify_target_date);
+            [$column_type, $column_table_id, $column_type_target, $view_pivot_column, $view_pivot_table] = $this->getViewColumnTargetItems($notify_target_date);
 
             $value['notify_target_column'] = $column_type_target;
             $value['notify_target_table_id'] = $column_table_id;
@@ -209,7 +209,7 @@ class Notify extends ModelBase
     // @phpstan-ignore-next-line
     public function notifySchedule()
     {
-        list($datalist, $table, $column) = $this->getNotifyTargetDatalist();
+        [$datalist, $table, $column] = $this->getNotifyTargetDatalist();
 
         // loop data
         foreach ($datalist as $custom_value) {
@@ -571,7 +571,7 @@ class Notify extends ModelBase
                     'mail_template' => $mail_template,
                     'prms' => [
                         'notify' => $this,
-                        'target_table' => $custom_table->table_view_name ?? null
+                        'target_table' => $custom_table->table_view_name ?? null,
                     ],
                     'custom_value' => $custom_value,
                     'subject' => $subject,
@@ -601,10 +601,10 @@ class Notify extends ModelBase
                 // }
 
                 $prms = [
-                'user' => $user,
-                'notify' => $this,
-                'target_table' => $custom_table->table_view_name ?? null
-            ];
+                    'user' => $user,
+                    'notify' => $this,
+                    'target_table' => $custom_table->table_view_name ?? null,
+                ];
 
                 // send mail
                 try {

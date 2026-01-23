@@ -186,7 +186,7 @@ class RoleGroupController extends AdminControllerBase
             ->rules([
                 "max:64",
                 Rule::unique('role_groups')->ignore($id),
-                "regex:/".Define::RULES_REGEX_ALPHANUMERIC_UNDER_HYPHEN."/",
+                "regex:/" . Define::RULES_REGEX_ALPHANUMERIC_UNDER_HYPHEN . "/",
             ])
             ->help(sprintf(exmtrans('common.help.max_length'), 30) . exmtrans('common.help_code'));
             ;
@@ -411,14 +411,14 @@ class RoleGroupController extends AdminControllerBase
             return array_get($item, 'role_group_user_org_type') . '_' . array_get($item, 'role_group_target_id');
         })->toArray();
 
-        list($options, $ajax) = CustomValueAuthoritable::getUserOrgSelectOptions(null, null, false, $default);
+        [$options, $ajax] = CustomValueAuthoritable::getUserOrgSelectOptions(null, null, false, $default);
 
         if (!is_nullorempty($ajax)) {
             $form->multipleSelect('role_group_item', exmtrans('role_group.user_organization_setting'))
                 ->options($options)
                 ->ajax($ajax)
                 ->validationOptions(function ($value) {
-                    list($options, $ajax) = CustomValueAuthoritable::getUserOrgSelectOptions(null, null, false, null, true);
+                    [$options, $ajax] = CustomValueAuthoritable::getUserOrgSelectOptions(null, null, false, null, true);
                     return $options;
                 })
                 ->default($default);
@@ -589,7 +589,7 @@ class RoleGroupController extends AdminControllerBase
 
             $role_group = $request->get($item['name'], []);
             $role_group = collect($role_group)->filter()->map(function ($role_group_target) use ($id, &$item) {
-                list($role_group_user_org_type, $role_group_target_id) = explode('_', $role_group_target);
+                [$role_group_user_org_type, $role_group_target_id] = explode('_', $role_group_target);
                 $item['role_group_user_org_type'] = $role_group_user_org_type;
                 $item['role_group_target_id'] = $role_group_target_id;
 
@@ -606,12 +606,12 @@ class RoleGroupController extends AdminControllerBase
                 },
                 'dbDeleteFilter' => function (&$model, $dbValue) use ($id) {
                     $model->where('role_group_id', $id)
-                        ->where('role_group_target_id', array_get((array)$dbValue, 'role_group_target_id'))
-                        ->where('role_group_user_org_type', array_get((array)$dbValue, 'role_group_user_org_type'));
+                        ->where('role_group_target_id', array_get((array) $dbValue, 'role_group_target_id'))
+                        ->where('role_group_user_org_type', array_get((array) $dbValue, 'role_group_user_org_type'));
                 },
                 'matchFilter' => function ($dbValue, $value) {
-                    return array_get((array)$dbValue, 'role_group_target_id') == array_get($value, 'role_group_target_id')
-                        && array_get((array)$dbValue, 'role_group_user_org_type') == array_get($value, 'role_group_user_org_type');
+                    return array_get((array) $dbValue, 'role_group_target_id') == array_get($value, 'role_group_target_id')
+                        && array_get((array) $dbValue, 'role_group_user_org_type') == array_get($value, 'role_group_user_org_type');
                 },
             ]);
 
@@ -649,14 +649,14 @@ class RoleGroupController extends AdminControllerBase
             'active' => $isSelectTarget,
             'complete' => false,
             'url' => isset($id) ? admin_urls('role_group', $id, 'edit') : null,
-            'description' => exmtrans('role_group.permission_setting')
+            'description' => exmtrans('role_group.permission_setting'),
         ];
 
         $steps[] = [
             'active' => !$isSelectTarget,
             'complete' => false,
             'url' => isset($id) && $this->hasPermission_UserOrganization() ? admin_urls('role_group', $id, 'edit?form_type=2') : null,
-            'description' => exmtrans('role_group.user_organization_setting')
+            'description' => exmtrans('role_group.user_organization_setting'),
         ];
         return $steps;
     }
@@ -701,9 +701,9 @@ class RoleGroupController extends AdminControllerBase
             $permissions = array_get($table_permission, 'permissions', []);
 
             // Whether accessable
-            $accessable_flg =
-                boolval($custom_table->getOption('all_user_accessable_flg')) ||
-                array_value_exists(Permission::CUSTOM_VALUE_ACCESS_ALL, $permissions);
+            $accessable_flg
+                = boolval($custom_table->getOption('all_user_accessable_flg'))
+                || array_value_exists(Permission::CUSTOM_VALUE_ACCESS_ALL, $permissions);
             if (!$accessable_flg) {
                 continue;
             }
@@ -834,7 +834,7 @@ class RoleGroupController extends AdminControllerBase
         // create exporter
         $service = $this->getImportExportService()
             ->format($request->file('custom_table_file'));
-        
+
         if ($service->format() == 'csv') {
             $file = $request->file('custom_table_file');
             // @phpstan-ignore-next-line

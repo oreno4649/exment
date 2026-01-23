@@ -59,7 +59,7 @@ abstract class FormBase
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($custom_table, $custom_form) = $args + [null, null];
+        [$custom_table, $custom_form] = $args + [null, null];
 
         /** Unsafe usage of new static(). */
         /** @phpstan-ignore-next-line */

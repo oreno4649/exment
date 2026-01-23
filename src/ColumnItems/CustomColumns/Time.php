@@ -68,7 +68,7 @@ class Time extends Date
      */
     protected function _getDefaultValue()
     {
-        list($default_type, $default) = $this->getDefaultSetting();
+        [$default_type, $default] = $this->getDefaultSetting();
         if (isMatchString($default_type, ColumnDefaultType::EXECUTING_TIME)) {
             return \Carbon\Carbon::now()->format($this->format);
         }
@@ -88,7 +88,7 @@ class Time extends Date
     {
         $form->select('default_type', exmtrans("custom_column.options.default_type"))
             ->help(exmtrans("custom_column.help.default_type"))
-            ->attribute(['data-filtertrigger' =>true])
+            ->attribute(['data-filtertrigger' => true])
             ->options(getTransArray(ColumnDefaultType::COLUMN_DEFAULT_TYPE_TIME(), 'custom_column.column_default_type_options'));
 
         $form->time('default', exmtrans("custom_column.options.default"))

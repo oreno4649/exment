@@ -312,7 +312,7 @@ class CustomFormPublicController extends AdminControllerTableBase
                     ->required()
                     ->disableClear()
                     ->attribute([
-                        'data-filtertrigger' =>true,
+                        'data-filtertrigger' => true,
                         'data-linkage' => json_encode([
                             'notify_action_target' => admin_urls('formpublic', $this->custom_table->table_name, 'notify_action_target'),
                         ]),
@@ -364,7 +364,7 @@ class CustomFormPublicController extends AdminControllerTableBase
                     ->required()
                     ->disableClear()
                     ->attribute([
-                        'data-filtertrigger' =>true,
+                        'data-filtertrigger' => true,
                         'data-linkage' => json_encode([
                             'notify_action_target' => admin_urls('formpublic', $this->custom_table->table_name, 'notify_action_target'),
                         ]),

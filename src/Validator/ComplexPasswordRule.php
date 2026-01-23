@@ -9,9 +9,7 @@ use Illuminate\Contracts\Validation\Rule;
  */
 class ComplexPasswordRule implements Rule
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
     * Check Validation
@@ -49,6 +47,6 @@ class ComplexPasswordRule implements Rule
      */
     public function message()
     {
-        return (string)exmtrans('validation.complex_password');
+        return (string) exmtrans('validation.complex_password');
     }
 }

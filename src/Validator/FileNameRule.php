@@ -10,7 +10,6 @@ use Encore\Admin\Form\Field;
  */
 class FileNameRule implements Rule
 {
-
     public function __construct() {}
 
     /**
@@ -42,13 +41,13 @@ class FileNameRule implements Rule
         // not check null or empty. Check by other required rule.
         if (is_nullorempty($value)) {
             return true;
-        } else if (is_string($value)) {
+        } elseif (is_string($value)) {
             // Check if the string starts with 'tmp:'
             if (strpos($value, Field\File::TMP_FILE_PREFIX) === 0) {
                 $value = substr($value, strlen(Field\File::TMP_FILE_PREFIX));
             }
             $filename = pathinfo($value, PATHINFO_BASENAME);
-        } else if ($value instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
+        } elseif ($value instanceof \Symfony\Component\HttpFoundation\File\UploadedFile) {
             $filename = $value->getClientOriginalName();
         } else {
             return false;
@@ -64,6 +63,6 @@ class FileNameRule implements Rule
      */
     public function message()
     {
-        return (string)exmtrans('validation.filename_not_allow');
+        return (string) exmtrans('validation.filename_not_allow');
     }
 }

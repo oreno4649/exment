@@ -94,7 +94,7 @@ trait ApiDataTrait
             $column_name = $custom_column->getIndexColumnName();
             $list = $this->custom_table->searchValue($query, [
                 'searchColumns' => collect([$column_name]),
-            /** @phpstan-ignore-next-line */
+                /** @phpstan-ignore-next-line */
             ])->pluck($column_name)->unique()->toArray();
         }
         return json_encode($list);
@@ -252,7 +252,7 @@ trait ApiDataTrait
         elseif ($target instanceof CustomValue) {
             /** @phpstan-ignore-next-line */
             $editor_cols = CustomColumn::where('custom_table_id', $this->custom_table->id)->where('column_type', ColumnType::EDITOR)->get();
-            foreach($editor_cols as $col) {
+            foreach ($editor_cols as $col) {
                 /** @phpstan-ignore-next-line */
                 $val = $target->getValue($col->column_name);
                 /** @phpstan-ignore-next-line */
@@ -340,7 +340,7 @@ trait ApiDataTrait
         if ($validator->fails()) {
             /** @phpstan-ignore-next-line */
             return abortJson(400, [
-                'errors' => $this->getErrorMessages($validator)
+                'errors' => $this->getErrorMessages($validator),
             ], ErrorCode::VALIDATION_ERROR());
         }
 
@@ -398,7 +398,7 @@ trait ApiDataTrait
             'appends' => [
                 'q' => $q,
                 'count' => $count,
-            ]
+            ],
         ]);
     }
 

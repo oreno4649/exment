@@ -30,7 +30,7 @@ class RouteServiceProvider extends ServiceProvider
         /** @var int $rate_limit */
         $rate_limit = config('exment.api_max_rate_limit', 60);
         RateLimiter::for('api', function (Request $request) use ($rate_limit) {
-            $login_user = \Exment::user()?? \Auth::guard(Define::AUTHENTICATE_KEY_API)->user();
+            $login_user = \Exment::user() ?? \Auth::guard(Define::AUTHENTICATE_KEY_API)->user();
             return Limit::perMinute($rate_limit)->by($login_user?->base_user_id ?: $request->ip());
         });
     }
@@ -153,7 +153,7 @@ class RouteServiceProvider extends ServiceProvider
 
             $router->get("loginuser/importModal", 'LoginUserController@importModal');
             $router->post("loginuser/import", 'LoginUserController@import');
-            $router->resource('loginuser', 'LoginUserController', ['except'=> ['create']]);
+            $router->resource('loginuser', 'LoginUserController', ['except' => ['create']]);
 
             $router->get("role_group/importModal", 'RoleGroupController@importModal');
             $router->post("role_group/import", 'RoleGroupController@import');

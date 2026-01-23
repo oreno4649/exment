@@ -25,7 +25,7 @@ class OperationValueType extends EnumBase
         }
         if (isMatchString($custom_column->column_type, ColumnType::USER)) {
             return [static::LOGIN_USER => exmtrans('custom_operation.operation_value_type_options.login_user'),
-                    static::CREATED_USER => exmtrans('custom_operation.operation_value_type_options.created_user')];
+                static::CREATED_USER => exmtrans('custom_operation.operation_value_type_options.created_user')];
         }
         if (isMatchString($custom_column->column_type, ColumnType::ORGANIZATION)) {
             return [static::BERONG_ORGANIZATIONS => exmtrans('custom_operation.operation_value_type_options.berong_organizations')];

@@ -18,7 +18,7 @@ class PublicFormSession extends \Encore\Admin\Middleware\Session
         $baseUrl = trim(request()->getBaseUrl(), '/');
         $path = '';
         if (!empty($baseUrl)) {
-            $path .= '/'.$baseUrl;
+            $path .= '/' . $baseUrl;
         } else {
             $path = '';
         }

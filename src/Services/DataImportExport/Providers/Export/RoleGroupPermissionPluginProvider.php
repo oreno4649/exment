@@ -15,13 +15,13 @@ class RoleGroupPermissionPluginProvider extends RoleGroupPermissionProvider
     {
         return 'role_group_permission_plugin';
     }
-    
+
     // @phpstan-ignore-next-line
     protected function setRoleTypeFilter(&$query)
     {
         $query->where('role_group_permission_type', RoleType::PLUGIN);
     }
-    
+
     protected function getRoleGroupType(): RoleGroupType
     {
         return RoleGroupType::PLUGIN();
@@ -30,8 +30,8 @@ class RoleGroupPermissionPluginProvider extends RoleGroupPermissionProvider
     // @phpstan-ignore-next-line
     protected function setHeadersOfType(array &$headers, array &$titles): void
     {
-        $headers[] = "role_group_target_id"; 
-        $titles[] = exmtrans('role_group.role_group_target_plugin'); 
+        $headers[] = "role_group_target_id";
+        $titles[] = exmtrans('role_group.role_group_target_plugin');
     }
 
     // @phpstan-ignore-next-line

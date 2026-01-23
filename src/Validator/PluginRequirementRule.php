@@ -13,9 +13,7 @@ class PluginRequirementRule implements Rule
     // @phpstan-ignore-next-line
     protected $composers = [];
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
     * Check Validation
@@ -61,6 +59,6 @@ class PluginRequirementRule implements Rule
     public function message()
     {
         $composer = implode(exmtrans('common.separate_word'), $this->composers);
-        return (string)exmtrans('plugin.error.class_requirement', ['composer' => $composer]);
+        return (string) exmtrans('plugin.error.class_requirement', ['composer' => $composer]);
     }
 }

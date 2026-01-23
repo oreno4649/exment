@@ -61,7 +61,7 @@ class RoleGroupUserOrganizationProvider extends ProviderBase
             'role_group_id',
             'role_group_user_org_type',
             'role_group_target_id',
-            'delete_flg'
+            'delete_flg',
         ];
 
         // 2nd row, column view name
@@ -69,7 +69,7 @@ class RoleGroupUserOrganizationProvider extends ProviderBase
             exmtrans('role_group.role_group_id'),
             exmtrans('role_group.role_group_user_org_type'),
             exmtrans('role_group.role_group_user_org_target_id'),
-            exmtrans('common.deleted')
+            exmtrans('common.deleted'),
         ];
 
         return $rows;

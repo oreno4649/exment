@@ -22,39 +22,39 @@ class BatchDelete extends BatchDeleteBase
 
         return <<<EOT
 
-$('{$this->getElementClass()}').on('click', function() {
+            $('{$this->getElementClass()}').on('click', function() {
 
-    swal({
-        title: "{$trans['delete_confirm']}",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "{$trans['confirm']}",
-        showLoaderOnConfirm: true,
-        allowOutsideClick: false,
-        cancelButtonText: "{$trans['cancel']}",
-        preConfirm: function() {
-            $('.swal2-cancel').hide();
-            return new Promise(function(resolve) {
-                $.ajax({
-                    method: 'post',
-                    url: '{$url}/' + $.admin.grid.selected().join(),
-                    data: {
-                        _method:'delete',
-                        _token:'{$this->getToken()}'
-                    },
-                    success: function (repsonse) {
-                        Exment.CommonEvent.CallbackExmentAjax(repsonse, resolve);
-                    },
-                    error: function (repsonse) {
-                        Exment.CommonEvent.CallbackExmentAjax(repsonse, resolve);
+                swal({
+                    title: "{$trans['delete_confirm']}",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "{$trans['confirm']}",
+                    showLoaderOnConfirm: true,
+                    allowOutsideClick: false,
+                    cancelButtonText: "{$trans['cancel']}",
+                    preConfirm: function() {
+                        $('.swal2-cancel').hide();
+                        return new Promise(function(resolve) {
+                            $.ajax({
+                                method: 'post',
+                                url: '{$url}/' + $.admin.grid.selected().join(),
+                                data: {
+                                    _method:'delete',
+                                    _token:'{$this->getToken()}'
+                                },
+                                success: function (repsonse) {
+                                    Exment.CommonEvent.CallbackExmentAjax(repsonse, resolve);
+                                },
+                                error: function (repsonse) {
+                                    Exment.CommonEvent.CallbackExmentAjax(repsonse, resolve);
+                                }
+                            });
+                        });
                     }
                 });
             });
-        }
-    });
-});
 
-EOT;
+            EOT;
     }
 }

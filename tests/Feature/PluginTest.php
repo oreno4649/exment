@@ -48,7 +48,7 @@ class PluginTest extends FeatureTestBase
         $custom_table = CustomTable::getEloquent(TestDefine::TESTDATA_TABLE_NAME_EDIT_ALL);
         $custom_value = $custom_table->getValueModel()->where('value->multiples_of_3', '1')->first();
 
-        list($plugin, $pluginClass) = $this->getPluginInfo('TestPluginButton', PluginType::BUTTON, [
+        [$plugin, $pluginClass] = $this->getPluginInfo('TestPluginButton', PluginType::BUTTON, [
             'custom_table' => $custom_table,
             'custom_value' => $custom_value,
         ]);
@@ -124,6 +124,7 @@ class PluginTest extends FeatureTestBase
         $notify = Notify::where('custom_table_id', $custom_table->id)->where('notify_trigger', NotifyTrigger::BUTTON)->first();
         $target_user = CustomTable::getEloquent('user')->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER2);
 
+        // @phpstan-ignore-next-line
         NotifyService::executeNotifyAction($notify, [
             'custom_value' => $custom_value,
             'subject' => 'プラグインテスト',
@@ -168,7 +169,7 @@ class PluginTest extends FeatureTestBase
         $custom_table = CustomTable::getEloquent(TestDefine::TESTDATA_TABLE_NAME_EDIT_ALL);
         $custom_value = $custom_table->getValueModel(1);
 
-        list($plugin, $pluginClass) = $this->getPluginInfo('TestPluginValidator', PluginType::VALIDATOR, [
+        [$plugin, $pluginClass] = $this->getPluginInfo('TestPluginValidator', PluginType::VALIDATOR, [
             'custom_table' => $custom_table,
             'custom_value' => $custom_value,
             'input_value' => [
@@ -208,7 +209,7 @@ class PluginTest extends FeatureTestBase
         $this->assertTrue(array_get($res, 'result'));
 
         $parent = getModelName('parent_table')::where('value->init_text', 'plugin_unit_test')->get();
-        $this->assertEquals($pre_cnt+1, count($parent));
+        $this->assertEquals($pre_cnt + 1, count($parent));
 
         $parent = $parent->last();
 
@@ -227,7 +228,7 @@ class PluginTest extends FeatureTestBase
         $plugin = Plugin::where('plugin_name', 'TestPluginExportCsv')->first();
         $pluginClass = $plugin->getClass(PluginType::EXPORT);
 
-        list($plugin, $pluginClass) = $this->getPluginInfo('TestPluginExportCsv', PluginType::EXPORT);
+        [$plugin, $pluginClass] = $this->getPluginInfo('TestPluginExportCsv', PluginType::EXPORT);
 
         $custom_table = CustomTable::getEloquent('information');
         $custom_view = CustomView::getAllData($custom_table);
@@ -236,13 +237,13 @@ class PluginTest extends FeatureTestBase
 
         $pluginClass->defaultProvider(new DataImportExport\Providers\Export\DefaultTableProvider([
             'custom_table' => $custom_table,
-            'grid' => $grid
+            'grid' => $grid,
         ]));
 
         $pluginClass->viewProvider(new DataImportExport\Providers\Export\SummaryProvider([
             'custom_table' => $custom_table,
             'custom_view' => $custom_view,
-            'grid' => $grid
+            'grid' => $grid,
         ]));
 
         $file = null;
@@ -266,7 +267,7 @@ class PluginTest extends FeatureTestBase
      */
     public function testExportExcel()
     {
-        list($plugin, $pluginClass) = $this->getPluginInfo('TestPluginExportExcel', PluginType::EXPORT);
+        [$plugin, $pluginClass] = $this->getPluginInfo('TestPluginExportExcel', PluginType::EXPORT);
 
         $custom_table = CustomTable::getEloquent('information');
         $custom_view = CustomView::getAllData($custom_table);
@@ -275,13 +276,13 @@ class PluginTest extends FeatureTestBase
 
         $pluginClass->defaultProvider(new DataImportExport\Providers\Export\DefaultTableProvider([
             'custom_table' => $custom_table,
-            'grid' => $grid
+            'grid' => $grid,
         ]));
 
         $pluginClass->viewProvider(new DataImportExport\Providers\Export\SummaryProvider([
             'custom_table' => $custom_table,
             'custom_view' => $custom_view,
-            'grid' => $grid
+            'grid' => $grid,
         ]));
 
         $file = null;
@@ -309,7 +310,7 @@ class PluginTest extends FeatureTestBase
         /** @var mixed $custom_value */
         $custom_value = $custom_table->getValueModel()->latest()->first();
 
-        list($plugin, $pluginClass) = $this->getPluginInfo('TestPluginDocument', PluginType::DOCUMENT, [
+        [$plugin, $pluginClass] = $this->getPluginInfo('TestPluginDocument', PluginType::DOCUMENT, [
             'custom_table' => $custom_table,
             'id' => $custom_value->id,
         ]);

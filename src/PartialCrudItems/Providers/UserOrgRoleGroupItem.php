@@ -80,10 +80,10 @@ class UserOrgRoleGroupItem extends ProviderBase
             'dbDeleteFilter' => function (&$model, $dbValue) use ($id) {
                 $model->where('role_group_target_id', $id)
                     ->where('role_group_user_org_type', $this->custom_table->table_name)
-                    ->where('role_group_id', array_get((array)$dbValue, 'role_group_id'));
+                    ->where('role_group_id', array_get((array) $dbValue, 'role_group_id'));
             },
             'matchFilter' => function ($dbValue, $value) {
-                return array_get((array)$dbValue, 'role_group_id') == array_get($value, 'role_group_id');
+                return array_get((array) $dbValue, 'role_group_id') == array_get($value, 'role_group_id');
             },
         ]);
 

@@ -73,23 +73,23 @@ class BatchUpdate extends BatchAction
 
         return <<<EOT
 
-$('{$this->getElementClass()}').on('click', function() {
-    var url = '{$url}/operationClick';
-    Exment.CommonEvent.ShowSwal(url, {
-        title: "$label",
-        confirm:"$confirm",
-        cancel:"$cancel",
-        text:"$text",
-        data: {
-            _method:'post',
-            _token:'{$this->getToken()}',
-            suuid: '$suuid',
-            id: $.admin.grid.selected().join(),
-        },
-    });
-});
+            $('{$this->getElementClass()}').on('click', function() {
+                var url = '{$url}/operationClick';
+                Exment.CommonEvent.ShowSwal(url, {
+                    title: "$label",
+                    confirm:"$confirm",
+                    cancel:"$cancel",
+                    text:"$text",
+                    data: {
+                        _method:'post',
+                        _token:'{$this->getToken()}',
+                        suuid: '$suuid',
+                        id: $.admin.grid.selected().join(),
+                    },
+                });
+            });
 
-EOT;
+            EOT;
     }
 
     /**
@@ -104,14 +104,14 @@ EOT;
 
         return <<<EOT
 
-        $('{$this->getElementClass()}').on('click', function() {
-            var url = '{$url}/operationModal';
-            Exment.ModalEvent.ShowModal($("#modal-form-$suuid"), url, {
-                'suuid': '$suuid',
-                'id': $.admin.grid.selected().join(),
-            });
-            return;
-        });
-EOT;
+                    $('{$this->getElementClass()}').on('click', function() {
+                        var url = '{$url}/operationModal';
+                        Exment.ModalEvent.ShowModal($("#modal-form-$suuid"), url, {
+                            'suuid': '$suuid',
+                            'id': $.admin.grid.selected().join(),
+                        });
+                        return;
+                    });
+            EOT;
     }
 }

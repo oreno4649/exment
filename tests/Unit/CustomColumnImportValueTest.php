@@ -26,7 +26,7 @@ class CustomColumnImportValueTest extends UnitTestBase
     public function _testSelectValTextImportValue($checkValue, $matchedValue, bool $result, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::SELECT_VALTEXT, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::SELECT_VALTEXT_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::SELECT_VALTEXT_VALUE);
 
         $v = $column_item->getImportValue($checkValue);
         $this->checkImportValueResult($v, $matchedValue, $result);
@@ -72,7 +72,7 @@ class CustomColumnImportValueTest extends UnitTestBase
     public function _testYesNoImportValue($checkValue, $matchedValue, bool $result, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::YESNO, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, 1);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, 1);
 
         $v = $column_item->getImportValue($checkValue);
         $this->checkImportValueResult($v, $matchedValue, $result);
@@ -119,7 +119,7 @@ class CustomColumnImportValueTest extends UnitTestBase
     public function _testBooleanImportValue($checkValue, $matchedValue, bool $result, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::BOOLEAN, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::BOOLEAN_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::BOOLEAN_VALUE);
 
         $v = $column_item->getImportValue($checkValue);
         $this->checkImportValueResult($v, $matchedValue, $result);
@@ -166,7 +166,7 @@ class CustomColumnImportValueTest extends UnitTestBase
         $options['select_target_table'] = CustomTable::getEloquent('information')->id;
 
         $custom_column = $this->getCustomColumnModel(ColumnType::SELECT_TABLE, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, 1);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, 1);
 
         $v = $column_item->getImportValue($checkValue, $setting);
         $this->checkImportValueResult($v, $matchedValue, $result);

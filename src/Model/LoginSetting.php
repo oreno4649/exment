@@ -156,7 +156,7 @@ class LoginSetting extends ModelBase
         $display_name = $this->getOption('login_button_label') ?? exmtrans('login.login_button_format', ['display_name' => $this->login_view_name]);
 
         return [
-            'btn_name' => 'btn-'.$provider_name,
+            'btn_name' => 'btn-' . $provider_name,
             'login_url' => $this->exment_login_url,
             'font_owesome' => $this->getOption('login_button_icon') ?? (!$hasDefault ? 'fa-sign-in' : "fa-$provider_name"),
             'display_name' => $display_name,

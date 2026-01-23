@@ -23,6 +23,6 @@ class FaviconRule extends FileRule
      */
     public function message()
     {
-        return (string)trans('validation.image');
+        return (string) trans('validation.image');
     }
 }

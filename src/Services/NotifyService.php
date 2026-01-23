@@ -253,7 +253,7 @@ class NotifyService
                 return getAjaxResponse([
                     'result'  => false,
                     'errors' => ['send_error_message' => ['type' => 'input',
-                        'message' => exmtrans('error.mailsend_failed')
+                        'message' => exmtrans('error.mailsend_failed'),
                     ]],
                 ]);
             } catch (\Exception $ex) {
@@ -261,7 +261,7 @@ class NotifyService
                 return getAjaxResponse([
                     'result'  => false,
                     'errors' => ['send_error_message' => ['type' => 'input',
-                        'message' => exmtrans('error.mailsend_failed')
+                        'message' => exmtrans('error.mailsend_failed'),
                     ]],
                 ]);
             }
@@ -348,7 +348,7 @@ class NotifyService
                 'to' => null,
                 'type' => 'mail',
                 'subject' => 'Exment TestMail',
-                'body' => 'Exment TestMail'
+                'body' => 'Exment TestMail',
             ],
             $params
         );
@@ -399,7 +399,7 @@ class NotifyService
         );
         $params['notify'] = $notify;
         $custom_value = $params['custom_value'];
-        $custom_table = isset($params['custom_table']) ? $params['custom_table'] : $custom_value->custom_table;
+        $custom_table = $params['custom_table'] ?? $custom_value->custom_table;
 
         Plugin::pluginExecuteEvent(PluginEventTrigger::NOTIFY_EXECUTING, $custom_table, [
             'custom_table' => $custom_table,
@@ -543,7 +543,7 @@ class NotifyService
         $prms = $params['prms'];
         $user = $params['user'];
         $custom_value = $params['custom_value'];
-        $custom_table = isset($params['custom_table']) ? $params['custom_table'] : ($custom_value ? $custom_value->custom_table : null);
+        $custom_table = $params['custom_table'] ?? ($custom_value ? $custom_value->custom_table : null);
         $subject = $params['subject'];
         $body = $params['body'];
         $replaceOptions = $params['replaceOptions'];
@@ -702,13 +702,13 @@ class NotifyService
             'active' => $isSelectTarget,
             'complete' => false,
             'url' => null,
-            'description' => exmtrans('notify.notify_select')
+            'description' => exmtrans('notify.notify_select'),
         ];
         $steps[] = [
             'active' => !$isSelectTarget,
             'complete' => false,
             'url' => null,
-            'description' => exmtrans('notify.message_input')
+            'description' => exmtrans('notify.message_input'),
         ];
         return $steps;
     }
@@ -732,8 +732,8 @@ class NotifyService
                     return array_get($prms, $matchKey);
                 }
                 return null;
-            }
-        ], (array)$replaceOptions);
+            },
+        ], (array) $replaceOptions);
 
         $target = replaceTextFromFormat($target, $custom_value, $replaceOptions);
 

@@ -288,14 +288,14 @@ class MailSender extends SenderBase
     {
         // get subject
         $subject = NotifyService::replaceWord($this->getSubject(), $this->getCustomValue(), $this->prms, $this->replaceOptions);
-        list($body, $bodyType) = $this->getBodyAndBodyType($this->getBody(), $this->prms, $this->replaceOptions);
+        [$body, $bodyType] = $this->getBodyAndBodyType($this->getBody(), $this->prms, $this->replaceOptions);
         $fromName = NotifyService::replaceWord($this->getFromName(), $this->getCustomValue(), $this->prms, $this->replaceOptions);
 
         // set header as password
         if ($this->getUsePassword()) {
             $password_notify_header = getModelName(SystemTableName::MAIL_TEMPLATE)::where('value->mail_key_name', 'password_notify_header')->first();
             if (isset($password_notify_header)) {
-                list($headerBody, $headerBodyType) = $this->getBodyAndBodyType(array_get($password_notify_header->value, 'mail_body'));
+                [$headerBody, $headerBodyType] = $this->getBodyAndBodyType(array_get($password_notify_header->value, 'mail_body'));
 
                 $body = $headerBody . $body;
             }
@@ -333,7 +333,7 @@ class MailSender extends SenderBase
 
         // get subject
         $subject = NotifyService::replaceWord($subject, $this->getCustomValue(), $prms);
-        list($body, $bodyType) = $this->getBodyAndBodyType($body, $prms);
+        [$body, $bodyType] = $this->getBodyAndBodyType($body, $prms);
         $fromName = NotifyService::replaceWord($fromName, $this->getCustomValue(), $prms);
 
         // clone and replace value

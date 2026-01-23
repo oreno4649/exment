@@ -95,7 +95,7 @@ class RoleGroupUserOrganizationProvider extends ProviderBase
     public function validateDataRow($line_no, $dataAndModel)
     {
         $data = array_get($dataAndModel, 'data');
- 
+
         $errors = [];
         $model = new RoleGroup();
 
@@ -109,17 +109,17 @@ class RoleGroupUserOrganizationProvider extends ProviderBase
         if ($validator->fails()) {
             // create error message
             foreach ($validator->getMessages() as $message) {
-                $errors[] = sprintf(exmtrans('custom_value.import.import_error_format_sheet'), $this->name(), ($line_no+1), implode(',', $message));
+                $errors[] = sprintf(exmtrans('custom_value.import.import_error_format_sheet'), $this->name(), ($line_no + 1), implode(',', $message));
             }
         } else {
             $role_group_user_org_type = array_get($data, 'role_group_user_org_type');
             $role_group_target_id = array_get($data, 'role_group_target_id');
             if (!CustomTable::getEloquent($role_group_user_org_type)->getValueModel()->withoutGlobalScopes()->where('id', $role_group_target_id)->exists()) {
                 $message = exmtrans('custom_value.import.message.user_org_not_exists', exmtrans("$role_group_user_org_type.default_table_name"));
-                $errors[] = sprintf(exmtrans('custom_value.import.import_error_format_sheet'), $this->name(), ($line_no+1), $message);
+                $errors[] = sprintf(exmtrans('custom_value.import.import_error_format_sheet'), $this->name(), ($line_no + 1), $message);
             }
         }
-        
+
 
         if (!is_nullorempty($errors)) {
             return $errors;
@@ -138,7 +138,7 @@ class RoleGroupUserOrganizationProvider extends ProviderBase
         $role_group_id = array_get($data, 'role_group_id');
 
         // parent data not exists, do nothing
-        if (!RoleGroup::where('id', $role_group_id )->exists()) {
+        if (!RoleGroup::where('id', $role_group_id)->exists()) {
             return;
         }
 
@@ -155,8 +155,8 @@ class RoleGroupUserOrganizationProvider extends ProviderBase
                 RoleGroupUserOrganization::find($id)->delete();
             }
             return;
-        } 
-        
+        }
+
         if (!isset($id)) {
             RoleGroupUserOrganization::insert($data);
         }

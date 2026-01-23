@@ -45,8 +45,8 @@ class CustomRelation extends ModelBase implements Interfaces\TemplateImporterInt
                         'replacingName' => 'parent_custom_table_id',
                         'replacedName' => [
                             'table_name' => 'parent_custom_table_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyClassName' => CustomTable::class,
             ],
@@ -56,8 +56,8 @@ class CustomRelation extends ModelBase implements Interfaces\TemplateImporterInt
                         'replacingName' => 'child_custom_table_id',
                         'replacedName' => [
                             'table_name' => 'child_custom_table_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyClassName' => CustomTable::class,
             ],
@@ -67,19 +67,19 @@ class CustomRelation extends ModelBase implements Interfaces\TemplateImporterInt
                         'replacedName' => [
                             'table_name' => 'options.parent_import_table_name',
                             'column_name' => 'options.parent_import_column_name',
-                        ]
+                        ],
                     ],
                     [
                         'replacedName' => [
                             'table_name' => 'options.parent_export_table_name',
                             'column_name' => 'options.parent_export_column_name',
-                        ]
+                        ],
                     ],
                 ],
                 'uniqueKeyFunction' => 'getUniqueKeyValues',
                 'uniqueKeyFunctionArgs' => ['options.parent_import_column_id', 'options.parent_export_column_id'],
             ],
-        ]
+        ],
     ];
 
 
@@ -383,20 +383,20 @@ class CustomRelation extends ModelBase implements Interfaces\TemplateImporterInt
         // delete view column
         foreach ($target->custom_views as $item) {
             foreach ($item->custom_view_columns as $column) {
-                if (ConditionType::isTableItem($column->view_column_type) &&
-                    $column->view_column_table_id == $original_child_id) {
+                if (ConditionType::isTableItem($column->view_column_type)
+                    && $column->view_column_table_id == $original_child_id) {
                     $column->delete();
                 }
             }
             foreach ($item->custom_view_summaries as $column) {
-                if (ConditionType::isTableItem($column->view_column_type) &&
-                    $column->view_column_table_id == $original_child_id) {
+                if (ConditionType::isTableItem($column->view_column_type)
+                    && $column->view_column_table_id == $original_child_id) {
                     $column->delete();
                 }
             }
             foreach ($item->custom_view_filters as $column) {
-                if (ConditionType::isTableItem($column->view_column_type) &&
-                    $column->view_column_table_id == $original_child_id) {
+                if (ConditionType::isTableItem($column->view_column_type)
+                    && $column->view_column_table_id == $original_child_id) {
                     $column->delete();
                 }
             }

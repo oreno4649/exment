@@ -100,13 +100,13 @@ class CustomTableAction implements ActionInterface
                 }
 
                 // validate data
-                list($data_import, $error_data) = $provider->validateImportData($dataObject);
+                [$data_import, $error_data] = $provider->validateImportData($dataObject);
 
                 // if has error data, return error data
                 if (is_array($error_data) && count($error_data) > 0) {
                     $error_msg = [];
                     if ($data_import_cnt > 0) {
-                        $messages[] = $table_name.':'.$data_import_cnt;
+                        $messages[] = $table_name . ':' . $data_import_cnt;
                     }
                     if (count($messages) > 0) {
                         $error_msg[] = exmtrans('command.import.error_info_ex', implode(',', $messages));
@@ -187,7 +187,7 @@ class CustomTableAction implements ActionInterface
             $dataObject = $provider->getDataObject($data, $options);
 
             // validate data
-            list($data_import, $error_data) = $provider->validateImportData($dataObject);
+            [$data_import, $error_data] = $provider->validateImportData($dataObject);
 
             // if has error data, return error data
             if (is_array($error_data) && count($error_data) > 0) {
@@ -199,7 +199,7 @@ class CustomTableAction implements ActionInterface
             }
             $data_imports[] = [
                 'provider' => $provider,
-                'data_import' => $data_import
+                'data_import' => $data_import,
             ];
         }
 
@@ -219,7 +219,7 @@ class CustomTableAction implements ActionInterface
 
         return [
             'result' => true,
-            'toastr' => exmtrans('common.message.import_success')
+            'toastr' => exmtrans('common.message.import_success'),
         ];
     }
 
@@ -315,7 +315,7 @@ class CustomTableAction implements ActionInterface
         // add key name "value.";
         $val_columns = [];
         foreach ($columns as $column_key => $column_value) {
-            $val_columns['value.'.$column_key] = $column_value;
+            $val_columns['value.' . $column_key] = $column_value;
         }
 
         // merge

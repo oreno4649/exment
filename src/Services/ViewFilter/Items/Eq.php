@@ -32,6 +32,6 @@ class Eq extends ViewFilter\ViewFilterBase
         if (!$this->isNumeric()) {
             return isMatchString($value, $conditionValue);
         }
-        return (float)$value == (float)$conditionValue;
+        return (float) $value == (float) $conditionValue;
     }
 }

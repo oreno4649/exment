@@ -20,7 +20,7 @@ class SsoLoginErrorException extends \Exception
     {
         $this->sso_login_error_type = SsoLoginErrorType::getEnum($sso_login_error_type);
         $this->displayMessage = $displayMessage;
-        $this->adminMessage = isset($adminMessage) ? $adminMessage : $displayMessage;
+        $this->adminMessage = $adminMessage ?? $displayMessage;
         $this->hasAdminError = isset($adminMessage);
 
         // for logging message

@@ -58,7 +58,7 @@ class InitOnlyRule implements Rule
      */
     public function message()
     {
-        return (string)exmtrans('validation.init_only', [
+        return (string) exmtrans('validation.init_only', [
             'original_value' => $this->getOriginalValue(),
         ]);
     }

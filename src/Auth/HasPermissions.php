@@ -195,17 +195,17 @@ trait HasPermissions
         foreach ($roles as $key => $role) {
             if (RoleType::SYSTEM == $key) {
                 $permissions[] = new AuthPermission([
-                    'role_type' =>$key,
+                    'role_type' => $key,
                     'table_name' => null,
-                    'permission_details' =>$role,
+                    'permission_details' => $role,
                 ]);
                 continue;
             } elseif (RoleType::TABLE == $key) {
                 foreach ($role as $k => $v) {
                     $permissions[] =  new AuthPermission([
-                        'role_type' =>$key,
-                        'table_name' =>$k,
-                        'permission_details' =>$v,
+                        'role_type' => $key,
+                        'table_name' => $k,
+                        'permission_details' => $v,
                     ]);
                 }
             } elseif (RoleType::PLUGIN == $key) {
@@ -214,7 +214,7 @@ trait HasPermissions
                         'role_type' => $key,
                         'table_name' => null,
                         'plugin_id' => $k,
-                        'permission_details' =>$v,
+                        'permission_details' => $v,
                     ]);
                 }
             }
@@ -264,7 +264,7 @@ trait HasPermissions
     {
         if (is_string($item)) {
             $item = [
-                'uri' => $item
+                'uri' => $item,
             ];
         } elseif (empty($item)) {
             return false;
@@ -388,7 +388,7 @@ trait HasPermissions
                     continue;
                 }
 
-                $custom_table = $tables->first(function($item) use ($role_group_permission) {
+                $custom_table = $tables->first(function ($item) use ($role_group_permission) {
                     return $item->id == $role_group_permission->role_group_target_id;
                 });
                 if (!isset($custom_table)) {
@@ -450,7 +450,7 @@ trait HasPermissions
                     continue;
                 }
 
-                $plugin = $plugins->first(function($item) use ($role_group_permission) {
+                $plugin = $plugins->first(function ($item) use ($role_group_permission) {
                     return $item->id == $role_group_permission->role_group_target_id;
                 });
                 if (!isset($plugin)) {

@@ -22,7 +22,7 @@ class ApiUserTest extends ApiTestBase
         ])->get(admin_urls('api', 'me'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -39,10 +39,10 @@ class ApiUserTest extends ApiTestBase
             ->assertStatus(200)
             ->assertJsonFragment([
                 'value' => [
-                    "email"=> "admin@admin.foobar.test",
-                    "user_code"=> "admin",
-                    "user_name"=> "admin"
-                ]
+                    "email" => "admin@admin.foobar.test",
+                    "user_code" => "admin",
+                    "user_name" => "admin",
+                ],
             ])
             ->assertJsonStructure([
                 'id',
@@ -66,7 +66,7 @@ class ApiUserTest extends ApiTestBase
         ])->get(admin_urls('api', 'me'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -83,10 +83,10 @@ class ApiUserTest extends ApiTestBase
             ->assertStatus(200)
             ->assertJsonFragment([
                 'value' => [
-                    "email"=> "admin@admin.foobar.test",
-                    "user_code"=> "admin",
-                    "user_name"=> "admin"
-                ]
+                    "email" => "admin@admin.foobar.test",
+                    "user_code" => "admin",
+                    "user_name" => "admin",
+                ],
             ])
             ->assertJsonStructure([
                 'id',
@@ -114,7 +114,7 @@ class ApiUserTest extends ApiTestBase
         ])->get(admin_urls('api', 'avatar'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -211,7 +211,7 @@ class ApiUserTest extends ApiTestBase
 
         $response = $this->withHeaders([
             'Authorization' => "Bearer $token",
-            ])->get(admin_urls_query('api', 'avatar', ['default' => '1']));
+        ])->get(admin_urls_query('api', 'avatar', ['default' => '1']));
 
         $content = $response->streamedContent();
         $this->assertMatch(base64_encode($content), TestDefine::FILE_USERDEFALUT_BASE64);

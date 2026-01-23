@@ -84,7 +84,7 @@ class DataShareAuthoritable extends ModelBase
 
         $target_type = static::getTargetType($target_data);
 
-        $target_name = exmtrans('role_group.share_target_options.'.$target_type->lowerkey());
+        $target_name = exmtrans('role_group.share_target_options.' . $target_type->lowerkey());
 
         if (isset($tableKey)) {
             $url = admin_urls($target_type->lowerkey(), $tableKey, $id, 'sendShares');
@@ -102,7 +102,7 @@ class DataShareAuthoritable extends ModelBase
 
         // select target users
         $default = static::getUserOrgSelectDefault($target_type->toString(), $id, Permission::DATA_SHARE_EDIT);
-        list($options, $ajax) = static::getUserOrgSelectOptions($target_data->custom_table, null, false, $default);
+        [$options, $ajax] = static::getUserOrgSelectOptions($target_data->custom_table, null, false, $default);
 
         // for validation options
         $validationOptions = null;
@@ -113,7 +113,7 @@ class DataShareAuthoritable extends ModelBase
                 if (!is_null($validationOptions)) {
                     return $validationOptions;
                 }
-                list($validationOptions, $ajax) = static::getUserOrgSelectOptions($target_data->custom_table, null, false, null, true);
+                [$validationOptions, $ajax] = static::getUserOrgSelectOptions($target_data->custom_table, null, false, null, true);
                 return $validationOptions;
             })
             ->ajax($ajax)
@@ -122,7 +122,7 @@ class DataShareAuthoritable extends ModelBase
             ->setWidth(9, 2);
 
         $default = static::getUserOrgSelectDefault($target_type->toString(), $id, Permission::DATA_SHARE_VIEW);
-        list($options, $ajax) = static::getUserOrgSelectOptions($target_data->custom_table, null, false, $default);
+        [$options, $ajax] = static::getUserOrgSelectOptions($target_data->custom_table, null, false, $default);
 
         $form->multipleSelect(Permission::DATA_SHARE_VIEW, exmtrans("role_group.role_type_option_value.data_share_view.label"))
             ->options($options)
@@ -130,7 +130,7 @@ class DataShareAuthoritable extends ModelBase
                 if (!is_null($validationOptions)) {
                     return $validationOptions;
                 }
-                list($validationOptions, $ajax) = static::getUserOrgSelectOptions($target_data->custom_table, null, false, null, true);
+                [$validationOptions, $ajax] = static::getUserOrgSelectOptions($target_data->custom_table, null, false, null, true);
                 return $validationOptions;
             })
             ->ajax($ajax)
@@ -200,7 +200,7 @@ class DataShareAuthoritable extends ModelBase
             foreach ($items as $item) {
                 $user_organizations = $request->get($item['name'], []);
                 $user_organizations = collect($user_organizations)->filter()->map(function ($user_organization) use ($target_data, $target_key, $item) {
-                    list($authoritable_user_org_type, $authoritable_target_id) = explode('_', $user_organization);
+                    [$authoritable_user_org_type, $authoritable_target_id] = explode('_', $user_organization);
                     return [
                         'authoritable_type' => $item['name'],
                         'authoritable_user_org_type' => $authoritable_user_org_type,
@@ -222,12 +222,12 @@ class DataShareAuthoritable extends ModelBase
                         $model->where('parent_type', $target_key)
                             ->where('parent_id', $target_data->id)
                             ->where('authoritable_type', $item['name'])
-                            ->where('authoritable_user_org_type', array_get((array)$dbValue, 'authoritable_user_org_type'))
-                            ->where('authoritable_target_id', array_get((array)$dbValue, 'authoritable_target_id'));
+                            ->where('authoritable_user_org_type', array_get((array) $dbValue, 'authoritable_user_org_type'))
+                            ->where('authoritable_target_id', array_get((array) $dbValue, 'authoritable_target_id'));
                     },
                     'matchFilter' => function ($dbValue, $value) {
-                        return array_get((array)$dbValue, 'authoritable_user_org_type') == array_get($value, 'authoritable_user_org_type')
-                            && array_get((array)$dbValue, 'authoritable_target_id') == array_get($value, 'authoritable_target_id');
+                        return array_get((array) $dbValue, 'authoritable_user_org_type') == array_get($value, 'authoritable_user_org_type')
+                            && array_get((array) $dbValue, 'authoritable_target_id') == array_get($value, 'authoritable_target_id');
                     },
                 ]));
             }

@@ -42,7 +42,7 @@ class CustomForm extends ModelBase implements Interfaces\TemplateImporterInterfa
         ],
 
         'uniqueKeys' => [
-            'suuid'
+            'suuid',
         ],
 
         'uniqueKeyReplaces' => [
@@ -52,14 +52,14 @@ class CustomForm extends ModelBase implements Interfaces\TemplateImporterInterfa
                         'replacingName' => 'custom_table_id',
                         'replacedName' => [
                             'table_name' => 'table_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyClassName' => CustomTable::class,
             ],
         ],
-        'children' =>[
-            'custom_form_blocks' => CustomFormBlock::class
+        'children' => [
+            'custom_form_blocks' => CustomFormBlock::class,
         ],
     ];
 

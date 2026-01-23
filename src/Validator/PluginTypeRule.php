@@ -11,9 +11,7 @@ use Exceedone\Exment\Enums\PluginType;
  */
 class PluginTypeRule implements Rule
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
     * Check Validation

@@ -43,7 +43,7 @@ class SqlServerBuilder extends BaseBuilder
     public function getColumnDefinitions($table)
     {
         $baseTable = $table;
-        $table = $this->connection->getTablePrefix().$table;
+        $table = $this->connection->getTablePrefix() . $table;
         $results = $this->connection->selectFromWriteConnection($this->grammar->compileColumnDefinitions($table), [$table]);
 
         return $this->connection->getPostProcessor()->processColumnDefinitions($baseTable, $results);
@@ -57,7 +57,7 @@ class SqlServerBuilder extends BaseBuilder
      */
     public function createValueTable($table)
     {
-        $table = $this->connection->getTablePrefix().$table;
+        $table = $this->connection->getTablePrefix() . $table;
         $this->connection->statement(
             $this->grammar->compileCreateValueTable($table)
         );

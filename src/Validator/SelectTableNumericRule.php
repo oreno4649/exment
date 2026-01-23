@@ -11,9 +11,7 @@ use Illuminate\Contracts\Validation\Rule;
  */
 class SelectTableNumericRule implements Rule
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
     * Check Validation
@@ -62,6 +60,6 @@ class SelectTableNumericRule implements Rule
      */
     public function message()
     {
-        return (string)trans('validation.numeric');
+        return (string) trans('validation.numeric');
     }
 }

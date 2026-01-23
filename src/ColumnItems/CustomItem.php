@@ -176,7 +176,7 @@ abstract class CustomItem implements ItemInterface
     {
         $array = [];
 
-        $header_align = array_get($this->options, 'header_align')?? TextAlignExType::LEFT;
+        $header_align = array_get($this->options, 'header_align') ?? TextAlignExType::LEFT;
         if ($header_align == TextAlignExType::INHERIT) {
             $text_align = $this->custom_column->getOption('text_align');
             if (isset($text_align)) {
@@ -257,7 +257,7 @@ abstract class CustomItem implements ItemInterface
             return $this->getViewPivotValue($custom_value, $this->options);
         }
 
-        return array_get($custom_value, 'value.'.$this->custom_column->column_name);
+        return array_get($custom_value, 'value.' . $this->custom_column->column_name);
     }
 
     /**
@@ -319,7 +319,7 @@ abstract class CustomItem implements ItemInterface
         }
 
         // default
-        list($default_type, $default) = $this->getDefaultSetting();
+        [$default_type, $default] = $this->getDefaultSetting();
         $options = $this->custom_column->options;
         if (!is_nullorempty($default)) {
             return $default;
@@ -472,7 +472,7 @@ abstract class CustomItem implements ItemInterface
     {
         $options = $this->custom_column->options;
         // form column name. join $column_name_prefix and $column_name
-        $form_column_name = $column_name_prefix.$this->name();
+        $form_column_name = $column_name_prefix . $this->name();
 
         $field = new $classname($form_column_name, [array_get($this->form_column_options, 'form_column_view_name') ?? $this->label()]);
         if ($this->isSetAdminOptions()) {
@@ -575,7 +575,7 @@ abstract class CustomItem implements ItemInterface
     // @phpstan-ignore-next-line
     public function getSortName()
     {
-        return $this->sqlUniqueTableName() .'.'. $this->custom_column->getQueryKey();
+        return $this->sqlUniqueTableName() . '.' . $this->custom_column->getQueryKey();
     }
 
     /**
@@ -584,16 +584,16 @@ abstract class CustomItem implements ItemInterface
     // @phpstan-ignore-next-line
     public function getCastName($is_summary = false)
     {
-        list($type, $addOption, $options) = $this->getCastOptions();
+        [$type, $addOption, $options] = $this->getCastOptions();
 
-        if ($is_summary && 
-           !(isMatchString($type, DatabaseDataType::TYPE_INTEGER) || isMatchString($type, DatabaseDataType::TYPE_DECIMAL))) {
+        if ($is_summary
+           && !(isMatchString($type, DatabaseDataType::TYPE_INTEGER) || isMatchString($type, DatabaseDataType::TYPE_DECIMAL))) {
             return null;
         }
 
         // if DatabaseDataType::TYPE_STRING, return null
-        if (isMatchString($type, DatabaseDataType::TYPE_STRING) ||
-            isMatchString($type, DatabaseDataType::TYPE_STRING_MULTIPLE)) {
+        if (isMatchString($type, DatabaseDataType::TYPE_STRING)
+            || isMatchString($type, DatabaseDataType::TYPE_STRING_MULTIPLE)) {
             return null;
         }
 
@@ -608,7 +608,7 @@ abstract class CustomItem implements ItemInterface
     // @phpstan-ignore-next-line
     public function getVirtualColumnTypeName()
     {
-        list($type, $addOption, $options) = $this->getCastOptions();
+        [$type, $addOption, $options] = $this->getCastOptions();
         $grammar = \DB::getQueryGrammar();
         // @phpstan-ignore-next-line
         return $grammar->getColumnTypeString($type);
@@ -656,17 +656,13 @@ abstract class CustomItem implements ItemInterface
      * get value before saving
      */
     // @phpstan-ignore-next-line
-    public function saving()
-    {
-    }
+    public function saving() {}
 
     /**
      * get value after saving
      */
     // @phpstan-ignore-next-line
-    public function saved()
-    {
-    }
+    public function saved() {}
 
     // @phpstan-ignore-next-line
     protected function disableEdit()
@@ -706,19 +702,13 @@ abstract class CustomItem implements ItemInterface
     abstract protected function getAdminFieldClass();
 
     // @phpstan-ignore-next-line
-    protected function setAdminOptions(&$field)
-    {
-    }
+    protected function setAdminOptions(&$field) {}
 
     // @phpstan-ignore-next-line
-    protected function setAdminFilterOptions(&$filter)
-    {
-    }
+    protected function setAdminFilterOptions(&$filter) {}
 
     // @phpstan-ignore-next-line
-    protected function setValidates(&$validates)
-    {
-    }
+    protected function setValidates(&$validates) {}
 
     protected function getAppendHelpText(): ?string
     {
@@ -742,7 +732,7 @@ abstract class CustomItem implements ItemInterface
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($custom_column, $custom_value, $view_column_target) = $args + [null, null, null];
+        [$custom_column, $custom_value, $view_column_target] = $args + [null, null, null];
         $column_type = $custom_column->column_type;
 
         if ($className = static::findItemClass($column_type)) {
@@ -914,10 +904,10 @@ abstract class CustomItem implements ItemInterface
 
     protected function isSetAdminOptions(): bool
     {
-        return !$this->hidden() &&
-            !$this->initonly() &&
-            !$this->viewonly() &&
-            !$this->internal();
+        return !$this->hidden()
+            && !$this->initonly()
+            && !$this->viewonly()
+            && !$this->internal();
     }
 
 
@@ -941,9 +931,7 @@ abstract class CustomItem implements ItemInterface
      * @param Form $form
      * @return void
      */
-    public function setCustomColumnOptionForm(&$form)
-    {
-    }
+    public function setCustomColumnOptionForm(&$form) {}
 
     /**
      * Set Custom Column Option Form. Using laravel-admin form option

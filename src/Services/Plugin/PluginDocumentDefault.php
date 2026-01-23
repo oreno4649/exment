@@ -11,15 +11,11 @@ class PluginDocumentDefault extends PluginDocumentBase
      * execute before creating document
      */
     // @phpstan-ignore-next-line
-    protected function executing()
-    {
-    }
+    protected function executing() {}
 
     /**
      * execute after creating document
      */
     // @phpstan-ignore-next-line
-    protected function executed()
-    {
-    }
+    protected function executed() {}
 }

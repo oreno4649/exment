@@ -97,7 +97,7 @@ class CCustomViewTest extends ExmentKitTestCase
         Model\System::clearRequestSession();
 
         // Update custom view
-        $this->visit(admin_url('view/exmenttest_view/'. $id . '/edit'))
+        $this->visit(admin_url('view/exmenttest_view/' . $id . '/edit'))
             ->seeInField('view_view_name', '新しいビュー')
             ->type('更新したビュー', 'view_view_name')
             ->press('admin-submit')
@@ -130,15 +130,15 @@ class CCustomViewTest extends ExmentKitTestCase
                     'view_column_name' => null,
                     'order' => 0,
                     '_remove_' => 0,
-                ]
+                ],
             ],
             'custom_view_summaries' => [
                 'new_1' => [
                     'view_column_target' => "id?table_id={$custom_table->id}",
                     'view_summary_condition' => 3,
                     '_remove_' => 0,
-                ]
-            ]
+                ],
+            ],
         ];
 
         $this->post(admin_url('view/custom_value_edit_all'), $data);
@@ -155,7 +155,7 @@ class CCustomViewTest extends ExmentKitTestCase
         $uniqueName = $custom_view_column->column_item->uniqueName();
         $params = [
             'group_view' => $raw->suuid,
-            'group_key' => json_encode([$uniqueName => '1'])
+            'group_key' => json_encode([$uniqueName => '1']),
         ];
 
         $url = admin_urls_query('data', 'custom_value_edit_all', $params);
@@ -273,7 +273,7 @@ class CCustomViewTest extends ExmentKitTestCase
 
             foreach ($columns as $k => $v) {
                 // get column info from view_column_target
-                list($column_type, $column_table_id, $column_type_target, $view_pivot_column_id, $view_pivot_table_id) = $this->getViewColumnTargetItems($v['view_column_target']);
+                [$column_type, $column_table_id, $column_type_target, $view_pivot_column_id, $view_pivot_table_id] = $this->getViewColumnTargetItems($v['view_column_target']);
 
                 $query = $classname::query()
                     ->where('custom_view_id', $id)
@@ -377,7 +377,7 @@ class CCustomViewTest extends ExmentKitTestCase
         ];
 
         $this->put(admin_url("view/exmenttest_view/{$id}"), $data);
-        
+
         $this->visit(admin_url("data/exmenttest_view?view={$suuid}"));
 
         $response = $this->get(admin_url("data/exmenttest_view?filter_ajax=1"));
@@ -433,7 +433,7 @@ class CCustomViewTest extends ExmentKitTestCase
         ];
 
         $this->put(admin_url("view/exmenttest_view/{$id}"), $data);
-        
+
         $this->visit(admin_url("data/exmenttest_view?view={$suuid}"));
 
         $response = $this->get(admin_url("data/exmenttest_view?filter_ajax=1"));

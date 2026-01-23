@@ -41,7 +41,7 @@ class ModalButton
             'label' => $this->label ?? null,
             'button_class' => $this->btn_class ?? 'btn-warning',
             'icon' => $this->icon ?? 'fa-share',
-            'url' => $this->url
+            'url' => $this->url,
         ]);
     }
 

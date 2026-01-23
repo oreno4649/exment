@@ -47,7 +47,7 @@ class CustomOperationColumn extends ModelBase
     // @phpstan-ignore-next-line
     public function setViewColumnTargetAttribute($view_column_target)
     {
-        list($column_type, $column_table_id, $column_type_target) = $this->getViewColumnTargetItems($view_column_target, 'custom_operation');
+        [$column_type, $column_table_id, $column_type_target] = $this->getViewColumnTargetItems($view_column_target, 'custom_operation');
 
         $this->view_column_type = $column_type;
         $this->view_column_target_id = $column_type_target;

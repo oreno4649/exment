@@ -30,7 +30,7 @@ class SystemChangePageMenu extends ModalTileMenuButton
         }
 
         $this->groups = [[
-            'items' => $items
+            'items' => $items,
         ]];
 
         return parent::render();

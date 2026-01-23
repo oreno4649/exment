@@ -75,16 +75,16 @@ class CustomFormPriority extends ModelBase
     public function getFormPriorityTextAttribute()
     {
         if (isset($this->custom_form_priority_conditions)) {
-            $list =[];
+            $list = [];
             foreach ($this->custom_form_priority_conditions as $condition) {
                 $list[] = $condition->condition_text;
             }
 
             // @phpstan-ignore-next-line
-            $glue = exmtrans('common.join_'.$this->condition_join??'and');
+            $glue = exmtrans('common.join_' . $this->condition_join ?? 'and');
             $text = implode($glue, $list);
             if (boolval($this->condition_reverse)) {
-                $text = exmtrans('common.condition_reverse'). $text;
+                $text = exmtrans('common.condition_reverse') . $text;
             }
             return $text;
         }

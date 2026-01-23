@@ -26,11 +26,11 @@ class RoleGroupPermissionPluginProvider extends RoleGroupPermissionProvider
 
     /**
      * add data row validate rules for each role type
-     * 
+     *
      * @param $rules
      */
     // @phpstan-ignore-next-line
-    protected function addValidateTypeRules(&$rules) : void
+    protected function addValidateTypeRules(&$rules): void
     {
         $model = new Plugin();
         $rules['role_group_target_id'] = 'required|exists:' . $model->getTable() . ',id';
@@ -38,13 +38,13 @@ class RoleGroupPermissionPluginProvider extends RoleGroupPermissionProvider
 
     /**
      * validate data row by ex rules
-     * 
+     *
      * @param array $data
      * @param int $line_no
      * @param array $errors
      */
     // @phpstan-ignore-next-line
-    protected function validateExtraRules($data, $line_no, &$errors) : void
+    protected function validateExtraRules($data, $line_no, &$errors): void
     {
         $role_group_target_id = array_get($data, 'role_group_target_id');
         $plugin_access = array_get($data, 'permissions:plugin_access');
@@ -55,9 +55,9 @@ class RoleGroupPermissionPluginProvider extends RoleGroupPermissionProvider
         });
         if (!$enabledPluginAccess && boolval($plugin_access)) {
             $errors[] = sprintf(
-                exmtrans('custom_value.import.import_error_format_sheet'), 
-                $this->name(), 
-                ($line_no+1), 
+                exmtrans('custom_value.import.import_error_format_sheet'),
+                $this->name(),
+                ($line_no + 1),
                 exmtrans('role_group.error.cannot_plugin_access_permission')
             );
         }

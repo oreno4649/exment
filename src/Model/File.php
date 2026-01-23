@@ -99,7 +99,7 @@ class File extends ModelBase
             return null;
         }
 
-        $name = 'files/'.($options['dirName'] ? $file->local_dirname.'/'.$file->local_filename  : $file->uuid);
+        $name = 'files/' . ($options['dirName'] ? $file->local_dirname . '/' . $file->local_filename : $file->uuid);
 
         // append prefix
         if ($options['asApi']) {
@@ -247,7 +247,7 @@ class File extends ModelBase
         $uuid = make_uuid();
 
         if (!isset($filename)) {
-            list($dirname, $filename) = static::getDirAndFileName($dirname);
+            [$dirname, $filename] = static::getDirAndFileName($dirname);
         }
 
         if (!isset($unique_filename)) {
@@ -460,7 +460,7 @@ class File extends ModelBase
         };
         $funcPath = function ($pathOrUuid) {
             // get by $dirname, $filename
-            list($dirname, $filename) = static::getDirAndFileName($pathOrUuid);
+            [$dirname, $filename] = static::getDirAndFileName($pathOrUuid);
             $file = static::where('local_dirname', $dirname)
                 ->where('local_filename', $filename)
                 ->first();
@@ -494,7 +494,7 @@ class File extends ModelBase
     {
         if ($override) {
             if (!isset($filename)) {
-                list($dirname, $filename) = static::getDirAndFileName($dirname);
+                [$dirname, $filename] = static::getDirAndFileName($dirname);
             }
 
             // get by dir and filename
@@ -506,7 +506,7 @@ class File extends ModelBase
         }
 
         $ext = file_ext($filename);
-        return make_uuid() . (!is_nullorempty($ext) ? '.'.$ext : '');
+        return make_uuid() . (!is_nullorempty($ext) ? '.' . $ext : '');
     }
 
     /**

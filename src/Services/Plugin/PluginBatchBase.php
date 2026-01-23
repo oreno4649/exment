@@ -21,7 +21,5 @@ class PluginBatchBase
      *
      * @return void
      */
-    public function execute()
-    {
-    }
+    public function execute() {}
 }

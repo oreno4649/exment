@@ -13,8 +13,8 @@ class Plugin extends PluginBatchBase
      */
     public function execute()
     {
-        require_once dirname(__FILE__).'/function.php';
-        require_once dirname(__FILE__).'/Dir1/function.php';
+        require_once dirname(__FILE__) . '/function.php';
+        require_once dirname(__FILE__) . '/Dir1/function.php';
 
         // call test global funciton
         testPluginGlobalFunction();

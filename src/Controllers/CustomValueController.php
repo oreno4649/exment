@@ -159,7 +159,7 @@ class CustomValueController extends AdminControllerTableBase
         if (!$modalframe || $modal) {
             Plugin::pluginExecuteEvent(PluginEventType::LOADING, $this->custom_table, [
                 'is_modal' => $modal,
-                'page_type' => PluginPageType::LIST
+                'page_type' => PluginPageType::LIST,
             ]);
         }
 
@@ -214,8 +214,8 @@ class CustomValueController extends AdminControllerTableBase
         } else {
             $callback = null;
             if ($request->has('query')) {
-                if (!boolval(config('exment.search_keep_default_view', false)) ||
-                    !($this->custom_view->view_kind_type == ViewKindType::DEFAULT || $this->custom_view->view_kind_type == ViewKindType::ALLDATA)) {
+                if (!boolval(config('exment.search_keep_default_view', false))
+                    || !($this->custom_view->view_kind_type == ViewKindType::DEFAULT || $this->custom_view->view_kind_type == ViewKindType::ALLDATA)) {
                     $this->custom_view = CustomView::getAllData($this->custom_table);
                 }
             }
@@ -248,7 +248,7 @@ class CustomValueController extends AdminControllerTableBase
                 $content = $grid_item->renderModal($grid);
                 Plugin::pluginExecuteEvent(PluginEventType::LOADED, $this->custom_table, [
                     'is_modal' => true,
-                    'page_type' => PluginPageType::LIST
+                    'page_type' => PluginPageType::LIST,
                 ]);
                 return $content;
             } elseif ($modalframe) {
@@ -275,7 +275,7 @@ class CustomValueController extends AdminControllerTableBase
         if (!$modalframe || $modal) {
             Plugin::pluginExecuteEvent(PluginEventType::LOADED, $this->custom_table, [
                 'is_modal' => $modal,
-                'page_type' => PluginPageType::LIST
+                'page_type' => PluginPageType::LIST,
             ]);
         }
 
@@ -298,12 +298,12 @@ class CustomValueController extends AdminControllerTableBase
         $this->AdminContent($content);
 
         Plugin::pluginExecuteEvent(PluginEventType::LOADING, $this->custom_table, [
-            'page_type' => PluginPageType::CREATE
+            'page_type' => PluginPageType::CREATE,
         ]);
 
         if (!is_null($copy_id = $request->get('copy_id'))) {
             // ignore file and autonumber from target model
-            $form = $this->form(null)->editing(function($form) {
+            $form = $this->form(null)->editing(function ($form) {
                 $model = $form->model();
                 $this->filterCopyColumn($model);
                 foreach ($model->getRelations() as $relations) {
@@ -315,7 +315,7 @@ class CustomValueController extends AdminControllerTableBase
         } else {
             $form = $this->form(null);
             $jan_code = $request->get("jan_code");
-            if($jan_code) {
+            if ($jan_code) {
                 $form->hidden("jan_code")->default($jan_code);
                 $form->hidden("table_code")->default($this->custom_table->id);
             }
@@ -332,7 +332,7 @@ class CustomValueController extends AdminControllerTableBase
         $content->row($row);
 
         Plugin::pluginExecuteEvent(PluginEventType::LOADED, $this->custom_table, [
-            'page_type' => PluginPageType::CREATE
+            'page_type' => PluginPageType::CREATE,
         ]);
         return $content;
     }
@@ -364,7 +364,7 @@ class CustomValueController extends AdminControllerTableBase
 
         Plugin::pluginExecuteEvent(PluginEventType::LOADING, $this->custom_table, [
             'page_type' => PluginPageType::EDIT,
-            'custom_value' => $custom_value
+            'custom_value' => $custom_value,
         ]);
         // @phpstan-ignore-next-line
         $row = new Row($this->form($id)->edit($id));
@@ -378,7 +378,7 @@ class CustomValueController extends AdminControllerTableBase
 
         Plugin::pluginExecuteEvent(PluginEventType::LOADED, $this->custom_table, [
             'page_type' => PluginPageType::EDIT,
-            'custom_value' => $custom_value
+            'custom_value' => $custom_value,
         ]);
         return $content;
     }
@@ -405,7 +405,7 @@ class CustomValueController extends AdminControllerTableBase
         Plugin::pluginExecuteEvent(PluginEventType::LOADING, $this->custom_table, [
             'is_modal' => $modal,
             'page_type' => PluginPageType::SHOW,
-            'custom_value' => $custom_value
+            'custom_value' => $custom_value,
         ]);
 
         $show_item = $this->custom_form->show_item->id($id)->modal($modal);
@@ -433,7 +433,7 @@ class CustomValueController extends AdminControllerTableBase
         Plugin::pluginExecuteEvent(PluginEventType::LOADED, $this->custom_table, [
             'is_modal' => $modal,
             'page_type' => PluginPageType::SHOW,
-            'custom_value' => $custom_value
+            'custom_value' => $custom_value,
         ]);
 
         return $content;
@@ -736,7 +736,7 @@ class CustomValueController extends AdminControllerTableBase
 
         //validation
         $workflow_actions = $custom_value->getWorkflowActions(true);
-        if (!$workflow_actions->contains(function($workflow_action) use($action){
+        if (!$workflow_actions->contains(function ($workflow_action) use ($action) {
             // @phpstan-ignore-next-line
             return $workflow_action->id == $action->id;
         })) {
@@ -792,7 +792,7 @@ class CustomValueController extends AdminControllerTableBase
             $field = FormHelper::getFormFieldObj($this->custom_table, $copy_input_column->to_custom_column, [
                 'columnOptions' => [
                     'as_modal' => true,
-                ]
+                ],
             ]);
             $form->pushField($field);
         }
@@ -810,7 +810,7 @@ class CustomValueController extends AdminControllerTableBase
         return getAjaxResponse([
             'body'  => $form->render(),
             'script' => $form->getScript(),
-            'title' => $label
+            'title' => $label,
         ]);
     }
 
@@ -854,7 +854,7 @@ class CustomValueController extends AdminControllerTableBase
                 'columnOptions' => [
                     'as_modal' => true,
                     'is_operation' => true,
-                ]
+                ],
             ]);
             $form->pushField($field);
         }
@@ -873,7 +873,7 @@ class CustomValueController extends AdminControllerTableBase
         return getAjaxResponse([
             'body'  => $form->render(),
             'script' => $form->getScript(),
-            'title' => $label
+            'title' => $label,
         ]);
     }
 
@@ -938,7 +938,7 @@ class CustomValueController extends AdminControllerTableBase
         return getAjaxResponse([
             'body'  => $form->render(),
             'script' => $form->getScript(),
-            'title' => exmtrans('custom_value.sendmail.title')
+            'title' => exmtrans('custom_value.sendmail.title'),
         ]);
     }
 
@@ -955,7 +955,7 @@ class CustomValueController extends AdminControllerTableBase
         return getAjaxResponse([
             'body'  => $form->render(),
             'script' => $form->getScript(),
-            'title' => exmtrans('common.shared')
+            'title' => exmtrans('common.shared'),
         ]);
     }
 
@@ -993,7 +993,7 @@ class CustomValueController extends AdminControllerTableBase
         return getAjaxResponse([
             'body'  => $form->render(),
             'script' => $form->getScript(),
-            'title' => exmtrans('custom_value.sendmail.title')
+            'title' => exmtrans('custom_value.sendmail.title'),
         ]);
     }
 
@@ -1197,10 +1197,10 @@ class CustomValueController extends AdminControllerTableBase
      */
     protected function filterCopyColumn(CustomValue $custom_value)
     {
-        $custom_value->custom_table->custom_columns->filter(function($column) {
+        $custom_value->custom_table->custom_columns->filter(function ($column) {
             $column_type = $column->column_type;
             return ColumnType::isAttachment($column_type) || $column_type == ColumnType::AUTO_NUMBER;
-        })->each(function($column) use($custom_value) {
+        })->each(function ($column) use ($custom_value) {
             $custom_value->setValue($column->column_name, null, true);
         });
     }
@@ -1221,7 +1221,7 @@ class CustomValueController extends AdminControllerTableBase
             'body'  => $form->render(),
             'script' => $form->getScript(),
             'title' => exmtrans("custom_table.qr_code.form_title"),
-            'submitlabel' => exmtrans("common.save")
+            'submitlabel' => exmtrans("common.save"),
         ]);
     }
 
@@ -1319,14 +1319,14 @@ class CustomValueController extends AdminControllerTableBase
     {
         $selected_custom_values = CustomTable::getEloquent($table_id)->getValueModel()->whereIn('id', $selected_custom_value_id)->get();
 
-        $_img_width = $this->custom_table->getOption('cell_width') != null ? (float)$this->custom_table->getOption('cell_width') : 62;
-        $_img_height = $this->custom_table->getOption('cell_height') != null ? (float)$this->custom_table->getOption('cell_height') : 31;
-        $margin_left = $this->custom_table->getOption('margin_left') != null ? (float)$this->custom_table->getOption('margin_left') : 9;
-        $margin_top =  $this->custom_table->getOption('margin_top') != null ? (float)$this->custom_table->getOption('margin_top') : 9;
-        $col_spacing = $this->custom_table->getOption('col_spacing') != null ? (float)$this->custom_table->getOption('col_spacing') : 3;
-        $col_per_page = $this->custom_table->getOption('col_per_page') != null ? (float)$this->custom_table->getOption('col_per_page') : 3;
-        $row_spacing = $this->custom_table->getOption('row_spacing') != null ? (float)$this->custom_table->getOption('row_spacing') : 0;
-        $row_per_page = $this->custom_table->getOption('row_per_page') != null ? (float)$this->custom_table->getOption('row_per_page') : 9;
+        $_img_width = $this->custom_table->getOption('cell_width') != null ? (float) $this->custom_table->getOption('cell_width') : 62;
+        $_img_height = $this->custom_table->getOption('cell_height') != null ? (float) $this->custom_table->getOption('cell_height') : 31;
+        $margin_left = $this->custom_table->getOption('margin_left') != null ? (float) $this->custom_table->getOption('margin_left') : 9;
+        $margin_top =  $this->custom_table->getOption('margin_top') != null ? (float) $this->custom_table->getOption('margin_top') : 9;
+        $col_spacing = $this->custom_table->getOption('col_spacing') != null ? (float) $this->custom_table->getOption('col_spacing') : 3;
+        $col_per_page = $this->custom_table->getOption('col_per_page') != null ? (float) $this->custom_table->getOption('col_per_page') : 3;
+        $row_spacing = $this->custom_table->getOption('row_spacing') != null ? (float) $this->custom_table->getOption('row_spacing') : 0;
+        $row_per_page = $this->custom_table->getOption('row_per_page') != null ? (float) $this->custom_table->getOption('row_per_page') : 9;
 
         $img_width = $this->mmToPixel($_img_width);
         $img_height = $this->mmToPixel($_img_height);
@@ -1337,8 +1337,7 @@ class CustomValueController extends AdminControllerTableBase
             $refer_column = $this->custom_table->getOption('refer_column');
             $target_column = $refer_column ? CustomColumn::getEloquent($refer_column) : null;
             $refer_column_name = $target_column ? $target_column->column_name : null;
-            $selected_custom_values->each(function ($selected_custom_value)
-            use (&$img_arr, $img_width, $img_height, $refer_column_name, $table_id, $refer_column) {
+            $selected_custom_values->each(function ($selected_custom_value) use (&$img_arr, $img_width, $img_height, $refer_column_name, $table_id, $refer_column) {
                 $selected_id = strval($selected_custom_value->id);
                 $refer_column_value = $refer_column_name ? $selected_custom_value->getValue($refer_column_name)
                     : ($refer_column === 'id' ? $selected_id : '');
@@ -1362,11 +1361,11 @@ class CustomValueController extends AdminControllerTableBase
             $fileName = '2D-barcode_' . Carbon::now()->format('YmdHis') . '.pdf';
             $tmpPath = getFullpath($fileName, Define::DISKNAME_ADMIN_TMP);
             /** @phpstan-ignore-next-line Instantiated class Elibyy\TCPDF\Facades\TCPDF not found. */
-            $pdf = new TCPDF;
+            $pdf = new TCPDF();
             // @phpstan-ignore-next-line
             $pdf::setAutoPageBreak(true, 0);
             // @phpstan-ignore-next-line
-            $pdf::AddPage('P', 'mm', array(210, 297), true, 'UTF-8', false);
+            $pdf::AddPage('P', 'mm', [210, 297], true, 'UTF-8', false);
 
             $count = 0;
             $checkWidth = 0;
@@ -1383,7 +1382,7 @@ class CustomValueController extends AdminControllerTableBase
                     if (($count + 1) * $_img_height > 297 - $margin_top * 2 - ($row_per_page - 1) * $row_spacing) {
                         $count = 0;
                         // @phpstan-ignore-next-line
-                        $pdf::AddPage('P', 'mm', array(210, 297), true, 'UTF-8', false);
+                        $pdf::AddPage('P', 'mm', [210, 297], true, 'UTF-8', false);
                     }
                     $pos_x = $margin_left;
                     $pos_y = ($margin_top + ($_img_height  + $row_spacing) * $count);

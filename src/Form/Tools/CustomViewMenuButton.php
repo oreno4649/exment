@@ -137,7 +137,7 @@ class CustomViewMenuButton extends ModalTileMenuButton
         }
 
         $this->groups = [[
-            'items' => $items
+            'items' => $items,
         ]];
 
         return parent::html();
@@ -152,7 +152,7 @@ class CustomViewMenuButton extends ModalTileMenuButton
                 return function ($a, $b) {
                     $atype = array_get($a, 'view_kind_type');
                     $btype = array_get($b, 'view_kind_type');
-        
+
                     if ($atype == ViewKindType::ALLDATA) {
                         return -1;
                     } elseif ($btype == ViewKindType::ALLDATA) {
@@ -165,7 +165,7 @@ class CustomViewMenuButton extends ModalTileMenuButton
                 return function ($a, $b) {
                     $atype = array_get($a, 'view_kind_type');
                     $btype = array_get($b, 'view_kind_type');
-    
+
                     if ($atype == $btype) {
                         $aorder = array_get($a, 'order');
                         $border = array_get($b, 'order');
@@ -186,7 +186,7 @@ class CustomViewMenuButton extends ModalTileMenuButton
                     $border = array_get($b, 'order');
                     return $aorder <=> $border;
                 };
-                        
+
         }
     }
 
@@ -203,11 +203,11 @@ class CustomViewMenuButton extends ModalTileMenuButton
         //role check
         if ($this->custom_table->hasViewPermission()) {
             if (isset($this->current_custom_view)) {
-                $query_str = '?view_kind_type='.$this->current_custom_view->view_kind_type.'&from_data=1';
+                $query_str = '?view_kind_type=' . $this->current_custom_view->view_kind_type . '&from_data=1';
 
                 if ($this->current_custom_view->hasEditPermission()) {
                     $items[] = [
-                        'href' => admin_urls('view', $this->custom_table->table_name, $this->current_custom_view->id, 'edit'.$query_str),
+                        'href' => admin_urls('view', $this->custom_table->table_name, $this->current_custom_view->id, 'edit' . $query_str),
                         'header' => exmtrans('custom_view.custom_view_menulist.current_view_edit'),
                         'description' => exmtrans('custom_view.custom_view_menulist.help.current_view_edit'),
                         'icon' => 'fa-cog',

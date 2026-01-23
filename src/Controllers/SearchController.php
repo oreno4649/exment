@@ -61,14 +61,8 @@ class SearchController extends AdminControllerBase
                 // get label
                 $text = $d->label;
                 $results[] = [
-                    'value' => $text
-                    , 'text' => $text
-                    , 'icon' =>array_get($table, 'options.icon')
-                    , 'table_view_name' => array_get($table, 'table_view_name')
-                    , 'table_name' => array_get($table, 'table_name')
-                    , 'value_id' => array_get($d, 'id')
-                    , 'color' =>array_get($d, 'options.color') ?? "#3c8dbc"
-                    ];
+                    'value' => $text, 'text' => $text, 'icon' => array_get($table, 'options.icon'), 'table_view_name' => array_get($table, 'table_view_name'), 'table_name' => array_get($table, 'table_name'), 'value_id' => array_get($d, 'id'), 'color' => array_get($d, 'options.color') ?? "#3c8dbc",
+                ];
                 if (count($results) >= 10) {
                     break;
                 }
@@ -215,14 +209,14 @@ class SearchController extends AdminControllerBase
             return [
                 'table_name' => array_get($custom_table, 'table_name'),
                 'header' => $boxHeader,
-                'body' => exmtrans('search.no_result')
+                'body' => exmtrans('search.no_result'),
             ];
         }
         $links = $paginate->links('exment::search.links')->toHtml();
         // get headers and bodies
         $view = CustomView::getAllData($custom_table);
 
-        list($headers, $bodies, $columnStyles, $columnClasses) = $view->convertDataTable($datalist, [
+        [$headers, $bodies, $columnStyles, $columnClasses] = $view->convertDataTable($datalist, [
             'action_callback' => function (&$link, $custom_table, $data) {
                 if (count($custom_table->getRelationTables()) > 0) {
                     $link .= (new Linker())
@@ -230,7 +224,7 @@ class SearchController extends AdminControllerBase
                     ->icon('fa-compress')
                     ->tooltip(exmtrans('search.header_relation'));
                 }
-            }
+            },
         ]);
         $table = (new WidgetTable($headers, $bodies))->class('table table-hover')
             ->setColumnStyle($columnStyles)
@@ -241,7 +235,7 @@ class SearchController extends AdminControllerBase
             'table_name' => array_get($custom_table, 'table_name'),
             'header' => $boxHeader,
             'body' => $table->render(),
-            'footer' => $links
+            'footer' => $links,
         ];
     }
 
@@ -279,10 +273,10 @@ class SearchController extends AdminControllerBase
         $value = $model->label;
         $content->body(
             view('exment::search.index', [
-            'table_name' => $request->input('table_name'),
-            'value_id' => $request->input('value_id'),
-            'query' => $value,
-            'tables' => $this->getSearchTargetRelationTable($table)])
+                'table_name' => $request->input('table_name'),
+                'value_id' => $request->input('value_id'),
+                'query' => $value,
+                'tables' => $this->getSearchTargetRelationTable($table)])
         );
 
         $this->setCommonScript(false);
@@ -350,13 +344,13 @@ class SearchController extends AdminControllerBase
                         ->icon('fa-compress')
                         ->tooltip(exmtrans('search.header_relation'));
                     }
-                }
+                },
             ];
         } else {
             $option = [];
         }
 
-        list($headers, $bodies, $columnStyles, $columnClasses) = $view->convertDataTable($data, $option);
+        [$headers, $bodies, $columnStyles, $columnClasses] = $view->convertDataTable($data, $option);
         $table = (new WidgetTable($headers, $bodies))
             ->class('table table-hover')
             ->setColumnStyle($columnStyles)
@@ -366,7 +360,7 @@ class SearchController extends AdminControllerBase
             'table_name' => array_get($search_table, 'table_name'),
             'header' => $boxHeader,
             'body' => $table->render(),
-            'footer' => $links
+            'footer' => $links,
         ];
     }
     /**
@@ -404,7 +398,7 @@ class SearchController extends AdminControllerBase
             'table_view_name' => array_get($table, 'table_view_name'),
             'icon' => array_get($table, 'options.icon'),
             'color' => array_get($table, 'options.color'),
-            'box_sytle' => array_has($table, 'options.color') ? 'border-top-color:'.esc_html(array_get($table, 'options.color')).';' : null,
+            'box_sytle' => array_has($table, 'options.color') ? 'border-top-color:' . esc_html(array_get($table, 'options.color')) . ';' : null,
         ];
         if (isset($search_type)) {
             $array['search_type'] = $search_type;
@@ -447,10 +441,10 @@ class SearchController extends AdminControllerBase
     {
         // create searching javascript
         $script = <<<EOT
-    $(function () {
-        Exment.SearchEvent.getNaviData($isList);
-    });
-EOT;
+                $(function () {
+                    Exment.SearchEvent.getNaviData($isList);
+                });
+            EOT;
         Admin::script($script);
     }
 }

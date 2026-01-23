@@ -148,7 +148,7 @@ trait BuilderTrait
     public function getColumnDefinitions($table)
     {
         $baseTable = $table;
-        $table = $this->connection->getTablePrefix().$table;
+        $table = $this->connection->getTablePrefix() . $table;
         $results = $this->connection->selectFromWriteConnection($this->grammar->compileColumnDefinitions($table));
 
         return $this->connection->getPostProcessor()->processColumnDefinitions($baseTable, $results);
@@ -199,7 +199,7 @@ trait BuilderTrait
         }
 
         $baseTableName = $tableName;
-        $tableName = $this->connection->getTablePrefix().$tableName;
+        $tableName = $this->connection->getTablePrefix() . $tableName;
 
         $sql = $unique ? $this->grammar->compileGetUnique($tableName) : $this->grammar->compileGetIndex($tableName);
 
@@ -224,7 +224,7 @@ trait BuilderTrait
         }
 
         $baseTableName = $tableName;
-        $tableName = $this->connection->getTablePrefix().$tableName;
+        $tableName = $this->connection->getTablePrefix() . $tableName;
 
         $sql = $this->grammar->compileGetConstraint($tableName);
         if (is_null($sql)) {
@@ -244,7 +244,7 @@ trait BuilderTrait
      */
     public function createValueTable($table)
     {
-        $table = $this->connection->getTablePrefix().$table;
+        $table = $this->connection->getTablePrefix() . $table;
         $this->connection->statement(
             $this->grammar->compileCreateValueTable($table)
         );
@@ -258,7 +258,7 @@ trait BuilderTrait
      */
     public function createRelationValueTable($table)
     {
-        $table = $this->connection->getTablePrefix().$table;
+        $table = $this->connection->getTablePrefix() . $table;
         $this->connection->statement(
             $this->grammar->compileCreateRelationValueTable($table)
         );
@@ -281,7 +281,7 @@ trait BuilderTrait
             return;
         }
 
-        $db_table_name = $this->connection->getTablePrefix().$db_table_name;
+        $db_table_name = $this->connection->getTablePrefix() . $db_table_name;
 
         $sqls = $this->grammar->compileAlterIndexColumn($db_table_name, $db_column_name, $index_name, $json_column_name, $custom_column);
 
@@ -305,7 +305,7 @@ trait BuilderTrait
             return;
         }
 
-        $db_table_name = $this->connection->getTablePrefix().$db_table_name;
+        $db_table_name = $this->connection->getTablePrefix() . $db_table_name;
 
         // check index name
         /** @phpstan-ignore-next-line */
@@ -342,7 +342,7 @@ trait BuilderTrait
         }
 
         $constraints = $this->getConstraints($tableName, $columnName);
-        $tableName = $this->connection->getTablePrefix().$tableName;
+        $tableName = $this->connection->getTablePrefix() . $tableName;
         foreach ($constraints as $constraint) {
             $sql = $this->grammar->compileDropConstraint($tableName, $constraint);
             $results = $this->connection->statement($sql);

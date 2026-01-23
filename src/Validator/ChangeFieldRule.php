@@ -35,7 +35,7 @@ class ChangeFieldRule implements Rule
     */
     public function passes($attribute, $value)
     {
-//        $prefix = substr($attribute, 0, strrpos($attribute, '.'));
+        //        $prefix = substr($attribute, 0, strrpos($attribute, '.'));
 
         // $item = ConditionItemBase::getItem($this->custom_table, $this->target);
         // $field = getCustomField(array_get($this->data, $prefix), $field_label);
@@ -51,7 +51,7 @@ class ChangeFieldRule implements Rule
 
         return true;
 
-//        return preg_match('/^[-]?[\d\s,\.]*$/', $value);
+        //        return preg_match('/^[-]?[\d\s,\.]*$/', $value);
     }
 
     /**
@@ -61,6 +61,6 @@ class ChangeFieldRule implements Rule
      */
     public function message()
     {
-        return (string)trans('validation.numeric');
+        return (string) trans('validation.numeric');
     }
 }

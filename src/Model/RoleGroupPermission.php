@@ -24,10 +24,10 @@ class RoleGroupPermission extends ModelBase
         'excepts' => ['role_group'],
         'uniqueKeys' => [
             'export' => [
-                'role_group.role_group_name', 'role_group_permission_type', 'role_group_target_name'
+                'role_group.role_group_name', 'role_group_permission_type', 'role_group_target_name',
             ],
             'import' => [
-                'role_group_id', 'role_group_permission_type', 'role_group_target_id'
+                'role_group_id', 'role_group_permission_type', 'role_group_target_id',
             ],
         ],
         'parent' => 'role_group_id',
@@ -42,11 +42,11 @@ class RoleGroupPermission extends ModelBase
                         'replacedName' => [
                             'table_name' => 'role_group_target_name',
                         ],
-                    ]
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getUniqueKeyValues',
-            ]
-        ]
+            ],
+        ],
     ];
 
 

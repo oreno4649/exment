@@ -1,4 +1,5 @@
 <?php
+
 /**
  * OAuth 2.0 Password grant.
  *
@@ -99,7 +100,7 @@ class PasswordGrant extends PasswordGrantBase
     {
         $provider = config('auth.guards.api.provider');
 
-        if (is_null($model = config('auth.providers.'.$provider.'.model'))) {
+        if (is_null($model = config('auth.providers.' . $provider . '.model'))) {
             throw new RuntimeException('Unable to determine authentication model from configuration.');
         }
 

@@ -33,7 +33,7 @@ class HasMany extends AdminHasMany
 
         // @phpstan-ignore-next-line
         $form = $this->buildNestedForm($this->column, $this->builder);
-        list($template, $script) = $this->getTemplateHtmlAndScript($form);
+        [$template, $script] = $this->getTemplateHtmlAndScript($form);
 
         $this->setupScript($script);
 
@@ -54,7 +54,7 @@ class HasMany extends AdminHasMany
     // @phpstan-ignore-next-line
     protected function getTemplateHtmlAndScript($form)
     {
-        list($template, $script) = $form->getTemplateHtmlAndScript();
+        [$template, $script] = $form->getTemplateHtmlAndScript();
         return [$template, $script];
 
         // // re-set $script
@@ -94,40 +94,40 @@ class HasMany extends AdminHasMany
          * {count} is increment number of current sub form count.
          */
         $script = <<<EOT
-var $indexName = {$count};
-$('#has-many-{$this->column}').off('click.admin_add').on('click.admin_add', '.add', function () {
+            var $indexName = {$count};
+            $('#has-many-{$this->column}').off('click.admin_add').on('click.admin_add', '.add', function () {
 
-    var tpl = $('template.{$this->column}-tpl');
+                var tpl = $('template.{$this->column}-tpl');
 
-    $indexName++;
+                $indexName++;
 
-    var template = tpl.html().replace(/{$defaultKey}/g, $indexName);
-    $('.has-many-{$this->column}-forms').append(template);
-    {$templateScript}
-    $(this).trigger('admin_hasmany_row_change');
-});
+                var template = tpl.html().replace(/{$defaultKey}/g, $indexName);
+                $('.has-many-{$this->column}-forms').append(template);
+                {$templateScript}
+                $(this).trigger('admin_hasmany_row_change');
+            });
 
-$('#has-many-{$this->column}').off('click.admin_remove').on('click.admin_remove', '.remove', function () {
-    $(this).closest('.has-many-{$this->column}-form').hide();
-    $(this).closest('.has-many-{$this->column}-form').find('input[required], select[required]').prop('disabled', true);
-    $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
+            $('#has-many-{$this->column}').off('click.admin_remove').on('click.admin_remove', '.remove', function () {
+                $(this).closest('.has-many-{$this->column}-form').hide();
+                $(this).closest('.has-many-{$this->column}-form').find('input[required], select[required]').prop('disabled', true);
+                $(this).closest('.has-many-{$this->column}-form').find('.$removeClass').val(1);
 
-    $(this).trigger('admin_hasmany_row_change');
-});
+                $(this).trigger('admin_hasmany_row_change');
+            });
 
-$("button[type='submit']").click(function(){
-    if ($('#has-many-{$this->column}').attr('required') === undefined) {
-        return true;
-    }
-    var cnt = $('#has-many-{$this->column} .has-many-{$this->column}-forms > .fields-group').filter(':visible').length;
-    if (cnt == 0) {
-        swal("$errortitle", "$requiremessage", "error");
-        return false;
-    };
-    return true;
-});
+            $("button[type='submit']").click(function(){
+                if ($('#has-many-{$this->column}').attr('required') === undefined) {
+                    return true;
+                }
+                var cnt = $('#has-many-{$this->column} .has-many-{$this->column}-forms > .fields-group').filter(':visible').length;
+                if (cnt == 0) {
+                    swal("$errortitle", "$requiremessage", "error");
+                    return false;
+                };
+                return true;
+            });
 
-EOT;
+            EOT;
 
         Admin::script($script);
 
@@ -137,7 +137,7 @@ EOT;
     public function getScript()
     {
         // @phpstan-ignore-next-line
-        list($template, $script) = $this->buildNestedForm($this->column, $this->builder)
+        [$template, $script] = $this->buildNestedForm($this->column, $this->builder)
             ->getTemplateHtmlAndScript();
 
         return $this->setupScript($script);
@@ -210,7 +210,7 @@ EOT;
 
                 if (is_array($column)) {
                     foreach ($column as $key => $name) {
-                        $rules[$name.$key] = ['hasmany' => false, 'rules' => $fieldRules];
+                        $rules[$name . $key] = ['hasmany' => false, 'rules' => $fieldRules];
                     }
 
                     $this->resetInputKey($input, $column);
@@ -245,8 +245,8 @@ EOT;
                 if (isset($attributes[$column])) {
                     $attributes["{$this->column}.$key.$column"] = $attributes[$column];
                 }
-                if (isset($input[$this->column][$key][$column]) &&
-                    is_array($input[$this->column][$key][$column])) {
+                if (isset($input[$this->column][$key][$column])
+                    && is_array($input[$this->column][$key][$column])) {
                     foreach ($input[$this->column][$key][$column] as $vkey => $value) {
                         $newInput["{$this->column}.$key.{$column}$vkey"] = $value;
                     }

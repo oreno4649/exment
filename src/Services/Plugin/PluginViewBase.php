@@ -82,9 +82,7 @@ abstract class PluginViewBase extends PluginPublicBase
      * @param Form $form
      * @return void
      */
-    public function setViewOptionForm($form)
-    {
-    }
+    public function setViewOptionForm($form) {}
 
 
     /**

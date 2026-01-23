@@ -39,7 +39,7 @@ class LdapService implements LoginServiceInterface
     // @phpstan-ignore-next-line
     public static function retrieveByCredential(array $credentials)
     {
-        list($result, $message, $adminMessage, $custom_login_user) = static::loginCallback(request(), array_get($credentials, 'login_setting') ?? LoginSetting::getLdapSetting(array_get($credentials, 'provider_name')));
+        [$result, $message, $adminMessage, $custom_login_user] = static::loginCallback(request(), array_get($credentials, 'login_setting') ?? LoginSetting::getLdapSetting(array_get($credentials, 'provider_name')));
 
         if ($result === true) {
             return LoginService::executeLogin(request(), $custom_login_user);
@@ -83,7 +83,7 @@ class LdapService implements LoginServiceInterface
                 'follow_referrals' => false,
                 'use_ssl' => boolval($login_setting->getOption('ldap_use_ssl')),
                 'use_tls' => boolval($login_setting->getOption('ldap_use_tls')),
-            ]
+            ],
         ];
     }
 
@@ -99,9 +99,9 @@ class LdapService implements LoginServiceInterface
         $prefix = $login_setting->getOption('ldap_account_prefix');
         $suffix = $login_setting->getOption('ldap_account_suffix');
 
-        return ((isset($prefix) && strpos($username, $prefix) !== 0) ? $prefix : '') .
-            $username .
-            ((isset($suffix) && strripos($username, $suffix) !== (mb_strlen($username) - mb_strlen($suffix))) ? $suffix : '');
+        return ((isset($prefix) && strpos($username, $prefix) !== 0) ? $prefix : '')
+            . $username
+            . ((isset($suffix) && strripos($username, $suffix) !== (mb_strlen($username) - mb_strlen($suffix))) ? $suffix : '');
     }
 
     /**
@@ -241,7 +241,7 @@ class LdapService implements LoginServiceInterface
      */
     public static function loginTest(Request $request, $login_setting)
     {
-        list($result, $message, $adminMessage, $custom_login_user) = static::loginCallback($request, $login_setting);
+        [$result, $message, $adminMessage, $custom_login_user] = static::loginCallback($request, $login_setting);
 
         return getAjaxResponse([
             'result' => $result === true,
@@ -277,9 +277,9 @@ class LdapService implements LoginServiceInterface
             $provider = $ad->getDefaultProvider();
 
             $provider->connect();
-            $bindDN = (empty($login_setting->getOption('ldap_schema')) || $login_setting->getOption('ldap_schema') == "ActiveDirectory") ?
-                $username :
-                static::getLdapUserDN($provider, $credentials['username'], $login_setting);
+            $bindDN = (empty($login_setting->getOption('ldap_schema')) || $login_setting->getOption('ldap_schema') == "ActiveDirectory")
+                ? $username
+                : static::getLdapUserDN($provider, $credentials['username'], $login_setting);
             if (!$bindDN || !$provider->auth()->attempt($bindDN, $credentials['password'], true)) {
                 // @phpstan-ignore-next-line
                 return LoginService::getLoginResult(SsoLoginErrorType::NOT_EXISTS_PROVIDER_USER, [exmtrans('error.login_failed')]);

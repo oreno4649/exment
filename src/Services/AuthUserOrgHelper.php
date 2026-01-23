@@ -367,8 +367,8 @@ class AuthUserOrgHelper
                 'users' => function ($query) {
                     // pass aborting
                     return $query->withoutGlobalScope(CustomValueModelScope::class);
-                }
-                ])
+                },
+            ])
                 // pass aborting
                 ->withoutGlobalScopes([CustomValueModelScope::class])
                 ->get(['id', $indexName])->toArray();

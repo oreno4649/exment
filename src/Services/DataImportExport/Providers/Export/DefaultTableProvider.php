@@ -86,13 +86,13 @@ class DefaultTableProvider extends ProviderBase
         // create 2 rows.
         $rows = [];
 
-        list($firstColumns, $custom_columns, $lastColumns) = $columnDefines;
+        [$firstColumns, $custom_columns, $lastColumns] = $columnDefines;
 
         // 1st row, column name
         $rows[] = array_merge(
             $firstColumns,
             collect($custom_columns)->map(function ($value) {
-                return "value.".array_get($value, 'column_name');
+                return "value." . array_get($value, 'column_name');
             })->toArray(),
             $lastColumns
         );
@@ -163,7 +163,7 @@ class DefaultTableProvider extends ProviderBase
 
         $bodies = [];
 
-        list($firstColumns, $custom_columns, $lastColumns) = $columnDefines;
+        [$firstColumns, $custom_columns, $lastColumns] = $columnDefines;
         foreach ($records as $record) {
             $body_items = [];
             // add items
@@ -187,9 +187,9 @@ class DefaultTableProvider extends ProviderBase
         foreach ($columns as $column) {
             // get key.
             if (is_array($column) || $column instanceof CustomColumn) {
-                $key = (isset($array_header_key) ? $array_header_key : "").array_get($column, 'column_name');
+                $key = ($array_header_key ?? "") . array_get($column, 'column_name');
             } else {
-                $key = (isset($array_header_key) ? $array_header_key : "").$column;
+                $key = ($array_header_key ?? "") . $column;
             }
 
             $value = $this->getBodyValue(array_get($record, $key), $column, $view_column_type, $record);

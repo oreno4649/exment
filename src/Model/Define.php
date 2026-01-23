@@ -68,12 +68,12 @@ class Define
         'header_user_info' => ['type' => 'array', 'default' => SystemColumn::CREATED_AT, 'group' => 'advanced'],
 
         // name is "flg", but array is OK.
-        'grid_filter_disable_flg' => ['type' => 'array', 'default' => 'comment', 'group' => 'advanced'] ,
+        'grid_filter_disable_flg' => ['type' => 'array', 'default' => 'comment', 'group' => 'advanced'],
 
         'system_values_pos' => ['default' => 'top', 'group' => 'advanced'],
 
-        'web_ip_filters' => ['default' => '', 'group' => 'advanced'] ,
-        'api_ip_filters' => ['default' => '', 'group' => 'advanced'] ,
+        'web_ip_filters' => ['default' => '', 'group' => 'advanced'],
+        'api_ip_filters' => ['default' => '', 'group' => 'advanced'],
 
         'userview_available' => ['type' => 'boolean', 'default' => false, 'group' => 'advanced'],
         'userdashboard_available' => ['type' => 'boolean', 'default' => false, 'group' => 'advanced'],
@@ -122,7 +122,7 @@ class Define
         'backup_enable_automatic' => ['type' => 'boolean', 'default' => '0', 'group' => 'backup'],
         'backup_automatic_term' => ['type' => 'int', 'default' => '1', 'group' => 'backup'],
         'backup_automatic_hour' => ['type' => 'int', 'default' => '3', 'group' => 'backup'],
-        'backup_target' => ['type' => 'array', 'default' => 'database,plugin,attachment,log,config', 'group' => 'backup'] ,
+        'backup_target' => ['type' => 'array', 'default' => 'database,plugin,attachment,log,config', 'group' => 'backup'],
         'backup_automatic_executed' => ['type' => 'datetime'],
         'backup_history_files' => ['type' => 'int', 'default' => '0', 'group' => 'backup'],
 
@@ -285,27 +285,27 @@ class Define
     public const CUSTOM_COLUMN_AVAILABLE_CHARACTERS = [
         [
             'key' => 'lower',
-            'regex' => 'a-z'
+            'regex' => 'a-z',
         ],
         [
             'key' => 'upper',
-            'regex' => 'A-Z'
+            'regex' => 'A-Z',
         ],
         [
             'key' => 'number',
-            'regex' => '0-9'
+            'regex' => '0-9',
         ],
         [
             'key' => 'hyphen_underscore',
-            'regex' => '_\-'
+            'regex' => '_\-',
         ],
         [
             'key' => 'dot',
-            'regex' => '\.'
+            'regex' => '\.',
         ],
         [
             'key' => 'symbol',
-            'regex' => '!"#$%&\'()\*\+\-\.,\/:;<=>?@\[\]^_`{}~'
+            'regex' => '!"#$%&\'()\*\+\-\.,\/:;<=>?@\[\]^_`{}~',
         ],
     ];
 
@@ -437,32 +437,32 @@ class Define
     }
 
     public const HELP_URLS = [
-        ['uri'=> 'template', 'help_uri'=> 'template'],
-        ['uri'=> 'search', 'help_uri'=> 'search'],
-        ['uri'=> 'table', 'help_uri'=> 'table'],
-        ['uri'=> 'column', 'help_uri'=> 'column'],
-        ['uri'=> 'relation', 'help_uri'=> 'relation'],
-        ['uri'=> 'formpublic', 'help_uri'=> 'publicform'],
-        ['uri'=> 'form', 'help_uri'=> 'form'],
-        ['uri'=> 'view', 'help_uri'=> 'view'],
-        ['uri'=> 'relation', 'help_uri'=> 'relation'],
-        ['uri'=> 'operation', 'help_uri'=> 'operation'],
-        ['uri'=> 'plugin', 'help_uri'=> 'plugin'],
-        ['uri'=> 'api_setting', 'help_uri'=> 'api'],
-        ['uri'=> 'backup', 'help_uri'=> 'backup'],
-        ['uri'=> 'role_group', 'help_uri'=> 'permission'],
-        ['uri'=> 'auth/menu', 'help_uri'=> 'menu'],
-        ['uri'=> 'loginuser', 'help_uri'=> 'user'],
-        ['uri'=> 'data/user', 'help_uri'=> 'user'],
-        ['uri'=> 'data/mail_template', 'help_uri'=> 'mail'],
-        ['uri'=> 'data/base_info', 'help_uri'=> 'base_info'],
-        ['uri'=> 'data', 'help_uri'=> 'data'],
-        ['uri'=> 'dashboard', 'help_uri'=> 'dashboard'],
-        ['uri'=> 'dashboardbox', 'help_uri'=> 'dashboard'],
-        ['uri'=> 'system', 'help_uri'=> 'system_setting'],
-        ['uri'=> 'workflow', 'help_uri'=> 'workflow_setting'],
-        ['uri'=> 'login_setting', 'help_uri'=> 'login_setting'],
-        ['uri'=> '/', 'help_uri'=> 'dashboard'],
+        ['uri' => 'template', 'help_uri' => 'template'],
+        ['uri' => 'search', 'help_uri' => 'search'],
+        ['uri' => 'table', 'help_uri' => 'table'],
+        ['uri' => 'column', 'help_uri' => 'column'],
+        ['uri' => 'relation', 'help_uri' => 'relation'],
+        ['uri' => 'formpublic', 'help_uri' => 'publicform'],
+        ['uri' => 'form', 'help_uri' => 'form'],
+        ['uri' => 'view', 'help_uri' => 'view'],
+        ['uri' => 'relation', 'help_uri' => 'relation'],
+        ['uri' => 'operation', 'help_uri' => 'operation'],
+        ['uri' => 'plugin', 'help_uri' => 'plugin'],
+        ['uri' => 'api_setting', 'help_uri' => 'api'],
+        ['uri' => 'backup', 'help_uri' => 'backup'],
+        ['uri' => 'role_group', 'help_uri' => 'permission'],
+        ['uri' => 'auth/menu', 'help_uri' => 'menu'],
+        ['uri' => 'loginuser', 'help_uri' => 'user'],
+        ['uri' => 'data/user', 'help_uri' => 'user'],
+        ['uri' => 'data/mail_template', 'help_uri' => 'mail'],
+        ['uri' => 'data/base_info', 'help_uri' => 'base_info'],
+        ['uri' => 'data', 'help_uri' => 'data'],
+        ['uri' => 'dashboard', 'help_uri' => 'dashboard'],
+        ['uri' => 'dashboardbox', 'help_uri' => 'dashboard'],
+        ['uri' => 'system', 'help_uri' => 'system_setting'],
+        ['uri' => 'workflow', 'help_uri' => 'workflow_setting'],
+        ['uri' => 'login_setting', 'help_uri' => 'login_setting'],
+        ['uri' => '/', 'help_uri' => 'dashboard'],
     ];
 
     public const SETTING_SHEET_NAME = '##setting##';

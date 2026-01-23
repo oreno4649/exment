@@ -54,7 +54,7 @@ class ColumnItem extends ConditionItemBase implements ConditionItemInterface
         }
 
         return collect(Enums\OperationUpdateType::values())->map(function ($val) {
-            return ['id' => $val->lowerkey(), 'text' => exmtrans('custom_operation.operation_update_type_options.'.$val->lowerkey())];
+            return ['id' => $val->lowerkey(), 'text' => exmtrans('custom_operation.operation_update_type_options.' . $val->lowerkey())];
         });
     }
 
@@ -334,7 +334,7 @@ class ColumnItem extends ConditionItemBase implements ConditionItemInterface
         if (isset($target_column)) {
             return [
                 $target_column->id ?? null,
-                $target_column->custom_table_id
+                $target_column->custom_table_id,
             ];
         }
 

@@ -300,7 +300,7 @@ class WorkflowAction extends ModelBase
                 return [
                     'related_id' => $id,
                     'related_type' => $key,
-                    'workflow_action_id' => $this->id
+                    'workflow_action_id' => $this->id,
                 ];
             })->toArray();
 
@@ -311,13 +311,13 @@ class WorkflowAction extends ModelBase
                 },
                 'dbDeleteFilter' => function (&$model, $dbValue) use ($key) {
                     $model->where('workflow_action_id', $this->id)
-                        ->where('related_id', array_get((array)$dbValue, 'related_id'))
+                        ->where('related_id', array_get((array) $dbValue, 'related_id'))
                         ->where('related_type', $key);
                 },
                 'matchFilter' => function ($dbValue, $value) {
-                    return array_get((array)$dbValue, 'workflow_action_id') == $value['workflow_action_id']
-                        && array_get((array)$dbValue, 'related_id') == $value['related_id']
-                        && array_get((array)$dbValue, 'related_type') == $value['related_type']
+                    return array_get((array) $dbValue, 'workflow_action_id') == $value['workflow_action_id']
+                        && array_get((array) $dbValue, 'related_id') == $value['related_id']
+                        && array_get((array) $dbValue, 'related_type') == $value['related_type']
                     ;
                 },
             ]);
@@ -383,7 +383,7 @@ class WorkflowAction extends ModelBase
                 if (array_key_value_exists('next_work_users', $data)) {
                     $user_organizations = array_get($data, 'next_work_users');
                     $user_organizations = collect($user_organizations)->filter()->map(function ($user_organization) use ($workflow_value) {
-                        list($authoritable_user_org_type, $authoritable_target_id) = explode('_', $user_organization);
+                        [$authoritable_user_org_type, $authoritable_target_id] = explode('_', $user_organization);
                         return [
                             'related_id' => $authoritable_target_id,
                             'related_type' => $authoritable_user_org_type,
@@ -445,7 +445,7 @@ class WorkflowAction extends ModelBase
         WorkflowValue::where([
             'morph_type' => $morph_type,
             'morph_id' => $morph_id,
-            'latest_flg' => true
+            'latest_flg' => true,
         ])->update(['latest_flg' => false]);
 
         // if next, update action_executed_flg to false
@@ -453,7 +453,7 @@ class WorkflowAction extends ModelBase
             WorkflowValue::where([
                 'morph_type' => $morph_type,
                 'morph_id' => $morph_id,
-                'action_executed_flg' => true
+                'action_executed_flg' => true,
             ])->update(['action_executed_flg' => false]);
         }
 
@@ -630,7 +630,7 @@ class WorkflowAction extends ModelBase
                     // Whether getting value autorities, only $work_target_type is ACTION_SELECT
                     'getValueAutorities' => isMatchString($work_target_type, WorkflowWorkTargetType::ACTION_SELECT),
                     // Whether getting autorities, only $work_target_type is not ACTION_SELECT
-                    'getAutorities' => !isMatchString($work_target_type, WorkflowWorkTargetType::ACTION_SELECT)
+                    'getAutorities' => !isMatchString($work_target_type, WorkflowWorkTargetType::ACTION_SELECT),
                 ];
             case WorkflowGetAuthorityType::CALC_NEXT_USER_COUNT:
                 return [
@@ -639,7 +639,7 @@ class WorkflowAction extends ModelBase
                     // Whether getting value autorities, only $work_target_type is ACTION_SELECT
                     'getValueAutorities' => isMatchString($work_target_type, WorkflowWorkTargetType::ACTION_SELECT),
                     // Whether getting autorities, only $work_target_type is not ACTION_SELECT
-                    'getAutorities' => !isMatchString($work_target_type, WorkflowWorkTargetType::ACTION_SELECT)
+                    'getAutorities' => !isMatchString($work_target_type, WorkflowWorkTargetType::ACTION_SELECT),
                 ];
             case WorkflowGetAuthorityType::NEXT_USER_ON_EXECUTING_MODAL:
                 return [
@@ -664,7 +664,7 @@ class WorkflowAction extends ModelBase
                     // Whether getting value autorities, only $work_target_type is ACTION_SELECT
                     'getValueAutorities' => isMatchString($work_target_type, WorkflowWorkTargetType::ACTION_SELECT),
                     // Whether getting autorities, only $work_target_type is not ACTION_SELECT
-                    'getAutorities' => !isMatchString($work_target_type, WorkflowWorkTargetType::ACTION_SELECT)
+                    'getAutorities' => !isMatchString($work_target_type, WorkflowWorkTargetType::ACTION_SELECT),
                 ];
         }
         return [];
@@ -726,7 +726,7 @@ class WorkflowAction extends ModelBase
     // @phpstan-ignore-next-line
     public function isActionNext($custom_value)
     {
-        list($isNext, $flow_next_count) = $this->getActionNextParams($custom_value);
+        [$isNext, $flow_next_count] = $this->getActionNextParams($custom_value);
 
         if ($isNext) {
             return true;
@@ -836,7 +836,7 @@ class WorkflowAction extends ModelBase
                 $isDisableForm = false;
                 // if select, show options
                 if ($select) {
-                    list($options, $ajax) = CustomValueAuthoritable::getUserOrgSelectOptions($custom_table, null, true);
+                    [$options, $ajax] = CustomValueAuthoritable::getUserOrgSelectOptions($custom_table, null, true);
                     $form->multipleSelect('next_work_users', exmtrans('workflow.next_work_users'))
                         ->options($options)
                         ->ajax($ajax)
@@ -848,7 +848,7 @@ class WorkflowAction extends ModelBase
                     }
                 } else {
                     // only display
-                    $displayText = $toActionAuthorities->count() == 0 ? "<span class='red bold'>" .exmtrans('workflow.message.nextuser_not_found') . "</span>" : $toActionAuthorities->map(function ($toActionAuthority) {
+                    $displayText = $toActionAuthorities->count() == 0 ? "<span class='red bold'>" . exmtrans('workflow.message.nextuser_not_found') . "</span>" : $toActionAuthorities->map(function ($toActionAuthority) {
                         return $toActionAuthority->getUrl([
                             'tag' => true,
                             'only_avatar' => true,
@@ -873,7 +873,7 @@ class WorkflowAction extends ModelBase
         elseif ($next !== true) {
 
             // @phpstan-ignore-next-line
-            list($flow_next_count, $action_executed_count) = $next;
+            [$flow_next_count, $action_executed_count] = $next;
 
             $form->display('flow_executed_user_count', exmtrans('workflow.flow_executed_user_count'))
             ->help(exmtrans('workflow.help.flow_executed_user_count'))

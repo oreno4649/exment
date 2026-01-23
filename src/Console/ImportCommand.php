@@ -65,7 +65,7 @@ class ImportCommand extends Command
             // get all csv file names in target directory
             $files = $this->getFiles('csv,xlsx');
 
-            $this->line(exmtrans('command.import.file_count').count($files));
+            $this->line(exmtrans('command.import.file_count') . count($files));
 
             foreach ($files as $index => $file) {
                 $file_name = $file->getFileName();
@@ -96,7 +96,7 @@ class ImportCommand extends Command
                 // Execute import. Show message executes in service.
                 $result = $service->importBackground($this, $file_name, $file->getRealPath(), [
                     'checkCount' => false,  // whether checking count
-                    'take' => 100           // if set, taking data count
+                    'take' => 100,           // if set, taking data count
                 ]);
 
                 if (boolval($result['result'] ?? true)) {

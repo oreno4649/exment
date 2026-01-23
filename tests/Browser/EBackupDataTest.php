@@ -37,7 +37,7 @@ class EBackupDataTest extends ExmentKitTestCase
 
         try {
             !\ExmentDB::checkBackup();
-        // @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
         } catch (BackupRestoreCheckException $ex) {
             $this->assertTrue(true);
             return;
@@ -64,7 +64,7 @@ class EBackupDataTest extends ExmentKitTestCase
     {
         try {
             !\ExmentDB::checkBackup();
-        // @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
         } catch (BackupRestoreCheckException $ex) {
             $this->assertTrue(true);
             return;
@@ -125,7 +125,7 @@ class EBackupDataTest extends ExmentKitTestCase
     {
         try {
             !\ExmentDB::checkBackup();
-        // @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
         } catch (BackupRestoreCheckException $ex) {
             $this->assertTrue(true);
             return;
@@ -184,7 +184,7 @@ class EBackupDataTest extends ExmentKitTestCase
     {
         try {
             !\ExmentDB::checkBackup();
-        // @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
         } catch (BackupRestoreCheckException $ex) {
             $this->assertTrue(true);
             return;
@@ -220,7 +220,7 @@ class EBackupDataTest extends ExmentKitTestCase
     {
         try {
             !\ExmentDB::checkBackup();
-        // @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
         } catch (BackupRestoreCheckException $ex) {
             $this->assertTrue(true);
             return;
@@ -249,7 +249,7 @@ class EBackupDataTest extends ExmentKitTestCase
     {
         try {
             !\ExmentDB::checkBackup();
-        // @phpstan-ignore-next-line
+            // @phpstan-ignore-next-line
         } catch (BackupRestoreCheckException $ex) {
             $this->assertTrue(true);
             return;

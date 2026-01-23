@@ -56,12 +56,12 @@ class ClientListCommand extends Command
         $clients = Client::all();
 
         foreach ($clients as $client) {
-            $this->line('<comment>Name:</comment> '.$client->name);
-            $this->line('<comment>Client Type:</comment> '.$this->getClientType($client));
-            $this->line('<comment>User ID:</comment> '.$client->user_id);
-            $this->line('<comment>Client ID:</comment> '.$client->id);
-            $this->line('<comment>Client secret:</comment> '.$client->secret);
-            $this->line('<comment>Redirect:</comment> '.$client->redirect);
+            $this->line('<comment>Name:</comment> ' . $client->name);
+            $this->line('<comment>Client Type:</comment> ' . $this->getClientType($client));
+            $this->line('<comment>User ID:</comment> ' . $client->user_id);
+            $this->line('<comment>Client ID:</comment> ' . $client->id);
+            $this->line('<comment>Client secret:</comment> ' . $client->secret);
+            $this->line('<comment>Redirect:</comment> ' . $client->redirect);
             $this->line('');
         }
     }

@@ -74,7 +74,7 @@ class CustomFormColumn extends ModelBase implements Interfaces\TemplateImporterI
                         'replacedName' => [
                             'column_name' => 'form_column_target_name',
                         ],
-                    ]
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getUniqueKeyValuesFormColumn',
             ],
@@ -84,8 +84,8 @@ class CustomFormColumn extends ModelBase implements Interfaces\TemplateImporterI
                         'replacedName' => [
                             'table_name' => 'options.changedata_column_table_name',
                             'column_name' => 'options.changedata_column_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getUniqueKeyValues',
                 'uniqueKeyFunctionArgs' => ['options.changedata_column_id'],
@@ -96,8 +96,8 @@ class CustomFormColumn extends ModelBase implements Interfaces\TemplateImporterI
                         'replacedName' => [
                             'table_name' => 'options.changedata_target_table_name',
                             'column_name' => 'options.changedata_target_column_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getUniqueKeyValues',
                 'uniqueKeyFunctionArgs' => ['options.changedata_target_column_id'],
@@ -108,13 +108,13 @@ class CustomFormColumn extends ModelBase implements Interfaces\TemplateImporterI
                         'replacedName' => [
                             'table_name' => 'options.relation_filter_target_table_name',
                             'column_name' => 'options.relation_filter_target_column_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getUniqueKeyValues',
                 'uniqueKeyFunctionArgs' => ['options.relation_filter_target_column_id'],
             ],
-        ]
+        ],
     ];
 
 
@@ -297,7 +297,7 @@ class CustomFormColumn extends ModelBase implements Interfaces\TemplateImporterI
             // get changedata target table name and column
             // if changedata_target_column_name value has dotted, get parent table name
             if (str_contains($changedata_target_column_name, ".")) {
-                list($changedata_target_table_name, $changedata_target_column_name) = explode(".", $changedata_target_column_name);
+                [$changedata_target_table_name, $changedata_target_column_name] = explode(".", $changedata_target_column_name);
                 $changedata_target_table = CustomTable::getEloquent($changedata_target_table_name);
             } elseif (array_key_value_exists($table_key_name, $json)) {
                 $changedata_target_table_name = array_get($json, $table_key_name);

@@ -46,11 +46,11 @@ class Plugin extends PluginExportExcel
         $laseRow = $column - 1;
         $sheet->getStyle("A2:D{$laseRow}")->applyFromArray([
             'borders' => [
-                'outside'=>[
-                    'borderStyle'=>\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+                'outside' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                 ],
-                'inside'=>[
-                    'borderStyle'=>\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_HAIR
+                'inside' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_HAIR,
                 ],
             ],
         ]);

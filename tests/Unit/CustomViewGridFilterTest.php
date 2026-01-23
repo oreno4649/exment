@@ -524,10 +524,10 @@ class CustomViewGridFilterTest extends UnitTestBase
         $custom_value->setValue('file_multiple', [$file->path])->save();
 
         $file->saveCustomValue($custom_value->id, $custom_column, $custom_table);
-    
+
         $this->__testGridFilter([$db_column_name => 'test1'], function ($data) {
             $actual = array_get($data, 'value.file_multiple');
-            return collect($actual)->contains(function($path) {
+            return collect($actual)->contains(function ($path) {
                 $file = ExmentFile::getData($path);
                 return Str::startsWith($file->filename, 'test1');
             });
@@ -545,12 +545,12 @@ class CustomViewGridFilterTest extends UnitTestBase
 
         $custom_table = CustomTable::getEloquent($this->table_name);
         $workflow = Workflow::getWorkflowByTable($custom_table);
-        $workflow_status = $workflow->workflow_statuses->first(function($data) {
+        $workflow_status = $workflow->workflow_statuses->first(function ($data) {
             return $data->status_name == 'status1';
         });
         $target_id = $workflow_status->id;
 
-        $this->__testGridFilter(['workflow_status_to_id' => $target_id], function ($data) use($target_id) {
+        $this->__testGridFilter(['workflow_status_to_id' => $target_id], function ($data) use ($target_id) {
             if ($workflow_value = $data->workflow_value) {
                 return $workflow_value->workflow_status_to_id == $target_id;
             }
@@ -571,7 +571,7 @@ class CustomViewGridFilterTest extends UnitTestBase
         $this->be(LoginUser::find(TestDefine::TESTDATA_USER_LOGINID_DEV1_USERC));
 
         $this->__testGridFilter(['workflow_work_users' => 1], function ($data) {
-            foreach($data->workflow_work_users as $user) {
+            foreach ($data->workflow_work_users as $user) {
                 if ($user->id == \Exment::user()->base_user->id) {
                     return true;
                 }
@@ -607,7 +607,7 @@ class CustomViewGridFilterTest extends UnitTestBase
 
         $this->__testGridFilter(['comment' => 'hoge'], function ($data) {
             return array_get($data, 'id') == 10;
-        }, 1, function() {
+        }, 1, function () {
             System::setRequestSession('setting.grid_filter_disable_flg', []);
         });
     }
@@ -625,7 +625,7 @@ class CustomViewGridFilterTest extends UnitTestBase
 
         $this->__testGridFilter(['comment' => 'てすと'], function ($data) {
             return array_get($data, 'id') == 10;
-        }, 1, function() {
+        }, 1, function () {
             System::setRequestSession('setting.grid_filter_disable_flg', []);
         });
     }
@@ -645,7 +645,7 @@ class CustomViewGridFilterTest extends UnitTestBase
 
         $this->__testGridFilter(['comment' => 'hoge'], function ($data) {
             return in_array(array_get($data, 'id'), [10, 20]);
-        }, 2, function() {
+        }, 2, function () {
             System::setRequestSession('setting.grid_filter_disable_flg', []);
         });
     }
@@ -666,15 +666,17 @@ class CustomViewGridFilterTest extends UnitTestBase
 
         $monthly_sum = $this->getGroupingData($values);
 
-        $this->__testSummaryGridFilter(['id' => 1],
+        $this->__testSummaryGridFilter(
+            ['id' => 1],
             $this->createAssertClosure(),
-            $monthly_sum);
+            $monthly_sum
+        );
     }
 
     // @phpstan-ignore-next-line
     protected function getGroupingData($values)
     {
-        $grouped = $values->groupBy(function($item) {
+        $grouped = $values->groupBy(function ($item) {
             if (is_nullorempty($date = $item->getValue('date'))) {
                 return null;
             }
@@ -683,19 +685,20 @@ class CustomViewGridFilterTest extends UnitTestBase
         });
 
         // 月ごとに合計を算出
-        return $grouped->map(function($items) {
-            return $items->map(function($item) {
+        return $grouped->map(function ($items) {
+            return $items->map(function ($item) {
                 return $item->getValue('integer');
             })->sum();
         });
     }
 
     // @phpstan-ignore-next-line
-    protected function createAssertClosure() {
+    protected function createAssertClosure()
+    {
         return function ($data, $custom_table, $monthly_sum) {
             $idx = 0;
             $actual = null;
-            foreach($data->toArray() as $val) {
+            foreach ($data->toArray() as $val) {
                 switch ($idx) {
                     case 0:
                         if ($monthly_sum->has($val)) {
@@ -731,9 +734,11 @@ class CustomViewGridFilterTest extends UnitTestBase
 
         $monthly_sum = $this->getGroupingData($values);
 
-        $this->__testSummaryGridFilter(['updated_user_id' => $targets],
+        $this->__testSummaryGridFilter(
+            ['updated_user_id' => $targets],
             $this->createAssertClosure(),
-            $monthly_sum);
+            $monthly_sum
+        );
     }
 
     /**
@@ -755,9 +760,11 @@ class CustomViewGridFilterTest extends UnitTestBase
 
         $monthly_sum = $this->getGroupingData($values);
 
-        $this->__testSummaryGridFilter(["$db_column_name.start" => 100, "$db_column_name.end" => 100000],
+        $this->__testSummaryGridFilter(
+            ["$db_column_name.start" => 100, "$db_column_name.end" => 100000],
             $this->createAssertClosure(),
-            $monthly_sum);
+            $monthly_sum
+        );
     }
 
     /**
@@ -779,9 +786,11 @@ class CustomViewGridFilterTest extends UnitTestBase
 
         $monthly_sum = $this->getGroupingData($values);
 
-        $this->__testSummaryGridFilter(["$db_column_name" => ['foo', 'baz']], 
+        $this->__testSummaryGridFilter(
+            ["$db_column_name" => ['foo', 'baz']],
             $this->createAssertClosure(),
-            $monthly_sum);
+            $monthly_sum
+        );
     }
 
     /**
@@ -795,22 +804,24 @@ class CustomViewGridFilterTest extends UnitTestBase
         $this->table_name = TestDefine::TESTDATA_TABLE_NAME_EDIT;
         $custom_table = CustomTable::getEloquent($this->table_name);
         $workflow = Workflow::getWorkflowByTable($custom_table);
-        $workflow_status = $workflow->workflow_statuses->first(function($data) {
+        $workflow_status = $workflow->workflow_statuses->first(function ($data) {
             return $data->status_name == 'status1';
         });
         $target_id = $workflow_status->id;
 
         $values = $custom_table->getValueModel()
             ->get()
-            ->filter(function($item) {
+            ->filter(function ($item) {
                 return $item->workflow_statusname == 'status1';
             });
 
         $monthly_sum = $this->getGroupingData($values);
 
-        $this->__testSummaryGridFilter(['workflow_status_to_id' => $target_id],
+        $this->__testSummaryGridFilter(
+            ['workflow_status_to_id' => $target_id],
             $this->createAssertClosure(),
-            $monthly_sum);
+            $monthly_sum
+        );
     }
 
     /**
@@ -830,9 +841,11 @@ class CustomViewGridFilterTest extends UnitTestBase
 
         $monthly_sum = $this->getGroupingData($values);
 
-        $this->__testSummaryGridFilter(['parent_id_child_table' => 5],
+        $this->__testSummaryGridFilter(
+            ['parent_id_child_table' => 5],
             $this->createAssertClosure(),
-            $monthly_sum);
+            $monthly_sum
+        );
     }
 
     /**
@@ -851,7 +864,7 @@ class CustomViewGridFilterTest extends UnitTestBase
 
         $values = $custom_table->getValueModel()
             ->get()
-            ->filter(function($data) use($parent_table) {
+            ->filter(function ($data) use ($parent_table) {
                 $parent_data = $parent_table->getValueModel($data->parent_id);
                 return $parent_data->getValue('odd_even') == 'odd';
             })
@@ -859,10 +872,12 @@ class CustomViewGridFilterTest extends UnitTestBase
 
         $monthly_sum = $this->getGroupingData($values);
 
-        $this->__testSummaryGridFilter(["ckey_[filter_uuid]" => 'odd'],
+        $this->__testSummaryGridFilter(
+            ["ckey_[filter_uuid]" => 'odd'],
             $this->createAssertClosure(),
             $monthly_sum,
-            $this->createFilterClosure($target_column, $custom_table));
+            $this->createFilterClosure($target_column, $custom_table)
+        );
     }
 
     /**
@@ -882,7 +897,7 @@ class CustomViewGridFilterTest extends UnitTestBase
         $values = $custom_table->getValueModel()
             ->whereIn('value->select', ['bar', 'baz'])
             ->get()
-            ->filter(function($data) {
+            ->filter(function ($data) {
                 $select_data = $data->getValue('select_table');
                 if ($select_data) {
                     return $select_data->getValue('multiples_of_3') == '1';
@@ -893,10 +908,12 @@ class CustomViewGridFilterTest extends UnitTestBase
 
         $monthly_sum = $this->getGroupingData($values);
 
-        $this->__testSummaryGridFilter(["ckey_[filter_uuid]" => 1],
+        $this->__testSummaryGridFilter(
+            ["ckey_[filter_uuid]" => 1],
             $this->createAssertClosure(),
             $monthly_sum,
-            $this->createFilterClosure($target_column, $pivot_column));
+            $this->createFilterClosure($target_column, $pivot_column)
+        );
     }
 
     // @phpstan-ignore-next-line
@@ -913,7 +930,7 @@ class CustomViewGridFilterTest extends UnitTestBase
                 if ($pivot_data instanceof CustomColumn) {
                     $model->SetOption('view_pivot_column_id', $pivot_data->id);
                     $model->SetOption('view_pivot_table_id', $pivot_data->custom_table_id);
-                } elseif ($pivot_data instanceof CustomTable)  {
+                } elseif ($pivot_data instanceof CustomTable) {
                     $model->SetOption('view_pivot_column_id', 'parent_id');
                     $model->SetOption('view_pivot_table_id', $pivot_data->id);
                 }
@@ -966,7 +983,7 @@ class CustomViewGridFilterTest extends UnitTestBase
         $list = $grid->applyFilter(false);
         if ($count) {
             $this->assertEquals($list->count(), $count);
-        } 
+        }
 
         foreach ($list as $data) {
             $matchResult = $testCallback($data);

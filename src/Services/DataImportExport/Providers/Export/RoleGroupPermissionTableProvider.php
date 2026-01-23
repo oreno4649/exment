@@ -17,7 +17,7 @@ class RoleGroupPermissionTableProvider extends RoleGroupPermissionProvider
     {
         return 'role_group_permission_table';
     }
-    
+
     // @phpstan-ignore-next-line
     protected function setRoleTypeFilter(&$query)
     {
@@ -26,7 +26,7 @@ class RoleGroupPermissionTableProvider extends RoleGroupPermissionProvider
         $query->where('role_group_permission_type', RoleType::TABLE)
             ->whereIn('role_group_target_id', $ids);
     }
-    
+
     protected function getRoleGroupType(): RoleGroupType
     {
         return RoleGroupType::TABLE();
@@ -35,8 +35,8 @@ class RoleGroupPermissionTableProvider extends RoleGroupPermissionProvider
     // @phpstan-ignore-next-line
     protected function setHeadersOfType(array &$headers, array &$titles): void
     {
-        $headers[] = "role_group_target_id"; 
-        $titles[] = exmtrans('role_group.role_group_target_table'); 
+        $headers[] = "role_group_target_id";
+        $titles[] = exmtrans('role_group.role_group_target_table');
     }
 
     // @phpstan-ignore-next-line

@@ -35,13 +35,13 @@ class Revision extends Eloquent
      * @var array
      */
     // @phpstan-ignore-next-line
-    protected $revisionFormattedFields = array();
+    protected $revisionFormattedFields = [];
 
     /**
      * @param array $attributes
      */
     // @phpstan-ignore-next-line
-    public function __construct(array $attributes = array())
+    public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
     }

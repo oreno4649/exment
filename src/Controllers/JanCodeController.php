@@ -42,7 +42,7 @@ class JanCodeController extends Controller
                 }
                 $table_name = $custom_table->table_name;
                 if ($target_id) {
-                    $form_id = (int)$custom_table->getOption('form_after_read_jan_code');
+                    $form_id = (int) $custom_table->getOption('form_after_read_jan_code');
                     if ($form_id == 0) {
                         $form_suuid = CustomForm::getDefault($custom_table)->suuid;
                     } else {
@@ -50,11 +50,11 @@ class JanCodeController extends Controller
                     }
                     if ($custom_table->getOption('action_after_read_jan_code') === DataScanSubmitRedirect::CONTINUE_EDITING) {
                         $url = admin_urls('data', $table_name, $target_id, 'edit?formid=' . $form_suuid . '&after-save=1');
-                    } else if ($custom_table->getOption('action_after_read_jan_code') === DataScanSubmitRedirect::VIEW) {
+                    } elseif ($custom_table->getOption('action_after_read_jan_code') === DataScanSubmitRedirect::VIEW) {
                         $url = admin_urls('data', $table_name, $target_id, 'edit?formid=' . $form_suuid . '&after-save=3');
-                    } else if ($custom_table->getOption('action_after_read_jan_code') === DataScanSubmitRedirect::LIST) {
+                    } elseif ($custom_table->getOption('action_after_read_jan_code') === DataScanSubmitRedirect::LIST) {
                         $url = admin_urls('data', $table_name, $target_id, 'edit?formid=' . $form_suuid);
-                    } else if ($custom_table->getOption('action_after_read_jan_code') === DataScanSubmitRedirect::CAMERA) {
+                    } elseif ($custom_table->getOption('action_after_read_jan_code') === DataScanSubmitRedirect::CAMERA) {
                         $url = admin_urls('data', $table_name, $target_id, 'edit?formid=' . $form_suuid . '&redirect-camera=1');
                     } else {
                         $url = admin_urls('data', $table_name, $target_id, 'edit?formid=' . $form_suuid . '&redirect-dashboard=1');
@@ -153,7 +153,7 @@ class JanCodeController extends Controller
         } else {
             $url = admin_urls();
         }
-        
+
         return redirect($url);
     }
 
@@ -168,7 +168,7 @@ class JanCodeController extends Controller
     {
         $custom_table = CustomTable::getEloquent($table_id);
         $table_name = $custom_table->table_name;
-        $form_id = (int)$custom_table->getOption('form_after_create_jan_code');
+        $form_id = (int) $custom_table->getOption('form_after_create_jan_code');
         if ($form_id == 0) {
             $form_suuid = CustomForm::getDefault($custom_table)->suuid;
         } else {
@@ -176,16 +176,16 @@ class JanCodeController extends Controller
         }
         if ($custom_table->getOption('action_after_create_jan_code') === DataScanSubmitRedirect::CONTINUE_EDITING) {
             $url = admin_urls('data', $table_name, 'create?formid=' . $form_suuid . '&after-save=1&jan_code=' . $id);
-        } else if ($custom_table->getOption('action_after_create_jan_code') === DataScanSubmitRedirect::VIEW) {
+        } elseif ($custom_table->getOption('action_after_create_jan_code') === DataScanSubmitRedirect::VIEW) {
             $url = admin_urls('data', $table_name, 'create?formid=' . $form_suuid . '&after-save=3&jan_code=' . $id);
-        } else if ($custom_table->getOption('action_after_create_jan_code') === DataScanSubmitRedirect::LIST) {
+        } elseif ($custom_table->getOption('action_after_create_jan_code') === DataScanSubmitRedirect::LIST) {
             $url = admin_urls('data', $table_name, 'create?formid=' . $form_suuid . '&jan_code=' . $id);
-        } else if ($custom_table->getOption('action_after_create_jan_code') === DataScanSubmitRedirect::CAMERA) {
+        } elseif ($custom_table->getOption('action_after_create_jan_code') === DataScanSubmitRedirect::CAMERA) {
             $url = admin_urls('data', $table_name, 'create?formid=' . $form_suuid . '&redirect-camera=1&jan_code=' . $id);
         } else {
             $url = admin_urls('data', $table_name, 'create?formid=' . $form_suuid . '&redirect-dashboard=1&jan_code=' . $id);
         }
-       
+
         return $url;
     }
 }

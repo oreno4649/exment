@@ -78,7 +78,7 @@ class DefaultForm extends FormBase
         $this->setCustomFormEvents($calc_formula_array, $changedata_array, $relatedlinkage_array, $force_caculate_column);
 
         $custom_form_blocks = $this->custom_form->custom_form_blocks->sortBy(function ($item, $key) {
-            return $item->getOption('form_block_order')?? -1;
+            return $item->getOption('form_block_order') ?? -1;
         });
         // loop for custom form blocks
         foreach ($custom_form_blocks as $custom_form_block) {
@@ -94,7 +94,7 @@ class DefaultForm extends FormBase
             }
             // one_to_many or manytomany
             else {
-                list($relation, $relation_name, $block_label) = $custom_form_block->getRelationInfo($this->custom_table);
+                [$relation, $relation_name, $block_label] = $custom_form_block->getRelationInfo($this->custom_table);
                 $target_table = $custom_form_block->target_table;
                 // if user doesn't have edit permission, hide child block
                 if ($target_table->enableEdit() !== true) {
@@ -177,26 +177,26 @@ class DefaultForm extends FormBase
             $json = json_encode($calc_formula_array);
             $columns = json_encode($force_caculate_column);
             $script = <<<EOT
-            var json = $json;
-            var columns = $columns;
-            Exment.CalcEvent.setCalcEvent(json, columns);
-EOT;
+                            var json = $json;
+                            var columns = $columns;
+                            Exment.CalcEvent.setCalcEvent(json, columns);
+                EOT;
             Admin::script($script);
         }
         if (count($changedata_array) > 0) {
             $json = json_encode($changedata_array);
             $script = <<<EOT
-            var json = $json;
-            Exment.CommonEvent.setChangedataEvent(json);
-EOT;
+                            var json = $json;
+                            Exment.CommonEvent.setChangedataEvent(json);
+                EOT;
             Admin::script($script);
         }
         if (count($relatedlinkage_array) > 0) {
             $json = json_encode($relatedlinkage_array);
             $script = <<<EOT
-            var json = $json;
-            Exment.CommonEvent.setRelatedLinkageEvent(json);
-EOT;
+                            var json = $json;
+                            Exment.CommonEvent.setRelatedLinkageEvent(json);
+                EOT;
             Admin::script($script);
         }
 
@@ -319,7 +319,7 @@ EOT;
                 }
                 /** @var CustomColumn $column */
                 $column = $form_column->custom_column;
-                if(array_get($column->options, 'force_caculate')) {
+                if (array_get($column->options, 'force_caculate')) {
                     $force_caculate_column[$force_caculate_column_key][]  = $column->column_name;
                 }
                 $form_column_options = $form_column->options;
@@ -379,7 +379,7 @@ EOT;
                 if (!isMatchString($custom_form_block->form_block_type, FormBlockType::ONE_TO_MANY)) {
                     continue;
                 }
-                list($custom_relation, $relation_name, $block_label) = $custom_form_block->getRelationInfo();
+                [$custom_relation, $relation_name, $block_label] = $custom_form_block->getRelationInfo();
                 if (!$custom_relation) {
                     continue;
                 }
@@ -451,7 +451,7 @@ EOT;
                     return redirect(admin_urls('data', $this->custom_table->table_name));
                 } elseif (!empty($select_parent)) {
                     admin_toastr(trans('admin.save_succeeded'));
-                    return redirect(admin_url('data/'.$form->model()->parent_type.'/'. $form->model()->parent_id));
+                    return redirect(admin_url('data/' . $form->model()->parent_type . '/' . $form->model()->parent_id));
                 } elseif (empty(request('after-save'))) {
                     admin_toastr(trans('admin.save_succeeded'));
                     return redirect($this->custom_table->getGridUrl(true));
@@ -494,7 +494,7 @@ EOT;
                         'value' => 4,
                         'redirect' => admin_urls('data', $this->custom_table->table_name),
                     ],
-                ])->map(function ($checkbox) use($data_submit_redirect) {
+                ])->map(function ($checkbox) use ($data_submit_redirect) {
                     return array_merge([
                         'label' => trans('admin.' . $checkbox['key']),
                         'default' => isMatchString($data_submit_redirect, $checkbox['value']),
@@ -621,7 +621,7 @@ EOT;
         // if not match form block's and $changedata_target_table. from block is default
         if (!isMatchString($custom_form_block->form_block_target_table_id, $changedata_target_table->id)) {
             $from_block_name = 'default';
-        //$from_block_name = CustomRelation::getRelationNameByTables($changedata_target_table->id, $custom_form_block->form_block_target_table_id);
+            //$from_block_name = CustomRelation::getRelationNameByTables($changedata_target_table->id, $custom_form_block->form_block_target_table_id);
         }
         // if child form
         elseif ($custom_form_block->form_block_type != FormBlockType::DEFAULT) {
@@ -646,7 +646,7 @@ EOT;
             'from_block' => $from_block_name, // target_table's block
             'to' => $column->column_name, // set data
             'to_block' => is_null($to_block_name) ? null : '.has-many-' . $to_block_name . ',.has-many-table-' . $to_block_name,
-            'to_block_form' => is_null($to_block_name) ? null : '.has-many-' . $to_block_name . '-form,.has-many-table-' . $to_block_name.'-form',
+            'to_block_form' => is_null($to_block_name) ? null : '.has-many-' . $to_block_name . '-form,.has-many-table-' . $to_block_name . '-form',
         ];
     }
 
@@ -796,8 +796,8 @@ EOT;
     {
         $parent_custom_table = $relation->parent_custom_table;
 
-        if ($parent_custom_table->table_name == SystemTableName::ORGANIZATION &&
-            $this->custom_table->table_name == SystemTableName::USER) {
+        if ($parent_custom_table->table_name == SystemTableName::ORGANIZATION
+            && $this->custom_table->table_name == SystemTableName::USER) {
             return;
         }
 

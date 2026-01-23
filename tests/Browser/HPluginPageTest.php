@@ -31,7 +31,7 @@ class HPluginPageTest extends ExmentKitTestCase
      */
     public function testDisplayPluginPage()
     {
-        list($plugin, $pluginClass) = $this->getPluginInfo('TestPluginPage', PluginType::PAGE);
+        [$plugin, $pluginClass] = $this->getPluginInfo('TestPluginPage', PluginType::PAGE);
         $url = $plugin->getRootUrl(PluginType::PAGE);
 
         $this->visit($url)
@@ -49,7 +49,7 @@ class HPluginPageTest extends ExmentKitTestCase
      */
     public function testSettingDashboard()
     {
-        list($plugin, $pluginClass) = $this->getPluginInfo('TestPluginDashboard', PluginType::DASHBOARD);
+        [$plugin, $pluginClass] = $this->getPluginInfo('TestPluginDashboard', PluginType::DASHBOARD);
 
         $pre_cnt = Dashboard::count();
         $pre_cnt_box = DashboardBox::count();
@@ -117,7 +117,7 @@ class HPluginPageTest extends ExmentKitTestCase
         /** @var Dashboard $dashboard */
         $dashboard = Dashboard::where('dashboard_view_name', 'unit test')->first();
         // delete dashboard
-        $this->delete('/admin/dashboard/'. $dashboard->id);
+        $this->delete('/admin/dashboard/' . $dashboard->id);
         $this->assertEquals($pre_cnt - 1, Dashboard::count());
         $this->assertEquals($pre_cnt_box - 1, DashboardBox::count());
     }

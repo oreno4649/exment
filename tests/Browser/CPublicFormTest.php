@@ -172,10 +172,10 @@ class CPublicFormTest extends ExmentKitTestCase
             ],
             'notify_mail_template_complete_user' => '16',
             'notify_actions_complete_user' => [
-                'notify_action_target' => [$email->id]
+                'notify_action_target' => [$email->id],
             ],
             'confirm_complete_setting2' => [
-                'use_notify_complete_admin' => '1'
+                'use_notify_complete_admin' => '1',
             ],
             'notify_mail_template_complete_admin' => '17',
             'notify_actions_complete_admin' => [
@@ -183,7 +183,7 @@ class CPublicFormTest extends ExmentKitTestCase
                     'notify_action' => '2',
                     'notify_action_target' => ['has_roles'],
                     '_remove_' => 0,
-                ]
+                ],
             ],
             'notify_mail_template_error' => '1',
             'notify_actions_error' => [
@@ -192,7 +192,7 @@ class CPublicFormTest extends ExmentKitTestCase
                     'notify_action_target' => ['administrator', 'fixed_email'],
                     'target_emails' => 'unittest@foobar.co.jp.test',
                     '_remove_' => 0,
-                ]
+                ],
             ],
             'error_setting' => [
                 'use_notify_error' => '1',
@@ -208,9 +208,9 @@ class CPublicFormTest extends ExmentKitTestCase
                 'plugin_js' => [$this->getScriptPluginId()],
             ],
             'option_setting' => [
-                'use_default_query' => '1'
+                'use_default_query' => '1',
             ],
-       ];
+        ];
 
         // Create public form with maxmum parameter
         $this->post(admin_url('formpublic/custom_value_edit_all'), $form);
@@ -244,7 +244,7 @@ class CPublicFormTest extends ExmentKitTestCase
         $this->assertEquals($notify_error->action_settings[0]['notify_action_target'], ['administrator', 'fixed_email']);
 
         // Check Public Form updated value
-        $this->visit(admin_url('formpublic/custom_value_edit_all/'. $pform->id . '/edit'))
+        $this->visit(admin_url('formpublic/custom_value_edit_all/' . $pform->id . '/edit'))
             ->seeInField('public_form_view_name', 'Public Form Unit Test')
             ->seeInField('basic_setting[validity_period_start]', "{$start} 01:02:03")
             ->seeInField('basic_setting[validity_period_end]', "{$end} 11:22:33")
@@ -290,13 +290,13 @@ class CPublicFormTest extends ExmentKitTestCase
         ;
 
         // Activate public form
-        $this->post(admin_url('formpublic/custom_value_edit_all/'. $pform->id . '/activate'))
+        $this->post(admin_url('formpublic/custom_value_edit_all/' . $pform->id . '/activate'))
             ->matchStatusCode(200)
         ;
 
         $share_url = $pform->getUrl();
         // Check activate infomation
-        $this->visit(admin_url('formpublic/custom_value_edit_all/'. $pform->id . '/edit'))
+        $this->visit(admin_url('formpublic/custom_value_edit_all/' . $pform->id . '/edit'))
             ->seeInElement('label', '公開フォームURL')
             ->seeInElement('label', '実行ユーザー')
             ->seeInElement('label', '有効フラグ')
@@ -344,7 +344,7 @@ class CPublicFormTest extends ExmentKitTestCase
         $row = \DB::table($table_name)->whereNull('deleted_at')->orderBy('id', 'desc')->first();
 
         // @phpstan-ignore-next-line
-        $this->visit(admin_url('data/custom_value_edit_all/'. $row->id . '/edit'))
+        $this->visit(admin_url('data/custom_value_edit_all/' . $row->id . '/edit'))
             ->seeInField('value[text]', 'unit test text')
             ->seeIsSelected('value[user]', '3')
             ->seeInField('value[index_text]', 'unit test index text')
@@ -359,7 +359,7 @@ class CPublicFormTest extends ExmentKitTestCase
         ;
 
         // Delete public form
-        $this->delete(admin_url('formpublic/custom_value_edit_all/'. $pform->id))
+        $this->delete(admin_url('formpublic/custom_value_edit_all/' . $pform->id))
             ->matchStatusCode(200)
         ;
 
@@ -406,7 +406,7 @@ class CPublicFormTest extends ExmentKitTestCase
         $this->assertNull($pform->notify_complete_admin);
 
         // Check Public Form default save value
-        $this->visit(admin_url('formpublic/custom_value_edit_all/'. $id . '/edit'))
+        $this->visit(admin_url('formpublic/custom_value_edit_all/' . $id . '/edit'))
             ->seeInElement('h3[class=box-title]', '編集')
             ->seeInElement('span', $target_form->form_view_name)
             ->seeInField('public_form_view_name', 'Public Form Unit Test')
@@ -468,7 +468,7 @@ class CPublicFormTest extends ExmentKitTestCase
         ];
 
         // Update Public Form
-        $this->visit(admin_url('formpublic/custom_value_edit_all/'. $id . '/edit'))
+        $this->visit(admin_url('formpublic/custom_value_edit_all/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('form/custom_value_edit_all'))
                 ->seeInElement('td', 'Public Form Unit Test Update')
@@ -476,7 +476,7 @@ class CPublicFormTest extends ExmentKitTestCase
         ;
 
         // Update Public Form Direct
-        $this->put(admin_url('formpublic/custom_value_edit_all/'. $id), [
+        $this->put(admin_url('formpublic/custom_value_edit_all/' . $id), [
             'confirm_complete_setting2' => [
                 'use_notify_complete_admin' => '1',
             ],
@@ -486,7 +486,7 @@ class CPublicFormTest extends ExmentKitTestCase
                     'notify_action' => '2',
                     'notify_action_target' => ['has_roles'],
                     '_remove_' => 0,
-                ]
+                ],
             ],
             'error_setting' => [
                 'use_notify_error' => '1',
@@ -498,7 +498,7 @@ class CPublicFormTest extends ExmentKitTestCase
                     'notify_action_target' => ['administrator', 'fixed_email'],
                     'target_emails' => 'unittest@mail.co.jp',
                     '_remove_' => 0,
-                ]
+                ],
             ],
         ]);
 
@@ -524,7 +524,7 @@ class CPublicFormTest extends ExmentKitTestCase
         $this->assertEquals($notify_error->action_settings[0]['notify_action_target'], ['administrator', 'fixed_email']);
 
         // Check Public Form updated value
-        $this->visit(admin_url('formpublic/custom_value_edit_all/'. $id . '/edit'))
+        $this->visit(admin_url('formpublic/custom_value_edit_all/' . $id . '/edit'))
             ->seeInField('public_form_view_name', 'Public Form Unit Test Update')
             ->seeInField('design_setting[use_header]', '0')
             ->seeInField('background_color_outer', '#0066CC')
@@ -561,7 +561,7 @@ class CPublicFormTest extends ExmentKitTestCase
         ;
 
         // Activate public form
-        $this->post(admin_url('formpublic/custom_value_edit_all/'. $pform->id . '/activate'))
+        $this->post(admin_url('formpublic/custom_value_edit_all/' . $pform->id . '/activate'))
             ->matchStatusCode(200)
         ;
 
@@ -582,7 +582,7 @@ class CPublicFormTest extends ExmentKitTestCase
         $row = \DB::table($table_name)->whereNull('deleted_at')->orderBy('id', 'desc')->first();
 
         // @phpstan-ignore-next-line
-        $this->visit(admin_url('data/custom_value_edit_all/'. $row->id . '/edit'))
+        $this->visit(admin_url('data/custom_value_edit_all/' . $row->id . '/edit'))
             ->seeInField('value[text]', 'unit test text')
         ;
         \DB::rollback();
@@ -628,7 +628,7 @@ class CPublicFormTest extends ExmentKitTestCase
         $pform = $this->getNewestForm();
 
         // Activate public form
-        $this->post(admin_url('formpublic/custom_value_edit_all/'. $pform->id . '/activate'))
+        $this->post(admin_url('formpublic/custom_value_edit_all/' . $pform->id . '/activate'))
             ->matchStatusCode(200)
         ;
         $share_url = $pform->getUrl();
@@ -664,7 +664,7 @@ class CPublicFormTest extends ExmentKitTestCase
         $pform = $this->getNewestForm();
 
         // Activate public form
-        $this->post(admin_url('formpublic/custom_value_edit_all/'. $pform->id . '/activate'))
+        $this->post(admin_url('formpublic/custom_value_edit_all/' . $pform->id . '/activate'))
             ->matchStatusCode(200)
         ;
         $share_url = $pform->getUrl();
@@ -674,7 +674,7 @@ class CPublicFormTest extends ExmentKitTestCase
         ;
 
         // Activate public form
-        $this->post(admin_url('formpublic/custom_value_edit_all/'. $pform->id . '/deactivate'))
+        $this->post(admin_url('formpublic/custom_value_edit_all/' . $pform->id . '/deactivate'))
             ->matchStatusCode(200)
         ;
     }

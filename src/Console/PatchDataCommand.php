@@ -425,7 +425,7 @@ class PatchDataCommand extends Command
                         foreach ($custom_values as &$custom_value) {
                             $isUpdate = false;
                             foreach ($custom_columns as $custom_column) {
-                                $originalValue = array_get($custom_value, 'value.' .$custom_column->column_name);
+                                $originalValue = array_get($custom_value, 'value.' . $custom_column->column_name);
                                 // already string, continue
                                 if (is_null($originalValue) || gettype($originalValue) == "string") {
                                     continue;
@@ -528,7 +528,7 @@ class PatchDataCommand extends Command
     // @phpstan-ignore-next-line
     protected function reAlterIndex($index_custom_columns)
     {
-        foreach ($index_custom_columns as  $index_custom_column) {
+        foreach ($index_custom_columns as $index_custom_column) {
             $db_table_name = getDBTableName($index_custom_column->custom_table);
             $db_column_name = $index_custom_column->getIndexColumnName(false);
             $index_name = "index_$db_column_name";
@@ -550,7 +550,7 @@ class PatchDataCommand extends Command
         // get index columns
         $index_custom_columns = CustomColumn::indexEnabled()->get();
 
-        foreach ($index_custom_columns as  $index_custom_column) {
+        foreach ($index_custom_columns as $index_custom_column) {
             $index_custom_column->setOption('freeword_search', '1');
             $index_custom_column->save();
         }
@@ -770,7 +770,7 @@ class PatchDataCommand extends Command
 
         $users = [];
         foreach ($system_authoritable as $s) {
-            $item = (array)$s;
+            $item = (array) $s;
             if (array_get($item, 'related_type') == SystemTableName::USER) {
                 $users[] = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(array_get($item, 'related_id'))->toArray();
             } else {
@@ -808,7 +808,7 @@ class PatchDataCommand extends Command
         $editRoles = [];
         $viewRoles = [];
         foreach ($valueRoles as $valueRole) {
-            $val = (array)$valueRole;
+            $val = (array) $valueRole;
             $permissions = json_decode_ex($val['permissions'], true);
             // @phpstan-ignore-next-line
             if (array_has($permissions, 'custom_value_edit')) {
@@ -823,7 +823,7 @@ class PatchDataCommand extends Command
             ->get();
         $custom_value_authoritables = [];
         foreach ($value_authoritable as $v) {
-            $val = (array)$v;
+            $val = (array) $v;
             if (in_array($val['role_id'], $editRoles)) {
                 $authoritable_type = Permission::CUSTOM_VALUE_EDIT;
             } else {
@@ -1137,7 +1137,7 @@ class PatchDataCommand extends Command
         $query = System::query()->whereIn('system_name', [
             'site_favicon',
             'site_logo',
-            'site_logo_mini'
+            'site_logo_mini',
         ]);
 
         $func($query, 'system_value', function ($item) {
@@ -1175,7 +1175,7 @@ class PatchDataCommand extends Command
                 $revisions = $query->get(); // ONLY WORK MYSQL
 
                 foreach ($revisions as $revision) {
-                    $r = (array)$revision;
+                    $r = (array) $revision;
 
                     // check data
                     $revision_id = array_get($r, 'revision_id');
@@ -1201,7 +1201,7 @@ class PatchDataCommand extends Command
                         ->get();
 
                     foreach ($reset_revisions as $index => $reset_revision) {
-                        $reset_r = (array)$reset_revision;
+                        $reset_r = (array) $reset_revision;
                         \DB::table(SystemTableName::REVISION)->where('id', $reset_r['id'])->update(['revision_no' => ($index + 1)]);
                     }
                 }
@@ -1268,7 +1268,7 @@ class PatchDataCommand extends Command
                     'sso_jit' => false,
                     'jit_rolegroups' => [],
                     'update_user_info' => true,
-                ]
+                ],
             ]);
 
             $login_setting->save();

@@ -9,9 +9,7 @@ class BatchRestore extends BatchAction
     /**
      * Create a new Tools instance.
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * Script of batch delete action.
@@ -30,21 +28,21 @@ class BatchRestore extends BatchAction
 
         return <<<EOT
 
-$('{$this->getElementClass()}').on('click', function() {
-    var url = '{$url}/rowRestore';
-    Exment.CommonEvent.ShowSwal(url, {
-        title: "$label",
-        confirm:"$confirm",
-        cancel:"$cancel",
-        text:"$text",
-        data: {
-            _method:'post',
-            _token:'{$this->getToken()}',
-            id: $.admin.grid.selected().join()
-        },
-    });
-});
+            $('{$this->getElementClass()}').on('click', function() {
+                var url = '{$url}/rowRestore';
+                Exment.CommonEvent.ShowSwal(url, {
+                    title: "$label",
+                    confirm:"$confirm",
+                    cancel:"$cancel",
+                    text:"$text",
+                    data: {
+                        _method:'post',
+                        _token:'{$this->getToken()}',
+                        id: $.admin.grid.selected().join()
+                    },
+                });
+            });
 
-EOT;
+            EOT;
     }
 }

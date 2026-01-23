@@ -14,9 +14,7 @@ class PublicShowRelation implements Renderable
     /**
      * Panel constructor.
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * The view to be rendered.

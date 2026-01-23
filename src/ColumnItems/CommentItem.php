@@ -24,7 +24,7 @@ class CommentItem extends SystemItem
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($custom_table, $custom_value) = $args + [null, null];
+        [$custom_table, $custom_value] = $args + [null, null];
         return new self($custom_table, $custom_value);
     }
 

@@ -32,7 +32,7 @@ class Email
     public function index()
     {
         return view('exment::auth.2factor.2factor-email', $this->getLoginPageData([
-            'email_send_verify' => exmtrans('2factor.message.email_send_verify', config('exment.login_2factor_valid_period', 10))
+            'email_send_verify' => exmtrans('2factor.message.email_send_verify', config('exment.login_2factor_valid_period', 10)),
         ]));
     }
 
@@ -63,7 +63,7 @@ class Email
 
             // error
             return back()->withInput()->withErrors([
-                'verify_code' => exmtrans('2factor.message.verify_failed')
+                'verify_code' => exmtrans('2factor.message.verify_failed'),
             ]);
         }
 

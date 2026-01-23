@@ -45,7 +45,7 @@ class PluginAction extends CustomTableAction
         $providers[] = new Export\ViewProvider([
             'custom_table' => $this->custom_table,
             'custom_view' => $this->custom_view,
-            'grid' => $this->grid
+            'grid' => $this->grid,
         ]);
 
         $datalist = [];
@@ -74,14 +74,14 @@ class PluginAction extends CustomTableAction
 
         $pluginClass->defaultProvider(new Export\DefaultTableProvider([
             'custom_table' => $this->custom_table,
-            'grid' => $this->grid
+            'grid' => $this->grid,
         ]));
 
         // todo プラグインエクスポートで通常ビューのプロバイダーを使うための修正です
         $pluginClass->viewProvider(new Export\ViewProvider([
             'custom_table' => $this->custom_table,
             'custom_view' => $this->custom_view,
-            'grid' => $this->grid
+            'grid' => $this->grid,
         ]));
 
         $file = null;

@@ -61,7 +61,7 @@ class ViewProvider extends DefaultTableProvider
 
         $rows[] = collect($this->summary_index_and_view_columns)->map(function ($summary_index_and_view_column) {
             $item = array_get($summary_index_and_view_column, 'item');
-            return array_get($item, 'view_column_name')?? $item->column_item->label();
+            return array_get($item, 'view_column_name') ?? $item->column_item->label();
         })->toArray();
 
         return $rows;

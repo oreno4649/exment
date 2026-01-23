@@ -37,7 +37,7 @@ trait SystemValuesTrait
                 SystemColumn::CREATED_AT => ['getOld' => true],
                 SystemColumn::UPDATED_AT => ['getOld' => true],
                 SystemColumn::DELETED_AT => ['getOld' => true, 'nullHidden' => true],
-            ]
+            ],
         ];
 
 
@@ -90,7 +90,7 @@ trait SystemValuesTrait
             $result[] = [
                 /** @phpstan-ignore-next-line */
                 'label' => exmtrans("common.$key"),
-                'value' => $value
+                'value' => $value,
             ];
         }
 
@@ -113,7 +113,7 @@ trait SystemValuesTrait
         return [
             /** @phpstan-ignore-next-line */
             'label' => exmtrans('common.history'),
-            'value' => '<a href="javascript:void(0);" data-widgetmodal_url="' . $link . '">' . trans('admin.show') . '</a>'
+            'value' => '<a href="javascript:void(0);" data-widgetmodal_url="' . $link . '">' . trans('admin.show') . '</a>',
         ];
     }
 }

@@ -51,7 +51,7 @@ class WorkflowAuthority extends ModelBase implements WorkflowAuthorityInterface
 
         $items = [];
         foreach ($values as $key => $value) {
-            foreach ((array)$value as $v) {
+            foreach ((array) $value as $v) {
                 $condition_type = ConditionTypeDetail::getEnum($key);
                 if (!isset($condition_type)) {
                     continue;

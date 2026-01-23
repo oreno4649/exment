@@ -81,7 +81,7 @@ class MailChannel
 
         // set password file
         if ($mailMessage->getUsePassword()) {
-            list($filepath, $filename) = $this->archiveAttachments($mailMessage);
+            [$filepath, $filename] = $this->archiveAttachments($mailMessage);
             $message->attach($filepath, ['as' => $filename]);
             $tmpZipPath = $filepath;
         } else {

@@ -53,6 +53,6 @@ class DuplicateRelationRule implements Rule
      */
     public function message()
     {
-        return (string)exmtrans('validation.duplicate_relation');
+        return (string) exmtrans('validation.duplicate_relation');
     }
 }

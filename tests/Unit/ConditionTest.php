@@ -1040,7 +1040,7 @@ class ConditionTest extends UnitTestBase
         $this->_testColumnSelectMultiNullCheck(null, FilterOption::NOT_NULL, false);
         $this->_testColumnSelectMultiNullCheck('', FilterOption::NOT_NULL, false);
         $this->markTestSkipped('現状空配列はNULLと見なされない');
-//        $this->_testColumnSelectMultiNullCheck([], FilterOption::NOT_NULL, false);
+        //        $this->_testColumnSelectMultiNullCheck([], FilterOption::NOT_NULL, false);
     }
     /**
      * @return void
@@ -1050,7 +1050,7 @@ class ConditionTest extends UnitTestBase
         $this->_testColumnSelectMultiNullCheck(null, FilterOption::NULL, true);
         $this->_testColumnSelectMultiNullCheck('', FilterOption::NULL, true);
         $this->markTestSkipped('現状空配列はNULLと見なされない');
-//        $this->_testColumnSelectMultiNullCheck([], FilterOption::NULL, true);
+        //        $this->_testColumnSelectMultiNullCheck([], FilterOption::NULL, true);
     }
     /**
      * @return void

@@ -194,7 +194,7 @@ abstract class FormatBase
         $filename = $this->getFileName();
         return [
             'Content-Type'        => 'application/force-download',
-            'Content-disposition' => "attachment; filename*=UTF-8''". rawurlencode($filename),
+            'Content-disposition' => "attachment; filename*=UTF-8''" . rawurlencode($filename),
         ];
     }
 
@@ -245,7 +245,7 @@ abstract class FormatBase
                 return isMatchString($library, ExportImportLibrary::SP_OUT) ? new SpOut\Csv() : new PhpSpreadSheet\Csv();
         }
         // unreachable statement
-//        return new PhpSpreadSheet\Xlsx();
+        //        return new PhpSpreadSheet\Xlsx();
     }
 
 
@@ -268,7 +268,7 @@ abstract class FormatBase
             $tmpdir = $this->tmpdir();
 
             $zip = new \ZipArchive();
-            $zipfilename = short_uuid().'.zip';
+            $zipfilename = short_uuid() . '.zip';
             $zipfillpath = path_join($tmpdir, $zipfilename);
             $res = $zip->open($zipfillpath, \ZipArchive::CREATE);
 
@@ -342,7 +342,7 @@ abstract class FormatBase
     protected function isReadSheetRow(int $sheet_row_no, array $options = []): bool
     {
         // get options
-        list($skip_excel_row_no) = [
+        [$skip_excel_row_no] = [
             array_get($options, 'skip_excel_row_no'),
         ];
 

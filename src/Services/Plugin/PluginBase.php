@@ -28,9 +28,7 @@ trait PluginBase
      * @param Form $form
      * @return void
      */
-    public function setCustomOptionForm(&$form)
-    {
-    }
+    public function setCustomOptionForm(&$form) {}
 
     /**
      * Get the value of pluginOptions

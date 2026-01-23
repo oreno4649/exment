@@ -50,8 +50,8 @@ class DashboardBox extends ModelBase implements Interfaces\TemplateImporterInter
                         'replacingName' => 'options.target_table_id',
                         'replacedName' => [
                             'table_name' => 'options.target_table_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyClassName' => CustomTable::class,
             ],
@@ -61,8 +61,8 @@ class DashboardBox extends ModelBase implements Interfaces\TemplateImporterInter
                         'replacingName' => 'options.target_view_id',
                         'replacedName' => [
                             'suuid' => 'options.target_view_suuid',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyClassName' => CustomView::class,
             ],
@@ -72,8 +72,8 @@ class DashboardBox extends ModelBase implements Interfaces\TemplateImporterInter
                         'replacingName' => 'options.target_system_id',
                         'replacedName' => [
                             'name' => 'options.target_system_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeySystemEnum' => DashboardBoxSystemPage::class,
             ],
@@ -85,8 +85,8 @@ class DashboardBox extends ModelBase implements Interfaces\TemplateImporterInter
                             'column_name' => 'options.chart_axisx_column_name',
                             'view_column_type' => 'options.chart_axisx_view_column_type',
                             'view_kind_type' => 'options.chart_axisx_type',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getUniqueKeyValues',
                 'uniqueKeyFunctionArgs' => ['options.chart_axisx'],
@@ -99,8 +99,8 @@ class DashboardBox extends ModelBase implements Interfaces\TemplateImporterInter
                             'column_name' => 'options.chart_axisy_column_name',
                             'view_column_type' => 'options.chart_axisy_view_column_type',
                             'view_kind_type' => 'options.chart_axisy_type',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getUniqueKeyValues',
                 'uniqueKeyFunctionArgs' => ['options.chart_axisy'],
@@ -270,7 +270,7 @@ class DashboardBox extends ModelBase implements Interfaces\TemplateImporterInter
                     ->where('view_column_target_id', $id)->first();
             }
             if (isset($view_column)) {
-                array_set($json, "options.{$key}", $table_type.'_'.$view_column->id);
+                array_set($json, "options.{$key}", $table_type . '_' . $view_column->id);
             }
         }
         // Define::CHARTITEM_LABEL

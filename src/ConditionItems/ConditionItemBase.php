@@ -207,7 +207,7 @@ abstract class ConditionItemBase implements ConditionItemInterface
         $options = $this->getFilterOption();
 
         return collect($options)->map(function ($array) {
-            return ['id' => array_get($array, 'id'), 'text' => exmtrans('custom_view.filter_condition_options.'.array_get($array, 'name'))];
+            return ['id' => array_get($array, 'id'), 'text' => exmtrans('custom_view.filter_condition_options.' . array_get($array, 'name'))];
         });
     }
 
@@ -218,7 +218,7 @@ abstract class ConditionItemBase implements ConditionItemInterface
     public function getOperationUpdateType()
     {
         return collect([Enums\OperationUpdateType::DEFAULT])->map(function ($val) {
-            return ['id' => $val, 'text' => exmtrans('custom_operation.operation_update_type_options.'.$val)];
+            return ['id' => $val, 'text' => exmtrans('custom_operation.operation_update_type_options.' . $val)];
         });
     }
 
@@ -332,9 +332,7 @@ abstract class ConditionItemBase implements ConditionItemInterface
      * @return void
      */
     // @phpstan-ignore-next-line
-    public function setQuerySort($query, Model\CustomViewSort $custom_view_sort)
-    {
-    }
+    public function setQuerySort($query, Model\CustomViewSort $custom_view_sort) {}
 
 
     /**

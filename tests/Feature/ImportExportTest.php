@@ -343,7 +343,7 @@ class ImportExportTest extends FeatureTestBase
         }
 
         if ($chunk_no > 0) {
-            $count = isset($params['--count']) ? $params['--count'] : 1000;
+            $count = $params['--count'] ?? 1000;
             if ($chunk_no > 1) {
                 $model = $model->skip(($chunk_no - 1) * $count);
             }
@@ -351,8 +351,8 @@ class ImportExportTest extends FeatureTestBase
         }
 
         if (isset($params['--type']) && $params['--type'] == 'page') {
-            $page = isset($params['--page']) ? $params['--page'] : 1;
-            $count = isset($params['--count']) ? $params['--count'] : $pager_count;
+            $page = $params['--page'] ?? 1;
+            $count = $params['--count'] ?? $pager_count;
             $count = empty($count) ? System::grid_pager_count() : $count;
             if ($page > 1) {
                 $model = $model->skip(($page - 1) * $count);
@@ -372,7 +372,7 @@ class ImportExportTest extends FeatureTestBase
     {
         $custom_table = CustomTable::getEloquent($params['table_name']);
 
-        list($custom_view, $db_array) = $this->_getTableData($custom_table, $params, $chunk_no);
+        [$custom_view, $db_array] = $this->_getTableData($custom_table, $params, $chunk_no);
 
         if ($chunk_no > 0 && count($db_array) == 0) {
             return false;
@@ -380,7 +380,7 @@ class ImportExportTest extends FeatureTestBase
 
         $file_array = $this->_getFileData($file_path, $custom_table, $params);
 
-        $this->assertEquals(count($db_array), count($file_array)-2);
+        $this->assertEquals(count($db_array), count($file_array) - 2);
 
         if (isset($custom_view)) {
             $this->_compareViewData($custom_view, $file_array, $db_array);
@@ -475,13 +475,13 @@ class ImportExportTest extends FeatureTestBase
 
         $this->assertEquals($result, 0);
 
-        $start = isset($params['--start']) ? $params['--start'] : 1;
-        $end = isset($params['--end']) ? $params['--end'] : 1000;
+        $start = $params['--start'] ?? 1;
+        $end = $params['--end'] ?? 1000;
 
         for ($i = $start; $i <= $end; $i++) {
             $num = $i;
             if (isset($params['--seqlength'])) {
-                $num = sprintf('%0'. $params['--seqlength'] . 'd', $i);
+                $num = sprintf('%0' . $params['--seqlength'] . 'd', $i);
             }
             $file_path = path_join($params['--dirpath'], $params['table_name'] . ".$num." . $params['--format']);
             if (!$this->_compareData($file_path, $params, $i)) {
@@ -502,7 +502,7 @@ class ImportExportTest extends FeatureTestBase
         //$maxid = CustomTable::getEloquent($target_name)->getValueModel()->max('id');
 
         $result = \Artisan::call('exment:import', [
-            'dir' => $this->dirpath
+            'dir' => $this->dirpath,
         ]);
 
         $this->assertEquals($result, $isSuccess ? 0 : -1);

@@ -33,7 +33,7 @@ class ApiAuthTest extends ApiTestBase
         ])->get(admin_urls('api', 'data', 'custom_value_edit', 5))
             ->assertStatus(200)
             ->assertJsonFragment([
-                'id' => 5
+                'id' => 5,
             ]);
     }
 
@@ -49,17 +49,17 @@ class ApiAuthTest extends ApiTestBase
         ])->post(admin_urls('api', 'data', 'custom_value_edit'), [
             'value' => [
                 'text' => $text,
-                'user' => 3
-            ]
+                'user' => 3,
+            ],
         ])
         ->assertStatus(201);
 
         $this->assertJsonTrue($response, [
             'value' => [
                 'text' => $text,
-                'user' => 3
+                'user' => 3,
             ],
-            'created_user_id' => "2" //user1
+            'created_user_id' => "2", //user1
         ]);
     }
 
@@ -94,8 +94,8 @@ class ApiAuthTest extends ApiTestBase
         $response = $this->post(admin_urls('api', 'data', 'custom_value_edit'), [
             'value' => [
                 'text' => $text,
-                'user' => 3
-            ]
+                'user' => 3,
+            ],
         ])
         ->assertStatus(401);
 
@@ -103,8 +103,8 @@ class ApiAuthTest extends ApiTestBase
         $response = $this->post(asset_urls('publicformapi', 'data', 'custom_value_edit'), [
             'value' => [
                 'text' => $text,
-                'user' => 3
-            ]
+                'user' => 3,
+            ],
         ])
         ->assertStatus(404);
     }
@@ -123,24 +123,24 @@ class ApiAuthTest extends ApiTestBase
         $this->get(admin_urls('webapi', 'data', 'custom_value_edit', 5))
             ->assertStatus(200)
             ->assertJsonFragment([
-                'id' => 5
+                'id' => 5,
             ]);
 
         $text = 'test' . date('YmdHis');
         $response = $this->post(admin_urls('webapi', 'data', 'custom_value_edit'), [
             'value' => [
                 'text' => $text,
-                'user' => 3
-            ]
+                'user' => 3,
+            ],
         ])
         ->assertStatus(201);
 
         $this->assertJsonTrue($response, [
             'value' => [
                 'text' => $text,
-                'user' => 3
+                'user' => 3,
             ],
-            'created_user_id' => "2" //user1
+            'created_user_id' => "2", //user1
         ]);
     }
 
@@ -185,8 +185,8 @@ class ApiAuthTest extends ApiTestBase
         ])->post(admin_urls('webapi', 'data', 'custom_value_edit'), [
             'value' => [
                 'text' => $text,
-                'user' => 3
-            ]
+                'user' => 3,
+            ],
         ])->assertStatus(401);
 
         // not allowed
@@ -195,8 +195,8 @@ class ApiAuthTest extends ApiTestBase
         ])->post(asset_urls('publicformapi', 'data', 'custom_value_edit'), [
             'value' => [
                 'text' => $text,
-                'user' => 3
-            ]
+                'user' => 3,
+            ],
         ])->assertStatus(404);
     }
 
@@ -217,7 +217,7 @@ class ApiAuthTest extends ApiTestBase
         $this->get(url_join($uri, 'data', 'custom_value_edit', 5))
             ->assertStatus(200)
             ->assertJsonFragment([
-                'id' => 5
+                'id' => 5,
             ]);
     }
 
@@ -264,8 +264,8 @@ class ApiAuthTest extends ApiTestBase
         ])->post(url_join($uri, 'data', 'custom_value_edit'), [
             'value' => [
                 'text' => $text,
-                'user' => 3
-            ]
+                'user' => 3,
+            ],
         ])->assertStatus(404);
 
         // not allowed
@@ -273,8 +273,8 @@ class ApiAuthTest extends ApiTestBase
         ])->post(asset_urls('publicformapi', 'data', 'custom_value_edit'), [
             'value' => [
                 'text' => $text,
-                'user' => 3
-            ]
+                'user' => 3,
+            ],
         ])->assertStatus(404);
 
 
@@ -284,8 +284,8 @@ class ApiAuthTest extends ApiTestBase
         $response = $this->post(url_join($uri, 'data', 'custom_value_edit'), [
             'value' => [
                 'text' => $text,
-                'user' => 3
-            ]
+                'user' => 3,
+            ],
         ])
         ->assertStatus(404);
     }

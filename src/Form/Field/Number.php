@@ -49,17 +49,17 @@ class Number extends \Encore\Admin\Form\Field\Number
             // get class remoiving dot
             $classname = str_replace('.', '', $this->getElementClassSelector(false));
             $this->script = <<<EOT
-$('{$this->getElementClassSelector()}:not(.initialized)')
-    .addClass('initialized')
-    .bootstrapNumber({
-        upClass: 'success btn-number-{$classname}',
-        downClass: 'primary btn-number-{$classname}',
-        center: true
-    });
+                $('{$this->getElementClassSelector()}:not(.initialized)')
+                    .addClass('initialized')
+                    .bootstrapNumber({
+                        upClass: 'success btn-number-{$classname}',
+                        downClass: 'primary btn-number-{$classname}',
+                        center: true
+                    });
 
-EOT;
+                EOT;
             $this->setElementClass('disableNumberFormat');
-            $this->prepend('')->defaultAttribute('style', 'width: '.$this->fieldWidth.'px');
+            $this->prepend('')->defaultAttribute('style', 'width: ' . $this->fieldWidth . 'px');
         } else {
             $this->defaultAttribute('style', 'max-width: 200px;');
         }

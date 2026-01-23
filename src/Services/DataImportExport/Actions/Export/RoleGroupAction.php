@@ -23,25 +23,25 @@ class RoleGroupAction extends ExportActionBase implements ActionInterface
     {
         $providers = [];
         $providers[] = new Export\RoleGroupProvider([
-            'grid' => $this->grid
+            'grid' => $this->grid,
         ]);
         $providers[] = new Export\RoleGroupPermissionSystemProvider([
-            'grid' => $this->grid
+            'grid' => $this->grid,
         ]);
         $providers[] = new Export\RoleGroupPermissionRoleProvider([
-            'grid' => $this->grid
+            'grid' => $this->grid,
         ]);
         $providers[] = new Export\RoleGroupPermissionPluginProvider([
-            'grid' => $this->grid
+            'grid' => $this->grid,
         ]);
         $providers[] = new Export\RoleGroupPermissionMasterProvider([
-            'grid' => $this->grid
+            'grid' => $this->grid,
         ]);
         $providers[] = new Export\RoleGroupPermissionTableProvider([
-            'grid' => $this->grid
+            'grid' => $this->grid,
         ]);
         $providers[] = new Export\RoleGroupUserOrganizationProvider([
-            'grid' => $this->grid
+            'grid' => $this->grid,
         ]);
 
         $datalist = [];

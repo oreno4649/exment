@@ -67,36 +67,36 @@ class SwalInputButton
 
         $script = <<<SCRIPT
 
-        $('.btn-{$suuid}').unbind('click').click(function() {
-            let select_ids = $('.column-__row_selector__').length > 0 ? $.admin.grid.selected() : null;
-            Exment.CommonEvent.ShowSwal("$url", {
-                type: "{$type}",
-                title: "{$title}",
-                text: "{$text}",
-                html: "{$html}",
-                input: "{$input}",
-                method: '{$method}',
-                confirm:"{$confirm}",
-                cancel:"{$cancel}",
-                showCancelButton: "{$showCancelButton}",
-                redirect: "{$redirectUrl}",
-                preConfirmValidate: function(input){
-                    if('$input' != 'text'){
-                        return true;
-                    }
-                    if (input != "{$confirmKeyword}") {
-                        return "error";
-                    } 
-        
-                    return true;
-                },
-                data: {
-                    select_ids: select_ids
-                }
-            });
-        });
-        
-SCRIPT;
+                    $('.btn-{$suuid}').unbind('click').click(function() {
+                        let select_ids = $('.column-__row_selector__').length > 0 ? $.admin.grid.selected() : null;
+                        Exment.CommonEvent.ShowSwal("$url", {
+                            type: "{$type}",
+                            title: "{$title}",
+                            text: "{$text}",
+                            html: "{$html}",
+                            input: "{$input}",
+                            method: '{$method}',
+                            confirm:"{$confirm}",
+                            cancel:"{$cancel}",
+                            showCancelButton: "{$showCancelButton}",
+                            redirect: "{$redirectUrl}",
+                            preConfirmValidate: function(input){
+                                if('$input' != 'text'){
+                                    return true;
+                                }
+                                if (input != "{$confirmKeyword}") {
+                                    return "error";
+                                } 
+                    
+                                return true;
+                            },
+                            data: {
+                                select_ids: select_ids
+                            }
+                        });
+                    });
+                    
+            SCRIPT;
 
         Admin::script($script);
     }
@@ -114,7 +114,7 @@ SCRIPT;
             'label' => $this->label ?? null,
             'btn_class' => $this->btn_class ?? 'btn-warning',
             'icon' => $this->icon ?? 'fa-share',
-            'url' => $this->url
+            'url' => $this->url,
         ]);
     }
 

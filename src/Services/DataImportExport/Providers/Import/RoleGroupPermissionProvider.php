@@ -99,7 +99,7 @@ class RoleGroupPermissionProvider extends ProviderBase
     public function validateDataRow($line_no, $dataAndModel)
     {
         $data = array_get($dataAndModel, 'data');
- 
+
         $errors = [];
 
         $model = new RoleGroup();
@@ -107,8 +107,7 @@ class RoleGroupPermissionProvider extends ProviderBase
             'role_group_id' => 'required|exists:' . $model->getTable() . ',id',
         ];
 
-        foreach($this->permission_keys as $permission_key)
-        {
+        foreach ($this->permission_keys as $permission_key) {
             $rules["permissions:$permission_key"] = 'nullable|regex:/^[01]$/';
         }
 
@@ -120,7 +119,7 @@ class RoleGroupPermissionProvider extends ProviderBase
         if ($validator->fails()) {
             // create error message
             foreach ($validator->getMessages() as $message) {
-                $errors[] = sprintf(exmtrans('custom_value.import.import_error_format_sheet'), $this->name(), ($line_no+1), implode(',', $message));
+                $errors[] = sprintf(exmtrans('custom_value.import.import_error_format_sheet'), $this->name(), ($line_no + 1), implode(',', $message));
             }
         }
         $this->validateExtraRules($data, $line_no, $errors);
@@ -133,25 +132,21 @@ class RoleGroupPermissionProvider extends ProviderBase
 
     /**
      * add data row validate rules for each role type
-     * 
+     *
      * @param array $rules
      */
     // @phpstan-ignore-next-line
-    protected function addValidateTypeRules(&$rules) : void
-    {
-    }
+    protected function addValidateTypeRules(&$rules): void {}
 
     /**
      * validate data row by custom rules
-     * 
+     *
      * @param array $data
      * @param int $line_no
      * @param array $errors
      */
     // @phpstan-ignore-next-line
-    protected function validateExtraRules($data, $line_no, &$errors) : void
-    {
-    }
+    protected function validateExtraRules($data, $line_no, &$errors): void {}
 
     /**
      * import data
@@ -163,21 +158,20 @@ class RoleGroupPermissionProvider extends ProviderBase
         $role_group_id = array_get($data, 'role_group_id');
 
         // parent data not exists, do nothing
-        if (!RoleGroup::where('id', $role_group_id )->exists()) {
+        if (!RoleGroup::where('id', $role_group_id)->exists()) {
             return;
         }
 
         $permissions = [];
 
-        foreach($this->permission_keys as $permission_key)
-        {
-            $dvalue = array_get($data, "permissions:$permission_key"); 
+        foreach ($this->permission_keys as $permission_key) {
+            $dvalue = array_get($data, "permissions:$permission_key");
             if (boolval($dvalue)) {
                 $permissions[] = $permission_key;
             }
         }
 
-        $role_group_target_id = $this->role_group_target_id?? array_get($data, 'role_group_target_id');
+        $role_group_target_id = $this->role_group_target_id ?? array_get($data, 'role_group_target_id');
 
         $model = RoleGroupPermission::where('role_group_id', $role_group_id)
             ->where('role_group_permission_type', $this->role_group_permission_type)
@@ -203,7 +197,7 @@ class RoleGroupPermissionProvider extends ProviderBase
     protected function getPermissions(int|string $role_type, array $values)
     {
         $result = [];
-        foreach($values as $value) {
+        foreach ($values as $value) {
             $keys = explode('.', $value);
             if (count($keys) !== 3) {
                 continue;
@@ -224,7 +218,7 @@ class RoleGroupPermissionProvider extends ProviderBase
 
         return $result;
     }
-    
+
     // @phpstan-ignore-next-line
     protected function getTargetRoleGroupType($role_type)
     {

@@ -130,7 +130,7 @@ abstract class ColumnBase
      */
     protected function getHtmlHeaderName()
     {
-        $key = $this->custom_form_column['id'] ?? $this->custom_form_column->request_key ?? 'NEW__'.make_uuid();
+        $key = $this->custom_form_column['id'] ?? $this->custom_form_column->request_key ?? 'NEW__' . make_uuid();
         // add header name
         return "[custom_form_columns][{$key}]";
     }

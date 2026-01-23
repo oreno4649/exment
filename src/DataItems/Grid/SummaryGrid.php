@@ -256,7 +256,7 @@ class SummaryGrid extends GridBase
 
 
     // @phpstan-ignore-next-line
-    protected function  isShowViewSummaryDetail()
+    protected function isShowViewSummaryDetail()
     {
         if (boolval(request()->get('execute_filter'))) {
             return false;
@@ -283,7 +283,7 @@ class SummaryGrid extends GridBase
     {
         static::setViewInfoboxFields($form);
 
-        $manualUrl = getManualUrl('column?id='.exmtrans('custom_column.options.index_enabled'));
+        $manualUrl = getManualUrl('column?id=' . exmtrans('custom_column.options.index_enabled'));
 
         // group columns setting
         $form->hasManyTable('custom_view_columns', exmtrans("custom_view.custom_view_groups"), function ($form) use ($custom_table) {
@@ -360,7 +360,7 @@ class SummaryGrid extends GridBase
                             }
 
                             return array_map(function ($array) {
-                                return exmtrans('custom_view.summary_condition_options.'.array_get($array, 'name'));
+                                return exmtrans('custom_view.summary_condition_options.' . array_get($array, 'name'));
                             }, $options);
                         }
                     }
@@ -407,7 +407,7 @@ class SummaryGrid extends GridBase
             'ignore_multiple_refer' => true,
         ], $column_options);
 
-        $manualUrl = getManualUrl('column?id='.exmtrans('custom_column.options.index_enabled'));
+        $manualUrl = getManualUrl('column?id=' . exmtrans('custom_column.options.index_enabled'));
         $description = exmtrans("custom_view.description_custom_view_grid_filters", $manualUrl);
         $description .= exmtrans("custom_view.description_custom_view_summary_filters");
 
@@ -452,7 +452,7 @@ class SummaryGrid extends GridBase
         // if date, return option
         $options = GroupCondition::getOptions();
         return collect($options)->map(function ($array) {
-            return ['id' => array_get($array, 'id'), 'text' => exmtrans('custom_view.group_condition_options.'.array_get($array, 'name'))];
+            return ['id' => array_get($array, 'id'), 'text' => exmtrans('custom_view.group_condition_options.' . array_get($array, 'name'))];
         });
     }
 
@@ -502,12 +502,12 @@ class SummaryGrid extends GridBase
                 }
             } else {
                 $separate = floor(count($filterItems) /  2);
-                $filter->column(1/2, function ($filter) use ($filterItems, $separate) {
+                $filter->column(1 / 2, function ($filter) use ($filterItems, $separate) {
                     for ($i = 0; $i < $separate; $i++) {
                         $filterItems[$i]->setAdminFilter($filter);
                     }
                 });
-                $filter->column(1/2, function ($filter) use ($filterItems, $separate) {
+                $filter->column(1 / 2, function ($filter) use ($filterItems, $separate) {
                     for ($i = $separate; $i < count($filterItems); $i++) {
                         /** @var int $i */
                         $filterItems[$i]->setAdminFilter($filter);
@@ -606,7 +606,7 @@ class SummaryGrid extends GridBase
         }
 
         // filter comment
-        if (boolval($this->custom_table->getOption('comment_flg')?? true)) {
+        if (boolval($this->custom_table->getOption('comment_flg') ?? true)) {
             foreach (SystemColumn::getOptions(['grid_filter' => true, 'grid_filter_system' => false]) as $filterKey => $filterType) {
                 if (!SystemColumn::isComment($filterKey)) {
                     continue;

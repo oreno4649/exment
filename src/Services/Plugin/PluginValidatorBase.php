@@ -75,9 +75,7 @@ class PluginValidatorBase
     }
 
     // @phpstan-ignore-next-line
-    public function validate()
-    {
-    }
+    public function validate() {}
 
     // @phpstan-ignore-next-line
     public function messages()
@@ -96,9 +94,7 @@ class PluginValidatorBase
 
         return $messages;
     }
-    
+
     // @phpstan-ignore-next-line
-    public function validateDestroy($model)
-    {
-    }
+    public function validateDestroy($model) {}
 }

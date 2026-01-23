@@ -657,7 +657,7 @@ class RelationTable
         // Append join query.
         $joinName = $leftJoin ? 'leftJoin' : 'join';
         $query->{$joinName}($relation_name, "$child_table_name.id", "=", "$relation_name.child_id")
-            ->{$joinName}("$parent_table_name AS {$this->tableUniqueName}", function($join) use($relation_name) {
+            ->{$joinName}("$parent_table_name AS {$this->tableUniqueName}", function ($join) use ($relation_name) {
                 $join->on("{$this->tableUniqueName}.id", "=", "$relation_name.parent_id")
                      ->whereNull("{$this->tableUniqueName}.deleted_at");
             });
@@ -817,7 +817,7 @@ class RelationTable
 
             // set from and default group by, select.
             $subQuery->from($relation_name)
-                ->{$joinName}("$child_table_name AS {$this->tableUniqueName}", function($join) use($relation_name) {
+                ->{$joinName}("$child_table_name AS {$this->tableUniqueName}", function ($join) use ($relation_name) {
                     $join->on("{$this->tableUniqueName}.id", "=", "$relation_name.child_id")
                          ->whereNull("{$this->tableUniqueName}.deleted_at");
                 })
@@ -966,7 +966,7 @@ class RelationTable
                 }
             })
             ->distinct()
-            ->select([$tableName .'.id  as morph_id']);
+            ->select([$tableName . '.id  as morph_id']);
 
 
         /////// second query. not has workflow value's custom value
@@ -999,7 +999,7 @@ class RelationTable
             })
             ->union($subquery)
             ->distinct()
-            ->select([$tableName .'.id as morph_id']);
+            ->select([$tableName . '.id as morph_id']);
 
         // join query is $or_option is true then leftJoin
         $joinFunc = $or_option ? 'leftJoinSub' : 'joinSub';

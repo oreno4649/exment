@@ -2,6 +2,4 @@
 
 namespace Exceedone\Exment\Model\Interfaces;
 
-interface WorkflowAuthorityInterface
-{
-}
+interface WorkflowAuthorityInterface {}

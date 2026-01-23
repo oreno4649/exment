@@ -16,9 +16,7 @@ class Backup
      *
      * @return void
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * Can check execute backup
@@ -43,7 +41,7 @@ class Backup
             // check backup execute
             \ExmentDB::checkBackup();
 
-            $target = $target ?? BackupTarget::arrays();
+            $target ??= BackupTarget::arrays();
 
             if (is_string($target)) {
                 $target = collect(explode(",", $target))->map(function ($t) {
@@ -182,7 +180,7 @@ class Backup
         // upload file
 
         $uploadPaths = [
-            $this->diskService->tmpDiskItem()->filePath() => $this->diskService->diskItem()->filePath()
+            $this->diskService->tmpDiskItem()->filePath() => $this->diskService->diskItem()->filePath(),
         ];
 
         $this->diskService->upload($uploadPaths);

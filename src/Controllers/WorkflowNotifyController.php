@@ -195,7 +195,7 @@ class WorkflowNotifyController extends Controller
                 ->required()
                 ->disableClear()
                 ->attribute([
-                    'data-filtertrigger' =>true,
+                    'data-filtertrigger' => true,
                     'data-linkage' => json_encode([
                         'notify_action_target' => admin_urls('workflow', $this->workflow->id, 'notify', 'notify_action_target'),
                     ]),
@@ -247,7 +247,7 @@ class WorkflowNotifyController extends Controller
     {
         $options = NotifyService::getNotifyTargetColumns(null, $request->get('q'), [
             'as_workflow' => true,
-            'workflow' => Workflow::find($workflow_id)
+            'workflow' => Workflow::find($workflow_id),
         ]);
 
         return $options;

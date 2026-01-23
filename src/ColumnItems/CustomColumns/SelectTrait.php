@@ -24,7 +24,7 @@ trait SelectTrait
     // @phpstan-ignore-next-line
     protected function getDefaultSetting()
     {
-        list($default_type, $default) = parent::getDefaultSetting();
+        [$default_type, $default] = parent::getDefaultSetting();
 
         if ($this->isMultipleEnabled() && is_string($default)) {
             $default = explode(',', $default);

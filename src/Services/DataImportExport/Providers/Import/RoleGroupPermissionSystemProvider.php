@@ -25,5 +25,5 @@ class RoleGroupPermissionSystemProvider extends RoleGroupPermissionProvider
     {
         return 'role_group_permission_system';
     }
-    
+
 }

@@ -54,6 +54,6 @@ class FileRequredRule implements ImplicitRule
      */
     public function message()
     {
-        return (string)trans('validation.required');
+        return (string) trans('validation.required');
     }
 }

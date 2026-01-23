@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
  */
 class Linkage
 {
-
     // @phpstan-ignore-next-line
     public $parent_column;
 

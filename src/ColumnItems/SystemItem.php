@@ -163,7 +163,7 @@ class SystemItem implements ItemInterface
         }
 
         if ($appendTable) {
-            return $this->sqlUniqueTableName() .'.'. $sqlname;
+            return $this->sqlUniqueTableName() . '.' . $sqlname;
         }
         return $sqlname;
     }
@@ -449,20 +449,20 @@ class SystemItem implements ItemInterface
             case SystemColumn::ID:
             case SystemColumn::SUUID:
             case SystemColumn::PARENT_ID:
-                return (string)FilterOption::EQ;
+                return (string) FilterOption::EQ;
             case SystemColumn::CREATED_AT:
             case SystemColumn::UPDATED_AT:
                 // Use custom query. So return null.
                 return null;
             case SystemColumn::CREATED_USER:
             case SystemColumn::UPDATED_USER:
-                return (string)FilterOption::USER_EQ;
+                return (string) FilterOption::USER_EQ;
             case SystemColumn::WORKFLOW_STATUS:
-                return (string)FilterOption::WORKFLOW_EQ_STATUS;
+                return (string) FilterOption::WORKFLOW_EQ_STATUS;
             case SystemColumn::WORKFLOW_WORK_USERS:
-                return (string)FilterOption::WORKFLOW_EQ_WORK_USER;
+                return (string) FilterOption::WORKFLOW_EQ_WORK_USER;
             case SystemColumn::COMMENT:
-                return (string)FilterOption::LIKE;
+                return (string) FilterOption::LIKE;
         }
 
         return null;
@@ -475,7 +475,7 @@ class SystemItem implements ItemInterface
             case SystemColumn::CREATED_AT:
             case SystemColumn::UPDATED_AT:
                 return ExmFilter\BetweenDatetime::class;
-            }
+        }
 
         return ExmWhere::class;
     }
@@ -518,7 +518,7 @@ class SystemItem implements ItemInterface
                 return;
             }
             $selectOption = [
-                'display_table' => $target_table
+                'display_table' => $target_table,
             ];
             $ajax = $target_table->getOptionAjaxUrl($selectOption);
 
@@ -541,7 +541,7 @@ class SystemItem implements ItemInterface
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($custom_table, $table_column_name, $custom_value) = $args + [null, null, null];
+        [$custom_table, $table_column_name, $custom_value] = $args + [null, null, null];
         return new self($custom_table, $table_column_name, $custom_value);
     }
 }

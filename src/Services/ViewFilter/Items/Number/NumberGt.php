@@ -32,6 +32,6 @@ class NumberGt extends NumberCompareBase
         if (is_null($value) || is_null($conditionValue)) {
             return false;
         }
-        return (float)$value > (float)$conditionValue;
+        return (float) $value > (float) $conditionValue;
     }
 }

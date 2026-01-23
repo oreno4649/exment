@@ -227,7 +227,7 @@ class Plugin extends ModelBase
     {
         $options = array_merge(
             [
-            'throw_ex' => true,
+                'throw_ex' => true,
             ],
             $options
         );
@@ -309,7 +309,7 @@ class Plugin extends ModelBase
     // @phpstan-ignore-next-line
     public function getPluginFilePaths($dirPath = null, $subdir = true, ?PluginDiskService $diskService = null)
     {
-        list($diskService, $disk, $dirName, $dirPath) = $this->initPluginDisk($dirPath, $diskService);
+        [$diskService, $disk, $dirName, $dirPath] = $this->initPluginDisk($dirPath, $diskService);
 
         $func = $subdir ? 'allFiles' : 'files';
         $files = $disk->{$func}($dirPath);
@@ -329,7 +329,7 @@ class Plugin extends ModelBase
     // @phpstan-ignore-next-line
     public function getPluginDirPaths($dirPath = null, $subdir = true, ?PluginDiskService $diskService = null)
     {
-        list($diskService, $disk, $dirName, $dirPath) = $this->initPluginDisk($dirPath, $diskService);
+        [$diskService, $disk, $dirName, $dirPath] = $this->initPluginDisk($dirPath, $diskService);
 
         $func = $subdir ? 'allDirectories' : 'directories';
         $dirs = $disk->{$func}($dirPath);
@@ -352,7 +352,7 @@ class Plugin extends ModelBase
      */
     public function getPluginFiledata(string $path, ?PluginDiskService $diskService = null)
     {
-        list($diskService, $disk, $dirName, $filePath) = $this->initPluginDisk($path, $diskService);
+        [$diskService, $disk, $dirName, $filePath] = $this->initPluginDisk($path, $diskService);
 
         return $disk->get($filePath);
     }
@@ -370,7 +370,7 @@ class Plugin extends ModelBase
     // @phpstan-ignore-next-line
     public function putPluginFile(string $path, $file, ?PluginDiskService $diskService = null)
     {
-        list($diskService, $disk, $dirName, $filePath) = $this->initPluginDisk($path, $diskService, ['exceptionFileNotFound' => false]);
+        [$diskService, $disk, $dirName, $filePath] = $this->initPluginDisk($path, $diskService, ['exceptionFileNotFound' => false]);
 
         return $disk->put($filePath, $file);
     }
@@ -389,7 +389,7 @@ class Plugin extends ModelBase
     // @phpstan-ignore-next-line
     public function putAsPluginFile(?string $dirPath, string $fileName, $file, ?PluginDiskService $diskService = null)
     {
-        list($diskService, $disk, $dirName, $dirPath) = $this->initPluginDisk($dirPath, $diskService, ['exceptionFileNotFound' => false]);
+        [$diskService, $disk, $dirName, $dirPath] = $this->initPluginDisk($dirPath, $diskService, ['exceptionFileNotFound' => false]);
 
         return $disk->putFileAs($dirPath, $file, $fileName);
     }
@@ -404,7 +404,7 @@ class Plugin extends ModelBase
      */
     public function deletePluginFile(string $path, ?PluginDiskService $diskService = null)
     {
-        list($diskService, $disk, $dirName, $filePath) = $this->initPluginDisk($path, $diskService, ['exceptionFileNotFound' => false]);
+        [$diskService, $disk, $dirName, $filePath] = $this->initPluginDisk($path, $diskService, ['exceptionFileNotFound' => false]);
 
         // delete local disk
         $diskService->localSyncDiskItem()->disk()->delete($filePath);
@@ -420,7 +420,7 @@ class Plugin extends ModelBase
      */
     public function isPathDir(?string $path, ?PluginDiskService $diskService = null)
     {
-        list($diskService, $disk, $dirName, $filePath) = $this->initPluginDisk($path, $diskService);
+        [$diskService, $disk, $dirName, $filePath] = $this->initPluginDisk($path, $diskService);
 
         return $disk->getDriver()->directoryExists($filePath);
     }
@@ -433,7 +433,7 @@ class Plugin extends ModelBase
      */
     public function requirePlugin(?PluginDiskService $diskService = null)
     {
-        list($diskService, $disk, $dirName, $filePath) = $this->initPluginDisk(null, $diskService, ['sync' => true]);
+        [$diskService, $disk, $dirName, $filePath] = $this->initPluginDisk(null, $diskService, ['sync' => true]);
 
         // call plugin
         $fullPathDir = \Exment::replaceBackToSlash($diskService->localSyncDiskItem()->dirFullPath());
@@ -515,11 +515,11 @@ class Plugin extends ModelBase
 
                 $options['throw_ex'] = false;
 
-                if (in_array($event, (array)$event_triggers) && isset($enum)) {
+                if (in_array($event, (array) $event_triggers) && isset($enum)) {
                     // call PluginType::EVENT as throw_ex is false
                     $class = $plugin->getClass(PluginType::EVENT, $options);
 
-                    $class = isset($class) ? $class : $plugin->getClass(PluginType::TRIGGER, $options);
+                    $class ??= $plugin->getClass(PluginType::TRIGGER, $options);
 
                     // if isset $class, call
                     if (isset($class)) {
@@ -587,7 +587,7 @@ class Plugin extends ModelBase
 
                         // call PluginType::BUTTON as throw_ex is false
                         $class = $plugin->getClass(PluginType::BUTTON, $options);
-                        $class = isset($class) ? $class : $plugin->getClass(PluginType::TRIGGER, $options);
+                        $class ??= $plugin->getClass(PluginType::TRIGGER, $options);
                         if (!isset($class)) {
                             admin_error(exmtrans('common.error'), $plugin->getCannotReadMessage());
                             break;
@@ -913,7 +913,7 @@ class Plugin extends ModelBase
     public function getCannotReadMessage()
     {
         return exmtrans('plugin.error.cannot_read', [
-            'plugin_view_name' => $this->plugin_view_name
+            'plugin_view_name' => $this->plugin_view_name,
         ]);
     }
 
@@ -929,7 +929,7 @@ class Plugin extends ModelBase
         }
 
         if ($obj instanceof \stdClass) {
-            $obj = (array)$obj;
+            $obj = (array) $obj;
         }
         // get id or array value
         if (is_array($obj)) {

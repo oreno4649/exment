@@ -39,7 +39,7 @@ trait DataShareTrait
                     return str_replace("{$key}_", "", $s);
                 })->toArray();
             }
-            list($optionItem, $ajaxItem) = CustomTable::getEloquent($key)->getSelectOptionsAndAjaxUrl([
+            [$optionItem, $ajaxItem] = CustomTable::getEloquent($key)->getSelectOptionsAndAjaxUrl([
                 'display_table' => $custom_table,
                 'selected_value' => $selected_value,
                 'permission' => $permission,

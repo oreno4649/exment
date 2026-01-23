@@ -8,7 +8,6 @@ namespace Exceedone\Exment\Model\Traits;
  */
 class AutoUuidObserverBase
 {
-
     // @phpstan-ignore-next-line
     public function creating($model)
     {

@@ -369,7 +369,7 @@ class GDashboardTest extends ExmentKitTestCase
 
         $options = array_merge(
             [
-                    'target_system_id' => $system_type,
+                'target_system_id' => $system_type,
             ],
             $options
         );

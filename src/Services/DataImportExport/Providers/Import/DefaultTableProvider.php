@@ -188,10 +188,10 @@ class DefaultTableProvider extends ProviderBase
         }
 
         if (!$validateRow && isset($code) && $code !== true) {
-            $errors[] = sprintf(exmtrans('custom_value.import.import_error_format'), ($line_no+1), $code->getMessage());
+            $errors[] = sprintf(exmtrans('custom_value.import.import_error_format'), ($line_no + 1), $code->getMessage());
         }
 
-        list($uniqueCheckSiblings, $uniqueCheckIgnoreIds) = $this->getUniqueCheckParams($line_no, $dataObjects);
+        [$uniqueCheckSiblings, $uniqueCheckIgnoreIds] = $this->getUniqueCheckParams($line_no, $dataObjects);
 
         // execute validation
         $validator = $this->custom_table->validateValue(array_dot_reverse($data), $model, [
@@ -208,7 +208,7 @@ class DefaultTableProvider extends ProviderBase
         if ($validator->fails()) {
             // create error message
             foreach ($validator->getMessages() as $message) {
-                $errors[] = sprintf(exmtrans('custom_value.import.import_error_format'), ($line_no+1), implode(',', $message));
+                $errors[] = sprintf(exmtrans('custom_value.import.import_error_format'), ($line_no + 1), implode(',', $message));
             }
             // return $errors;
         }
@@ -279,7 +279,7 @@ class DefaultTableProvider extends ProviderBase
     {
         ///// convert data first.
         $options['errorCallback'] = function ($message, $key) use ($line_no) {
-            $this->selectTableNotFounds[] = sprintf(exmtrans('custom_value.import.import_error_format'), ($line_no-1), $message);
+            $this->selectTableNotFounds[] = sprintf(exmtrans('custom_value.import.import_error_format'), ($line_no - 1), $message);
         };
 
         return DataImportExportService::processCustomValue($this->custom_columns, $data, $options);

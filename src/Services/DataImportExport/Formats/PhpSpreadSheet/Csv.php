@@ -19,7 +19,7 @@ class Csv extends PhpSpreadSheet
     protected function _getData($request, $callbackZip, $callbackDefault)
     {
         // get file
-        list($path, $extension, $originalName, $file) = $this->getFileInfo($request);
+        [$path, $extension, $originalName, $file] = $this->getFileInfo($request);
 
         // if zip, extract
         if ($extension == 'zip' && isset($file)) {

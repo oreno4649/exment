@@ -12,9 +12,7 @@ class SelectValTextSettingRule implements Rule
 {
     // @phpstan-ignore-next-line
     protected $errors = [];
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
     * Check Validation

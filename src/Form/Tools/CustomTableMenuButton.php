@@ -34,7 +34,7 @@ class CustomTableMenuButton extends ModalTileMenuButton
         }
 
         $this->groups = [[
-            'items' => $items
+            'items' => $items,
         ]];
 
         return parent::render();

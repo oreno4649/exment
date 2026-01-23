@@ -250,75 +250,75 @@ class HasManyTable extends HasMany
          * {count} is increment number of current sub form count.
          */
         $script = <<<EOT
-var $indexName = {$count};
-$('#has-many-table-{$this->column}').off('click.admin_add', '.add').on('click.admin_add', '.add', function () {
-    var tpl = $('template.{$this->column}-tpl');
+            var $indexName = {$count};
+            $('#has-many-table-{$this->column}').off('click.admin_add', '.add').on('click.admin_add', '.add', function () {
+                var tpl = $('template.{$this->column}-tpl');
 
-    $indexName++;
+                $indexName++;
 
-    var template = tpl.html().replace(/{$defaultKey}/g, $indexName);
-    $('.has-many-table-{$this->column}-table tbody').append(template);
+                var template = tpl.html().replace(/{$defaultKey}/g, $indexName);
+                $('.has-many-table-{$this->column}-table tbody').append(template);
 
-    {$templateScript}
-    $(this).trigger('admin_hasmany_row_change');
-});
+                {$templateScript}
+                $(this).trigger('admin_hasmany_row_change');
+            });
 
-$('#has-many-table-{$this->column}').off('click.admin_remove', '.remove').on('click.admin_remove', '.remove', function () {
-    var row = $(this).closest('.has-many-table-{$this->column}-row');
-    row.find('input,textarea,select').removeAttr('required max min maxlength pattern');
-    row.hide();
-    row.find('.$removeClass').val(1);
-    $(this).trigger('admin_hasmany_row_change');
-});
+            $('#has-many-table-{$this->column}').off('click.admin_remove', '.remove').on('click.admin_remove', '.remove', function () {
+                var row = $(this).closest('.has-many-table-{$this->column}-row');
+                row.find('input,textarea,select').removeAttr('required max min maxlength pattern');
+                row.hide();
+                row.find('.$removeClass').val(1);
+                $(this).trigger('admin_hasmany_row_change');
+            });
 
-$('#has-many-table-{$this->column}').off('click.admin_row_remove', '.row-move').on('click.admin_row_remove', '.row-move', function(ev){
-    var row = $(ev.target).closest('tr');
-    var isup = $(ev.target).closest('.row-move').hasClass('row-move-up');
+            $('#has-many-table-{$this->column}').off('click.admin_row_remove', '.row-move').on('click.admin_row_remove', '.row-move', function(ev){
+                var row = $(ev.target).closest('tr');
+                var isup = $(ev.target).closest('.row-move').hasClass('row-move-up');
 
-    let getPrevNextRow = function(row, isup){
-        while(true){
-            var targetRow = isup ? row.prev() : row.next();
-            if(!hasValue(targetRow)){
-                return;
-            }
-            if(targetRow.is(':visible')){
-                return targetRow;
-            }
-            row = targetRow;
-        }
+                let getPrevNextRow = function(row, isup){
+                    while(true){
+                        var targetRow = isup ? row.prev() : row.next();
+                        if(!hasValue(targetRow)){
+                            return;
+                        }
+                        if(targetRow.is(':visible')){
+                            return targetRow;
+                        }
+                        row = targetRow;
+                    }
 
-        return null;
-    };
+                    return null;
+                };
 
-    var targetRow = getPrevNextRow(row, isup);
-    if(!hasValue(targetRow)){
-        return;
-    }
+                var targetRow = getPrevNextRow(row, isup);
+                if(!hasValue(targetRow)){
+                    return;
+                }
 
-    if(isup){
-        targetRow.insertAfter(row);
-    }else{
-        row.insertAfter(targetRow);
-    }
+                if(isup){
+                    targetRow.insertAfter(row);
+                }else{
+                    row.insertAfter(targetRow);
+                }
 
-    row.stop().css('background-color', '#FFFFCC').animate({backgroundColor: "rgba(0,0,0,0.0)"}, 1000);
+                row.stop().css('background-color', '#FFFFCC').animate({backgroundColor: "rgba(0,0,0,0.0)"}, 1000);
 
-});
+            });
 
-$("button[type='submit']").click(function(){
-    if ($('#has-many-table-{$this->column}-table').attr('required') === undefined) {
-        return true;
-    }
-    var cnt = $('#has-many-table-{$this->column}-table tr.has-many-table-{$this->column}-row').filter(':visible').length;
-    if (cnt == 0) {
-        swal("$title", "$message", "error");
-        return false;
-    };
-    return true;
-});
+            $("button[type='submit']").click(function(){
+                if ($('#has-many-table-{$this->column}-table').attr('required') === undefined) {
+                    return true;
+                }
+                var cnt = $('#has-many-table-{$this->column}-table tr.has-many-table-{$this->column}-row').filter(':visible').length;
+                if (cnt == 0) {
+                    swal("$title", "$message", "error");
+                    return false;
+                };
+                return true;
+            });
 
 
-EOT;
+            EOT;
 
         Admin::script($script);
 
@@ -379,14 +379,14 @@ EOT;
         // @phpstan-ignore-next-line
         $form = $this->buildNestedForm($this->column, $this->builder);
 
-        list($template, $script) = $this->getTemplateHtmlAndScript($form);
-        list($tableitems, $hiddens, $requires, $helps) = $this->getTableItem($form);
+        [$template, $script] = $this->getTemplateHtmlAndScript($form);
+        [$tableitems, $hiddens, $requires, $helps] = $this->getTableItem($form);
 
         // set related forms
         $relatedforms = [];
         // set labelclass hidden
         foreach ($this->buildRelatedForms() as $k => &$relatedform) {
-            list($relatedtableitems, $relatedhiddens, $relatedrequires, $relatedhelps) = $this->getTableItem($relatedform);
+            [$relatedtableitems, $relatedhiddens, $relatedrequires, $relatedhelps] = $this->getTableItem($relatedform);
 
             $relatedforms[$k] = [
                 'tableitems' => $relatedtableitems,

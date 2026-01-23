@@ -17,26 +17,26 @@ class BatchCheck extends BatchAction
 
         return <<<EOT
 
-$('{$this->getElementClass()}').on('click', function() {
-    $.ajax({
-        method: 'post',
-        url: '{$url}/rowcheck/' + $.admin.grid.selected().join(),
-        data: {
-            _method:'post',
-            _token:'{$this->getToken()}'
-        },
-    })
-    .then(
-        function (repsonse) {
-            $.pjax.reload('#pjax-container');
-            Exment.CommonEvent.CallbackExmentAjax(repsonse);
-        },
-        function (repsonse) {
-            Exment.CommonEvent.CallbackExmentAjax(repsonse);
-        }
-    );
-});
+            $('{$this->getElementClass()}').on('click', function() {
+                $.ajax({
+                    method: 'post',
+                    url: '{$url}/rowcheck/' + $.admin.grid.selected().join(),
+                    data: {
+                        _method:'post',
+                        _token:'{$this->getToken()}'
+                    },
+                })
+                .then(
+                    function (repsonse) {
+                        $.pjax.reload('#pjax-container');
+                        Exment.CommonEvent.CallbackExmentAjax(repsonse);
+                    },
+                    function (repsonse) {
+                        Exment.CommonEvent.CallbackExmentAjax(repsonse);
+                    }
+                );
+            });
 
-EOT;
+            EOT;
     }
 }

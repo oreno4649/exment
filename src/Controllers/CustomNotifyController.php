@@ -161,11 +161,11 @@ class CustomNotifyController extends AdminControllerTableBase
             ->required()
             ->disableClear()
             ->attribute([
-                'data-filtertrigger' =>true,
+                'data-filtertrigger' => true,
                 'data-changedata' => json_encode([
-                    'getitem' =>
-                        ['uri' => admin_url('notify/notifytrigger_template')]
-                ])
+                    'getitem'
+                        => ['uri' => admin_url('notify/notifytrigger_template')],
+                ]),
             ])
             ->help(exmtrans("notify.help.notify_trigger"));
 
@@ -210,7 +210,7 @@ class CustomNotifyController extends AdminControllerTableBase
                 ->default(NotifyBeforeAfter::BEFORE)
                 ->required()
                 ->attribute(['data-filter' => json_encode(['parent' => 1, 'key' => 'notify_trigger', 'value' => [NotifyTrigger::TIME]])])
-                ->help(exmtrans("notify.help.notify_beforeafter") . sprintf(exmtrans("common.help.task_schedule"), getManualUrl('quickstart_more?id='.exmtrans('common.help.task_schedule_id'))));
+                ->help(exmtrans("notify.help.notify_beforeafter") . sprintf(exmtrans("common.help.task_schedule"), getManualUrl('quickstart_more?id=' . exmtrans('common.help.task_schedule_id'))));
 
             $form->number('notify_hour', exmtrans("notify.notify_hour"))
                 ->min(0)
@@ -247,7 +247,7 @@ class CustomNotifyController extends AdminControllerTableBase
             ->required()
             ->disableClear()
             ->attribute([
-                'data-filtertrigger' =>true,
+                'data-filtertrigger' => true,
                 'data-linkage' => json_encode([
                     'notify_action_target' => admin_urls('notify', $this->custom_table->table_name, 'notify_action_target'),
                 ]),
@@ -354,7 +354,7 @@ class CustomNotifyController extends AdminControllerTableBase
         }
 
         return [
-            $keyName => $mail_template->id
+            $keyName => $mail_template->id,
         ];
     }
 }

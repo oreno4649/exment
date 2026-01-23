@@ -101,7 +101,7 @@ class CustomCopyController extends AdminControllerTableBase
         $grid->disableCreateButton();
         $grid->tools(function (Grid\Tools $tools) {
             $tools->append(view('exment::custom-value.new-button-copy', [
-                'url' => admin_urls('copy', $this->custom_table->table_name, 'newModal')
+                'url' => admin_urls('copy', $this->custom_table->table_name, 'newModal'),
             ]));
             //$tools->append($this->createNewModal());
             // @phpstan-ignore-next-line
@@ -298,10 +298,10 @@ class CustomCopyController extends AdminControllerTableBase
         return getAjaxResponse([
             'body'  => $form->render(),
             'script' => $form->getScript(),
-            'title' => trans('admin.setting')
+            'title' => trans('admin.setting'),
         ]);
 
         // add button unreachable statement
-//        return $form->render()->render();
+        //        return $form->render()->render();
     }
 }

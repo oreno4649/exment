@@ -73,7 +73,7 @@ class SystemItem implements ItemInterface
         $target_system_name = isset($enum) ? $enum->option()['name'] : null;
 
         return [
-            'target_system_name' => $target_system_name
+            'target_system_name' => $target_system_name,
         ];
     }
 
@@ -86,11 +86,11 @@ class SystemItem implements ItemInterface
         // show system item list
         $options = [];
         foreach (DashboardBoxSystemPage::options() as $page) {
-            $options[array_get($page, 'id')] = exmtrans('dashboard.dashboard_box_system_pages.'.array_get($page, 'name'));
+            $options[array_get($page, 'id')] = exmtrans('dashboard.dashboard_box_system_pages.' . array_get($page, 'name'));
         }
         $form->select('target_system_id', exmtrans("dashboard.dashboard_box_options.target_system_id"))
             ->required()
-            ->attribute(['data-filtertrigger' =>true])
+            ->attribute(['data-filtertrigger' => true])
             ->options($options)
         ;
 
@@ -109,14 +109,12 @@ class SystemItem implements ItemInterface
      * saving event
      */
     // @phpstan-ignore-next-line
-    public static function saving(&$form)
-    {
-    }
+    public static function saving(&$form) {}
 
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($dashboard_box) = $args + [null];
+        [$dashboard_box] = $args + [null];
         return new self($dashboard_box);
     }
 }

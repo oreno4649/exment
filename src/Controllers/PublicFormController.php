@@ -212,7 +212,7 @@ class PublicFormController extends Controller
                 $model = $form->model();
                 $notifies = array_filter([
                     $public_form->notify_complete_admin,
-                    $public_form->notify_complete_user
+                    $public_form->notify_complete_user,
                 ]);
 
                 // if has notify, get inputs by $data

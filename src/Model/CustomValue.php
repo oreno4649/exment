@@ -291,8 +291,8 @@ abstract class CustomValue extends ModelBase
     public function getWorkflowStatusTagAttribute()
     {
         $icon = ' <i class="fa fa-lock" aria-hidden="true" data-toggle="tooltip" title="' . esc_html(exmtrans('workflow.message.locked')) . '"></i>';
-        return esc_html($this->workflow_status_name) .
-            ($this->lockedWorkflow() ? $icon : '');
+        return esc_html($this->workflow_status_name)
+            . ($this->lockedWorkflow() ? $icon : '');
     }
 
 
@@ -822,7 +822,7 @@ abstract class CustomValue extends ModelBase
                     continue;
                 }
 
-                $file->saveCustomValueAndColumn(array_get($value, 'id')?? $this->id, array_get($uuid, 'column_name'), array_get($uuid, 'custom_table'), array_get($uuid, 'replace'));
+                $file->saveCustomValueAndColumn(array_get($value, 'id') ?? $this->id, array_get($uuid, 'column_name'), array_get($uuid, 'custom_table'), array_get($uuid, 'replace'));
                 $uuid['setted'] = true;
             }
             System::requestSession(Define::SYSTEM_KEY_SESSION_FILE_UPLOADED_UUID, $uuids);
@@ -994,7 +994,7 @@ abstract class CustomValue extends ModelBase
      */
     public function delete()
     {
-        if(!$this->getValidationDestroy()) {
+        if (!$this->getValidationDestroy()) {
             $res = Plugin::pluginValidateDestroy($this);
             if (!empty($res)) {
                 throw new \Exception(array_get($res, 'message'));
@@ -1027,7 +1027,7 @@ abstract class CustomValue extends ModelBase
                     if ($deleteForce) {
                         $child->forceDelete();
                     } else {
-                        if(!$child->getValidationDestroy()) {
+                        if (!$child->getValidationDestroy()) {
                             $res = Plugin::pluginValidateDestroy($child);
                             if (!empty($res)) {
                                 throw new \Exception(array_get($res, 'message'));
@@ -1075,7 +1075,7 @@ abstract class CustomValue extends ModelBase
         // If already getting, filter value.
         if (!is_null($reqSessions)) {
             return $reqSessions->filter(function ($value) use ($related_type) {
-                $value = (array)$value;
+                $value = (array) $value;
                 if ($value['authoritable_user_org_type'] != $related_type) {
                     return false;
                 }
@@ -1334,7 +1334,7 @@ abstract class CustomValue extends ModelBase
 
         // if table's use_label_id_flg is true, add id
         if (boolval($custom_table->getOption('use_label_id_flg', false))) {
-            $labels[] = '#'.strval($this->id);
+            $labels[] = '#' . strval($this->id);
         }
 
         foreach ($columns as $column) {
@@ -1428,7 +1428,7 @@ abstract class CustomValue extends ModelBase
 
             // Exment helper class not recognized
             return \Exment::getUrlTag($url, $document_name, UrlTagType::BLANK, [], [
-                'tooltipTitle' => exmtrans('common.download')
+                'tooltipTitle' => exmtrans('common.download'),
             ]);
         }
         $url = admin_urls('data', $this->custom_table->table_name);
@@ -1511,7 +1511,7 @@ abstract class CustomValue extends ModelBase
         }
         $options = array_merge(
             [
-                'force' => false
+                'force' => false,
             ],
             $options
         );
@@ -1821,7 +1821,7 @@ abstract class CustomValue extends ModelBase
             return $options;
         }
 
-        list($mark, $value) = $this->getQueryMarkAndValue($options['isLike'], $q, $options['relation']);
+        [$mark, $value] = $this->getQueryMarkAndValue($options['isLike'], $q, $options['relation']);
 
         if (boolval($options['relation'])) {
             $takeCount = intval(config('exment.keyword_search_relation_count', 5000));

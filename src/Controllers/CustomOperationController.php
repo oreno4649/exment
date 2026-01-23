@@ -170,7 +170,7 @@ class CustomOperationController extends AdminControllerTableBase
             ->options(function () {
                 return CustomOperationType::transArray("custom_operation.operation_type_options");
             })->required()
-            ->attribute(['data-filtertrigger' =>true]);
+            ->attribute(['data-filtertrigger' => true]);
 
         $form->embeds('options', null, function ($form) {
             $form->text('button_label', exmtrans("custom_operation.options.button_label"))
@@ -241,7 +241,7 @@ class CustomOperationController extends AdminControllerTableBase
         ]);
 
         $hasManyTable->callbackField(function ($field) {
-            $manualUrl = getManualUrl('column?id='.exmtrans('custom_column.options.index_enabled'));
+            $manualUrl = getManualUrl('column?id=' . exmtrans('custom_column.options.index_enabled'));
             $field->descriptionHtml(sprintf(exmtrans("custom_operation.help.custom_operation_columns"), $manualUrl));
             $field->setTableColumnWidth(4, 3, 4, 1);
         });
@@ -330,14 +330,14 @@ class CustomOperationController extends AdminControllerTableBase
         }
 
         $columnname = 'update_value';
-        $label = exmtrans('custom_operation.'.$columnname.'_text');
+        $label = exmtrans('custom_operation.' . $columnname . '_text');
 
         $field = new ChangeField($columnname, $label);
         $field->required()
             ->rules("changeFieldValue:$label")
             ->data([
                 'view_column_target' => $target_val,
-        ]);
+            ]);
         $element_name = str_replace('view_column_target', 'update_value', $target_name);
         $field->setElementName($element_name);
 

@@ -15,7 +15,7 @@ trait UserOrganizationItemTrait
         $field->setElementClass($className);
 
         $selectOption = [
-            'display_table' => $this->custom_table
+            'display_table' => $this->custom_table,
         ];
 
         // set buttons

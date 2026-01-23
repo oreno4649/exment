@@ -93,7 +93,7 @@ class ApiDataController extends AdminControllerTableBase
             'appends' => [
                 'count' => $count,
                 'orderby' => $request->get('orderby'),
-            ]
+            ],
         ]);
     }
 
@@ -147,7 +147,7 @@ class ApiDataController extends AdminControllerTableBase
         ]);
         if ($validator->fails()) {
             return abortJson(400, [
-                'errors' => $this->getErrorMessages($validator)
+                'errors' => $this->getErrorMessages($validator),
             ], ErrorCode::VALIDATION_ERROR());
         }
 
@@ -179,7 +179,7 @@ class ApiDataController extends AdminControllerTableBase
             'appends' => [
                 'count' => $count,
                 'orderby' => $request->get('orderby'),
-            ]
+            ],
         ]);
     }
 
@@ -324,7 +324,7 @@ class ApiDataController extends AdminControllerTableBase
 
         $custom_values = [];
         $validates = [];
-        foreach ((array)$ids as $index => $i) {
+        foreach ((array) $ids as $index => $i) {
             if (($custom_value = $this->getCustomValue($this->custom_table, $i, $forceDelete)) instanceof Response) {
                 return $custom_value;
             }
@@ -333,13 +333,13 @@ class ApiDataController extends AdminControllerTableBase
                 return abortJson(403, $code());
             }
             if ($res = $this->custom_table->validateValueDestroy($i)) {
-                $message = array_get($res, 'message')?? exmtrans('error.delete_failed');
+                $message = array_get($res, 'message') ?? exmtrans('error.delete_failed');
                 if (count($ids) == 1) {
                     $validates[] = $message;
                 } else {
                     $validates[] = [
                         'line_no' => $index,
-                        'error' => $message
+                        'error' => $message,
                     ];
                 }
             }
@@ -348,7 +348,7 @@ class ApiDataController extends AdminControllerTableBase
 
         if (count($validates) > 0) {
             return abortJson(400, [
-                'errors' => $validates
+                'errors' => $validates,
             ], ErrorCode::VALIDATION_ERROR());
         }
 
@@ -385,7 +385,7 @@ class ApiDataController extends AdminControllerTableBase
         if ($init instanceof Response) {
             return $init;
         }
-        list($custom_view, $valuetype, $count) = $init;
+        [$custom_view, $valuetype, $count] = $init;
 
         $paginator = $custom_view->getDataPaginate([
             'maxCount' => $count,
@@ -399,7 +399,7 @@ class ApiDataController extends AdminControllerTableBase
             'makeHidden' => false,
         ]);
 
-        list($results, $apiDefinitions) = $this->viewDataAfter($custom_view, $valuetype, $paginator->items());
+        [$results, $apiDefinitions] = $this->viewDataAfter($custom_view, $valuetype, $paginator->items());
 
         $paginator->setCollection(collect($results));
 
@@ -440,9 +440,9 @@ class ApiDataController extends AdminControllerTableBase
             return abortJson(403, trans('admin.deny'), $code);
         }
 
-        list($custom_view, $valuetype, $count) = $init;
+        [$custom_view, $valuetype, $count] = $init;
 
-        list($results, $apiDefinitions) = $this->viewDataAfter($custom_view, $valuetype, collect([$model]));
+        [$results, $apiDefinitions] = $this->viewDataAfter($custom_view, $valuetype, collect([$model]));
 
         // convert to array
         $array = ['value' => $results->first(), 'column_definitions' => $apiDefinitions];
@@ -500,8 +500,8 @@ class ApiDataController extends AdminControllerTableBase
     // @phpstan-ignore-next-line
     protected function viewDataAfter($custom_view, $valuetype, $target)
     {
-        list($headers, $bodies, $columnStyles, $columnClasses, $columnItems) =
-            $custom_view->convertDataTable($target, ['appendLink' => false, 'valueType' => $valuetype]);
+        [$headers, $bodies, $columnStyles, $columnClasses, $columnItems]
+            = $custom_view->convertDataTable($target, ['appendLink' => false, 'valueType' => $valuetype]);
 
         // get api name and definitions
         $apiNames = collect($columnItems)->map(function ($columnItem) {
@@ -557,7 +557,7 @@ class ApiDataController extends AdminControllerTableBase
 
         // @phpstan-ignore-next-line
         $documents->appends([
-            'count' => $count
+            'count' => $count,
         ]);
 
         // @phpstan-ignore-next-line
@@ -598,7 +598,7 @@ class ApiDataController extends AdminControllerTableBase
         ]);
         if ($validator->fails()) {
             return abortJson(400, [
-                'errors' => $this->getErrorMessages($validator)
+                'errors' => $this->getErrorMessages($validator),
             ], ErrorCode::VALIDATION_ERROR());
         }
 
@@ -649,7 +649,7 @@ class ApiDataController extends AdminControllerTableBase
         ]);
         if ($validator->fails()) {
             return abortJson(400, [
-                'errors' => $this->getErrorMessages($validator)
+                'errors' => $this->getErrorMessages($validator),
             ], ErrorCode::VALIDATION_ERROR());
         }
 
@@ -664,7 +664,7 @@ class ApiDataController extends AdminControllerTableBase
         $findResult = $this->convertFindKeys($rootValues, $request);
         if ($findResult !== true) {
             return abortJson(400, [
-                'errors' => $findResult
+                'errors' => $findResult,
             ], ErrorCode::VALIDATION_ERROR());
         }
 
@@ -682,7 +682,7 @@ class ApiDataController extends AdminControllerTableBase
             }
 
             // Convert base64 encode file
-            list($value, $fileColumns) = $this->convertFileData($value);
+            [$value, $fileColumns] = $this->convertFileData($value);
             $files[$index] = $fileColumns;
 
             // merge value for validate
@@ -706,7 +706,7 @@ class ApiDataController extends AdminControllerTableBase
                 } else {
                     $validates[] = [
                         'line_no' => $index,
-                        'error' => $this->getErrorMessages($validator)
+                        'error' => $this->getErrorMessages($validator),
                     ];
                 }
             }
@@ -714,7 +714,7 @@ class ApiDataController extends AdminControllerTableBase
 
         if (count($validates) > 0) {
             return abortJson(400, [
-                'errors' => $validates
+                'errors' => $validates,
             ], ErrorCode::VALIDATION_ERROR());
         }
 
@@ -825,7 +825,7 @@ class ApiDataController extends AdminControllerTableBase
             'setting' => collect($findKeys)->map(function ($value, $key) {
                 return [
                     'column_name' => $key,
-                    'target_column_name' => $value
+                    'target_column_name' => $value,
                 ];
             })->toArray()];
 
@@ -1042,7 +1042,7 @@ class ApiDataController extends AdminControllerTableBase
             }
             $file_value = $value[$file_column->column_name];
             // convert file name for validation
-            list($fileNames, $fileValues) = $this->getFileValue($file_column, $file_value);
+            [$fileNames, $fileValues] = $this->getFileValue($file_column, $file_value);
             $value[$file_column->column_name] = $fileNames;
 
             // append file data

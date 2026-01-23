@@ -68,7 +68,7 @@ trait NotifyTrait
         if (!isset($notify) || is_nullorempty($notify->notify_name)) {
             /** @phpstan-ignore-next-line */
             $form->text('notify_name', exmtrans("notify.notify_name"))
-                ->rules("max:30|nullable|unique:".Notify::getTableName()."|regex:/".Define::RULES_REGEX_SYSTEM_NAME."/")
+                ->rules("max:30|nullable|unique:" . Notify::getTableName() . "|regex:/" . Define::RULES_REGEX_SYSTEM_NAME . "/")
                 /** @phpstan-ignore-next-line */
                 ->help(sprintf(exmtrans('common.help.max_length'), 30) . exmtrans('common.help_code'));
         } else {
@@ -102,14 +102,14 @@ trait NotifyTrait
             /** @phpstan-ignore-next-line */
             ->help(exmtrans("notify.help.webhook_url", getManualUrl('notify_webhook')))
             ->attribute([
-                'data-filter' => json_encode(['key' => 'notify_action', 'value' => [NotifyAction::SLACK, NotifyAction::MICROSOFT_TEAMS]])
+                'data-filter' => json_encode(['key' => 'notify_action', 'value' => [NotifyAction::SLACK, NotifyAction::MICROSOFT_TEAMS]]),
             ]);
 
         /** @phpstan-ignore-next-line */
         $form->switchbool('mention_here', exmtrans("notify.mention_here"))
             /** @phpstan-ignore-next-line */
             ->help(exmtrans("notify.help.mention_here"))
-            ->attribute(['data-filter' => json_encode(['key' => 'notify_action', 'value' =>  [NotifyAction::SLACK]])
+            ->attribute(['data-filter' => json_encode(['key' => 'notify_action', 'value' =>  [NotifyAction::SLACK]]),
             ]);
 
         $system_slack_user_column = CustomColumn::getEloquent(System::system_slack_user_column());
@@ -136,14 +136,14 @@ trait NotifyTrait
                     $custom_table ?? null,
                     array_get($field->data(), 'notify_action'),
                     $options
-                /** @phpstan-ignore-next-line */
+                    /** @phpstan-ignore-next-line */
                 ))->pluck('text', 'id');
             })
             ->attribute([
                 'data-filter' => json_encode([
                     ['key' => 'notify_action', 'value' => $notify_action_target_filter],
                     ['key' => 'notify_action', 'requiredValue' => [NotifyAction::EMAIL, NotifyAction::SHOW_PAGE]],
-                ])
+                ]),
             ])
             ->help($help);
 
@@ -158,18 +158,18 @@ trait NotifyTrait
                 'data-filter' => json_encode([
                     ['key' => 'notify_action', 'value' => [NotifyAction::EMAIL]],
                     ['key' => 'notify_action_target', 'value' => [NotifyActionTarget::FIXED_EMAIL]],
-                ])
+                ]),
             ]);
         $selected_value = [];
         $form_index = $form->getIndex();
-        if($form_index !== null ) {
-            if(isset($notify->action_settings[$form_index]['target_users'])) {
+        if ($form_index !== null) {
+            if (isset($notify->action_settings[$form_index]['target_users'])) {
                 $selected_value = $notify->action_settings[$form_index]['target_users'];
             }
         }
-        list($users, $ajax) = CustomTable::getEloquent(SystemTableName::USER)->getSelectOptionsAndAjaxUrl([
+        [$users, $ajax] = CustomTable::getEloquent(SystemTableName::USER)->getSelectOptionsAndAjaxUrl([
             'display_table' => $custom_table,
-            'selected_value'=> $selected_value
+            'selected_value' => $selected_value,
         ]);
 
         /** @phpstan-ignore-next-line */
@@ -180,7 +180,7 @@ trait NotifyTrait
             ->attribute([
                 'data-filter' => json_encode([
                     ['key' => 'notify_action_target', 'value' => [NotifyActionTarget::FIXED_USER]],
-                ])
+                ]),
             ]);
 
         if ($custom_table) {
@@ -194,14 +194,14 @@ trait NotifyTrait
         }
 
         if (System::organization_available()) {
-            if($form_index !== null ) {
-                if(isset($notify->action_settings[$form_index]['target_organizations'])) {
+            if ($form_index !== null) {
+                if (isset($notify->action_settings[$form_index]['target_organizations'])) {
                     $selected_value = $notify->action_settings[$form_index]['target_organizations'];
                 }
             }
-            list($organizations, $ajax) = CustomTable::getEloquent(SystemTableName::ORGANIZATION)->getSelectOptionsAndAjaxUrl([
+            [$organizations, $ajax] = CustomTable::getEloquent(SystemTableName::ORGANIZATION)->getSelectOptionsAndAjaxUrl([
                 'display_table' => $custom_table,
-                'selected_value'=> $selected_value
+                'selected_value' => $selected_value,
             ]);
 
             /** @phpstan-ignore-next-line */
@@ -231,8 +231,8 @@ trait NotifyTrait
                 ->displayText(exmtrans('notify.help.slack_user_column_not_setting') . \Exment::getMoreTag('notify_webhook', 'notify.mention_setting_manual_id'))
                 ->attribute([
                     'data-filter' => json_encode([
-                        ['key' => 'notify_action', 'value' => [NotifyAction::SLACK]]
-                    ])
+                        ['key' => 'notify_action', 'value' => [NotifyAction::SLACK]],
+                    ]),
                 ])
                 ->escape(false);
             $form->ignore('notify_action_target_text');
@@ -246,7 +246,7 @@ trait NotifyTrait
         $form->select('mail_template_id', exmtrans("notify.mail_template_id"))->options(function ($val) {
             /** @phpstan-ignore-next-line */
             return getModelName(SystemTableName::MAIL_TEMPLATE)::all()->pluck('label', 'id');
-        /** @phpstan-ignore-next-line */
+            /** @phpstan-ignore-next-line */
         })->help(exmtrans("notify.help.mail_template_id"))
             ->disableClear()
             ->default($mail_template_id)
@@ -264,7 +264,7 @@ trait NotifyTrait
             } else {
                 $cnt = collect($form->action_settings)->filter(function ($value) {
                     return $value[Form::REMOVE_FLAG_NAME] != 1;
-                /** @phpstan-ignore-next-line */
+                    /** @phpstan-ignore-next-line */
                 })->count();
                 if ($cnt == 0) {
                     $error = true;
@@ -312,7 +312,7 @@ trait NotifyTrait
         }
 
         return [
-            $keyName => $mail_template->id
+            $keyName => $mail_template->id,
         ];
     }
 

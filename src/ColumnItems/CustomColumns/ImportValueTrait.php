@@ -49,8 +49,8 @@ trait ImportValueTrait
             /** @phpstan-ignore-next-line */
             'message' => !$result ? exmtrans('custom_value.import.message.select_item_not_found', [
                 'column_view_name' => $this->label(),
-                'value_options' => implode(exmtrans('common.separate_word'), collect($options)->keys()->toArray())
-            ]) : null
+                'value_options' => implode(exmtrans('common.separate_word'), collect($options)->keys()->toArray()),
+            ]) : null,
         ];
     }
 

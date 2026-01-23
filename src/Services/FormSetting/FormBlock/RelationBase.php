@@ -44,7 +44,7 @@ abstract class RelationBase extends BlockBase
         $block->available = 0;
         $block->options = [
             'hasmany_type' => null,
-            'form_block_order' => 0
+            'form_block_order' => 0,
         ];
 
         // @phpstan-ignore-next-line

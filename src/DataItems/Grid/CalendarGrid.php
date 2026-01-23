@@ -58,7 +58,7 @@ class CalendarGrid extends GridBase
     {
         static::setViewInfoboxFields($form);
 
-        $manualUrl = getManualUrl('column?id='.exmtrans('custom_column.options.index_enabled'));
+        $manualUrl = getManualUrl('column?id=' . exmtrans('custom_column.options.index_enabled'));
 
         // columns setting
         $form->hasManyTable('custom_view_columns', exmtrans("custom_view.custom_view_columns"), function ($form) use ($custom_table) {

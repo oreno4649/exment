@@ -82,9 +82,9 @@ class ListItem implements ItemInterface
                     ->icon('fa-compress')
                     ->tooltip(exmtrans('search.header_relation'));
                 }
-            }
+            },
         ];
-        list($headers, $bodies, $columnStyles, $columnClasses) = $this->custom_view->convertDataTable($datalist, $option);
+        [$headers, $bodies, $columnStyles, $columnClasses] = $this->custom_view->convertDataTable($datalist, $option);
 
         $widgetTable = new WidgetTable($headers, $bodies);
         $widgetTable->class('table table-hover');
@@ -132,7 +132,7 @@ class ListItem implements ItemInterface
             ])->pluck('table_view_name', 'id'))
             ->attribute([
                 'data-linkage' => json_encode(['options_target_view_id' => admin_urls('dashboardbox', 'table_views', DashboardBoxType::LIST)]),
-                'data-linkage-expand' => json_encode(['dashboard_suuid' => $dashboard->suuid])
+                'data-linkage-expand' => json_encode(['dashboard_suuid' => $dashboard->suuid]),
             ]);
 
         $form->select('target_view_id', exmtrans("dashboard.dashboard_box_options.target_view_id"))
@@ -146,14 +146,12 @@ class ListItem implements ItemInterface
      * saving event
      */
     // @phpstan-ignore-next-line
-    public static function saving(&$form)
-    {
-    }
+    public static function saving(&$form) {}
 
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($dashboard_box) = $args + [null];
+        [$dashboard_box] = $args + [null];
         return new self($dashboard_box);
     }
 

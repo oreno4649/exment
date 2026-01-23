@@ -40,7 +40,7 @@ class CrudShow extends CrudBase
     {
         $data = $this->pluginClass->getData($id);
 
-        $form = new WidgetForm((array)$data);
+        $form = new WidgetForm((array) $data);
         $form->disableReset();
         $form->disableSubmit();
 
@@ -104,11 +104,11 @@ class CrudShow extends CrudBase
         }
 
         $box->tools(view('exment::tools.button', [
-                'href' => admin_url($this->getFullUrl()),
-                'label' => trans('admin.list'),
-                'icon' => 'fa-list',
-                'btn_class' => 'btn-default',
-            ])->render());
+            'href' => admin_url($this->getFullUrl()),
+            'label' => trans('admin.list'),
+            'icon' => 'fa-list',
+            'btn_class' => 'btn-default',
+        ])->render());
 
         $this->pluginClass->callbackShowTool($id, $box);
     }

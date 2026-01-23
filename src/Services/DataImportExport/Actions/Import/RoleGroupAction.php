@@ -30,7 +30,7 @@ class RoleGroupAction implements ActionInterface
             $dataObject = $provider->getDataObject($data, $options);
 
             // validate data
-            list($data_import, $error_data) = $provider->validateImportData($dataObject);
+            [$data_import, $error_data] = $provider->validateImportData($dataObject);
 
             // if has error data, return error data
             if (is_array($error_data) && count($error_data) > 0) {
@@ -42,7 +42,7 @@ class RoleGroupAction implements ActionInterface
             }
             $data_imports[] = [
                 'provider' => $provider,
-                'data_import' => $data_import
+                'data_import' => $data_import,
             ];
         }
 
@@ -56,7 +56,7 @@ class RoleGroupAction implements ActionInterface
 
         return [
             'result' => true,
-            'toastr' => exmtrans('common.message.import_success')
+            'toastr' => exmtrans('common.message.import_success'),
         ];
     }
 

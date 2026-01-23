@@ -157,13 +157,13 @@ class Initialize
         ///// File info
         $permissions = [
             'file' => [
-                'public' => 0764,
-                'private' => 0700,
+                'public' => 0o764,
+                'private' => 0o700,
             ],
             'dir' => [
-                'public' => 0775,
-                'private' => 0700,
-            ]
+                'public' => 0o775,
+                'private' => 0o700,
+            ],
         ];
         /// maybe update setting by user
         if (!Config::has('filesystems.disks.exment')) {

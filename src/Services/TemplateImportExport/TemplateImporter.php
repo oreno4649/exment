@@ -52,7 +52,7 @@ class TemplateImporter
     public function importTemplate($importKeys)
     {
         try {
-            $importKeys = (array)$importKeys;
+            $importKeys = (array) $importKeys;
 
             $items = $this->getTemplates();
             foreach (array_filter($importKeys) as $importKey) {
@@ -118,7 +118,7 @@ class TemplateImporter
     public function getJsonFromZip($uploadFile)
     {
         try {
-            list($json, $tmpfolderpath, $fullpath, $config_path, $thumbnail_path) = $this->extractZip($uploadFile);
+            [$json, $tmpfolderpath, $fullpath, $config_path, $thumbnail_path] = $this->extractZip($uploadFile);
             return $json;
         } catch (\Exception $ex) {
             throw $ex;
@@ -299,7 +299,7 @@ class TemplateImporter
     public function uploadTemplate($uploadFile)
     {
         try {
-            list($json, $tmpfolderpath, $fullpath, $config_path, $thumbnail_path, $tmpDiskItem) = $this->extractZip($uploadFile);
+            [$json, $tmpfolderpath, $fullpath, $config_path, $thumbnail_path, $tmpDiskItem] = $this->extractZip($uploadFile);
 
             if (isset($config_path)) {
                 // get template name
@@ -311,7 +311,7 @@ class TemplateImporter
 
                 // copy to app/templates path
                 $files = [
-                    path_join($tmpDiskItem->dirName(), $config_path) => path_join($template_name, 'config.json')
+                    path_join($tmpDiskItem->dirName(), $config_path) => path_join($template_name, 'config.json'),
                 ];
                 if (isset($thumbnail_path)) {
                     $files[path_join($tmpDiskItem->dirName(), $thumbnail_path)] = path_join($template_name, pathinfo(path_join($tmpfolderpath, $thumbnail_path))['basename']);
@@ -376,7 +376,7 @@ class TemplateImporter
                 $zip->extractTo($tmpfolderpath);
                 // @phpstan-ignore-next-line
                 $config_path = array_get($stat, 'name');
-            // @phpstan-ignore-next-line
+                // @phpstan-ignore-next-line
             } elseif (pathinfo($fileInfo)['filename'] === 'thumbnail') {
                 // @phpstan-ignore-next-line
                 $thumbnail_path = array_get($stat, 'name');
@@ -436,7 +436,7 @@ class TemplateImporter
 
         // copy to app/templates path
         $files = [
-            $config_path => path_join($template_name, 'config.json')
+            $config_path => path_join($template_name, 'config.json'),
         ];
         if (isset($thumbnail_path)) {
             $files[$thumbnail_path] = path_join($template_name, pathinfo($thumbnail_path)['basename']);
@@ -564,7 +564,7 @@ class TemplateImporter
                             'options' => [
                                 'table_label_table_name' => $table_name,
                                 'table_label_column_name' => $table_label_column_name,
-                            ]
+                            ],
                         ];
                     }
                 }
@@ -693,7 +693,7 @@ class TemplateImporter
             foreach (array_get($json, "custom_tables", []) as $table) {
                 // Create tables. --------------------------------------------------
                 $obj_table = CustomTable::importTemplate($table, $is_update, [
-                    'system_flg' => $system_flg
+                    'system_flg' => $system_flg,
                 ]);
 
                 // if call from excel and created first, append list

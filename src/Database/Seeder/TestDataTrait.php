@@ -127,7 +127,7 @@ trait TestDataTrait
                         'parent_organization' => null,
                     ],
                     'users' => [
-                        5
+                        5,
                     ],
                 ],
                 'dev' => [
@@ -138,7 +138,7 @@ trait TestDataTrait
                         'parent_organization' => 1,
                     ],
                     'users' => [
-                        6
+                        6,
                     ],
                 ],
                 'manage' => [
@@ -157,7 +157,7 @@ trait TestDataTrait
                         'parent_organization' => 2,
                     ],
                     'users' => [
-                        7, 8
+                        7, 8,
                     ],
                 ],
                 'dev2' => [
@@ -168,7 +168,7 @@ trait TestDataTrait
                         'parent_organization' => 2,
                     ],
                     'users' => [
-                        9
+                        9,
                     ],
                 ],
                 'company2' => [
@@ -179,7 +179,7 @@ trait TestDataTrait
                         'parent_organization' => null,
                     ],
                     'users' => [
-                        10
+                        10,
                     ],
                 ],
                 'company2-a' => [
@@ -190,7 +190,7 @@ trait TestDataTrait
                         'parent_organization' => 6,
                     ],
                 ],
-            ]
+            ],
         ];
 
 

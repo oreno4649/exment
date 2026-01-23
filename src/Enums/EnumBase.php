@@ -95,7 +95,7 @@ class EnumBase extends Enum
     // @phpstan-ignore-next-line
     public function transKey($base_key, $isExment = true)
     {
-        $key = $base_key.'.'.$this->lowerKey();
+        $key = $base_key . '.' . $this->lowerKey();
         if ($isExment) {
             return exmtrans($key);
         }

@@ -88,7 +88,7 @@ class CustomTableTest extends UnitTestBase
         // compare custom column
         $this->assertEquals($to_table->custom_columns_cache->count(), $from_table->custom_columns_cache->count());
         foreach ($to_table->custom_columns_cache as $to_column) {
-            $from_column = $from_table->custom_columns_cache->filter(function($column) use($to_column){
+            $from_column = $from_table->custom_columns_cache->filter(function ($column) use ($to_column) {
                 return $column->column_name == $to_column->column_name;
             })->first();
             $diff = collect($to_column->getAttributes())->diffAssoc(collect($from_column->getAttributes()));
@@ -108,9 +108,9 @@ class CustomTableTest extends UnitTestBase
         // compare custom column multisettings
         $this->assertEquals($to_table->custom_column_multisettings->count(), $from_table->custom_column_multisettings->count());
         foreach ($to_table->custom_column_multisettings as $to_column) {
-            $from_column = $from_table->custom_column_multisettings->filter(function($column) use($to_column){
-                return $column->multisetting_type == $to_column->multisetting_type &&
-                    $column->priority == $to_column->priority;
+            $from_column = $from_table->custom_column_multisettings->filter(function ($column) use ($to_column) {
+                return $column->multisetting_type == $to_column->multisetting_type
+                    && $column->priority == $to_column->priority;
             })->first();
             $this->assertEquals($to_column->custom_table_id, $to_table->id);
             foreach ($from_column->options as $key => $value) {
@@ -123,10 +123,10 @@ class CustomTableTest extends UnitTestBase
                     case 'share_column_id':
                     case 'compare_column1_id':
                     case 'compare_column2_id':
-                        $from = $from_table->custom_columns_cache->filter(function($column) use($value){
+                        $from = $from_table->custom_columns_cache->filter(function ($column) use ($value) {
                             return $column->id == $value;
                         })->first();
-                        $to = $to_table->custom_columns_cache->filter(function($column) use($to_value){
+                        $to = $to_table->custom_columns_cache->filter(function ($column) use ($to_value) {
                             return $column->id == $to_value;
                         })->first();
 

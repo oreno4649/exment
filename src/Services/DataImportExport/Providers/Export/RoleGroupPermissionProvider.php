@@ -60,12 +60,12 @@ class RoleGroupPermissionProvider extends ProviderBase
 
         // 1st row, column name
         $headers = [
-            'role_group_id'
+            'role_group_id',
         ];
 
         // 2nd row, column view name
         $titles = [
-            exmtrans('role_group.role_group_id')
+            exmtrans('role_group.role_group_id'),
         ];
 
         // set headers for each role_group_type
@@ -74,8 +74,8 @@ class RoleGroupPermissionProvider extends ProviderBase
         // add permissions
         $role_group_type = $this->getRoleGroupType();
         foreach ($role_group_type->getRoleGroupOptions() as $key => $permission) {
-            $headers[] = "permissions:{$key}"; 
-            $titles[] = $permission; 
+            $headers[] = "permissions:{$key}";
+            $titles[] = $permission;
         }
         $rows[] = $headers;
         $rows[] = $titles;
@@ -140,9 +140,9 @@ class RoleGroupPermissionProvider extends ProviderBase
             $role_group_type = $this->getRoleGroupType();
             foreach ($role_group_type->getRoleGroupOptions() as $key => $permission) {
                 if (in_array($key, $permissions)) {
-                    $body_items[] = 1; 
-                } else{
-                    $body_items[] = ''; 
+                    $body_items[] = 1;
+                } else {
+                    $body_items[] = '';
                 }
             }
 
@@ -151,22 +151,16 @@ class RoleGroupPermissionProvider extends ProviderBase
 
         return $bodies;
     }
- 
-    // @phpstan-ignore-next-line
-    protected function setHeadersOfType(array &$headers, array &$titles): void
-    {
-    }
 
     // @phpstan-ignore-next-line
-    protected function setBodiesOfType(array &$body_items, $record): void
-    {
-    }
+    protected function setHeadersOfType(array &$headers, array &$titles): void {}
 
     // @phpstan-ignore-next-line
-    protected function setRoleTypeFilter(&$query)
-    {
-    }
-    
+    protected function setBodiesOfType(array &$body_items, $record): void {}
+
+    // @phpstan-ignore-next-line
+    protected function setRoleTypeFilter(&$query) {}
+
     protected function getRoleGroupType(): RoleGroupType
     {
         return RoleGroupType::SYSTEM();

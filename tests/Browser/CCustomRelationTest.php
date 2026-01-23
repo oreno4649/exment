@@ -81,7 +81,7 @@ class CCustomRelationTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Edit custom relation
-        $this->visit(admin_url('relation/exmenttest_contract/'. $id . '/edit'))
+        $this->visit(admin_url('relation/exmenttest_contract/' . $id . '/edit'))
                 ->seeInElement('span[class=child_custom_table_id]', 'Exmenttest Contract Relation')
                 ->seeInElement('span[class=relation_type]', '1対多')
                 ->select('2', 'relation_type')
@@ -119,7 +119,7 @@ class CCustomRelationTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom relation
-        $this->visit(admin_url('relation/exmenttest_contract/'. $id . '/edit'))
+        $this->visit(admin_url('relation/exmenttest_contract/' . $id . '/edit'))
                 ->seeInElement('span[class=child_custom_table_id]', 'ユーザー')
                 ->seeInElement('span[class=relation_type]', '多対多')
         ;
@@ -142,7 +142,7 @@ class CCustomRelationTest extends ExmentKitTestCase
 
         if ($row) {
             // Delete custom relation
-            $this->delete('/admin/relation/exmenttest_contract/'. $row->id)
+            $this->delete('/admin/relation/exmenttest_contract/' . $row->id)
                 ->assertEquals($pre_cnt - 1, CustomRelation::count())
             ;
         }

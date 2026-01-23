@@ -77,11 +77,11 @@ class RoleGroupProvider extends ProviderBase
     protected function getImportColumnName(): array
     {
         return [
-            'id', 
-            'role_group_name', 
-            'role_group_view_name', 
-            'role_group_order', 
-            'description'
+            'id',
+            'role_group_name',
+            'role_group_view_name',
+            'role_group_order',
+            'description',
         ];
     }
 
@@ -109,18 +109,18 @@ class RoleGroupProvider extends ProviderBase
             $data = array_get($item, 'data');
             $id = array_get($data, 'id');
             $delete = array_get($item, 'delete');
-            return ['id' => $id, 'delete' => $delete, 'line_no' => $key+1];
+            return ['id' => $id, 'delete' => $delete, 'line_no' => $key + 1];
         })->filter(function ($item) {
             return isset($item['id']);
         })->sortBy(function ($item) {
             return $item['id'];
-        })->reduce(function ($carry, $item) use(&$error_data) {
+        })->reduce(function ($carry, $item) use (&$error_data) {
             $id = array_get($item, 'id');
             $delete = array_get($item, 'delete');
             $line_no = array_get($item, 'line_no');
             if (in_array($id, $carry)) {
                 if ($delete) {
-                    $carry = array_filter($carry, function($data) use($id) {
+                    $carry = array_filter($carry, function ($data) use ($id) {
                         return $data != $id;
                     });
                 } else {
@@ -157,7 +157,7 @@ class RoleGroupProvider extends ProviderBase
             'role_group_name' => [
                 'max:64',
                 Rule::unique('role_groups')->ignore($id),
-                'regex:/'.Define::RULES_REGEX_ALPHANUMERIC_UNDER_HYPHEN.'/',
+                'regex:/' . Define::RULES_REGEX_ALPHANUMERIC_UNDER_HYPHEN . '/',
             ],
             'role_group_view_name' => 'required|max:64',
             'role_group_order' => 'nullable|integer',
@@ -165,9 +165,9 @@ class RoleGroupProvider extends ProviderBase
         if ($validator->fails()) {
             // create error message
             foreach ($validator->getMessages() as $message) {
-                $errors[] = sprintf(exmtrans('custom_value.import.import_error_format_sheet'), $this->name(), ($line_no+1), implode(',', $message));
+                $errors[] = sprintf(exmtrans('custom_value.import.import_error_format_sheet'), $this->name(), ($line_no + 1), implode(',', $message));
             }
-         }
+        }
 
         if (!is_nullorempty($errors)) {
             return $errors;
@@ -210,7 +210,7 @@ class RoleGroupProvider extends ProviderBase
                 continue;
             }
             if ($dkey == 'role_group_order') {
-                $dvalue = $dvalue?? 0;
+                $dvalue ??= 0;
             }
             $model->{$dkey} = $dvalue;
         }

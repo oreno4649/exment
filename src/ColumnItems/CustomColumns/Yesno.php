@@ -67,7 +67,7 @@ class Yesno extends CustomItem
     {
         if (boolval(array_get($this->custom_column, 'options.checkbox_enabled'))) {
             $field->option([
-                1 => ''
+                1 => '',
             ]);
         }
 

@@ -290,12 +290,12 @@ class DefaultGrid extends GridBase
                 }
             } else {
                 $separate = floor(count($filterItems) /  2);
-                $filter->column(1/2, function ($filter) use ($filterItems, $separate) {
+                $filter->column(1 / 2, function ($filter) use ($filterItems, $separate) {
                     for ($i = 0; $i < $separate; $i++) {
                         $filterItems[$i]->setAdminFilter($filter);
                     }
                 });
-                $filter->column(1/2, function ($filter) use ($filterItems, $separate) {
+                $filter->column(1 / 2, function ($filter) use ($filterItems, $separate) {
                     for ($i = $separate; $i < count($filterItems); $i++) {
                         /** @var int $i */
                         $filterItems[$i]->setAdminFilter($filter);
@@ -357,7 +357,7 @@ class DefaultGrid extends GridBase
         }
 
         // filter comment
-        if (boolval($this->custom_table->getOption('comment_flg')?? true)) {
+        if (boolval($this->custom_table->getOption('comment_flg') ?? true)) {
             foreach (SystemColumn::getOptions(['grid_filter' => true, 'grid_filter_system' => false]) as $filterKey => $filterType) {
                 if (!SystemColumn::isComment($filterKey)) {
                     continue;
@@ -589,7 +589,7 @@ class DefaultGrid extends GridBase
                     $actions->disableView();
                     $actions->disableDelete();
 
-                    // if parent data does not exist or has not been deleted 
+                    // if parent data does not exist or has not been deleted
                     if (!$parent_value || !$parent_value->trashed()) {
                         // add restore link
                         $restoreUrl = $actions->row->getUrl() . '/restoreClick';
@@ -723,20 +723,20 @@ class DefaultGrid extends GridBase
                 $target_column_class,
                 $widgetmodal_uuid,
                 [[
-                'name' => 'select',
-                'label' =>  trans('admin.choose'),
-                'multiple' => boolval($target_column_multiple),
-                'icon' => $this->custom_table->getOption('icon'),
-                'background_color' =>  $this->custom_table->getOption('color') ?? '#3c8dbc', //if especially
-                'color' => '#FFFFFF',
-                'items' => $items->map(function ($item) {
-                    return [
-                        'value' => $item->id,
-                        'label' => $item->getLabel(),
-                    ];
-                })->toArray(),
-            ],
-            ]
+                    'name' => 'select',
+                    'label' =>  trans('admin.choose'),
+                    'multiple' => boolval($target_column_multiple),
+                    'icon' => $this->custom_table->getOption('icon'),
+                    'background_color' =>  $this->custom_table->getOption('color') ?? '#3c8dbc', //if especially
+                    'color' => '#FFFFFF',
+                    'items' => $items->map(function ($item) {
+                        return [
+                            'value' => $item->id,
+                            'label' => $item->getLabel(),
+                        ];
+                    })->toArray(),
+                ],
+                ]
             ))->render(),
             'submitlabel' => trans('admin.setting'),
             'modalSize' => 'modal-xl',
@@ -749,7 +749,7 @@ class DefaultGrid extends GridBase
     public function renderModal($grid)
     {
         return view('exment::widgets.partialindex', [
-            'content' => $grid->render()
+            'content' => $grid->render(),
         ]);
     }
 
@@ -842,7 +842,7 @@ class DefaultGrid extends GridBase
             'ignore_multiple_refer' => true,
         ], $column_options);
 
-        $manualUrl = getManualUrl('column?id='.exmtrans('custom_column.options.index_enabled'));
+        $manualUrl = getManualUrl('column?id=' . exmtrans('custom_column.options.index_enabled'));
 
         $form->hasManyTable('custom_view_grid_filters', exmtrans("custom_view.custom_view_grid_filters"), function ($form) use ($custom_table, $column_options) {
             $targetOptions = $custom_table->getColumnsSelectOptions($column_options);

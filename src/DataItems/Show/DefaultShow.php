@@ -277,7 +277,7 @@ class DefaultShow extends ShowBase
                                 'redirectUrl' => admin_urls("data", $this->custom_table->table_name),
                             ]));
 
-                            // if parent data does not exist or has not been deleted 
+                            // if parent data does not exist or has not been deleted
                             if (!$parent_value || !$parent_value->trashed()) {
                                 // add restore button
                                 $tools->prepend(new Tools\SwalInputButton([
@@ -366,7 +366,7 @@ class DefaultShow extends ShowBase
         $trashed = boolval(request()->get('trashed'));
 
         $custom_form_blocks = $this->custom_form->custom_form_blocks->sortBy(function ($item, $key) {
-            return $item->getOption('form_block_order')?? -1;
+            return $item->getOption('form_block_order') ?? -1;
         });
         // loop for custom form blocks
         foreach ($custom_form_blocks as $custom_form_block) {
@@ -380,7 +380,7 @@ class DefaultShow extends ShowBase
             }
             ////// relation block
             else {
-                list($relation, $relation_name, $block_label) = $custom_form_block->getRelationInfo();
+                [$relation, $relation_name, $block_label] = $custom_form_block->getRelationInfo();
                 $target_table = $custom_form_block->target_table;
                 if (!isset($target_table)) {
                     return;
@@ -516,7 +516,7 @@ class DefaultShow extends ShowBase
             'form_url' => admin_urls('data', $table_name, $id, 'compare'),
             'has_diff' => collect($table_columns)->filter(function ($table_column) {
                 return array_get($table_column, 'diff', false);
-            })->count() > 0
+            })->count() > 0,
         ];
 
         if ($pjax) {
@@ -524,18 +524,18 @@ class DefaultShow extends ShowBase
         }
 
         $script = <<<EOT
-        $("#revisions").off('change').on('change', function(e, params) {
-            let url = admin_url(URLJoin('data', '$table_name', '$id', 'compare'));
-            let query = {'revision': $(e.target).val()};
+                    $("#revisions").off('change').on('change', function(e, params) {
+                        let url = admin_url(URLJoin('data', '$table_name', '$id', 'compare'));
+                        let query = {'revision': $(e.target).val()};
 
-            if('$trashed' == true){
-                query['trashed'] = 1;
-            }
+                        if('$trashed' == true){
+                            query['trashed'] = 1;
+                        }
 
-            $.pjax({container:'#pjax-container-revision', url: url +'?' + $.param(query) });
-        });
+                        $.pjax({container:'#pjax-container-revision', url: url +'?' + $.param(query) });
+                    });
 
-EOT;
+            EOT;
         Admin::script($script);
 
         return view("exment::custom-value.revision-compare", $prms);
@@ -559,10 +559,10 @@ EOT;
             $form->html(
                 view('exment::form.field.revisionlink', [
                     'revision' => $revision,
-                    'link' => admin_urls('data', $this->custom_table->table_name, $this->custom_value->id, 'compare?revision='.$revision->suuid . (boolval(request()->get('trashed')) ? '&trashed=1' : '')),
+                    'link' => admin_urls('data', $this->custom_table->table_name, $this->custom_value->id, 'compare?revision=' . $revision->suuid . (boolval(request()->get('trashed')) ? '&trashed=1' : '')),
                     'index' => $index,
                 ])->render(),
-                'No.'.($revision->revision_no)
+                'No.' . ($revision->revision_no)
             )->setWidth(9, 2);
         }
         // @phpstan-ignore-next-line
@@ -639,8 +639,8 @@ EOT;
                 'showPreview' => true,
                 'showCancel' => false,
                 'uploadUrl' => admin_urls('data', $this->custom_table->table_name, $this->custom_value->id, 'fileupload'),
-                'uploadExtraData'=> [
-                    '_token' => csrf_token()
+                'uploadExtraData' => [
+                    '_token' => csrf_token(),
                 ],
                 'minFileCount' => 1,
                 'maxFileCount' => $max_count,
@@ -654,21 +654,21 @@ EOT;
                 ->help(exmtrans('custom_value.help.document_upload', ['max_size' => bytesToHuman(\Exment::getUploadMaxFileSize()), 'max_count' => $max_count]))
                 ->setWidth(12, 0);
             $script = <<<EOT
-            var uploadCount = null;
-            $(".$input_id").on('filepreupload', function(event, data, previewId, index) {
-                if(uploadCount === null){
-                    uploadCount = data.files.length;
-                }
-            });
-            $(".$input_id").on('fileuploaded', function(e, params, fileId, index) {
-                uploadCount--;
-                console.log('upload uploadCount : ' + uploadCount);
-                console.log('upload index : ' + index);
-                if(0 >= uploadCount){
-                    $.pjax.reload('#pjax-container');
-                }
-            });
-EOT;
+                            var uploadCount = null;
+                            $(".$input_id").on('filepreupload', function(event, data, previewId, index) {
+                                if(uploadCount === null){
+                                    uploadCount = data.files.length;
+                                }
+                            });
+                            $(".$input_id").on('fileuploaded', function(e, params, fileId, index) {
+                                uploadCount--;
+                                console.log('upload uploadCount : ' + uploadCount);
+                                console.log('upload index : ' + index);
+                                if(0 >= uploadCount){
+                                    $.pjax.reload('#pjax-container');
+                                }
+                            });
+                EOT;
 
             Admin::script($script);
         }

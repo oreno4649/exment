@@ -64,7 +64,7 @@ abstract class DiskServiceBase
     // @phpstan-ignore-next-line
     public function upload($file)
     {
-        foreach ((array)$file as $key => $value) {
+        foreach ((array) $file as $key => $value) {
             // if $key is not numeric(string), copy from and to
             if (!is_numeric($key)) {
                 $from = $key;

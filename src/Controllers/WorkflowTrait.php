@@ -28,7 +28,7 @@ trait WorkflowTrait
             'complete' => false,
             'url' => ($action != 1) ? $workflow_status_url : null,
             /** @phpstan-ignore-next-line */
-            'description' => exmtrans('workflow.workflow_statuses')
+            'description' => exmtrans('workflow.workflow_statuses'),
         ];
 
         $steps[] = [
@@ -36,7 +36,7 @@ trait WorkflowTrait
             'complete' => false,
             'url' => ($action != 2) ? $workflow_action_url : null,
             /** @phpstan-ignore-next-line */
-            'description' => exmtrans('workflow.workflow_actions')
+            'description' => exmtrans('workflow.workflow_actions'),
         ];
 
         /** @phpstan-ignore-next-line */

@@ -212,7 +212,7 @@ class Exment
     // @phpstan-ignore-next-line
     public function version($getFromComposer = true)
     {
-        list($latest, $current) = $this->getExmentVersion($getFromComposer);
+        [$latest, $current] = $this->getExmentVersion($getFromComposer);
         return $current;
     }
 
@@ -313,7 +313,7 @@ class Exment
 
                 try {
                     Cache::put(Define::SYSTEM_KEY_SESSION_SYSTEM_VERSION, json_encode([
-                        'latest' => $latest, 'current' => $current
+                        'latest' => $latest, 'current' => $current,
                     ]), Define::CACHE_CLEAR_MINUTE);
                 } catch (\Exception $e) {
                 }
@@ -344,7 +344,7 @@ class Exment
      */
     public function checkLatestVersion()
     {
-        list($latest, $current) = $this->getExmentVersion();
+        [$latest, $current] = $this->getExmentVersion();
         $latest = trim($latest, 'v');
         $current = trim($current, 'v');
 
@@ -354,10 +354,10 @@ class Exment
             return SystemVersion::DEV;
         } elseif ($latest === $current) {
             return SystemVersion::LATEST;
-// Unreachable statement - code above always terminates.
-//            $message = exmtrans("system.version_latest");
-//            $icon = 'check-square';
-//            $bgColor = 'blue';
+            // Unreachable statement - code above always terminates.
+            //            $message = exmtrans("system.version_latest");
+            //            $icon = 'check-square';
+            //            $bgColor = 'blue';
         } else {
             return SystemVersion::HAS_NEXT;
         }
@@ -443,7 +443,7 @@ class Exment
             $validates[] = 'confirmed';
         }
 
-        $validates[] = 'max:'.(!is_null(config('exment.password_rule.max')) ? config('exment.password_rule.max') : '32');
+        $validates[] = 'max:' . (!is_null(config('exment.password_rule.max')) ? config('exment.password_rule.max') : '32');
 
         // check password policy
         $complex = false;
@@ -455,12 +455,12 @@ class Exment
         }
 
         if (!$complex) {
-            $validates[] = 'min:'.(!is_null(config('exment.password_rule.min')) ? config('exment.password_rule.min') : '8');
+            $validates[] = 'min:' . (!is_null(config('exment.password_rule.min')) ? config('exment.password_rule.min') : '8');
         }
 
         // set regex
         if (!$complex && !is_null(config('exment.password_rule.rule'))) {
-            $validates[] = 'regex:/'.config('exment.password_rule.rule').'/';
+            $validates[] = 'regex:/' . config('exment.password_rule.rule') . '/';
         }
 
         return $validates;
@@ -543,7 +543,7 @@ class Exment
             $targetDbNameWrap = \Exment::wrapTable(getDBTableName($target_custom_table));
 
             // search document name
-            list($mark, $q) = \Exment::getQueryMarkAndValue(true, $q);
+            [$mark, $q] = \Exment::getQueryMarkAndValue(true, $q);
             $query
                 ->select(\DB::raw(1))
                 ->from($documentDbName)
@@ -686,7 +686,7 @@ class Exment
         $html = [];
 
         foreach ($attributes as $name => $value) {
-            $html[] = $name.'="'.esc_html($value).'"';
+            $html[] = $name . '="' . esc_html($value) . '"';
         }
 
         return implode(' ', $html);
@@ -819,7 +819,7 @@ class Exment
      * @param string|null $path
      * @return void
      */
-    public function makeDirectory(?string $path, int $mode = 0775)
+    public function makeDirectory(?string $path, int $mode = 0o775)
     {
         if (\File::exists($path)) {
             return;
@@ -834,7 +834,7 @@ class Exment
      * @return void
      */
     // @phpstan-ignore-next-line
-    public function makeDirectoryDisk($disk, ?string $path, int $mode = 0775)
+    public function makeDirectoryDisk($disk, ?string $path, int $mode = 0o775)
     {
         if (!$disk) {
             return;

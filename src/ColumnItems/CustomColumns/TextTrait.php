@@ -18,7 +18,7 @@ trait TextTrait
         }
 
         $config_length = config('exment.char_length_limit', 63999);
-        $string_length = array_get($options, 'string_length')?? $config_length;
+        $string_length = array_get($options, 'string_length') ?? $config_length;
         return min($string_length, $config_length);
     }
 }

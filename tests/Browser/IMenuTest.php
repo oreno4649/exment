@@ -44,12 +44,12 @@ class IMenuTest extends ExmentKitTestCase
     public function testCreateMenuParent()
     {
         $this->_testCreateMenu('parent_menu_name', [
-            'parent_id' =>'0',
-            'menu_type' =>'parent_node',
-            'menu_target' =>'',
-            'uri' =>'/',
-            'title' =>'MenuTestParent',
-            'icon' =>'fa-user',
+            'parent_id' => '0',
+            'menu_type' => 'parent_node',
+            'menu_target' => '',
+            'uri' => '/',
+            'title' => 'MenuTestParent',
+            'icon' => 'fa-user',
         ]);
     }
 
@@ -137,8 +137,8 @@ class IMenuTest extends ExmentKitTestCase
     {
         $menu = $this->getMenuTestModel('parent_menu_name');
         $this->_testEditMenu($menu, [
-            'title' =>'MenuTestParentEdit',
-            'icon' =>'fa-database',
+            'title' => 'MenuTestParentEdit',
+            'icon' => 'fa-database',
         ]);
     }
 

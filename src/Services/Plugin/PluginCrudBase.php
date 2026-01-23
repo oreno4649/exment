@@ -156,9 +156,7 @@ abstract class PluginCrudBase extends PluginPublicBase
      * @return mixed
      */
     // @phpstan-ignore-next-line
-    public function postCreate(array $posts, array $options = [])
-    {
-    }
+    public function postCreate(array $posts, array $options = []) {}
 
     /**
      * edit posted value
@@ -166,9 +164,7 @@ abstract class PluginCrudBase extends PluginPublicBase
      * @return mixed
      */
     // @phpstan-ignore-next-line
-    public function putEdit($id, array $posts, array $options = [])
-    {
-    }
+    public function putEdit($id, array $posts, array $options = []) {}
 
     /**
      * delete value
@@ -177,9 +173,7 @@ abstract class PluginCrudBase extends PluginPublicBase
      * @return mixed
      */
     // @phpstan-ignore-next-line
-    public function delete($id, array $options = [])
-    {
-    }
+    public function delete($id, array $options = []) {}
 
     /**
      * delete value
@@ -295,7 +289,7 @@ abstract class PluginCrudBase extends PluginPublicBase
     public function getAuthSettingHelp(): ?string
     {
         return exmtrans('plugin.help.crud_auth_' . $this->getAuthType(), [
-            'callback_url' => $this->getFullUrl('oauthcallback')
+            'callback_url' => $this->getFullUrl('oauthcallback'),
         ]);
     }
 
@@ -561,9 +555,7 @@ abstract class PluginCrudBase extends PluginPublicBase
      * @param Grid $grid
      * @return void
      */
-    public function callbackGrid(Grid $grid)
-    {
-    }
+    public function callbackGrid(Grid $grid) {}
 
 
     /**
@@ -573,9 +565,7 @@ abstract class PluginCrudBase extends PluginPublicBase
      * @return void
      */
     // @phpstan-ignore-next-line
-    public function callbackGridTool($tools)
-    {
-    }
+    public function callbackGridTool($tools) {}
 
 
     /**
@@ -585,9 +575,7 @@ abstract class PluginCrudBase extends PluginPublicBase
      * @return void
      */
     // @phpstan-ignore-next-line
-    public function callbackShowTool($id, Box $box)
-    {
-    }
+    public function callbackShowTool($id, Box $box) {}
 
     /**
      * Callback form page tools. If add event, definition.
@@ -596,9 +584,7 @@ abstract class PluginCrudBase extends PluginPublicBase
      * @return void
      */
     // @phpstan-ignore-next-line
-    public function callbackFormTool($id, Box $box)
-    {
-    }
+    public function callbackFormTool($id, Box $box) {}
 
     /**
      * Callback grid row action. If add event, definition.
@@ -607,9 +593,7 @@ abstract class PluginCrudBase extends PluginPublicBase
      * @return void
      */
     // @phpstan-ignore-next-line
-    public function callbackGridAction($actions)
-    {
-    }
+    public function callbackGridAction($actions) {}
 
     /**
      * Callback show. If add event, definition.
@@ -618,9 +602,7 @@ abstract class PluginCrudBase extends PluginPublicBase
      * @return void
      */
     // @phpstan-ignore-next-line
-    public function callbackShow($id, WidgetForm $form, Box $box)
-    {
-    }
+    public function callbackShow($id, WidgetForm $form, Box $box) {}
 
     /**
      * Callback create. If add event, definition.
@@ -628,9 +610,7 @@ abstract class PluginCrudBase extends PluginPublicBase
      * @param WidgetForm $form
      * @return void
      */
-    public function callbackCreate(WidgetForm $form, Box $box)
-    {
-    }
+    public function callbackCreate(WidgetForm $form, Box $box) {}
 
     /**
      * Callback edit. If add event, definition.
@@ -639,9 +619,7 @@ abstract class PluginCrudBase extends PluginPublicBase
      * @return void
      */
     // @phpstan-ignore-next-line
-    public function callbackEdit($id, WidgetForm $form, Box $box)
-    {
-    }
+    public function callbackEdit($id, WidgetForm $form, Box $box) {}
 
     /**
      * Set column difinition for grid. If add event, definition.

@@ -116,7 +116,7 @@ class LoginSettingController extends AdminControllerBase
         if (!isset($id)) {
             $form->radio('login_type', exmtrans('login.login_type'))->options(LoginType::transArrayFilter('login.login_type_options', LoginType::SETTING()))
                 ->required()
-                ->attribute(['data-filtertrigger' =>true])
+                ->attribute(['data-filtertrigger' => true])
                 ->help(exmtrans('common.help.init_flg'));
         } else {
             $form->display('login_type_text', exmtrans('login.login_type'));
@@ -179,7 +179,7 @@ class LoginSettingController extends AdminControllerBase
             $form->switchbool('sso_jit', exmtrans("login.sso_jit"))
             ->help(exmtrans("login.help.sso_jit"))
             ->default(false)
-            ->attribute(['data-filtertrigger' =>true]);
+            ->attribute(['data-filtertrigger' => true]);
 
             $form->multipleSelect('jit_rolegroups', exmtrans("role_group.header"))
             ->help(exmtrans('login.help.jit_rolegroups'))
@@ -305,7 +305,7 @@ class LoginSettingController extends AdminControllerBase
         $collection =  collect($errors)->mapWithKeys(function ($error) {
             return [$error->getValue() => '<span class="red">' . exmtrans('login.message.not_install_library', [
                 'name' => $error->transKey('login.login_type_options'),
-                'url' => getManualUrl('login_'.$error->getValue()),
+                'url' => getManualUrl('login_' . $error->getValue()),
             ]) . '</span>'];
         });
         return $collection;
@@ -372,8 +372,8 @@ class LoginSettingController extends AdminControllerBase
                 'deleteExtraData'      => [
                     '_token'           => csrf_token(),
                     '_method'          => 'PUT',
-                    'delete_flg'       => 'login_page_image'
-                ]
+                    'delete_flg'       => 'login_page_image',
+                ],
             ]
         );
         $form->image('login_page_image', exmtrans("system.login_page_image"))
@@ -503,7 +503,7 @@ class LoginSettingController extends AdminControllerBase
         } catch (\Exception $ex) {
             \Log::error($ex);
 
-            list($result, $message, $adminMessage, $custom_login_user) = LoginService::getLoginResult(false, exmtrans('login.sso_provider_error'), [$ex]);
+            [$result, $message, $adminMessage, $custom_login_user] = LoginService::getLoginResult(false, exmtrans('login.sso_provider_error'), [$ex]);
             session([Define::SYSTEM_KEY_SESSION_SSO_TEST_MESSAGE => $adminMessage]);
 
             return redirect($this->getEditUrl($id, true));
@@ -525,14 +525,14 @@ class LoginSettingController extends AdminControllerBase
         try {
             $login_setting = LoginSetting::getEloquent($id);
 
-            list($result, $message, $adminMessage, $custom_login_user) = $login_setting->getLoginServiceClassName()::loginCallback($request, $login_setting, true);
+            [$result, $message, $adminMessage, $custom_login_user] = $login_setting->getLoginServiceClassName()::loginCallback($request, $login_setting, true);
             session([Define::SYSTEM_KEY_SESSION_SSO_TEST_MESSAGE => $adminMessage]);
 
             return redirect($this->getEditUrl($id, true));
         } catch (\Exception $ex) {
             \Log::error($ex);
 
-            list($result, $message, $adminMessage, $custom_login_user) = LoginService::getLoginResult(false, exmtrans('login.sso_provider_error'), [$ex]);
+            [$result, $message, $adminMessage, $custom_login_user] = LoginService::getLoginResult(false, exmtrans('login.sso_provider_error'), [$ex]);
             session([Define::SYSTEM_KEY_SESSION_SSO_TEST_MESSAGE => $adminMessage]);
 
             return redirect($this->getEditUrl($id, true));
@@ -612,7 +612,7 @@ class LoginSettingController extends AdminControllerBase
 
         $form->switchbool('login_use_2factor', exmtrans("2factor.login_use_2factor"))
             ->help(exmtrans("2factor.help.login_use_2factor"))
-            ->attribute(['data-filtertrigger' =>true]);
+            ->attribute(['data-filtertrigger' => true]);
 
         $form->select('login_2factor_provider', exmtrans("2factor.login_2factor_provider"))
             ->options(Login2FactorProviderType::transKeyArray('2factor.2factor_provider_options'))
@@ -651,7 +651,7 @@ class LoginSettingController extends AdminControllerBase
             if (!Auth2factorService::verifyCode('system', $login_2factor_verify_code)) {
                 // error
                 return back()->withInput()->withErrors([
-                    'login_2factor_verify_code' => exmtrans('2factor.message.verify_failed')
+                    'login_2factor_verify_code' => exmtrans('2factor.message.verify_failed'),
                 ]);
             }
         }

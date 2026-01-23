@@ -27,19 +27,19 @@ class ClassBuilder
     private $superClass;
 
     /** @var array<int, string> */
-    private $interfaces = array();
+    private $interfaces = [];
 
     /** @var array<int, string> */
-    private $uses = array();
+    private $uses = [];
 
     /** @var array<int, string> */
-    private $inUses = array();
+    private $inUses = [];
 
     /** @var array<int, array<string, mixed>> */
-    private $properties = array();
+    private $properties = [];
 
     /** @var array<int, array<string, mixed>> */
-    private $methods = array();
+    private $methods = [];
 
     /**
      * @param string $className
@@ -128,11 +128,11 @@ class ClassBuilder
      */
     public function addProperty($scope, $name, $default = null)
     {
-        $this->properties[] = array(
+        $this->properties[] = [
             "scope" => $scope,
             "name"  => $name,
             "default"  => $default,
-        );
+        ];
 
         return $this;
     }
@@ -145,11 +145,11 @@ class ClassBuilder
      */
     public function addMethod($scope, $signature, $contents)
     {
-        $this->methods[] = array(
+        $this->methods[] = [
             "scope"     => $scope,
             "signature" => $signature,
             "contents"  => $contents,
-        );
+        ];
 
         return $this;
     }
@@ -166,38 +166,38 @@ class ClassBuilder
 
         $interface  = '';
         if (count($this->interfaces) > 0) {
-            $interface = " implements ".implode(",", $this->interfaces);
+            $interface = " implements " . implode(",", $this->interfaces);
         }
 
-        $uses = array();
+        $uses = [];
         foreach ($this->uses as $use) {
             $uses[] = sprintf("use %s; ", $use);
         }
 
-        $inUses = array();
+        $inUses = [];
         foreach ($this->inUses as $inUse) {
             $inUses[] = sprintf("use %s; ", $inUse);
         }
 
-        $properties = array();
+        $properties = [];
         foreach ($this->properties as $property) {
             $scope = empty($property["scope"]) ? "" : $property["scope"];
-            $name  = empty($property["name"]) ? "" : '$'.$property["name"];
+            $name  = empty($property["name"]) ? "" : '$' . $property["name"];
             $default  = empty($property["default"]) ? "" : " = {$property["default"]}";
 
             $properties[] = sprintf("%s %s %s;", $scope, $name, $default);
         }
 
-        $methods = array();
+        $methods = [];
         foreach ($this->methods as $method) {
             $scope     = empty($method["scope"]) ? "" : $method["scope"];
             $signature = empty($method["signature"]) ? "" : $method["signature"];
             $contents  = empty($method["contents"]) ? "" : $method["contents"];
 
             $methods[] = sprintf(
-                "%s function %s {" .
-                "%s" .
-                "}",
+                "%s function %s {"
+                . "%s"
+                . "}",
                 $scope,
                 $signature,
                 $contents
@@ -247,8 +247,8 @@ class ClassBuilder
                 ->addNamespace($namespace)
                 ->addUse("\Exceedone\Exment\Model\CustomValue")
                 ->extend("CustomValue")
-                ->addProperty("protected", 'table', "'".getDBTableName($table)."'")
-                ->addMethod("public", "getCustomTableNameAttribute()", "return '".$table->table_name."';")
+                ->addProperty("protected", 'table', "'" . getDBTableName($table) . "'")
+                ->addMethod("public", "getCustomTableNameAttribute()", "return '" . $table->table_name . "';")
                 //->addProperty("public", 'custom_table_name', "'".$table->table_name."'")
         ;
 

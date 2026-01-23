@@ -233,7 +233,7 @@ class NotifyNavbarController extends AdminControllerBase
 
             return getAjaxResponse([
                 'result'  => true,
-                'toastr' => exmtrans('notify_navbar.message.'.$type.'_succeeded'),
+                'toastr' => exmtrans('notify_navbar.message.' . $type . '_succeeded'),
             ]);
         } catch (\Exception $e) {
             \DB::rollback();

@@ -10,6 +10,4 @@ use Exceedone\Exment\Model\Interfaces\WorkflowAuthorityInterface;
  * @property mixed $related_id
  * @property mixed $related_type
  */
-class WorkflowValueAuthority extends ModelBase implements WorkflowAuthorityInterface
-{
-}
+class WorkflowValueAuthority extends ModelBase implements WorkflowAuthorityInterface {}

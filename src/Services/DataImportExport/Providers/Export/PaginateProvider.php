@@ -128,7 +128,7 @@ class PaginateProvider extends ProviderBase
             // add items
 
             foreach ($this->headers as $header) {
-                $body_items[] = array_get((array)$record, array_get($header, 'key'));
+                $body_items[] = array_get((array) $record, array_get($header, 'key'));
             }
             $bodies[] = $body_items;
         }

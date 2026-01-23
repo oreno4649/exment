@@ -138,86 +138,86 @@ class AjaxButton extends Field
 
         $this->script = <<<SCRIPT
 
-        $('{$this->getElementClassSelector()}').off('click').on('click', function(ev) {
-            const button = $(ev.target).closest('button');
+                    $('{$this->getElementClassSelector()}').off('click').on('click', function(ev) {
+                        const button = $(ev.target).closest('button');
 
-            // get senddata
-            let send_data = {};
-            let senddata_params = button.data('senddata');
-            if (hasValue(senddata_params)) {
-                let parent = button.parents('.fields-group');
-                // get data-key
-                for (let index in senddata_params.key) {
-                    let key = senddata_params.key[index];
-                    let elem = parent.find(CommonEvent.getClassKey(key));
-                    if (elem.length == 0) {
-                        continue;
-                    }
-                    send_data[key] = elem.val();
-                }
-            }
+                        // get senddata
+                        let send_data = {};
+                        let senddata_params = button.data('senddata');
+                        if (hasValue(senddata_params)) {
+                            let parent = button.parents('.fields-group');
+                            // get data-key
+                            for (let index in senddata_params.key) {
+                                let key = senddata_params.key[index];
+                                let elem = parent.find(CommonEvent.getClassKey(key));
+                                if (elem.length == 0) {
+                                    continue;
+                                }
+                                send_data[key] = elem.val();
+                            }
+                        }
 
-            var beforesubmit_events = button.data('beforesubmit-events');
-            if (beforesubmit_events) {
-                beforesubmit_events.split(',').forEach(function(key) {
-                    $('#' + key).trigger('ajaxbutton-beforesubmit');
-                })
-            }
+                        var beforesubmit_events = button.data('beforesubmit-events');
+                        if (beforesubmit_events) {
+                            beforesubmit_events.split(',').forEach(function(key) {
+                                $('#' + key).trigger('ajaxbutton-beforesubmit');
+                            })
+                        }
 
-            send_data['_token'] = LA.token;
-            var send_params = button.data('send-params');
-            if (send_params) {
-                send_params.split(',').forEach(function(key) {
-                    send_data[key] = $('#' + key).val();
-                })
-            }
+                        send_data['_token'] = LA.token;
+                        var send_params = button.data('send-params');
+                        if (send_params) {
+                            send_params.split(',').forEach(function(key) {
+                                send_data[key] = $('#' + key).val();
+                            })
+                        }
 
-            let postEvent = function(button, send_data){
-                button.text(button.data('loading-label'));
-                button.prop('disabled', true);
-    
-                return new Promise(function (resolve) {
-                    $.ajax({
-                        type: "POST",
-                        url: "{$url}",
-                        data: send_data,
-                        success:function(repsonse) {
-                            button.text(button.data('default-label'));
-                            button.prop('disabled', false);
-                            Exment.CommonEvent.CallbackExmentAjax(repsonse, resolve);
-                        },
-                        error: function(repsonse){
-                            button.text(button.data('default-label'));
-                            button.prop('disabled', false);
-                            Exment.CommonEvent.CallbackExmentAjax(repsonse, resolve);
+                        let postEvent = function(button, send_data){
+                            button.text(button.data('loading-label'));
+                            button.prop('disabled', true);
+                
+                            return new Promise(function (resolve) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "{$url}",
+                                    data: send_data,
+                                    success:function(repsonse) {
+                                        button.text(button.data('default-label'));
+                                        button.prop('disabled', false);
+                                        Exment.CommonEvent.CallbackExmentAjax(repsonse, resolve);
+                                    },
+                                    error: function(repsonse){
+                                        button.text(button.data('default-label'));
+                                        button.prop('disabled', false);
+                                        Exment.CommonEvent.CallbackExmentAjax(repsonse, resolve);
+                                    }
+                                });
+                            });
+                        };
+
+
+                        if(pBool("{$confirm['isConfirm']}")){
+                            Exment.CommonEvent.ShowSwal("{$url}", {
+                                title: "{$confirm['title']}",
+                                text: "{$confirm['text']}",
+                                input: 'text',
+                                preConfirmValidate: function(input){
+                                    if (input != "yes") {
+                                        return "{$confirm['error']}";
+                                    }
+                        
+                                    return true;
+                                },
+                                postEvent: function(data){
+                                    return postEvent(button, data);
+                                },
+                            });
+                        }
+                        else{
+                            postEvent(button, send_data);
                         }
                     });
-                });
-            };
-
-
-            if(pBool("{$confirm['isConfirm']}")){
-                Exment.CommonEvent.ShowSwal("{$url}", {
-                    title: "{$confirm['title']}",
-                    text: "{$confirm['text']}",
-                    input: 'text',
-                    preConfirmValidate: function(input){
-                        if (input != "yes") {
-                            return "{$confirm['error']}";
-                        }
-            
-                        return true;
-                    },
-                    postEvent: function(data){
-                        return postEvent(button, data);
-                    },
-                });
-            }
-            else{
-                postEvent(button, send_data);
-            }
-        });
-SCRIPT;
+            SCRIPT;
 
         // @phpstan-ignore-next-line
         return parent::render()->with([

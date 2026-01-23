@@ -41,8 +41,8 @@ class CustomViewGridFilter extends ModelBase
                         'replacedName' => [
                             'table_name' => 'view_column_table_name',
                             'column_name' => 'view_column_target_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getUniqueKeyValues',
             ],
@@ -52,8 +52,8 @@ class CustomViewGridFilter extends ModelBase
                         'replacedName' => [
                             'table_name' => 'view_pivot_table_name',
                             'column_name' => 'view_pivot_column_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getPivotUniqueKeyValues',
             ],

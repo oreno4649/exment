@@ -60,9 +60,9 @@ class ChartItem implements ItemInterface
         $this->axis_x = array_get($this->dashboard_box, 'options.chart_axisx');
         $this->axis_y = array_get($this->dashboard_box, 'options.chart_axisy');
         $this->chart_type = array_get($this->dashboard_box, 'options.chart_type');
-        $this->chart_options = array_get($this->dashboard_box, 'options.chart_options')?? [];
-        $this->chart_axis_label = array_get($this->dashboard_box, 'options.chart_axis_label')?? [];
-        $this->chart_axis_name = array_get($this->dashboard_box, 'options.chart_axis_name')?? [];
+        $this->chart_options = array_get($this->dashboard_box, 'options.chart_options') ?? [];
+        $this->chart_axis_label = array_get($this->dashboard_box, 'options.chart_axis_label') ?? [];
+        $this->chart_axis_name = array_get($this->dashboard_box, 'options.chart_axis_name') ?? [];
     }
 
 
@@ -128,7 +128,7 @@ class ChartItem implements ItemInterface
             'chart_axisy' => $axisy_label,
             'chart_legend' => in_array(ChartOptionType::LEGEND, $this->chart_options),
             'chart_begin_zero' => in_array(ChartOptionType::BEGIN_ZERO, $this->chart_options),
-            'chart_color' => json_encode($this->getChartColor(count($chart_data)))
+            'chart_color' => json_encode($this->getChartColor(count($chart_data))),
         ])->render();
     }
 
@@ -161,7 +161,7 @@ class ChartItem implements ItemInterface
             return esc_html($view_column_x->column_item->setCustomValue($val)->text());
         });
         $axis_y_name = $view_column_y->custom_column->column_name;
-        $chart_data = $items->pluck('value.'.$axis_y_name);
+        $chart_data = $items->pluck('value.' . $axis_y_name);
 
         if ($view_column_x == Define::CHARTITEM_LABEL) {
             $axisx_label = $this->custom_table->table_view_name;
@@ -194,7 +194,7 @@ class ChartItem implements ItemInterface
             $summary_index = ViewKindType::DEFAULT . '_' . $item->id;
             return $item->column_item->options([
                 'summary' => true,
-                'summary_index' => $summary_index
+                'summary_index' => $summary_index,
             ]);
         });
         $item_y = $view_column_y->column_item;
@@ -215,14 +215,14 @@ class ChartItem implements ItemInterface
 
         // get item label
         $axisx_label = collect($view_column_x_list)->map(function ($item) {
-            return array_get($item, 'view_column_name')?? $item->column_item->label();
+            return array_get($item, 'view_column_name') ?? $item->column_item->label();
         })->implode(' ');
 
         return [
             'chart_data'    => $chart_data,
             'chart_label'   => $chart_label,
             'axisx_label'   => $axisx_label,
-            'axisy_label'   => array_get($view_column_y, 'view_column_name')?? $item_y->label(),
+            'axisy_label'   => array_get($view_column_y, 'view_column_name') ?? $item_y->label(),
         ];
     }
     /**
@@ -244,7 +244,7 @@ class ChartItem implements ItemInterface
             ->options($tables)
             ->attribute([
                 'data-linkage' => json_encode(['options_target_view_id' => admin_urls('dashboardbox', 'table_views', DashboardBoxType::CHART)]),
-                'data-linkage-expand' => json_encode(['dashboard_suuid' => $dashboard->suuid])
+                'data-linkage-expand' => json_encode(['dashboard_suuid' => $dashboard->suuid]),
             ]);
 
         $form->select('target_view_id', exmtrans("dashboard.dashboard_box_options.target_view_id"))
@@ -254,11 +254,11 @@ class ChartItem implements ItemInterface
             })
             ->loads(
                 ['options_chart_axisx', 'options_chart_axisy'],
-                [admin_url('dashboardbox/chart_axis').'/x', admin_url('dashboardbox/chart_axis').'/y']
+                [admin_url('dashboardbox/chart_axis') . '/x', admin_url('dashboardbox/chart_axis') . '/y']
             );
 
         // link to manual
-        $form->descriptionHtml(sprintf(exmtrans("chart.help.chartitem_manual"), getManualUrl('dashboard?id='.exmtrans('chart.chartitem_manual'))));
+        $form->descriptionHtml(sprintf(exmtrans("chart.help.chartitem_manual"), getManualUrl('dashboard?id=' . exmtrans('chart.chartitem_manual'))));
 
         $form->select('chart_axisx', exmtrans("dashboard.dashboard_box_options.chart_axisx"))
             ->required()
@@ -301,31 +301,31 @@ class ChartItem implements ItemInterface
         ;
         $form->checkbox('chart_axis_name', exmtrans("dashboard.dashboard_box_options.chart_axis_name"))
         ->options([
-                1 => exmtrans("dashboard.dashboard_box_options.chart_axisx_short"),
-                2 => exmtrans("dashboard.dashboard_box_options.chart_axisy_short")])
+            1 => exmtrans("dashboard.dashboard_box_options.chart_axisx_short"),
+            2 => exmtrans("dashboard.dashboard_box_options.chart_axisy_short")])
         ;
         $form->checkbox('chart_options', exmtrans("dashboard.dashboard_box_options.chart_options"))
         ->options([
-                1 => exmtrans("dashboard.dashboard_box_options.chart_legend"),
-                2 => exmtrans("dashboard.dashboard_box_options.chart_begin_zero")])
+            1 => exmtrans("dashboard.dashboard_box_options.chart_legend"),
+            2 => exmtrans("dashboard.dashboard_box_options.chart_begin_zero")])
         ;
         $script = <<<EOT
-        function setChartOptions(val) {
-            if (val == 'pie') {
-                $('#chart_options > .icheck:nth-child(1)').show();
-                $('#chart_options > .icheck:nth-child(2)').hide();
-            } else {
-                $('#chart_options > .icheck:nth-child(1)').hide();
-                $('#chart_options > .icheck:nth-child(2)').show();
-            }
-        }
-        setChartOptions($('.options_chart_type').val());
+                    function setChartOptions(val) {
+                        if (val == 'pie') {
+                            $('#chart_options > .icheck:nth-child(1)').show();
+                            $('#chart_options > .icheck:nth-child(2)').hide();
+                        } else {
+                            $('#chart_options > .icheck:nth-child(1)').hide();
+                            $('#chart_options > .icheck:nth-child(2)').show();
+                        }
+                    }
+                    setChartOptions($('.options_chart_type').val());
 
-        $(document).off('change.exment_dashboard', ".options_chart_type");
-        $(document).on('change.exment_dashboard', ".options_chart_type", function () {
-            setChartOptions($(this).val());
-        });
-EOT;
+                    $(document).off('change.exment_dashboard', ".options_chart_type");
+                    $(document).on('change.exment_dashboard', ".options_chart_type", function () {
+                        setChartOptions($(this).val());
+                    });
+            EOT;
         Admin::script($script);
     }
 
@@ -338,7 +338,7 @@ EOT;
         // except fields not visible
         $options = $form->options;
         $chart_type = array_get($options, 'chart_type');
-        $chart_options = array_get($options, 'chart_options')?? [];
+        $chart_options = array_get($options, 'chart_options') ?? [];
         $new_options = [];
         if ($chart_type == ChartType::PIE) {
             $options['chart_axis_label'] = [];
@@ -388,7 +388,7 @@ EOT;
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($dashboard_box) = $args + [null];
+        [$dashboard_box] = $args + [null];
         return new self($dashboard_box);
     }
 }

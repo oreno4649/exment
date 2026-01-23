@@ -29,7 +29,5 @@ class PluginEventBase
     }
 
     // @phpstan-ignore-next-line
-    public function execute()
-    {
-    }
+    public function execute() {}
 }

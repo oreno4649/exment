@@ -16,7 +16,7 @@ class PluginDiskService extends DiskServiceBase
     public function __construct(...$args)
     {
         $this->now = date('YmdHis');
-        $this->initDiskService(isset($args[0]) ? $args[0] : null);
+        $this->initDiskService($args[0] ?? null);
     }
 
     // @phpstan-ignore-next-line

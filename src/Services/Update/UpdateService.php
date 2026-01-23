@@ -93,10 +93,10 @@ class UpdateService
 
         $helper = new UpdateHelper($event);
 
-        $upgrades = array(
+        $upgrades = [
             Define::COMPOSER_PACKAGE_NAME_LARAVEL_ADMIN => '*',
             Define::COMPOSER_PACKAGE_NAME => '*',
-        );
+        ];
         $helper->setDependencyVersions($upgrades)->require($upgrades);
     }
 

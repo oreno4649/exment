@@ -89,7 +89,7 @@ class SelectValtext extends Select
         // enable multiple
         // @phpstan-ignore-next-line
         $form->switchbool('multiple_enabled', exmtrans("custom_column.options.multiple_enabled"))
-            ->attribute(['data-filtertrigger' =>true])
+            ->attribute(['data-filtertrigger' => true])
             ->help(exmtrans("custom_column.help.multiple_enabled"));
 
         // @phpstan-ignore-next-line

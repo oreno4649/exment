@@ -84,10 +84,10 @@ class Options extends Select
 
         if (empty($this->script)) {
             $this->script = <<<EOT
-            $('.workflow_actions_comment_type').select2($configs);
-            $('.workflow_actions_flow_next_type').iCheck({radioClass:'iradio_minimal-blue'});
-            $('.workflow_actions_ignore_work').iCheck({checkboxClass:'icheckbox_minimal-blue'});
-EOT;
+                            $('.workflow_actions_comment_type').select2($configs);
+                            $('.workflow_actions_flow_next_type').iCheck({radioClass:'iradio_minimal-blue'});
+                            $('.workflow_actions_ignore_work').iCheck({checkboxClass:'icheckbox_minimal-blue'});
+                EOT;
         }
 
         $options = WorkflowCommentType::transArray('workflow.comment_options');

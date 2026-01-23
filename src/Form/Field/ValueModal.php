@@ -177,59 +177,59 @@ class ValueModal extends Field
 
         $script = <<<EOT
 
-        // Set to submit button modal event
-        {
-            let keyname = '[data-contentname="$modalContentname"] .modal-submit';
-            $(document).off('click', keyname).on('click', keyname, {}, function(ev){
-                ev.preventDefault();
+                    // Set to submit button modal event
+                    {
+                        let keyname = '[data-contentname="$modalContentname"] .modal-submit';
+                        $(document).off('click', keyname).on('click', keyname, {}, function(ev){
+                            ev.preventDefault();
 
-                let valText = {$valueTextScript};
-                if(!hasValue(valText)){
-                    return;
-                }
+                            let valText = {$valueTextScript};
+                            if(!hasValue(valText)){
+                                return;
+                            }
 
-                // set value and text
-                let target = getValueModalTarget();
-                target.find('.value-valuemodal').val(valText.value);
-                target.find('.text-valuemodal').html(valText.text);
+                            // set value and text
+                            let target = getValueModalTarget();
+                            target.find('.value-valuemodal').val(valText.value);
+                            target.find('.text-valuemodal').html(valText.text);
 
-                if(!hasValue(valText.text)){
-                    let nullText = target.find('.nulltext-valuemodal').val();
-                    target.find('.text-valuemodal').text(nullText);
-                }
+                            if(!hasValue(valText.text)){
+                                let nullText = target.find('.nulltext-valuemodal').val();
+                                target.find('.text-valuemodal').text(nullText);
+                            }
 
-                let forms = $('.modal form').get();
+                            let forms = $('.modal form').get();
 
-                if(forms.length > 0 &&!forms[0].reportValidity()){
-                    return;
-                }
+                            if(forms.length > 0 &&!forms[0].reportValidity()){
+                                return;
+                            }
 
-                $('.modal').modal('hide');
-            });
+                            $('.modal').modal('hide');
+                        });
 
-            // Set to reset event
-            keyname = '[data-contentname="$modalContentname"] .modal-reset';
-            $(document).off('click', keyname).on('click', keyname, {}, function(ev){
-                ev.preventDefault();
+                        // Set to reset event
+                        keyname = '[data-contentname="$modalContentname"] .modal-reset';
+                        $(document).off('click', keyname).on('click', keyname, {}, function(ev){
+                            ev.preventDefault();
 
-                let target = getValueModalTarget();
-                let nullValue = target.find('.nullvalue-valuemodal').val();
-                target.find('.value-valuemodal').val(nullValue);
+                            let target = getValueModalTarget();
+                            let nullValue = target.find('.nullvalue-valuemodal').val();
+                            target.find('.value-valuemodal').val(nullValue);
 
-                let nullText = target.find('.nulltext-valuemodal').val();
-                target.find('.text-valuemodal').text(nullText);
-            });
+                            let nullText = target.find('.nulltext-valuemodal').val();
+                            target.find('.text-valuemodal').text(nullText);
+                        });
 
-            function getValueModalTarget(){
-                let valueModalUuid = $('.modal .valueModalUuid').val();
-                if(hasValue(valueModalUuid)){
-                    return $('[data-widgetmodal_uuid="' + valueModalUuid + '"]').closest('.block-valuemodal');
-                }
+                        function getValueModalTarget(){
+                            let valueModalUuid = $('.modal .valueModalUuid').val();
+                            if(hasValue(valueModalUuid)){
+                                return $('[data-widgetmodal_uuid="' + valueModalUuid + '"]').closest('.block-valuemodal');
+                            }
 
-                return  $('$classname').closest('.block-valuemodal');
-            }
-        }
-EOT;
+                            return  $('$classname').closest('.block-valuemodal');
+                        }
+                    }
+            EOT;
         $this->script = $script;
     }
 

@@ -76,7 +76,7 @@ trait HasManyJsonTrait
         // @phpstan-ignore-next-line
         if (is_null($this->value)) {
             $this->value = [];
-        /** @phpstan-ignore-next-line */
+            /** @phpstan-ignore-next-line */
         } elseif (is_string($this->value) && is_json($this->value)) {
             /** @phpstan-ignore-next-line */
             $this->value = json_decode_ex($this->value, true);

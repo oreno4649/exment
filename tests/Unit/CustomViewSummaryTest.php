@@ -42,7 +42,7 @@ class CustomViewSummaryTest extends UnitTestBase
                 'column_name' => 'id',
                 'condition_type' => ConditionType::SYSTEM,
                 'filter_condition' => FilterOption::NOT_LIKE,
-                'filter_value_text' => '1'
+                'filter_value_text' => '1',
             ]],
         ];
 
@@ -76,7 +76,7 @@ class CustomViewSummaryTest extends UnitTestBase
             'summary_settings' => [[
                 'column_name' => 'suuid',
                 'condition_type' => ConditionType::SYSTEM,
-                'summary_condition' => SummaryCondition::COUNT
+                'summary_condition' => SummaryCondition::COUNT,
             ]],
         ];
 
@@ -106,7 +106,7 @@ class CustomViewSummaryTest extends UnitTestBase
             ]],
             'summary_settings' => [[
                 'column_name' => 'integer',
-                'summary_condition' => SummaryCondition::SUM
+                'summary_condition' => SummaryCondition::SUM,
             ]],
         ];
 
@@ -139,7 +139,7 @@ class CustomViewSummaryTest extends UnitTestBase
             ]],
             'summary_settings' => [[
                 'column_name' => 'date',
-                'summary_condition' => SummaryCondition::MIN
+                'summary_condition' => SummaryCondition::MIN,
             ]],
         ];
 
@@ -172,7 +172,7 @@ class CustomViewSummaryTest extends UnitTestBase
             ]],
             'summary_settings' => [[
                 'column_name' => 'currency',
-                'summary_condition' => SummaryCondition::MIN
+                'summary_condition' => SummaryCondition::MIN,
             ]],
         ];
 
@@ -207,12 +207,12 @@ class CustomViewSummaryTest extends UnitTestBase
             'column_settings' => [[
                 'column_name' => 'date',
                 'options' => [
-                    'view_group_condition' => 'y'
-                ]
+                    'view_group_condition' => 'y',
+                ],
             ]],
             'summary_settings' => [[
                 'column_name' => 'decimal',
-                'summary_condition' => SummaryCondition::SUM
+                'summary_condition' => SummaryCondition::SUM,
             ]],
         ];
 
@@ -246,12 +246,12 @@ class CustomViewSummaryTest extends UnitTestBase
             'column_settings' => [[
                 'column_name' => 'date',
                 'options' => [
-                    'view_group_condition' => 'ym'
-                ]
+                    'view_group_condition' => 'ym',
+                ],
             ]],
             'summary_settings' => [[
                 'column_name' => 'currency',
-                'summary_condition' => SummaryCondition::SUM
+                'summary_condition' => SummaryCondition::SUM,
             ]],
         ];
 
@@ -286,12 +286,12 @@ class CustomViewSummaryTest extends UnitTestBase
             'column_settings' => [[
                 'column_name' => 'date',
                 'options' => [
-                    'view_group_condition' => 'ymd'
-                ]
+                    'view_group_condition' => 'ymd',
+                ],
             ]],
             'summary_settings' => [[
                 'column_name' => 'time',
-                'summary_condition' => SummaryCondition::MIN
+                'summary_condition' => SummaryCondition::MIN,
             ]],
         ];
 
@@ -326,8 +326,8 @@ class CustomViewSummaryTest extends UnitTestBase
             'column_settings' => [[
                 'column_name' => 'date',
                 'options' => [
-                    'view_group_condition' => 'm'
-                ]
+                    'view_group_condition' => 'm',
+                ],
             ]],
             'summary_settings' => [[
                 'column_name' => 'datetime',
@@ -365,8 +365,8 @@ class CustomViewSummaryTest extends UnitTestBase
             'column_settings' => [[
                 'column_name' => 'date',
                 'options' => [
-                    'view_group_condition' => 'd'
-                ]
+                    'view_group_condition' => 'd',
+                ],
             ]],
             'summary_settings' => [[
                 'condition_type' => ConditionType::SYSTEM,
@@ -407,13 +407,13 @@ class CustomViewSummaryTest extends UnitTestBase
             'column_settings' => [[
                 'column_name' => 'date',
                 'options' => [
-                    'view_group_condition' => 'w'
-                ]
+                    'view_group_condition' => 'w',
+                ],
             ]],
             'summary_settings' => [[
                 'condition_type' => ConditionType::SYSTEM,
                 'column_name' => 'id',
-                'summary_condition' => SummaryCondition::COUNT
+                'summary_condition' => SummaryCondition::COUNT,
             ]],
         ];
 
@@ -522,8 +522,8 @@ class CustomViewSummaryTest extends UnitTestBase
             'column_settings' => [[
                 'column_name' => 'datetime',
                 'options' => [
-                    'view_group_condition' => 'ymd'
-                ]
+                    'view_group_condition' => 'ymd',
+                ],
             ]],
             'summary_settings' => [[
                 'column_name' => 'decimal',
@@ -696,7 +696,7 @@ class CustomViewSummaryTest extends UnitTestBase
     public function testFuncGroupCreatedAtYmd()
     {
         $this->commonTestCount('created_at', ConditionType::SYSTEM, [
-            'view_group_condition' => 'ymd'
+            'view_group_condition' => 'ymd',
         ]);
     }
 
@@ -718,7 +718,7 @@ class CustomViewSummaryTest extends UnitTestBase
     public function testFuncGroupUpdatedAtYm()
     {
         $this->commonTestCount('updated_at', ConditionType::SYSTEM, [
-            'view_group_condition' => 'ym'
+            'view_group_condition' => 'ym',
         ]);
     }
 
@@ -817,7 +817,7 @@ class CustomViewSummaryTest extends UnitTestBase
                 'reference_table' => 'child_table',
                 'is_child' => true,
                 'column_name' => 'integer',
-                'summary_condition' => SummaryCondition::SUM
+                'summary_condition' => SummaryCondition::SUM,
             ]],
         ];
 
@@ -849,14 +849,14 @@ class CustomViewSummaryTest extends UnitTestBase
             'column_settings' => [[
                 'column_name' => 'date',
                 'options' => [
-                    'view_group_condition' => 'ym'
-                ]
+                    'view_group_condition' => 'ym',
+                ],
             ]],
             'summary_settings' => [[
                 'reference_table' => 'child_table',
                 'is_child' => true,
                 'column_name' => 'date',
-                'summary_condition' => SummaryCondition::MIN
+                'summary_condition' => SummaryCondition::MIN,
             ]],
         ];
 
@@ -896,7 +896,7 @@ class CustomViewSummaryTest extends UnitTestBase
                 'reference_table' => 'child_table',
                 'is_child' => true,
                 'column_name' => 'integer',
-                'summary_condition' => SummaryCondition::SUM
+                'summary_condition' => SummaryCondition::SUM,
             ]],
         ];
 
@@ -919,7 +919,7 @@ class CustomViewSummaryTest extends UnitTestBase
 
     /**
      * FilterOption = Group(parent:user,order:2), Summary(integer/sum/child_table,order:1)
-     * bugfix: set order to child table column occurs exception. 
+     * bugfix: set order to child table column occurs exception.
      */
     // @phpstan-ignore-next-line
     public function testFuncSummaryChildOrder()
@@ -933,7 +933,7 @@ class CustomViewSummaryTest extends UnitTestBase
                 'options' => [
                     'sort_type' => 1,
                     'sort_order' => 2,
-                ]
+                ],
             ]],
             'summary_settings' => [[
                 'reference_table' => 'child_table',
@@ -943,7 +943,7 @@ class CustomViewSummaryTest extends UnitTestBase
                 'options' => [
                     'sort_type' => 1,
                     'sort_order' => 1,
-                ]
+                ],
             ]],
         ];
 
@@ -981,20 +981,20 @@ class CustomViewSummaryTest extends UnitTestBase
                 'options' => [
                     'sort_type' => 1,
                     'sort_order' => 1,
-                ]
+                ],
             ]],
             'summary_settings' => [[
                 'reference_table' => 'child_table',
                 'is_child' => true,
                 'column_name' => 'integer',
-                'summary_condition' => SummaryCondition::SUM
+                'summary_condition' => SummaryCondition::SUM,
             ]],
         ];
 
         $summaries = $this->getCustomViewSummary($options);
 
-        $users = collect($summaries)->map(function($summary) {
-            return (int)$summary['key'];
+        $users = collect($summaries)->map(function ($summary) {
+            return (int) $summary['key'];
         });
 
         $this->assertTrue($users->sort()->values()->toArray() === $users->values()->toArray());
@@ -1017,12 +1017,12 @@ class CustomViewSummaryTest extends UnitTestBase
                 'reference_column' => 'parent_select_table',
                 'is_refer' => true,
                 'options' => [
-                    'view_group_condition' => 'ym'
-                ]
+                    'view_group_condition' => 'ym',
+                ],
             ]],
             'summary_settings' => [[
                 'column_name' => 'integer',
-                'summary_condition' => SummaryCondition::SUM
+                'summary_condition' => SummaryCondition::SUM,
             ]],
         ];
 
@@ -1042,7 +1042,7 @@ class CustomViewSummaryTest extends UnitTestBase
                 return $data->getValue('parent_select_table', ValueType::PURE_VALUE);
             })->filter();
 
-            $result = CustomTable::getEloquent('parent_table_select')->getValueModel()->find($ids)->sum(function($val) {
+            $result = CustomTable::getEloquent('parent_table_select')->getValueModel()->find($ids)->sum(function ($val) {
                 return $val->getValue('integer');
             });
             $this->assertTrue($result == $summary['value']);
@@ -1066,12 +1066,12 @@ class CustomViewSummaryTest extends UnitTestBase
                 'reference_column' => 'parent_select_table',
                 'is_refer' => true,
                 'options' => [
-                    'view_group_condition' => 'w'
-                ]
+                    'view_group_condition' => 'w',
+                ],
             ]],
             'summary_settings' => [[
                 'column_name' => 'integer',
-                'summary_condition' => SummaryCondition::SUM
+                'summary_condition' => SummaryCondition::SUM,
             ]],
         ];
 
@@ -1095,7 +1095,7 @@ class CustomViewSummaryTest extends UnitTestBase
                 return $data->getValue('parent_select_table', ValueType::PURE_VALUE);
             })->filter();
 
-            $result = CustomTable::getEloquent('parent_table_select')->getValueModel()->find($ids)->sum(function($val) {
+            $result = CustomTable::getEloquent('parent_table_select')->getValueModel()->find($ids)->sum(function ($val) {
                 return $val->getValue('integer');
             });
             $this->assertTrue($result == $summary['value']);
@@ -1116,7 +1116,7 @@ class CustomViewSummaryTest extends UnitTestBase
             'column_settings' => [[
                 'reference_table' => 'parent_table',
                 'column_name' => 'user',
-                'is_parent' => true
+                'is_parent' => true,
             ]],
             'summary_settings' => [[
                 'column_name' => 'integer',
@@ -1151,13 +1151,13 @@ class CustomViewSummaryTest extends UnitTestBase
             'column_settings' => [[
                 'reference_table' => 'parent_table',
                 'column_name' => 'user',
-                'is_parent' => true
+                'is_parent' => true,
             ], [
                 'column_name' => 'odd_even',
             ]],
             'summary_settings' => [[
                 'column_name' => 'integer',
-                'summary_condition' => SummaryCondition::SUM
+                'summary_condition' => SummaryCondition::SUM,
             ]],
         ];
 
@@ -1195,7 +1195,7 @@ class CustomViewSummaryTest extends UnitTestBase
                 'is_child' => true,
                 'condition_type' => ConditionType::SYSTEM,
                 'column_name' => 'id',
-                'summary_condition' => SummaryCondition::COUNT
+                'summary_condition' => SummaryCondition::COUNT,
             ]],
         ];
 
@@ -1232,7 +1232,7 @@ class CustomViewSummaryTest extends UnitTestBase
                 'is_child' => true,
                 'condition_type' => ConditionType::SYSTEM,
                 'column_name' => 'id',
-                'summary_condition' => SummaryCondition::COUNT
+                'summary_condition' => SummaryCondition::COUNT,
             ]],
         ];
 
@@ -1272,7 +1272,7 @@ class CustomViewSummaryTest extends UnitTestBase
                 'is_parent' => true,
                 'condition_type' => ConditionType::SYSTEM,
                 'column_name' => 'id',
-                'summary_condition' => SummaryCondition::COUNT
+                'summary_condition' => SummaryCondition::COUNT,
             ]],
         ];
 
@@ -1288,7 +1288,7 @@ class CustomViewSummaryTest extends UnitTestBase
         foreach ($summaries as $summary) {
             $result = collect($defaults)->filter(function ($data) use ($summary) {
                 return $data->getValue('odd_even') == $summary['key'];
-            })->map(function ($data) use($relation) {
+            })->map(function ($data) use ($relation) {
                 return $data->getParentValue($relation)->count();
             })->sum();
             $this->assertTrue($result == $summary['value']);
@@ -1311,7 +1311,7 @@ class CustomViewSummaryTest extends UnitTestBase
             ]],
             'summary_settings' => [[
                 'column_name' => 'currency',
-                'summary_condition' => SummaryCondition::SUM
+                'summary_condition' => SummaryCondition::SUM,
             ]],
         ];
 
@@ -1340,7 +1340,7 @@ class CustomViewSummaryTest extends UnitTestBase
         $this->commonTestCountBase([
             'column_name' => $column_name,
             'condition_type' => $condition_type,
-            'options' => $column_options
+            'options' => $column_options,
         ]);
     }
 
@@ -1357,7 +1357,7 @@ class CustomViewSummaryTest extends UnitTestBase
             'summary_settings' => [[
                 'condition_type' => ConditionType::SYSTEM,
                 'column_name' => 'id',
-                'summary_condition' => SummaryCondition::COUNT
+                'summary_condition' => SummaryCondition::COUNT,
             ]],
             'offset' => 0,
             'limit' => 80,
@@ -1371,7 +1371,7 @@ class CustomViewSummaryTest extends UnitTestBase
             $result = collect($defaults)->filter(function ($data) use ($summary, $column_settings) {
                 $reference_table = array_get($column_settings, 'reference_table');
                 $column_name = array_get($column_settings, 'column_name');
-                $column_options = array_get($column_settings, 'options')?? [];
+                $column_options = array_get($column_settings, 'options') ?? [];
                 $group_condition = array_get($column_options, 'view_group_condition');
 
                 if (isset($reference_table)) {
@@ -1425,7 +1425,7 @@ class CustomViewSummaryTest extends UnitTestBase
             $key = count($values) > 2 ? array_slice($values, 0, count($values) - 1) : $values[0];
             return [
                 'key' => $key,
-                'value' => end($values)
+                'value' => end($values),
             ];
         });
     }

@@ -45,7 +45,7 @@ class Text extends CustomItem
     protected function setValidates(&$validates)
     {
         // value size
-        $validates[] = 'max:'.$this->getMaxLength();
+        $validates[] = 'max:' . $this->getMaxLength();
 
         // value type
         $validates[] = new Validator\StringNumericRule();
@@ -79,7 +79,7 @@ class Text extends CustomItem
 
         if (boolval(config('exment.expart_mode', false)) && array_key_value_exists('regex_validate', $options)) {
             $regex_validate = array_get($options, 'regex_validate');
-            $validates[] = 'regex:/'.$regex_validate.'/u';
+            $validates[] = 'regex:/' . $regex_validate . '/u';
             $regex = $regex_validate;
         } elseif (array_key_value_exists('available_characters', $options)) {
             $difinitions = CustomColumn::getAvailableCharacters();
@@ -100,7 +100,7 @@ class Text extends CustomItem
                 $help_regexes[] = array_get($define, 'label');
             }
             if (count($regexes) > 0) {
-                $validates[] = 'regex:/^['.implode("", $regexes).']*$/u';
+                $validates[] = 'regex:/^[' . implode("", $regexes) . ']*$/u';
                 $regex = "^[" . implode("", $regexes) . "]*$";
             }
         }
@@ -120,7 +120,7 @@ class Text extends CustomItem
      */
     protected function getGridFilterOption(): ?string
     {
-        return (string)FilterOption::LIKE;
+        return (string) FilterOption::LIKE;
     }
 
 
@@ -149,7 +149,7 @@ class Text extends CustomItem
             ->help(exmtrans("custom_column.help.suggest_input"));
 
         if (boolval(config('exment.expart_mode', false))) {
-            $manual_url = getManualUrl('column?id='.exmtrans('custom_column.options.regex_validate'));
+            $manual_url = getManualUrl('column?id=' . exmtrans('custom_column.options.regex_validate'));
             $form->text('regex_validate', exmtrans("custom_column.options.regex_validate"))
                 ->rules('regularExpression')
                 ->help(sprintf(exmtrans("custom_column.help.regex_validate"), $manual_url));

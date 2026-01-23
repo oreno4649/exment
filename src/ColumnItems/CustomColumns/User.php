@@ -30,7 +30,7 @@ class User extends SelectTable
         }
 
         $options = $this->custom_column->options;
-        list($default_type, $default) = $this->getDefaultSetting();
+        [$default_type, $default] = $this->getDefaultSetting();
 
         // default (login user)
         if (isMatchString($default_type, ColumnDefaultType::LOGIN_USER)) {
@@ -73,7 +73,7 @@ class User extends SelectTable
     public function setCustomColumnDefaultValueForm(&$form, bool $asCustomForm = false)
     {
         $form->select('default_type', exmtrans("custom_column.options.default_type"))
-            ->attribute(['data-filtertrigger' =>true])
+            ->attribute(['data-filtertrigger' => true])
             ->help(exmtrans("custom_column.help.default_type"))
             ->options(getTransArray(ColumnDefaultType::COLUMN_DEFAULT_TYPE_USER(), 'custom_column.column_default_type_options'));
 
@@ -91,7 +91,7 @@ class User extends SelectTable
     // @phpstan-ignore-next-line
     protected function getDefaultSetting()
     {
-        list($default_type, $default) = parent::getDefaultSetting();
+        [$default_type, $default] = parent::getDefaultSetting();
 
         if (is_nullorempty($default_type)) {
             $default = null;

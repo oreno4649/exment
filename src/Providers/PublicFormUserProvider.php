@@ -41,9 +41,7 @@ class PublicFormUserProvider extends \Illuminate\Auth\EloquentUserProvider
      * @param  string  $token
      * @return void
      */
-    public function updateRememberToken(Authenticatable $user, $token)
-    {
-    }
+    public function updateRememberToken(Authenticatable $user, $token) {}
 
     /**
      * Retrieve a user by the given credentials.

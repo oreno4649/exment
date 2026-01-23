@@ -19,7 +19,7 @@ abstract class ShowBase
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($custom_table, $custom_form) = $args + [null, null, null];
+        [$custom_table, $custom_form] = $args + [null, null, null];
 
         return new static($custom_table, $custom_form);
     }

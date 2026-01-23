@@ -263,7 +263,7 @@ class PluginType extends EnumBase
                     return new $classname(
                         $plugin,
                         [
-                            'command_options' => array_get($options, 'command_options')
+                            'command_options' => array_get($options, 'command_options'),
                         ]
                     );
                 case PluginType::PAGE:

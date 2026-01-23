@@ -39,7 +39,7 @@ class DateValue extends ItemBase
         else {
             $length = 1;
         }
-        $str = sprintf('%0'.$length.'d', $str);
+        $str = sprintf('%0' . $length . 'd', $str);
 
         return $str;
     }

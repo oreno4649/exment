@@ -155,7 +155,7 @@ class DCustomDataTest extends ExmentKitTestCase
         $row = \DB::table($table_name)->whereNull('deleted_at')->orderBy('id', 'desc')->first();
         // Check custom data
         // @phpstan-ignore-next-line
-        $this->visit(admin_url('data/exmenttest_data/'. $row->id . '/edit'))
+        $this->visit(admin_url('data/exmenttest_data/' . $row->id . '/edit'))
                 // @phpstan-ignore-next-line
                 ->seeInField('value[integer]', 99)
                 ->seeInField('value[onelinetext]', 'EXMENT Test Data 1')
@@ -195,13 +195,13 @@ class DCustomDataTest extends ExmentKitTestCase
             'value[yesno]' => 1,
         ];
         // @phpstan-ignore-next-line
-        $this->visit(admin_url('data/exmenttest_data/'. $row->id . '/edit'))
+        $this->visit(admin_url('data/exmenttest_data/' . $row->id . '/edit'))
                 ->submitForm('admin-submit', $data)
                 ->seePageIs('/admin/data/exmenttest_data')
         ;
         // Check custom data
         // @phpstan-ignore-next-line
-        $this->visit(admin_url('data/exmenttest_data/'. $row->id . '/edit'))
+        $this->visit(admin_url('data/exmenttest_data/' . $row->id . '/edit'))
                 ->seeInField('value[select2value]', 'value1')
                 // @phpstan-ignore-next-line
                 ->seeInField('value[yesno]', 1)
@@ -222,7 +222,7 @@ class DCustomDataTest extends ExmentKitTestCase
 
         // Update custom data
         // @phpstan-ignore-next-line
-        $this->visit(admin_url('data/exmenttest_data/'. $row->id . '/edit'))
+        $this->visit(admin_url('data/exmenttest_data/' . $row->id . '/edit'))
                 // @phpstan-ignore-next-line
                 ->type(100, 'value[integer]')
                 ->type('EXMENT Test Data 1 Edited', 'value[onelinetext]')
@@ -250,7 +250,7 @@ class DCustomDataTest extends ExmentKitTestCase
 
         // Check custom data
         // @phpstan-ignore-next-line
-        $this->visit(admin_url('data/exmenttest_data/'. $row->id . '/edit'))
+        $this->visit(admin_url('data/exmenttest_data/' . $row->id . '/edit'))
                 // @phpstan-ignore-next-line
                 ->seeInField('value[integer]', 100)
                 // @phpstan-ignore-next-line
@@ -380,8 +380,8 @@ class DCustomDataTest extends ExmentKitTestCase
             'view' => $all_view->suuid,
             'group_view' => $group_view->suuid,
             'group_key' => [
-                Define::COLUMN_ITEM_UNIQUE_PREFIX .$group_column->suuid => $group_key
-            ]
+                Define::COLUMN_ITEM_UNIQUE_PREFIX . $group_column->suuid => $group_key,
+            ],
         ]);
 
         // Check custom view data
@@ -410,8 +410,8 @@ class DCustomDataTest extends ExmentKitTestCase
             'view' => $all_view->suuid,
             'group_view' => $group_view->suuid,
             'group_key' => [
-                Define::COLUMN_ITEM_UNIQUE_PREFIX .$group_column->suuid => ''
-            ]
+                Define::COLUMN_ITEM_UNIQUE_PREFIX . $group_column->suuid => '',
+            ],
         ]);
 
         // Check custom view data

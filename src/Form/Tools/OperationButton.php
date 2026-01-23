@@ -52,21 +52,21 @@ class OperationButton
         $operation_type = arrayToString($this->operation_type);
         return <<<EOT
 
-        $('#menu_button_$suuid').off('click').on('click', function(){
-            let select_ids = $('.column-__row_selector__').length > 0 ? $.admin.grid.selected() : null;
-            Exment.CommonEvent.ShowSwal("$url", {
-                title: "$label",
-                text: "$text",
-                confirm:"$confirm",
-                cancel:"$cancel",
-                data: {
-                    suuid:"$suuid",
-                    operation_type: '$operation_type',
-                    select_ids: select_ids
-                }
-            });
-        });
-EOT;
+                    $('#menu_button_$suuid').off('click').on('click', function(){
+                        let select_ids = $('.column-__row_selector__').length > 0 ? $.admin.grid.selected() : null;
+                        Exment.CommonEvent.ShowSwal("$url", {
+                            title: "$label",
+                            text: "$text",
+                            confirm:"$confirm",
+                            cancel:"$cancel",
+                            data: {
+                                suuid:"$suuid",
+                                operation_type: '$operation_type',
+                                select_ids: select_ids
+                            }
+                        });
+                    });
+            EOT;
     }
 
     // @phpstan-ignore-next-line
@@ -81,20 +81,20 @@ EOT;
         }
         return <<<EOT
 
-        $('#menu_button_$suuid').off('click').on('click', function(){
-            Exment.ModalEvent.ShowModal($("#modal-form-$suuid"), '$url', {
-                'suuid': '$suuid'
-            });
-            return;
-        });
-EOT;
+                    $('#menu_button_$suuid').off('click').on('click', function(){
+                        Exment.ModalEvent.ShowModal($("#modal-form-$suuid"), '$url', {
+                            'suuid': '$suuid'
+                        });
+                        return;
+                    });
+            EOT;
     }
 
     // @phpstan-ignore-next-line
     public function render()
     {
-        $label = array_get($this->operation, 'options.button_label') ??
-            array_get($this->operation, 'operation_name');
+        $label = array_get($this->operation, 'options.button_label')
+            ?? array_get($this->operation, 'operation_name');
 
         // get suuid
         $suuid = array_get($this->operation, 'suuid');

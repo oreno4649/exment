@@ -113,7 +113,7 @@ abstract class SpOut extends FormatBase
 
                 // if keyvalue, set array as key value
                 if ($keyvalue) {
-                    $key = $this->getCellValue($column_no."1", $sheet, $isGetMerge);
+                    $key = $this->getCellValue($column_no . "1", $sheet, $isGetMerge);
                     $cells[$key] = mbTrim($value);
                 }
                 // if false, set as array

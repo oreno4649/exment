@@ -50,7 +50,7 @@ abstract class ApiTestBase extends FeatureTestBase
     protected function getPasswordToken($user_code, $password, $scope = [])
     {
         $this->initAllTest();
-        list($client_id, $client_secret) = $this->getClientIdAndSecret();
+        [$client_id, $client_secret] = $this->getClientIdAndSecret();
 
         if (\is_nullorempty($scope)) {
             $scope = ApiScope::arrays();
@@ -74,7 +74,7 @@ abstract class ApiTestBase extends FeatureTestBase
     protected function getApiKey($scope = [])
     {
         $this->initAllTest();
-        list($client_id, $client_secret, $api_key) = $this->getClientIdAndSecretAndKey();
+        [$client_id, $client_secret, $api_key] = $this->getClientIdAndSecretAndKey();
 
         if (\is_nullorempty($scope)) {
             $scope = ApiScope::arrays();
@@ -229,7 +229,7 @@ abstract class ApiTestBase extends FeatureTestBase
                 $checkKey = implode('.', $copykeys);
                 $checkValue = array_get($json, $checkKey);
                 $jsonString = json_encode($json);
-                $this->assertTrue($checkValue == $v, "key $checkKey is $checkValue, but value is $v".PHP_EOL.PHP_EOL.$jsonString);
+                $this->assertTrue($checkValue == $v, "key $checkKey is $checkValue, but value is $v" . PHP_EOL . PHP_EOL . $jsonString);
             }
         }
     }

@@ -78,9 +78,7 @@ class PaginateAction extends ExportActionBase implements ActionInterface
      *
      * @return void
      */
-    public function execute()
-    {
-    }
+    public function execute() {}
 
     /**
      * Get file name

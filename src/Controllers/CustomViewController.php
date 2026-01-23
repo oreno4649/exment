@@ -134,16 +134,16 @@ class CustomViewController extends AdminControllerTableBase
                     $actions->disableDelete();
                 }
                 // unreachable statement
-//                if (intval($actions->row->view_kind_type) === Enums\ViewKindType::AGGREGATE ||
-//                    intval($actions->row->view_kind_type) === Enums\ViewKindType::CALENDAR) {
-//                    $actions->disableEdit();
-//
-//                    $linker = (new Linker())
-//                        ->url(admin_urls('view', $table_name, $actions->getKey(), 'edit').'?view_kind_type='.$actions->row->view_kind_type)
-//                        ->icon('fa-edit')
-//                        ->tooltip(trans('admin.edit'));
-//                    $actions->prepend($linker);
-//                }
+                //                if (intval($actions->row->view_kind_type) === Enums\ViewKindType::AGGREGATE ||
+                //                    intval($actions->row->view_kind_type) === Enums\ViewKindType::CALENDAR) {
+                //                    $actions->disableEdit();
+                //
+                //                    $linker = (new Linker())
+                //                        ->url(admin_urls('view', $table_name, $actions->getKey(), 'edit').'?view_kind_type='.$actions->row->view_kind_type)
+                //                        ->icon('fa-edit')
+                //                        ->tooltip(trans('admin.edit'));
+                //                    $actions->prepend($linker);
+                //                }
             } else {
                 $actions->disableEdit();
                 $actions->disableDelete();
@@ -260,7 +260,7 @@ class CustomViewController extends AdminControllerTableBase
         $form->display('custom_table.table_view_name', exmtrans("custom_table.table_view_name"))->default($this->custom_table->table_view_name);
         $form->display('view_kind_type', exmtrans("custom_view.view_kind_type"))
             ->with(function ($value) use ($view_kind_type) {
-                return ViewKindType::getEnum($value?? $view_kind_type)->transKey("custom_view.custom_view_kind_type_options");
+                return ViewKindType::getEnum($value ?? $view_kind_type)->transKey("custom_view.custom_view_kind_type_options");
             });
 
         $form->text('view_view_name', exmtrans("custom_view.view_view_name"))->required()->rules("max:40");
@@ -397,7 +397,7 @@ class CustomViewController extends AdminControllerTableBase
             $options = SummaryCondition::getOptions(['numeric' => false]);
         }
         return collect($options)->map(function ($array) {
-            return ['id' => array_get($array, 'id'), 'text' => exmtrans('custom_view.summary_condition_options.'.array_get($array, 'name'))];
+            return ['id' => array_get($array, 'id'), 'text' => exmtrans('custom_view.summary_condition_options.' . array_get($array, 'name'))];
         });
     }
 
@@ -465,7 +465,7 @@ class CustomViewController extends AdminControllerTableBase
         return getAjaxResponse([
             'body'  => $form->render(),
             'script' => $form->getScript(),
-            'title' => exmtrans('common.shared')
+            'title' => exmtrans('common.shared'),
         ]);
     }
 

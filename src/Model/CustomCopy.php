@@ -40,19 +40,19 @@ class CustomCopy extends ModelBase implements Interfaces\TemplateImporterInterfa
                         'replacingName' => 'from_custom_table_id',
                         'replacedName' => [
                             'table_name' => 'from_custom_table_name',
-                        ]
+                        ],
                     ],
                     [
                         'replacingName' => 'to_custom_table_id',
                         'replacedName' => [
                             'table_name' => 'to_custom_table_name',
-                        ]
+                        ],
                     ],
                 ],
                 'uniqueKeyClassName' => CustomTable::class,
             ],
         ],
-        'children' =>[
+        'children' => [
             'custom_copy_columns' => CustomCopyColumn::class,
             'custom_copy_input_columns' => CustomCopyColumn::class,
         ],
@@ -147,7 +147,7 @@ class CustomCopy extends ModelBase implements Interfaces\TemplateImporterInterfa
             'result'  => true,
             'toastr' => sprintf(exmtrans('common.message.success_execute')),
             // set redirect url
-            'redirect' => admin_urls('data', $this->to_custom_table->table_name, $to_custom_value->id)
+            'redirect' => admin_urls('data', $this->to_custom_table->table_name, $to_custom_value->id),
         ];
     }
 

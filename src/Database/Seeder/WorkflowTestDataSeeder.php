@@ -96,7 +96,7 @@ class WorkflowTestDataSeeder extends Seeder
                             [
                                 'related_id' => 0,
                                 'related_type' => 'system',
-                            ]
+                            ],
                         ],
                     ],
 
@@ -122,7 +122,7 @@ class WorkflowTestDataSeeder extends Seeder
                             [
                                 'related_id' => 6, // dev0-userB
                                 'related_type' => 'user',
-                            ]
+                            ],
                         ],
                     ],
                     [
@@ -199,7 +199,7 @@ class WorkflowTestDataSeeder extends Seeder
                             [
                                 'related_id' => 0,
                                 'related_type' => 'system',
-                            ]
+                            ],
                         ],
                     ],
 
@@ -225,7 +225,7 @@ class WorkflowTestDataSeeder extends Seeder
                             [
                                 'related_id' => 6, // dev0-userB
                                 'related_type' => 'user',
-                            ]
+                            ],
                         ],
                     ],
                 ],
@@ -283,7 +283,7 @@ class WorkflowTestDataSeeder extends Seeder
                                     'condition_key' => FilterOption::EQ,
                                     'target_column_id' => 'multiples_of_3',
                                     'condition_value' => 1,
-                                ]
+                                ],
                             ],
                             [
                                 'status_to' => 1,
@@ -295,7 +295,7 @@ class WorkflowTestDataSeeder extends Seeder
                             [
                                 'related_id' => 0,
                                 'related_type' => 'system',
-                            ]
+                            ],
                         ],
                     ],
 
@@ -321,7 +321,7 @@ class WorkflowTestDataSeeder extends Seeder
                             [
                                 'related_id' => 2, // dev
                                 'related_type' => 'organization',
-                            ]
+                            ],
                         ],
                     ],
                     [
@@ -347,7 +347,7 @@ class WorkflowTestDataSeeder extends Seeder
                             [
                                 'related_id' => 0,
                                 'related_type' => 'system',
-                            ]
+                            ],
                         ],
                     ],
                 ],
@@ -405,7 +405,7 @@ class WorkflowTestDataSeeder extends Seeder
                             [
                                 'related_id' => 0,
                                 'related_type' => 'system',
-                            ]
+                            ],
                         ],
                     ],
                     [
@@ -430,7 +430,7 @@ class WorkflowTestDataSeeder extends Seeder
                             [
                                 'related_id' => $boss->id,
                                 'related_type' => ConditionTypeDetail::LOGIN_USER_COLUMN()->lowerKey(),
-                            ]
+                            ],
                         ],
                     ],
                     [
@@ -455,7 +455,7 @@ class WorkflowTestDataSeeder extends Seeder
                             [
                                 'related_id' => $boss->id,
                                 'related_type' => ConditionTypeDetail::LOGIN_USER_COLUMN()->lowerKey(),
-                            ]
+                            ],
                         ],
                     ],
                 ],
@@ -500,7 +500,7 @@ class WorkflowTestDataSeeder extends Seeder
                 $workflowaction->workflow_id = $workflowObj->id;
                 // @phpstan-ignore-next-line
                 $workflowaction->action_name = $action['action_name'];
-                $workflowaction->ignore_work = $action['ignore_work']?? 0;
+                $workflowaction->ignore_work = $action['ignore_work'] ?? 0;
 
                 // @phpstan-ignore-next-line
                 if ($action['status_from'] === 'start') {
@@ -596,7 +596,7 @@ class WorkflowTestDataSeeder extends Seeder
                     $user = $users[$userKey];
                     \Auth::guard('admin')->attempt([
                         'username' => array_get($user, 'value.user_code'),
-                        'password' => array_get($user, 'password')
+                        'password' => array_get($user, 'password'),
                     ]);
 
                     // @phpstan-ignore-next-line
@@ -636,7 +636,7 @@ class WorkflowTestDataSeeder extends Seeder
                         $user = $users[$wfUserKeys[$index - 1]];
                         \Auth::guard('admin')->attempt([
                             'username' => array_get($user, 'value.user_code'),
-                            'password' => array_get($user, 'password')
+                            'password' => array_get($user, 'password'),
                         ]);
 
                         $wfValue = new WorkflowValue();
@@ -660,7 +660,7 @@ class WorkflowTestDataSeeder extends Seeder
         $user = $users['admin'];
         \Auth::guard('admin')->attempt([
             'username' => array_get($user, 'value.user_code'),
-            'password' => array_get($user, 'password')
+            'password' => array_get($user, 'password'),
         ]);
 
         // add for organization work user

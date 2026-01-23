@@ -76,9 +76,9 @@ class FileController extends AdminControllerBase
         return static::downloadFile(
             $uuid,
             [
-            'asBase64' => boolval($request->get('base64', false)),
-            'asApi' => true,
-        ]
+                'asBase64' => boolval($request->get('base64', false)),
+                'asApi' => true,
+            ]
         );
     }
 
@@ -91,9 +91,9 @@ class FileController extends AdminControllerBase
         return static::downloadFile(
             url_join($tableKey, $uuid),
             [
-            'asBase64' => boolval($request->get('base64', false)),
-            'asApi' => true,
-        ]
+                'asBase64' => boolval($request->get('base64', false)),
+                'asApi' => true,
+            ]
         );
     }
 
@@ -336,8 +336,8 @@ class FileController extends AdminControllerBase
             if (isset($custom_value) && isset($custom_column)) {
                 // @phpstan-ignore-next-line
                 $current_val = $custom_value->getValue($custom_column->column_name);
-                if($custom_column->column_type == ColumnType::IMAGE || $custom_column->column_type == ColumnType::FILE) {
-                    if($current_val instanceof \Illuminate\Support\Collection) {
+                if ($custom_column->column_type == ColumnType::IMAGE || $custom_column->column_type == ColumnType::FILE) {
+                    if ($current_val instanceof \Illuminate\Support\Collection) {
                         $current_val = $current_val->toArray();
                     }
                     if (is_array($current_val)) {
@@ -350,7 +350,7 @@ class FileController extends AdminControllerBase
                         $current_val = '';
                     }
                 }
-                if($custom_column->column_type == ColumnType::EDITOR) {
+                if ($custom_column->column_type == ColumnType::EDITOR) {
                     preg_match_all('/\<img(.*?)data-exment-file-uuid="(?<file_uuid>.*?)"(.*?)\>/u', $current_val, $matches);
                     if (!is_nullorempty($matches)) {
                         for ($index = 0; $index < count($matches[0]); $index++) {
@@ -418,14 +418,14 @@ class FileController extends AdminControllerBase
             $contents = DashboardBox::where('dashboard_box_type', DashboardBoxType::SYSTEM)
                 ->where('options->target_system_id', DashboardBoxSystemPage::EDITOR)
                 ->get()
-                ->map(function($rec) {
+                ->map(function ($rec) {
                     return $rec->getOption('content');
                 });
         }
 
-        $file_url = admin_url('tmpfiles/'. array_get($file, 'name'));
-        foreach($contents as $content) {
-            if(strpos($content, $file_url) !== false) {
+        $file_url = admin_url('tmpfiles/' . array_get($file, 'name'));
+        foreach ($contents as $content) {
+            if (strpos($content, $file_url) !== false) {
                 return true;
             }
         }
@@ -471,7 +471,7 @@ class FileController extends AdminControllerBase
 
         // check image file.
         $rules = [
-            'file' => ['required']
+            'file' => ['required'],
         ];
         if ($isImage) {
             $rules['file'][] = new ImageRule();

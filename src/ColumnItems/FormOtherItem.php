@@ -205,7 +205,7 @@ abstract class FormOtherItem implements ItemInterface
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($form_column) = $args + [null];
+        [$form_column] = $args + [null];
         $form_column_name = FormColumnType::getOption(['id' => $form_column->form_column_target_id])['column_name'] ?? null;
 
         if ($className = static::findItemClass($form_column_name)) {

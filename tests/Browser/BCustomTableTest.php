@@ -101,7 +101,7 @@ class BCustomTableTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Update custom table
-        $this->visit(admin_url('table/'. $id . '/edit'))
+        $this->visit(admin_url('table/' . $id . '/edit'))
                 ->seeInField('options[search_enabled]', '1')
                 ->seeInField('options[attachment_flg]', '1')
                 ->seeInField('options[revision_flg]', '1')
@@ -116,17 +116,17 @@ class BCustomTableTest extends ExmentKitTestCase
 
         // Update custom table(checkbox field)
         $data = [
-                'table_view_name' => 'test table checked',
-                'options[search_enabled]' => 0,
-                'options[one_record_flg]' => 1,
-                'options[attachment_flg]' => 0,
-                'options[revision_flg]' => 0,
-                'options[all_user_editable_flg]' => 1,
-                'options[all_user_viewable_flg]' => 1,
-                'options[all_user_accessable_flg]' => 1,
+            'table_view_name' => 'test table checked',
+            'options[search_enabled]' => 0,
+            'options[one_record_flg]' => 1,
+            'options[attachment_flg]' => 0,
+            'options[revision_flg]' => 0,
+            'options[all_user_editable_flg]' => 1,
+            'options[all_user_viewable_flg]' => 1,
+            'options[all_user_accessable_flg]' => 1,
         ];
         // Update custom table
-        $this->visit(admin_url('table/'. $id . '/edit'))
+        $this->visit(admin_url('table/' . $id . '/edit'))
                 ->submitForm('admin-submit', $data)
                 ->seePageIs(admin_url('table'))
         ;

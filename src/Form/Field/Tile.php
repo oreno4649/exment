@@ -20,7 +20,7 @@ class Tile extends Field
     protected $overlay = false;
 
     // @phpstan-ignore-next-line
-    public function __construct($column, $arguments = array())
+    public function __construct($column, $arguments = [])
     {
         parent::__construct($column, $arguments);
 
@@ -102,31 +102,31 @@ class Tile extends Field
         // template search url
         $this->script = <<<EOT
 
-    $(document).on('click.exment_tile', '[data-ajax-link]', {}, function(ev){
-        searchTemplate(null, $(ev.target).data('ajax-link'));
-    });
+                $(document).on('click.exment_tile', '[data-ajax-link]', {}, function(ev){
+                    searchTemplate(null, $(ev.target).data('ajax-link'));
+                });
 
-    $(document).off('click', '#tile-{$this->column} .tile').on('click', '#tile-{$this->column} .tile', {}, function(event){
-        var tile = $(event.target).closest('.tile');
-        var hasActive = tile.hasClass('active');
+                $(document).off('click', '#tile-{$this->column} .tile').on('click', '#tile-{$this->column} .tile', {}, function(event){
+                    var tile = $(event.target).closest('.tile');
+                    var hasActive = tile.hasClass('active');
 
-        // not multipled
-        if(!{$multipled}){
-            var tile_group = $(event.target).closest('.tile-group');
-            tile_group.find('.tile').removeClass('active');
-            tile_group.find('.tile-value').val('');
-        }
+                    // not multipled
+                    if(!{$multipled}){
+                        var tile_group = $(event.target).closest('.tile-group');
+                        tile_group.find('.tile').removeClass('active');
+                        tile_group.find('.tile-value').val('');
+                    }
 
-        if(!hasActive){
-            tile.addClass('active');
-            tile.find('.tile-value').val(tile.attr('data-id'));
-        }else{
-            tile.removeClass('active');
-            tile.find('.tile-value').val('');
-        }
-    });
+                    if(!hasActive){
+                        tile.addClass('active');
+                        tile.find('.tile-value').val(tile.attr('data-id'));
+                    }else{
+                        tile.removeClass('active');
+                        tile.find('.tile-value').val('');
+                    }
+                });
 
-EOT;
+            EOT;
 
         // @phpstan-ignore-next-line
         return parent::render()->with([

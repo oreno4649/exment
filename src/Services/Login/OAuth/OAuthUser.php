@@ -44,10 +44,10 @@ class OAuthUser extends CustomLoginUserBase
         $user->mapping_values['user_code'] = $provider_user->id;
         $user->mapping_values['user_name'] = $provider_user->name ?: $provider_user->email;
 
-        $user->avatar = isset($provider_user->avatar) ? $provider_user->avatar : null;
-        $user->token = isset($provider_user->token) ? $provider_user->token : null;
-        $user->refreshToken = isset($provider_user->refreshToken) ? $provider_user->refreshToken : null;
-        $user->expiresIn = isset($provider_user->expiresIn) ? $provider_user->expiresIn : null;
+        $user->avatar = $provider_user->avatar ?? null;
+        $user->token = $provider_user->token ?? null;
+        $user->refreshToken = $provider_user->refreshToken ?? null;
+        $user->expiresIn = $provider_user->expiresIn ?? null;
 
         $user->id = $provider_user->id;
 

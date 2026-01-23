@@ -103,7 +103,7 @@ class CCustomOperationTest extends ExmentKitTestCase
                 'view_column_target' => $column_date->id . '?table_id=' . $target_table->id,
                 'update_value_text' => '2021-01-01',
                 '_remove_' => 0,
-            ]]
+            ]],
         ]);
 
         $this->seeIsSelected('operation_type[]', CustomOperationType::BUTTON);
@@ -134,7 +134,7 @@ class CCustomOperationTest extends ExmentKitTestCase
         $custom_value = $target_table->getValueModel()->where('value->user', '<>', \Exment::user()->base_user->id)->first();
         $target_id = $custom_value->id;
         $this->post(admin_url("data/$target_table_name/$target_id/operationClick"), [
-            'suuid' => array_get($operation, 'suuid')
+            'suuid' => array_get($operation, 'suuid'),
         ]);
         $this->assertPostResponse($this->response, admin_url("data/$target_table_name/$target_id/operationClick"));
 
@@ -183,7 +183,7 @@ class CCustomOperationTest extends ExmentKitTestCase
                 'condition_key' => FilterOption::NUMBER_GT,
                 'condition_value' => 30000,
                 '_remove_' => 0,
-            ]]
+            ]],
         ]);
 
         $this->seeIsSelected('operation_type[]', CustomOperationType::BULK_UPDATE);
@@ -260,7 +260,7 @@ class CCustomOperationTest extends ExmentKitTestCase
 
         $this->post(admin_url("data/$target_table_name/operationClick"), [
             'suuid' => array_get($operation, 'suuid'),
-            'id' => implode(',', $ids)
+            'id' => implode(',', $ids),
         ]);
         $this->assertPostResponse($this->response, admin_url("data/$target_table_name/operationClick"));
 
@@ -278,7 +278,7 @@ class CCustomOperationTest extends ExmentKitTestCase
 
         $this->post(admin_url("data/$target_table_name/operationClick"), [
             'suuid' => array_get($operation, 'suuid'),
-            'id' => implode(',', $err_ids)
+            'id' => implode(',', $err_ids),
         ]);
         // @phpstan-ignore-next-line
         $this->assertFalse($this->response->getData()->result);
@@ -288,7 +288,7 @@ class CCustomOperationTest extends ExmentKitTestCase
 
         $this->post(admin_url("data/$target_table_name/operationClick"), [
             'suuid' => array_get($operation, 'suuid'),
-            'id' => implode(',', $ids)
+            'id' => implode(',', $ids),
         ]);
         // @phpstan-ignore-next-line
         $this->assertFalse($this->response->getData()->result);
@@ -326,7 +326,7 @@ class CCustomOperationTest extends ExmentKitTestCase
                 'condition_key' => FilterOption::SELECT_EXISTS,
                 'condition_value' => [TestDefine::TESTDATA_ROLEGROUP_GENERAL],
                 '_remove_' => 0,
-            ]]
+            ]],
         ]);
 
         foreach ($operation->custom_operation_columns as $index => $custom_operation_column) {
@@ -434,7 +434,7 @@ class CCustomOperationTest extends ExmentKitTestCase
                 'condition_key' => FilterOption::EQ,
                 'condition_value' => 0,
                 '_remove_' => 0,
-            ]]
+            ]],
         ]);
 
         foreach ($operation->custom_operation_columns as $index => $custom_operation_column) {
@@ -532,7 +532,7 @@ class CCustomOperationTest extends ExmentKitTestCase
                 'condition_target' => $filter_1->id,
                 'condition_key' => FilterOption::DAY_LAST_YEAR,
                 '_remove_' => 0,
-            ]]
+            ]],
         ]);
 
         foreach ($operation->custom_operation_columns as $index => $custom_operation_column) {
@@ -664,7 +664,7 @@ class CCustomOperationTest extends ExmentKitTestCase
                 'view_column_target' => $column_select_multi->id . '?table_id=' . $target_table->id,
                 'update_value_text' => '',
                 '_remove_' => 0,
-            ]]
+            ]],
         ]);
 
         $this->seeIsSelected('operation_type[]', CustomOperationType::BUTTON);
@@ -682,7 +682,7 @@ class CCustomOperationTest extends ExmentKitTestCase
             );
             if ($index == 0) {
                 $user_ids = CustomTable::getEloquent(SystemTableName::USER)->getValueModel()->pluck('id');
-                foreach($user_ids as $user_id) {
+                foreach ($user_ids as $user_id) {
                     $this->dontSeeIsSelected("custom_operation_columns[$row_id][update_value_text]", $user_id);
                 }
             } elseif ($index == 4 || $index == 7) {
@@ -696,8 +696,7 @@ class CCustomOperationTest extends ExmentKitTestCase
             } else {
                 $this->seeOuterElement("input.update_value_text.rowno-$row_id", '');
             }
-            if (ColumnType::isOperationEnableSystem($custom_column->column_type))
-            {
+            if (ColumnType::isOperationEnableSystem($custom_column->column_type)) {
                 $this->exactSelectOptions("select[name='custom_operation_columns[$row_id][operation_update_type]']", OperationUpdateType::transKeyArray('custom_operation.operation_update_type_options'));
             } else {
                 $this->exactSelectOptions("select[name='custom_operation_columns[$row_id][operation_update_type]']", [OperationUpdateType::DEFAULT => exmtrans('custom_operation.operation_update_type_options.' . OperationUpdateType::DEFAULT)]);
@@ -715,7 +714,7 @@ class CCustomOperationTest extends ExmentKitTestCase
         $custom_value = $target_table->getValueModel()->where('value->user', '<>', \Exment::user()->base_user->id)->first();
         $target_id = $custom_value->id;
         $this->post(admin_url("data/$target_table_name/$target_id/operationClick"), [
-            'suuid' => array_get($operation, 'suuid')
+            'suuid' => array_get($operation, 'suuid'),
         ]);
         $this->assertPostResponse($this->response, admin_url("data/$target_table_name/$target_id/operationClick"));
 

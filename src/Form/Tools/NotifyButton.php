@@ -41,17 +41,17 @@ class NotifyButton
 
         return <<<EOT
 
-        $('#menu_button_$suuid').off('click').on('click', function(){
-            Exment.CommonEvent.ShowSwal("$url", {
-                title: "$label",
-                confirm:"$confirm",
-                cancel:"$cancel",
-                data: {
-                    uuid:"$suuid"
-                }
-            });
-        });
-EOT;
+                    $('#menu_button_$suuid').off('click').on('click', function(){
+                        Exment.CommonEvent.ShowSwal("$url", {
+                            title: "$label",
+                            confirm:"$confirm",
+                            cancel:"$cancel",
+                            data: {
+                                uuid:"$suuid"
+                            }
+                        });
+                    });
+            EOT;
     }
 
     // @phpstan-ignore-next-line
@@ -75,7 +75,7 @@ EOT;
             'label' => $label ?? null,
             'button_class' => 'btn-info',
             'icon' => 'fa-envelope-o',
-            'url' => $url
+            'url' => $url,
         ]);
     }
 

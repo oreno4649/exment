@@ -48,7 +48,7 @@ class TemplateExporter
         $tmpfilename = make_uuid();
 
         $zip = new ZipArchive();
-        $zipfilename = short_uuid().'.zip';
+        $zipfilename = short_uuid() . '.zip';
         $zipfillpath = path_join($tmpFulldir, $zipfilename);
         if ($zip->open($zipfillpath, ZipArchive::CREATE) !== true) {
             //TODO:error
@@ -81,7 +81,7 @@ class TemplateExporter
             File::deleteDirectory($thumbnail_dirpath);
         }
         // create response
-        $filename = ($options['zip_name'] ?? $template_name).'.zip';
+        $filename = ($options['zip_name'] ?? $template_name) . '.zip';
         $response = response()->download($zipfillpath, $filename)->deleteFileAfterSend(true);
 
         return $response;
@@ -99,7 +99,7 @@ class TemplateExporter
             $config['template_name'] = $template_name;
 
             // get version
-            list($latest, $current) = \Exment::getExmentVersion();
+            [$latest, $current] = \Exment::getExmentVersion();
             if (isset($current)) {
                 $config['version'] = $current;
             }

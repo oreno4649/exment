@@ -45,7 +45,7 @@ class Xlsx extends SpOut
     // @phpstan-ignore-next-line
     protected function _getData($request, $callback)
     {
-        list($path, $extension, $originalName, $file) = $this->getFileInfo($request);
+        [$path, $extension, $originalName, $file] = $this->getFileInfo($request);
 
         $reader = $this->createReader();
         $reader->open($path);

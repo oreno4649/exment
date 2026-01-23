@@ -207,7 +207,7 @@ class FileColumnProvider extends ProviderBase
 
         // Append row no
         $errors = collect($errors)->map(function ($error) use ($line_no) {
-            return sprintf(exmtrans('custom_value.import.import_error_format'), ($line_no+1), $error);
+            return sprintf(exmtrans('custom_value.import.import_error_format'), ($line_no + 1), $error);
         })->toArray();
 
         if (!is_nullorempty($errors)) {

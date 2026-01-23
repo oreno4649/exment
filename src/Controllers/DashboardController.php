@@ -106,7 +106,7 @@ class DashboardController extends AdminControllerBase
 
         //set row
         for ($i = 1; $i <= intval(config('exment.dashboard_rows', 4)); $i++) {
-            $row_name = 'row'.$i;
+            $row_name = 'row' . $i;
             $row_column = intval($this->dashboard->getOption($row_name));
             if ($row_column > 0) {
                 $this->setDashboardBox($content, $row_column, $i);
@@ -120,119 +120,119 @@ class DashboardController extends AdminControllerBase
         $error = exmtrans('error.header');
 
         $script = <<<EOT
-        $(function () {
-            // get suuid inputs
-            var suuids = $('[data-suuid]');
-            // add 'row-eq-height' class
-            suuids.parents('.row').addClass('row-eq-height row-dashboard');
-            suuids.each(function(index, element){
-                var suuid = $(element).data('suuid');
-                loadDashboardBox(suuid);
-            });
+                    $(function () {
+                        // get suuid inputs
+                        var suuids = $('[data-suuid]');
+                        // add 'row-eq-height' class
+                        suuids.parents('.row').addClass('row-eq-height row-dashboard');
+                        suuids.each(function(index, element){
+                            var suuid = $(element).data('suuid');
+                            loadDashboardBox(suuid);
+                        });
 
-            ///// delete click event
-            $('[data-exment-widget="delete"]').off('click').on('click', function(ev){
-                // get suuid
-                var suuid = $(ev.target).closest('[data-suuid]').data('suuid');
-                var url = admin_url('dashboardbox/delete/' + suuid);
-                Exment.CommonEvent.ShowSwal(url, {
-                    title: "$delete_confirm",
-                    confirm:"$confirm",
-                    method: 'delete',
-                    cancel:"$cancel",
-                });
-            });
+                        ///// delete click event
+                        $('[data-exment-widget="delete"]').off('click').on('click', function(ev){
+                            // get suuid
+                            var suuid = $(ev.target).closest('[data-suuid]').data('suuid');
+                            var url = admin_url('dashboardbox/delete/' + suuid);
+                            Exment.CommonEvent.ShowSwal(url, {
+                                title: "$delete_confirm",
+                                confirm:"$confirm",
+                                method: 'delete',
+                                cancel:"$cancel",
+                            });
+                        });
 
-            ///// reload click event
-            $('[data-exment-widget="reload"]').off('click').on('click', function(ev){
-                // get suuid
-                var target = $(ev.target).closest('[data-suuid]');
-                var suuid = target.data('suuid');
-                loadDashboardBox(suuid);
-            });
+                        ///// reload click event
+                        $('[data-exment-widget="reload"]').off('click').on('click', function(ev){
+                            // get suuid
+                            var target = $(ev.target).closest('[data-suuid]');
+                            var suuid = target.data('suuid');
+                            loadDashboardBox(suuid);
+                        });
 
-            ///// click dashboard link event
-            $(document).off('click.exment_dashboard', '[data-ajax-link]').on('click.exment_dashboard', '[data-ajax-link]', [], function(ev){
-                // get link
-                var url = $(ev.target).closest('[data-ajax-link]').data('ajax-link');
-                var suuid = $(ev.target).closest('[data-suuid]').data('suuid');
-                loadDashboardBox(suuid, url);
-            });
-        });
+                        ///// click dashboard link event
+                        $(document).off('click.exment_dashboard', '[data-ajax-link]').on('click.exment_dashboard', '[data-ajax-link]', [], function(ev){
+                            // get link
+                            var url = $(ev.target).closest('[data-ajax-link]').data('ajax-link');
+                            var suuid = $(ev.target).closest('[data-suuid]').data('suuid');
+                            loadDashboardBox(suuid, url);
+                        });
+                    });
 
-        function loadDashboardBox(suuid, url){
-            if(!hasValue(suuid)){
-                return true;
-            }
-            if(!hasValue(url)){
-                url = admin_url('dashboardbox/html/' + suuid);
-            }
-            var target = $('[data-suuid="' + suuid + '"]');
-            if(target.hasClass('loading')){
-                return true;
-            }
-            target.addClass('loading');
+                    function loadDashboardBox(suuid, url){
+                        if(!hasValue(suuid)){
+                            return true;
+                        }
+                        if(!hasValue(url)){
+                            url = admin_url('dashboardbox/html/' + suuid);
+                        }
+                        var target = $('[data-suuid="' + suuid + '"]');
+                        if(target.hasClass('loading')){
+                            return true;
+                        }
+                        target.addClass('loading');
 
-            // set height
-            var inner_body = target.find('.box-body-inner-body');
-            var height = inner_body.height();
-            inner_body.css('height', height);
+                        // set height
+                        var inner_body = target.find('.box-body-inner-body');
+                        var height = inner_body.height();
+                        inner_body.css('height', height);
 
-            target.find('.box-body-inneritem').html('');
-            target.find('.overlay').show();
+                        target.find('.box-body-inneritem').html('');
+                        target.find('.overlay').show();
 
-            $.ajax({
-                url: url,
-                type: "GET",
-                context: {
-                    'inner_body': inner_body,
-                    'suuid': suuid,
-                },
-                success: function (data) {
-                    var suuid = this.suuid;
+                        $.ajax({
+                            url: url,
+                            type: "GET",
+                            context: {
+                                'inner_body': inner_body,
+                                'suuid': suuid,
+                            },
+                            success: function (data) {
+                                var suuid = this.suuid;
 
-                    // get target object
-                    var target = $('[data-suuid="' + suuid + '"]');
+                                // get target object
+                                var target = $('[data-suuid="' + suuid + '"]');
 
-                    // if set header
-                    if(data.header){
-                        target.find('.box-body .box-body-inner-header').html(data.header);
+                                // if set header
+                                if(data.header){
+                                    target.find('.box-body .box-body-inner-header').html(data.header);
+                                }
+                                // if set body
+                                if(data.body){
+                                    target.find('.box-body .box-body-inner-body').html(data.body);
+                                }
+                                // if set footer
+                                if(data.footer){
+                                    target.find('.box-body .box-body-inner-footer').html(data.footer);
+                                }
+
+                                // remove height
+                                this.inner_body.css('height', '');
+
+                                target.find('.overlay').hide();
+
+                                // fire plugin event
+                                target.trigger('exment:dashboard_loaded');
+
+                                target.removeClass('loading');
+
+                                Exment.CommonEvent.tableHoverLink();
+                            },
+                            error: function () {
+                                var suuid = this.suuid;
+                                // get target object
+                                var target = $('[data-suuid="' + suuid + '"]');
+
+                                target.find('.overlay').hide();
+                                target.removeClass('loading');
+
+                                // show error
+                                target.find('.box-body .box-body-inner-body').html('$error');
+                            },
+                        });
                     }
-                    // if set body
-                    if(data.body){
-                        target.find('.box-body .box-body-inner-body').html(data.body);
-                    }
-                    // if set footer
-                    if(data.footer){
-                        target.find('.box-body .box-body-inner-footer').html(data.footer);
-                    }
-
-                    // remove height
-                    this.inner_body.css('height', '');
-
-                    target.find('.overlay').hide();
-
-                    // fire plugin event
-                    target.trigger('exment:dashboard_loaded');
-
-                    target.removeClass('loading');
-
-                    Exment.CommonEvent.tableHoverLink();
-                },
-                error: function () {
-                    var suuid = this.suuid;
-                    // get target object
-                    var target = $('[data-suuid="' + suuid + '"]');
-
-                    target.find('.overlay').hide();
-                    target.removeClass('loading');
-
-                    // show error
-                    target.find('.box-body .box-body-inner-body').html('$error');
-                },
-            });
-        }
-EOT;
+            EOT;
         Admin::script($script);
         return $content;
     }
@@ -258,7 +258,7 @@ EOT;
             $form->text('dashboard_name', exmtrans("dashboard.dashboard_name"))
                 ->required()
                 ->default(short_uuid())
-                ->rules("max:30|unique:".Dashboard::getTableName()."|regex:/".Define::RULES_REGEX_ALPHANUMERIC_UNDER_HYPHEN."/")
+                ->rules("max:30|unique:" . Dashboard::getTableName() . "|regex:/" . Define::RULES_REGEX_ALPHANUMERIC_UNDER_HYPHEN . "/")
                 ->help(sprintf(exmtrans('common.help.max_length'), 30) . exmtrans('common.help_code'));
         } else {
             $form->display('dashboard_name', exmtrans("dashboard.dashboard_name"));
@@ -276,7 +276,7 @@ EOT;
                 ->disableClear()
                 ->default(DashboardType::SYSTEM);
         } else {
-            $form->internal('dashboard_type')->default($dashboard_type?? DashboardType::USER);
+            $form->internal('dashboard_type')->default($dashboard_type ?? DashboardType::USER);
         }
 
         $form->switchbool('default_flg', exmtrans("common.default"))->default(false);
@@ -286,7 +286,7 @@ EOT;
             for ($row_count = 1; $row_count <= intval(config('exment.dashboard_rows', 4)); $row_count++) {
                 $row = [];
                 for ($i = 1; $i <= 4; $i++) {
-                    $row[$i] = $i.exmtrans('dashboard.row_optionsX');
+                    $row[$i] = $i . exmtrans('dashboard.row_optionsX');
                 }
                 if ($row_count > 1) {
                     $row[0] = exmtrans('dashboard.row_options0');
@@ -305,7 +305,7 @@ EOT;
                         break;
                 }
 
-                $form->radio('row'.$row_count, sprintf(exmtrans("dashboard.row"), $row_count))
+                $form->radio('row' . $row_count, sprintf(exmtrans("dashboard.row"), $row_count))
                     ->options($row)
                     ->help(sprintf(exmtrans("dashboard.description_row"), $row_count))
                     ->required()
@@ -325,7 +325,7 @@ EOT;
             }
 
             // addhome button
-            $tools->append('<a href="'.admin_url('').'" class="btn btn-sm btn-default"  style="margin-right: 5px"><i class="fa fa-home"></i>&nbsp;'. exmtrans('common.home').'</a>');
+            $tools->append('<a href="' . admin_url('') . '" class="btn btn-sm btn-default"  style="margin-right: 5px"><i class="fa fa-home"></i>&nbsp;' . exmtrans('common.home') . '</a>');
         });
 
         $form->saved(function ($form) {
@@ -391,14 +391,14 @@ EOT;
                 $icons = [['widget' => 'reload', 'icon' => 'fa-refresh', 'tooltip' => trans('admin.refresh')]];
                 // check role.
                 if ($has_role) {
-                    $icons = array_prepend($icons, ['link' => admin_url('dashboardbox/'.$id.'/edit'), 'icon' => 'fa-cog', 'tooltip' => trans('admin.edit')]);
+                    $icons = array_prepend($icons, ['link' => admin_url('dashboardbox/' . $id . '/edit'), 'icon' => 'fa-cog', 'tooltip' => trans('admin.edit')]);
                     $icons[] = ['widget' => 'delete', 'icon' => 'fa-trash', 'tooltip' => trans('admin.delete')];
                 }
 
                 // set column. use grid system
                 $grids = [
                     'xs' => 12,
-                    'md' => 12 / $row_column_count
+                    'md' => 12 / $row_column_count,
                 ];
 
                 $row->column($grids, view('exment::dashboard.box', [
@@ -428,8 +428,8 @@ EOT;
 
         $versionCheck = \Exment::checkLatestVersion();
         if ($versionCheck === SystemVersion::HAS_NEXT) {
-            list($latest, $current) = \Exment::getExmentVersion();
-            admin_info(exmtrans("system.version_old") . '(' . $latest . ')', '<a href="'. admin_url('system').'">'.exmtrans("system.update_guide").'</a>');
+            [$latest, $current] = \Exment::getExmentVersion();
+            admin_info(exmtrans("system.version_old") . '(' . $latest . ')', '<a href="' . admin_url('system') . '">' . exmtrans("system.update_guide") . '</a>');
         }
     }
 
@@ -446,7 +446,7 @@ EOT;
         return getAjaxResponse([
             'body'  => $form->render(),
             'script' => $form->getScript(),
-            'title' => exmtrans('common.shared')
+            'title' => exmtrans('common.shared'),
         ]);
     }
 

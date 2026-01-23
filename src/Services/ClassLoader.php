@@ -28,7 +28,7 @@ class ClassLoader
      */
     public function register()
     {
-        spl_autoload_register(array($this, 'loadClass'));
+        spl_autoload_register([$this, 'loadClass']);
     }
 
     /**
@@ -98,7 +98,7 @@ class ClassLoader
         $defaultClassPath = $class . '.php';
 
         // removing base namespace class
-        $removingClassPath = path_ltrim(str_replace($baseNamespace, '', $class), '')  . '.php';
+        $removingClassPath = path_ltrim(str_replace($baseNamespace, '', $class), '') . '.php';
 
         foreach ([$defaultClassPath, $removingClassPath] as $path) {
             $file = path_join_os($dir, $path);

@@ -286,7 +286,7 @@ class SearchService
 
         if (!$relationTable) {
             $this->query->whereNotMatch();
-        } elseif ((int)$relationTable->searchType === SearchType::MANY_TO_MANY) {
+        } elseif ((int) $relationTable->searchType === SearchType::MANY_TO_MANY) {
             throw new \Exception('Many to many relation not support order by.');
         }
         // set relation query using relation type class.
@@ -401,7 +401,7 @@ class SearchService
             // set select column. And add "as".
             $this->query->selectRaw("$wrap_column AS $sqlAsName");
 
-            // set group by. 
+            // set group by.
             $this->query->groupByRaw($sqlAsName);
 
             // case sqlasname
@@ -598,7 +598,7 @@ class SearchService
         $relationTable = null;
 
         // get condition params
-        list($order_table_id, $order_column_id, $this_table_id, $this_column_id) = $this->getConditionParams($column);
+        [$order_table_id, $order_column_id, $this_table_id, $this_column_id] = $this->getConditionParams($column);
         $orderCustomTable = CustomTable::getEloquent($order_table_id);
 
         // if not match this table and order table, setJoin relation table.
@@ -608,7 +608,7 @@ class SearchService
 
             if (!$relationTable) {
                 $this->query->whereNotMatch();
-            } elseif ($asOrderBy && (int)$relationTable->searchType === SearchType::MANY_TO_MANY) {
+            } elseif ($asOrderBy && (int) $relationTable->searchType === SearchType::MANY_TO_MANY) {
                 throw new \Exception('Many to many relation not support order by.');
             }
             // set relation query using relation type class.
@@ -702,7 +702,7 @@ class SearchService
 
         ///// get relationTables filtering info
         // get condition params
-        list($order_table_id, $order_column_id, $this_table_id, $this_column_id) = $this->getConditionParams($filterObj);
+        [$order_table_id, $order_column_id, $this_table_id, $this_column_id] = $this->getConditionParams($filterObj);
         // get search type
         // If $this_column_id is not "parent_id", set searchtype is select_table
         if (!isMatchString($this_column_id, Define::PARENT_ID_NAME)) {
@@ -787,10 +787,10 @@ class SearchService
     protected function isJoinedTable($relationTable)
     {
         return collect($this->joinedTables)->contains(function ($joinedTable) use ($relationTable) {
-            return isMatchString($joinedTable->table->id, $relationTable->table->id) &&
-            isMatchString($joinedTable->base_table->id, $relationTable->base_table->id) &&
-            isMatchString($joinedTable->searchType, $relationTable->searchType) &&
-            isMatchString($joinedTable->selectTablePivotColumn, $relationTable->selectTablePivotColumn);
+            return isMatchString($joinedTable->table->id, $relationTable->table->id)
+            && isMatchString($joinedTable->base_table->id, $relationTable->base_table->id)
+            && isMatchString($joinedTable->searchType, $relationTable->searchType)
+            && isMatchString($joinedTable->selectTablePivotColumn, $relationTable->selectTablePivotColumn);
         });
     }
 

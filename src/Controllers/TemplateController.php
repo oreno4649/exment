@@ -114,7 +114,7 @@ class TemplateController extends AdminControllerBase
                     'title' => array_get($a, 'template_view_name'),
                     'description' => array_get($a, 'description'),
                     'author' => array_get($a, 'author'),
-                    'thumbnail' => 'data:image/png;base64,'.$thumbnail_file,
+                    'thumbnail' => 'data:image/png;base64,' . $thumbnail_file,
                     'delete_url' => $delete_url,
                 ];
             }
@@ -179,7 +179,7 @@ class TemplateController extends AdminControllerBase
         $form->text('template_name', exmtrans('template.template_name'))
             ->required()
             ->help(exmtrans('common.help_code'))
-            ->rules(["max:64", 'regex:/'.Define::RULES_REGEX_ALPHANUMERIC_UNDER_HYPHEN.'/']);
+            ->rules(["max:64", 'regex:/' . Define::RULES_REGEX_ALPHANUMERIC_UNDER_HYPHEN . '/']);
 
         $form->text('template_view_name', exmtrans('template.template_view_name'))
             ->required()
@@ -192,7 +192,7 @@ class TemplateController extends AdminControllerBase
         $fileOption = Define::FILE_OPTION();
         $form->image('thumbnail', exmtrans('template.thumbnail'))
             ->removable()
-            ->help(exmtrans('template.help.thumbnail'). exmtrans('common.separate_word') . array_get($fileOption, 'maxFileSizeHelp'))
+            ->help(exmtrans('template.help.thumbnail') . exmtrans('common.separate_word') . array_get($fileOption, 'maxFileSizeHelp'))
             ->rules('nullable|file|mimes:jpeg,gif,png')
             ->options($fileOption);
 

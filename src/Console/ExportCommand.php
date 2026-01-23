@@ -106,7 +106,7 @@ class ExportCommand extends Command
     {
         try {
             // get parameters
-            list($custom_table, $options) = $this->getParameters();
+            [$custom_table, $options] = $this->getParameters();
             $classname = getModelName($custom_table);
 
             $grid = new Grid(new $classname());

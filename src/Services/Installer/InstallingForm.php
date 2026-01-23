@@ -22,7 +22,7 @@ class InstallingForm
     {
         try {
             $inputs = [
-                'APP_DEBUG' => boolval(request()->get('APP_DEBUG')) ? 'true' : 'false'
+                'APP_DEBUG' => boolval(request()->get('APP_DEBUG')) ? 'true' : 'false',
             ];
             $this->setEnv($inputs);
             InstallService::forgetInputParams();

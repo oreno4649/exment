@@ -52,9 +52,9 @@ class NotifyTest extends UnitTestBase
             'body' => $body,
             'to' => $to,
         ], function ($notifiable) use ($to, $subject, $body) {
-            return ($notifiable->getTo() == $to) &&
-                ($notifiable->getSubject() == $subject) &&
-                ($notifiable->getBody() == $body);
+            return ($notifiable->getTo() == $to)
+                && ($notifiable->getSubject() == $subject)
+                && ($notifiable->getBody() == $body);
         });
     }
 
@@ -74,9 +74,9 @@ class NotifyTest extends UnitTestBase
             'mail_template' => $mail_template,
             'to' => $to,
         ], function ($notifiable) use ($to, $subject, $body) {
-            return ($notifiable->getTo() == $to) &&
-                ($notifiable->getSubject() == $subject) &&
-                ($notifiable->getBody() == $body);
+            return ($notifiable->getTo() == $to)
+                && ($notifiable->getSubject() == $subject)
+                && ($notifiable->getBody() == $body);
         });
     }
 
@@ -99,9 +99,9 @@ class NotifyTest extends UnitTestBase
                 'prms2' => 'BBB',
             ],
         ], function ($notifiable) use ($to, $subject, $body) {
-            return ($notifiable->getTo() == $to) &&
-                ($notifiable->getSubject() == $subject) &&
-                ($notifiable->getBody() == $body);
+            return ($notifiable->getTo() == $to)
+                && ($notifiable->getSubject() == $subject)
+                && ($notifiable->getBody() == $body);
         });
     }
 
@@ -119,9 +119,9 @@ class NotifyTest extends UnitTestBase
             'body' => $body,
             'to' => $to,
         ], function ($notifiable) use ($to, $subject, $body) {
-            return ($notifiable->getTo() == arrayToString($to)) &&
-                ($notifiable->getSubject() == $subject) &&
-                ($notifiable->getBody() == $body);
+            return ($notifiable->getTo() == arrayToString($to))
+                && ($notifiable->getSubject() == $subject)
+                && ($notifiable->getBody() == $body);
         });
     }
 
@@ -139,9 +139,10 @@ class NotifyTest extends UnitTestBase
             'body' => $body,
             'to' => $to,
         ], function ($notifiable) use ($to, $subject, $body) {
-            return ($notifiable->getTo() == arrayToString(NotifyService::getAddresses($to))) &&
-                ($notifiable->getSubject() == $subject) &&
-                ($notifiable->getBody() == $body);
+            // @phpstan-ignore-next-line
+            return ($notifiable->getTo() == arrayToString(NotifyService::getAddresses($to)))
+                && ($notifiable->getSubject() == $subject)
+                && ($notifiable->getBody() == $body);
         });
     }
 
@@ -159,9 +160,9 @@ class NotifyTest extends UnitTestBase
             'body' => $body,
             'to' => $to,
         ], function ($notifiable) use ($to, $subject, $body) {
-            return ($notifiable->getTo() == arrayToString(NotifyService::getAddresses($to))) &&
-                ($notifiable->getSubject() == $subject) &&
-                ($notifiable->getBody() == $body);
+            return ($notifiable->getTo() == arrayToString(NotifyService::getAddresses($to)))
+                && ($notifiable->getSubject() == $subject)
+                && ($notifiable->getBody() == $body);
         });
     }
 
@@ -179,9 +180,10 @@ class NotifyTest extends UnitTestBase
             'body' => $body,
             'to' => $to,
         ], function ($notifiable) use ($to, $subject, $body) {
-            return ($notifiable->getTo() == arrayToString(NotifyService::getAddresses($to))) &&
-                ($notifiable->getSubject() == $subject) &&
-                ($notifiable->getBody() == $body);
+            // @phpstan-ignore-next-line
+            return ($notifiable->getTo() == arrayToString(NotifyService::getAddresses($to)))
+                && ($notifiable->getSubject() == $subject)
+                && ($notifiable->getBody() == $body);
         });
     }
 
@@ -199,9 +201,9 @@ class NotifyTest extends UnitTestBase
             'body' => $body,
             'to' => $to,
         ], function ($notifiable) use ($to, $subject, $body) {
-            return ($notifiable->getTo() == arrayToString(NotifyService::getAddresses($to))) &&
-                ($notifiable->getSubject() == $subject) &&
-                ($notifiable->getBody() == $body);
+            return ($notifiable->getTo() == arrayToString(NotifyService::getAddresses($to)))
+                && ($notifiable->getSubject() == $subject)
+                && ($notifiable->getBody() == $body);
         });
     }
 
@@ -223,9 +225,9 @@ class NotifyTest extends UnitTestBase
             'to' => $to,
             'disableHistoryBody' => true,
         ], function ($notifiable) use ($to, $subject, $body) {
-            return ($notifiable->getTo() == arrayToString(NotifyService::getAddresses($to))) &&
-                ($notifiable->getSubject() == $subject) &&
-                ($notifiable->getBody() == $body);
+            return ($notifiable->getTo() == arrayToString(NotifyService::getAddresses($to)))
+                && ($notifiable->getSubject() == $subject)
+                && ($notifiable->getBody() == $body);
         });
     }
 
@@ -255,9 +257,9 @@ class NotifyTest extends UnitTestBase
             'to' => $to,
             'attach_files' => [$file],
         ], function ($notifiable) use ($to, $subject, $body, $file) {
-            if (($notifiable->getTo() != $to) ||
-                ($notifiable->getSubject() != $subject) ||
-                ($notifiable->getBody() != $body)) {
+            if (($notifiable->getTo() != $to)
+                || ($notifiable->getSubject() != $subject)
+                || ($notifiable->getBody() != $body)) {
                 return false;
             };
 
@@ -287,9 +289,9 @@ class NotifyTest extends UnitTestBase
             $notifiable,
             Jobs\SlackSendJob::class,
             function ($notification, $channels, $notifiable) use ($webhook_url, $subject, $body) {
-                return ($notifiable->getWebhookUrl() == $webhook_url) &&
-                    ($notifiable->getSubject() == $subject) &&
-                    ($notifiable->getBody() == $body);
+                return ($notifiable->getWebhookUrl() == $webhook_url)
+                    && ($notifiable->getSubject() == $subject)
+                    && ($notifiable->getBody() == $body);
             }
         );
     }
@@ -316,9 +318,9 @@ class NotifyTest extends UnitTestBase
             $notifiable,
             Jobs\MicrosoftTeamsJob::class,
             function ($notification, $channels, $notifiable) use ($webhook_url, $subject, $body) {
-                return ($notifiable->getWebhookUrl() == $webhook_url) &&
-                    ($notifiable->getSubject() == $subject) &&
-                    ($notifiable->getBody() == $body);
+                return ($notifiable->getWebhookUrl() == $webhook_url)
+                    && ($notifiable->getSubject() == $subject)
+                    && ($notifiable->getBody() == $body);
             }
         );
     }
@@ -436,9 +438,9 @@ class NotifyTest extends UnitTestBase
             $notifiable,
             Jobs\MailSendJob::class,
             function ($notification, $channels, $notifiable) {
-                return ($notifiable->getTo() == TestDefine::TESTDATA_DUMMY_EMAIL) &&
-                    ($notifiable->getSubject() == 'Exment TestMail') &&
-                    ($notifiable->getBody() == 'Exment TestMail');
+                return ($notifiable->getTo() == TestDefine::TESTDATA_DUMMY_EMAIL)
+                    && ($notifiable->getSubject() == 'Exment TestMail')
+                    && ($notifiable->getBody() == 'Exment TestMail');
             }
         );
     }

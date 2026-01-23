@@ -11,7 +11,7 @@ class BackupDiskService extends DiskServiceBase
     public function __construct(...$args)
     {
         $now = date('YmdHis');
-        $fileName = isset($args[0]) ? $args[0] : $now;
+        $fileName = $args[0] ?? $now;
 
         $this->diskItem = new DiskServiceItem(Storage::disk(Define::DISKNAME_BACKUP_SYNC), "$fileName.zip", 'list');
         $this->tmpDiskItem = new DiskServiceItem(Storage::disk(Define::DISKNAME_ADMIN_TMP), "$now.zip", $now);

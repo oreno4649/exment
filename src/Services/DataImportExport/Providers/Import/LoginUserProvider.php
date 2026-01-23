@@ -129,12 +129,12 @@ class LoginUserProvider extends ProviderBase
         $validator = \Validator::make($data, [
             // get validate password.
             // not check history.
-            'password' => \Exment::get_password_rule(true, null, ['confirmed' => false])
+            'password' => \Exment::get_password_rule(true, null, ['confirmed' => false]),
         ]);
         if ($validator->fails()) {
             // create error message
             foreach ($validator->getMessages() as $message) {
-                $errors[] = sprintf(exmtrans('custom_value.import.import_error_format'), ($line_no+1), implode(',', $message));
+                $errors[] = sprintf(exmtrans('custom_value.import.import_error_format'), ($line_no + 1), implode(',', $message));
             }
             // return $errors;
         }

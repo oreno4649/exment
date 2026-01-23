@@ -23,9 +23,7 @@ class WorkflowStatus extends ModelBase
 
 
     // @phpstan-ignore-next-line
-    public function deletingChildren()
-    {
-    }
+    public function deletingChildren() {}
 
     protected static function boot()
     {

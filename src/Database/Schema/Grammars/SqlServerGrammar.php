@@ -165,9 +165,9 @@ class SqlServerGrammar extends BaseGrammar implements GrammarInterface
     // @phpstan-ignore-next-line
     public function compileDropDefaultConstraint(Blueprint $blueprint, Fluent $command)
     {
-        $columns = "'".implode("','", $command->columns)."'";
+        $columns = "'" . implode("','", $command->columns) . "'";
 
-        $tableName = $this->getTablePrefix().$blueprint->getTable();
+        $tableName = $this->getTablePrefix() . $blueprint->getTable();
 
         $sql = "DECLARE @sql NVARCHAR(MAX) = '';";
         $sql .= "SELECT @sql += 'ALTER TABLE [dbo].[{$tableName}] DROP CONSTRAINT ' + OBJECT_NAME([default_object_id]) + ';' ";

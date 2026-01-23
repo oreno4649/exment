@@ -24,7 +24,5 @@ class PluginImportBase
     }
 
     // @phpstan-ignore-next-line
-    public function execute()
-    {
-    }
+    public function execute() {}
 }

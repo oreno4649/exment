@@ -131,10 +131,10 @@ trait ExtendedBuilderTrait
         // is suport where in multiple ----------------------------------------------------
         if ($this->_getQueryExment()->grammar->isSupportWhereInMultiple()) {
             $columns = $this->_getQueryExment()->grammar->wrapWhereInMultiple($columns);
-            list($bindStrings, $binds) = $this->_getQueryExment()->grammar->bindValueWhereInMultiple($values);
+            [$bindStrings, $binds] = $this->_getQueryExment()->grammar->bindValueWhereInMultiple($values);
 
             return $this->whereRaw(
-                '('.implode(', ', $columns).') in ('.implode(', ', $bindStrings).')',
+                '(' . implode(', ', $columns) . ') in (' . implode(', ', $bindStrings) . ')',
                 $binds
             );
         }

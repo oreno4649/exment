@@ -31,8 +31,8 @@ trait CodeTreeTrait
             'text' => isMatchString($folder, '/') ? '/' : basename($folder),
             'state' => [
                 'opened' => $parent == '#',
-                'selected' => $root
-            ]
+                'selected' => $root,
+            ],
         ];
 
         $directories = $this->getDirectoryPaths($folder);

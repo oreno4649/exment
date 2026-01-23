@@ -16,7 +16,7 @@ class PivotMultiSelect extends MultipleSelect
     protected $pivot;
 
     // @phpstan-ignore-next-line
-    public function __construct($column, $arguments = array())
+    public function __construct($column, $arguments = [])
     {
         parent::__construct($column, $arguments);
         $this->pivot = [];

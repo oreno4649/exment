@@ -14,7 +14,7 @@ abstract class NotNullBase extends ViewFilterBase
                 $query->where($query_column, '<>', '[]');
             });
         } else {
-            $query->{$method_name. 'NotNull'}($query_column);
+            $query->{$method_name . 'NotNull'}($query_column);
         }
     }
 

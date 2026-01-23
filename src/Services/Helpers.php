@@ -29,7 +29,7 @@ if (!function_exists('exmDebugLog')) {
     {
         $now = Carbon::now();
 
-        $log_string = $now->format("YmdHisv")." ".$log;
+        $log_string = $now->format("YmdHisv") . " " . $log;
 
         \Log::debug($log_string);
     }
@@ -77,7 +77,7 @@ if (!function_exists('esc_html')) {
     // @phpstan-ignore-next-line
     function esc_html($str)
     {
-        return htmlspecialchars_ex($str, ENT_QUOTES|ENT_HTML5);
+        return htmlspecialchars_ex($str, ENT_QUOTES | ENT_HTML5);
     }
 }
 
@@ -279,7 +279,7 @@ if (!function_exists('exment_app_path')) {
      */
     function exment_app_path($path = '')
     {
-        return ucfirst(config('exment.directory', app_path('Exment'))).($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return ucfirst(config('exment.directory', app_path('Exment'))) . ($path ? DIRECTORY_SEPARATOR . $path : $path);
     }
 }
 
@@ -462,13 +462,13 @@ if (!function_exists('join_paths')) {
             }
 
             if (is_array($value)) {
-                $ret_pass = $ret_pass.$trim_str.join_paths($trim_str, $value);
+                $ret_pass = $ret_pass . $trim_str . join_paths($trim_str, $value);
             } elseif ($ret_pass == "") {
                 $ret_pass   =   $value;
             } else {
                 $ret_pass   =   rtrim($ret_pass, $trim_str);
                 $value      =   ltrim($value, $trim_str);
-                $ret_pass   =   $ret_pass.$trim_str.$value;
+                $ret_pass   =   $ret_pass . $trim_str . $value;
             }
         }
         return $ret_pass;
@@ -582,7 +582,7 @@ if (!function_exists('getFullpath')) {
 
 if (!function_exists('mb_basename')) {
     // @phpstan-ignore-next-line
-    function mb_basename($str, $suffix=null)
+    function mb_basename($str, $suffix = null)
     {
         $tmp = preg_split('/[\/\\\\]/', $str);
         // @phpstan-ignore-next-line
@@ -946,7 +946,7 @@ if (!function_exists('breakCommaToArray')) {
             return $value->toArray();
         }
 
-        $value = str_replace(array("\r\n", "\r", "\n", ","), "\n", $value);
+        $value = str_replace(["\r\n", "\r", "\n", ","], "\n", $value);
         $array = explode("\n", $value);
 
         return collect($array)->map(function ($a) {
@@ -984,7 +984,7 @@ if (!function_exists('toArray')) {
             return $value->toArray();
         }
 
-        return (array)$value;
+        return (array) $value;
     }
 }
 
@@ -1010,7 +1010,7 @@ if (!function_exists('arrayToString')) {
             return $value->implode(',');
         }
 
-        return (string)$value;
+        return (string) $value;
     }
 }
 
@@ -1129,8 +1129,8 @@ if (!function_exists('rstrpos')) {
      */
     function rstrpos(?string $haystack, ?string $needle, ?int $offset = 0)
     {
-        $haystack = $haystack?? '';
-        $needle = $needle?? '';
+        $haystack ??= '';
+        $needle ??= '';
 
         $result = strrpos($haystack, $needle, $offset);
         if ($result === false) {
@@ -1171,7 +1171,7 @@ if (!function_exists('make_password')) {
         }
         $str = '';
         for ($i = 0; $i < $length; ++$i) {
-            $str .= $chars[mt_rand(0, strlen_ex($chars) -1)];
+            $str .= $chars[mt_rand(0, strlen_ex($chars) - 1)];
         }
         return $str;
     }
@@ -1191,7 +1191,7 @@ if (!function_exists('make_randomstr')) {
 
         $str = '';
         for ($i = 0; $i < $length; ++$i) {
-            $str .= $chars[mt_rand(0, strlen_ex($chars) -1)];
+            $str .= $chars[mt_rand(0, strlen_ex($chars) - 1)];
         }
         return $str;
     }
@@ -1228,7 +1228,7 @@ if (!function_exists('make_licensecode')) {
     // @phpstan-ignore-next-line
     function make_licensecode()
     {
-        return make_randomstr(5).'-'.make_randomstr(5).'-'.make_randomstr(5).'-'.make_randomstr(5).'-'.make_randomstr(5);
+        return make_randomstr(5) . '-' . make_randomstr(5) . '-' . make_randomstr(5) . '-' . make_randomstr(5) . '-' . make_randomstr(5);
     }
 }
 
@@ -1408,7 +1408,7 @@ if (!function_exists('getModelName')) {
             }
         }
 
-        return "\\".$fillpath;
+        return "\\" . $fillpath;
     }
 }
 
@@ -1481,7 +1481,7 @@ if (!function_exists('getDBTableName')) {
         if (!isset($obj) && $isThrow) {
             throw new Exception('table name is not found. please tell system administrator.');
         }
-        return 'exm__'.array_get($obj, 'suuid');
+        return 'exm__' . array_get($obj, 'suuid');
     }
 }
 
@@ -1723,7 +1723,7 @@ if (!function_exists('getPagerOptions')) {
             $options[0] = exmtrans("custom_view.pager_count_default");
         }
         foreach ($counts as $count) {
-            $options[$count] = $count. ' ' . trans('admin.entries');
+            $options[$count] = $count . ' ' . trans('admin.entries');
         }
         return $options;
     }
@@ -1870,7 +1870,7 @@ if (!function_exists('admin_exclusion_path')) {
                 $char = mb_convert_encoding($matches[1], "UTF-16", "UTF-8");
                 $escaped = "";
                 for ($i = 0, $l = strlen_ex($char); $i < $l; $i += 2) {
-                    $escaped .=  "\u" . sprintf("%02x%02x", ord($char[$i]), ord($char[$i+1]));
+                    $escaped .=  "\u" . sprintf("%02x%02x", ord($char[$i]), ord($char[$i + 1]));
                 }
                 return $escaped;
             }, $str);
@@ -1912,14 +1912,14 @@ if (!function_exists('admin_exclusion_path')) {
         {
             $from = ['/', ':', '*', '?', '"', '<', '>', '|'];
             $to = ['_', '_', '_', '_', '_', '[', ']', '_'];
-    
-            $patterns = array_map(function($val) {
-                return '#\\'.$val.'#';
+
+            $patterns = array_map(function ($val) {
+                return '#\\' . $val . '#';
             }, $from);
-    
+
             // Replace characters that cannot be used in filename
             $validName = preg_replace($patterns, $to, $filename);
-            
+
             // Truncate the filename if it exceeds 255 characters
             if (strlen($validName) > 255) {
                 $validName = substr($validName, 0, 255);

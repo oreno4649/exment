@@ -27,7 +27,7 @@ class DayThisMonth extends DayMonthBase
      */
     protected function _compareValue($value, $conditionValue): bool
     {
-        list($target_day, $today) = $this->getTargetAndTodayFirstDay($value);
+        [$target_day, $today] = $this->getTargetAndTodayFirstDay($value);
         return $target_day->format('Y-m') == $today->format('Y-m');
     }
 }

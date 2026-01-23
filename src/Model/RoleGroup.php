@@ -28,7 +28,7 @@ class RoleGroup extends ModelBase
             'keys' => ['role_group_name'],
             'values' => ['role_group_view_name', 'description'],
         ],
-        'children' =>[
+        'children' => [
             'role_group_permissions' => RoleGroupPermission::class,
         ],
     ];
@@ -84,17 +84,17 @@ class RoleGroup extends ModelBase
 
             if ($user_orgs->contains(function ($user_org) use ($user_id, $organization_ids, $checkContainJointdOrgs) {
                 if (!is_nullorempty($user_id)) {
-                    if ($user_org->role_group_user_org_type == SystemTableName::USER && in_array($user_org->role_group_target_id, (array)$user_id)) {
+                    if ($user_org->role_group_user_org_type == SystemTableName::USER && in_array($user_org->role_group_target_id, (array) $user_id)) {
                         return true;
                     }
                 }
 
                 if (!is_nullorempty($organization_ids) && $user_org->role_group_user_org_type == SystemTableName::ORGANIZATION) {
-                    if (!$checkContainJointdOrgs && in_array($user_org->role_group_target_id, (array)$organization_ids)) {
+                    if (!$checkContainJointdOrgs && in_array($user_org->role_group_target_id, (array) $organization_ids)) {
                         return true;
                     } elseif ($checkContainJointdOrgs) {
                         $enum = JoinedOrgFilterType::getEnum(System::org_joined_type_role_group(), JoinedOrgFilterType::ALL);
-                        foreach ((array)$organization_ids as $organization_id) {
+                        foreach ((array) $organization_ids as $organization_id) {
                             // ge check contains parent and child organizaions.
                             $org = CustomTable::getEloquent(SystemTableName::ORGANIZATION)->getValueModel($organization_id);
 

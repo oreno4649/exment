@@ -84,6 +84,6 @@ class PluginNamespaceRule implements Rule
     public function message()
     {
         $classes = implode(exmtrans('common.separate_word'), $this->errors);
-        return (string)exmtrans('plugin.error.class_wrongnamespace', ['classes' => $classes]);
+        return (string) exmtrans('plugin.error.class_wrongnamespace', ['classes' => $classes]);
     }
 }

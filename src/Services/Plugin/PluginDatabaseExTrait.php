@@ -23,7 +23,7 @@ trait PluginDatabaseExTrait
             'username'  => $this->plugin->getCustomOption('custom_user', 'root'),
             'password'  => $this->plugin->getCustomOption('custom_password', 'password'),
             'charset'   => 'utf8',
-            'collation' => 'utf8_unicode_ci'
+            'collation' => 'utf8_unicode_ci',
         ]]);
     }
 

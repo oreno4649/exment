@@ -319,7 +319,7 @@ class LoginUser extends ModelBase implements \Illuminate\Contracts\Auth\Authenti
                 // save password history
                 PasswordHistory::create([
                     'login_user_id' => $model->id,
-                    'password' => $model->password
+                    'password' => $model->password,
                 ]);
             }
         });

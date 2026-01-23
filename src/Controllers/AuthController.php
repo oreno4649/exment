@@ -299,7 +299,7 @@ class AuthController extends \Encore\Admin\Controllers\AuthController
                         '_token'           => csrf_token(),
                         '_method'          => 'PUT',
                         'delete_flg'       => 'avatar',
-                    ]
+                    ],
                 ]
             );
 

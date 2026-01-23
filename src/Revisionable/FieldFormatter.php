@@ -60,7 +60,7 @@ class FieldFormatter
      * @return string
      */
     // @phpstan-ignore-next-line
-    public static function isEmpty($value, $options = array())
+    public static function isEmpty($value, $options = [])
     {
         $value_set = isset($value) && $value != '';
 
@@ -84,7 +84,7 @@ class FieldFormatter
         }
 
         if (sizeof($options) != 2) {
-            $options = array('No', 'Yes');
+            $options = ['No', 'Yes'];
         }
 
         return $options[!!$value];

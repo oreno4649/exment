@@ -36,7 +36,7 @@ class OAuthService implements LoginServiceInterface
     // @phpstan-ignore-next-line
     public static function retrieveByCredential(array $credentials)
     {
-        list($result, $message, $adminMessage, $custom_login_user) = static::loginCallback(request(), array_get($credentials, 'login_setting') ?? LoginSetting::getOAuthSetting(array_get($credentials, 'provider_name')));
+        [$result, $message, $adminMessage, $custom_login_user] = static::loginCallback(request(), array_get($credentials, 'login_setting') ?? LoginSetting::getOAuthSetting(array_get($credentials, 'provider_name')));
 
         if ($result === true) {
             return LoginService::executeLogin(request(), $custom_login_user);

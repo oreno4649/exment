@@ -4,7 +4,6 @@ namespace Exceedone\Exment\Model\Traits;
 
 class AutoSUuidObserver extends AutoUuidObserverBase
 {
-
     // @phpstan-ignore-next-line
     protected function setUuid($model)
     {

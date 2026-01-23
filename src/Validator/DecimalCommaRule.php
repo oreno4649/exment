@@ -29,6 +29,6 @@ class DecimalCommaRule implements Rule
      */
     public function message()
     {
-        return (string)trans('validation.numeric');
+        return (string) trans('validation.numeric');
     }
 }

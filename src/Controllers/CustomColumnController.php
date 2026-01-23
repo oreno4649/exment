@@ -88,7 +88,7 @@ class CustomColumnController extends AdminControllerTableBase
      */
     // @phpstan-ignore-next-line
     public function update($tableKey, $id)
-    {   
+    {
         //Validation table value
         if (!$this->validateTable($this->custom_table, Permission::CUSTOM_TABLE)) {
             return;
@@ -237,7 +237,7 @@ class CustomColumnController extends AdminControllerTableBase
                 ->required()
                 ->rules([
                     "max:30",
-                    "regex:/".Define::RULES_REGEX_SYSTEM_NAME."/",
+                    "regex:/" . Define::RULES_REGEX_SYSTEM_NAME . "/",
                     "uniqueInTable:{$classname},{$this->custom_table->id}",
                     Rule::notIn(SystemColumn::arrays()),
                 ])
@@ -270,7 +270,7 @@ class CustomColumnController extends AdminControllerTableBase
                     })->toArray();
                 })
                 ->escapeMarkup(true)
-                ->attribute(['data-filtertrigger' =>true,
+                ->attribute(['data-filtertrigger' => true,
                     'data-changehtml' => json_encode([
                         [
                             'url' => admin_urls('column', $this->custom_table->table_name, $id, 'columnTypeHtml'),
@@ -296,8 +296,8 @@ class CustomColumnController extends AdminControllerTableBase
                     new Validator\CustomColumnIndexCountRule($this->custom_table, $id),
                     new Validator\CustomColumnUsingIndexRule($id),
                 ])
-                ->attribute(['data-filtertrigger' =>true])
-                ->help(sprintf(exmtrans("custom_column.help.index_enabled"), getManualUrl('column?id='.exmtrans('custom_column.options.index_enabled'))));
+                ->attribute(['data-filtertrigger' => true])
+                ->help(sprintf(exmtrans("custom_column.help.index_enabled"), getManualUrl('column?id=' . exmtrans('custom_column.options.index_enabled'))));
 
             $form->switchbool('freeword_search', exmtrans("custom_column.options.freeword_search"))
                 ->attribute(['data-filter' => json_encode(['parent' => 1, 'key' => 'options_index_enabled', 'value' => '1'])])

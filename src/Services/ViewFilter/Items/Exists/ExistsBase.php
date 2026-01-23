@@ -24,7 +24,7 @@ abstract class ExistsBase extends ViewFilterBase
         })->toArray();
         if ($isMultiple) {
             $method_name_suffix = $this->isExists() ? 'InArrayString' : 'NotInArrayString';
-            $query->{$method_name.$method_name_suffix}($query_column, $query_value);
+            $query->{$method_name . $method_name_suffix}($query_column, $query_value);
         }
         // if default
         else {

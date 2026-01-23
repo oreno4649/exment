@@ -114,8 +114,8 @@ class CustomValueAuthoritable extends ModelBase
                 $share_permission = array_get($share_setting, 'share_permission');
                 $share_column = array_get($share_setting, 'share_column');
                 $target_ids = array_get($custom_value->value, $share_column->column_name);
-                $user_organizations =
-                    collect(stringToArray($target_ids))->map(function ($target_id) use ($share_column) {
+                $user_organizations
+                    = collect(stringToArray($target_ids))->map(function ($target_id) use ($share_column) {
                         return [
                             'related_id' => $target_id,
                             'related_type' => $share_column->column_type,
@@ -283,7 +283,7 @@ class CustomValueAuthoritable extends ModelBase
 
         // select target users
         $default = static::getUserOrgSelectDefault($custom_value, Permission::CUSTOM_VALUE_EDIT);
-        list($options, $ajax) = static::getUserOrgSelectOptions($custom_value->custom_table, null, false, $default);
+        [$options, $ajax] = static::getUserOrgSelectOptions($custom_value->custom_table, null, false, $default);
 
         // for validation options
         $validationOptions = null;
@@ -294,7 +294,7 @@ class CustomValueAuthoritable extends ModelBase
                 if (!is_null($validationOptions)) {
                     return $validationOptions;
                 }
-                list($validationOptions, $ajax) = static::getUserOrgSelectOptions($custom_value->custom_table, null, false, null, true);
+                [$validationOptions, $ajax] = static::getUserOrgSelectOptions($custom_value->custom_table, null, false, null, true);
                 return $validationOptions;
             })
             ->ajax($ajax)
@@ -303,14 +303,14 @@ class CustomValueAuthoritable extends ModelBase
             ->setWidth(9, 2);
 
         $default = static::getUserOrgSelectDefault($custom_value, Permission::CUSTOM_VALUE_VIEW);
-        list($options, $ajax) = static::getUserOrgSelectOptions($custom_value->custom_table, null, false, $default);
+        [$options, $ajax] = static::getUserOrgSelectOptions($custom_value->custom_table, null, false, $default);
         $form->multipleSelect('custom_value_view', exmtrans('role_group.role_type_option_value.custom_value_view.label'))
             ->options($options)
             ->validationOptions(function ($value) use (&$validationOptions, $custom_value) {
                 if (!is_null($validationOptions)) {
                     return $validationOptions;
                 }
-                list($validationOptions, $ajax) = static::getUserOrgSelectOptions($custom_value->custom_table, null, false, null, true);
+                [$validationOptions, $ajax] = static::getUserOrgSelectOptions($custom_value->custom_table, null, false, null, true);
                 return $validationOptions;
             })
             ->ajax($ajax)
@@ -370,7 +370,7 @@ class CustomValueAuthoritable extends ModelBase
             foreach ($items as $item) {
                 $user_organizations = $request->get($item['name'], []);
                 $user_organizations = collect($user_organizations)->filter()->map(function ($user_organization) use ($custom_value, $item) {
-                    list($authoritable_user_org_type, $authoritable_target_id) = explode('_', $user_organization);
+                    [$authoritable_user_org_type, $authoritable_target_id] = explode('_', $user_organization);
                     return [
                         'authoritable_type' => $item['name'],
                         'authoritable_user_org_type' => $authoritable_user_org_type,
@@ -392,12 +392,12 @@ class CustomValueAuthoritable extends ModelBase
                         $model->where('parent_type', $custom_value->custom_table->table_name)
                             ->where('parent_id', $custom_value->id)
                             ->where('authoritable_type', $item['name'])
-                            ->where('authoritable_user_org_type', array_get((array)$dbValue, 'authoritable_user_org_type'))
-                            ->where('authoritable_target_id', array_get((array)$dbValue, 'authoritable_target_id'));
+                            ->where('authoritable_user_org_type', array_get((array) $dbValue, 'authoritable_user_org_type'))
+                            ->where('authoritable_target_id', array_get((array) $dbValue, 'authoritable_target_id'));
                     },
                     'matchFilter' => function ($dbValue, $value) {
-                        return array_get((array)$dbValue, 'authoritable_user_org_type') == array_get($value, 'authoritable_user_org_type')
-                            && array_get((array)$dbValue, 'authoritable_target_id') == array_get($value, 'authoritable_target_id');
+                        return array_get((array) $dbValue, 'authoritable_user_org_type') == array_get($value, 'authoritable_user_org_type')
+                            && array_get((array) $dbValue, 'authoritable_target_id') == array_get($value, 'authoritable_target_id');
                     },
                 ]));
             }
@@ -445,7 +445,7 @@ class CustomValueAuthoritable extends ModelBase
         }
 
         foreach ($keys as $key) {
-            list($optionItem, $ajaxItem) = CustomTable::getEloquent($key)->getSelectOptionsAndAjaxUrl([
+            [$optionItem, $ajaxItem] = CustomTable::getEloquent($key)->getSelectOptionsAndAjaxUrl([
                 'display_table' => $custom_table,
                 'selected_value' => str_replace_ex("{$key}_", "", $default),
                 'permission' => $permission,

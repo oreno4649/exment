@@ -79,7 +79,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --one line--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('onelinetext')
             ->seeInField('column_view_name', 'One Line Text')
             ->see(exmtrans('custom_column.column_type_options.text'))
@@ -97,13 +97,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[available_characters]' => ['lower','upper','number','hyphen_underscore','dot','symbol'],
         ];
         // Update custom column --one line--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'One Line Text Update');
 
         // Check custom column --one line--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->matchStatusCode(200)
             ->see('onelinetext')
             ->seeInField('column_view_name', 'One Line Text Update')
@@ -143,7 +143,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Multi line--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('multilinetext')
             ->seeInField('column_view_name', 'Multi Line Text')
             ->see(exmtrans('custom_column.column_type_options.textarea'))
@@ -160,13 +160,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[string_length]' => 256,
         ];
         // Update custom column --Multi line--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'Multi Line Text Update');
 
         // Check custom column --Multi line--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('multilinetext')
             ->seeInField('column_view_name', 'Multi Line Text Update')
             ->seeInField('options[required]', "1")
@@ -204,7 +204,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Editor--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('editor_col')
             ->seeInField('column_view_name', 'Editor Column')
             ->see(exmtrans('custom_column.column_type_options.editor'))
@@ -219,13 +219,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[unique]' => 1,
         ];
         // Update custom column --Editor--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'Editor Column Update');
 
         // Check custom column --Editor--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('editor_col')
             ->seeInField('column_view_name', 'Editor Column Update')
             ->seeInField('options[required]', "1")
@@ -261,7 +261,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --URL--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('url_col')
             ->seeInField('column_view_name', 'URL Column')
             ->see(exmtrans('custom_column.column_type_options.url'))
@@ -276,13 +276,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[unique]' => 1,
         ];
         // Update custom column --URL--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'URL Column Update');
 
         // Check custom column --URL--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('url_col')
             ->seeInField('column_view_name', 'URL Column Update')
             ->seeInField('options[required]', "1")
@@ -318,7 +318,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Email--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('email_col')
             ->seeInField('column_view_name', 'Email Column')
             ->see(exmtrans('custom_column.column_type_options.email'))
@@ -333,13 +333,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[unique]' => 1,
         ];
         // Update custom column --Email--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'Email Column Update');
 
         // Check custom column --Email--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('email_col')
             ->seeInField('column_view_name', 'Email Column Update')
             ->seeInField('options[required]', "1")
@@ -378,7 +378,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Integer--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('integer_col')
             ->seeInField('column_view_name', 'Integer Column')
             ->see(exmtrans('custom_column.column_type_options.integer'))
@@ -405,13 +405,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[calc_formula]' => '[{"type":"symbol","val":"times"},{"type":"fixed","val":100}]',
         ];
         // Update custom column --Integer--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'Integer Column Update');
 
         // Check custom column --Integer--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('integer_col')
             ->seeInField('column_view_name', 'Integer Column Update')
             ->seeInField('options[required]', "1")
@@ -457,7 +457,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Decimal--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('decimal_col')
             ->seeInField('column_view_name', 'Decimal Column')
             ->see(exmtrans('custom_column.column_type_options.decimal'))
@@ -480,13 +480,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[decimal_digit]' => 0,
         ];
         // Update custom column --Decimal--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'Decimal Column Update');
 
         // Check custom column --decimal line--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('decimal_col')
             ->seeInField('column_view_name', 'Decimal Column Update')
             ->seeInField('options[required]', "1")
@@ -530,7 +530,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Currency--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('currency_col')
             ->seeInField('column_view_name', 'Currency Column')
             ->see(exmtrans('custom_column.column_type_options.currency'))
@@ -557,13 +557,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[calc_formula]' => '[{"type":"symbol","val":"times"},{"type":"fixed","val":100}]',
         ];
         // Update custom column --Currency--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'Currency Column Update');
 
         // Check custom column --Currency--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('currency_col')
             ->seeInField('column_view_name', 'Currency Column Update')
             ->seeInField('options[required]', "1")
@@ -607,7 +607,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Date--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('date_col')
             ->seeInField('column_view_name', 'Date Column')
             ->see(exmtrans('custom_column.column_type_options.date'))
@@ -623,13 +623,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[unique]' => 1,
         ];
         // Update custom column --Date--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'Date Column Update');
 
         // Check custom column --Date--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('date_col')
             ->seeInField('column_view_name', 'Date Column Update')
             ->seeInField('options[required]', "1")
@@ -667,7 +667,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Time--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('time_col')
             ->seeInField('column_view_name', 'Time Column')
             ->see(exmtrans('custom_column.column_type_options.time'))
@@ -683,13 +683,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[unique]' => 1,
         ];
         // Uptime custom column --Time--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'Time Column Uptime');
 
         // Check custom column --Time--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('time_col')
             ->seeInField('column_view_name', 'Time Column Uptime')
             ->seeInField('options[required]', "1")
@@ -727,7 +727,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --DateTime--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('datetime_col')
             ->seeInField('column_view_name', 'DateTime Column')
             ->see(exmtrans('custom_column.column_type_options.datetime'))
@@ -743,13 +743,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[unique]' => 1,
         ];
         // Updatetime custom column --DateTime--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'DateTime Column Updatetime');
 
         // Check custom column --DateTime--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('datetime_col')
             ->seeInField('column_view_name', 'DateTime Column Updatetime')
             ->seeInField('options[required]', "1")
@@ -773,7 +773,7 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options' => [
                 'default' => 0,
                 'help' => '選択肢のヘルプ',
-                'select_item' => '選択1'."\n".'選択2'."\n".'選択3',
+                'select_item' => '選択1' . "\n" . '選択2' . "\n" . '選択3',
             ],
         ]);
 
@@ -787,7 +787,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Select line--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('select_col')
             ->seeInField('column_view_name', 'Select Column')
             ->see(exmtrans('custom_column.column_type_options.select'))
@@ -804,13 +804,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[unique]' => 1,
         ];
         // Update custom column --Select line--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'Select Column Update');
 
         // Check custom column --Select line--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('select_col')
             ->seeInField('column_view_name', 'Select Column Update')
             ->seeInField('options[required]', "1")
@@ -834,7 +834,7 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options' => [
                 'default' => 0,
                 'help' => '選択肢（値と見出し）のヘルプ',
-                'select_item_valtext' => '0,低い'."\n".'1,通常'."\n".'2,高い',
+                'select_item_valtext' => '0,低い' . "\n" . '1,通常' . "\n" . '2,高い',
             ],
         ]);
 
@@ -848,7 +848,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Select Value Text--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('select_valtext_col')
             ->seeInField('column_view_name', 'Select Value Text Column')
             ->see(exmtrans('custom_column.column_type_options.select_valtext'))
@@ -867,13 +867,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[multiple_enabled]' => 1,
         ];
         // Update custom column --Select Value Text--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'Select Value Text Column Update');
 
         // Check custom column --Select Value Text--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('select_valtext_col')
             ->seeInField('column_view_name', 'Select Value Text Column Update')
             ->seeInField('options[required]', "1")
@@ -915,7 +915,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Select Table--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('select_table_col')
             ->seeInField('column_view_name', 'Select Table Column')
             ->see(exmtrans('custom_column.column_type_options.select_table'))
@@ -934,13 +934,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[multiple_enabled]' => 1,
         ];
         // Update custom column --Select Table--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'Select Table Column Update');
 
         // Check custom column --Select Table--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('select_table_col')
             ->seeInField('column_view_name', 'Select Table Column Update')
             ->seeInField('options[required]', "1")
@@ -978,7 +978,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --YesNo--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('yesno_col')
             ->seeInField('column_view_name', 'YesNo Column')
             ->see(exmtrans('custom_column.column_type_options.yesno'))
@@ -994,13 +994,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[unique]' => 1,
         ];
         // Update custom column --YesNo--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'YesNo Column Update');
 
         // Check custom column --YesNo--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('yesno_col')
             ->seeInField('column_view_name', 'YesNo Column Update')
             ->seeInField('options[required]', "1")
@@ -1041,7 +1041,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Boolean--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('boolean_col')
             ->seeInField('column_view_name', 'Boolean Column')
             ->see(exmtrans('custom_column.column_type_options.boolean'))
@@ -1061,13 +1061,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[unique]' => 1,
         ];
         // Update custom column --Boolean--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'Boolean Column Update');
 
         // Check custom column --Boolean--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('boolean_col')
             ->seeInField('column_view_name', 'Boolean Column Update')
             ->seeInField('options[required]', "1")
@@ -1104,7 +1104,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --AutoNumber--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('auto_number_col')
             ->seeInField('column_view_name', 'AutoNumber Column')
             ->see(exmtrans('custom_column.column_type_options.auto_number'))
@@ -1120,13 +1120,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[unique]' => 1,
         ];
         // Update custom column --AutoNumber--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'AutoNumber Column Update');
 
         // Check custom column --AutoNumber--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('auto_number_col')
             ->seeInField('column_view_name', 'AutoNumber Column Update')
             ->seeInField('options[required]', "1")
@@ -1162,7 +1162,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Image--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('image_col')
             ->seeInField('column_view_name', 'Image Column')
             ->see(exmtrans('custom_column.column_type_options.image'))
@@ -1177,13 +1177,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[unique]' => 1,
         ];
         // Update custom column --Image--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'Image Column Update');
 
         // Check custom column --Image--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('image_col')
             ->seeInField('column_view_name', 'Image Column Update')
             ->seeInField('options[required]', "1")
@@ -1219,7 +1219,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --File--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('file_col')
             ->seeInField('column_view_name', 'File Column')
             ->see(exmtrans('custom_column.column_type_options.file'))
@@ -1234,13 +1234,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[unique]' => 1,
         ];
         // Update custom column --File--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'File Column Update');
 
         // Check custom column --File--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('file_col')
             ->seeInField('column_view_name', 'File Column Update')
             ->seeInField('options[required]', "1")
@@ -1276,7 +1276,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --User--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('user_col')
             ->seeInField('column_view_name', 'User Column')
             ->see(exmtrans('custom_column.column_type_options.user'))
@@ -1293,13 +1293,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[multiple_enabled]' => 1,
         ];
         // Update custom column --User--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
                 ->seeInElement('td', 'User Column Update');
 
         // Check custom column --User--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('user_col')
             ->seeInField('column_view_name', 'User Column Update')
             ->seeInField('options[required]', "1")
@@ -1336,7 +1336,7 @@ class CCustomColumnTest extends ExmentKitTestCase
         $id = array_get($row, 'id');
 
         // Check custom column --Organization--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('organization_col')
             ->seeInField('column_view_name', 'Organization Column')
             ->see(exmtrans('custom_column.column_type_options.organization'))
@@ -1353,13 +1353,13 @@ class CCustomColumnTest extends ExmentKitTestCase
             'options[multiple_enabled]' => 1,
         ];
         // Update custom column --Organization--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
                 ->submitForm('admin-submit', $form)
                 ->seePageIs(admin_url('column/test'))
         ;
 
         // Check custom column --Organization--
-        $this->visit(admin_url('column/test/'. $id . '/edit'))
+        $this->visit(admin_url('column/test/' . $id . '/edit'))
             ->see('organization_col')
             ->seeInField('column_view_name', 'Organization Column Update')
             ->seeInField('options[required]', "1")

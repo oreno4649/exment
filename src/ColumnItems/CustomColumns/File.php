@@ -112,7 +112,7 @@ class File extends CustomItem
             // @phpstan-ignore-next-line
             return [
                 'result' => true,
-                'value' => $file_path
+                'value' => $file_path,
             ];
         }
 
@@ -126,7 +126,7 @@ class File extends CustomItem
         // return file path
         return [
             'result' => true,
-            'value' => $result
+            'value' => $result,
         ];
     }
 
@@ -408,7 +408,7 @@ class File extends CustomItem
     // @phpstan-ignore-next-line
     public function getAdminFilterWhereQuery($query, $input)
     {
-        list($mark, $value) = \Exment::getQueryMarkAndValue(true, $input);
+        [$mark, $value] = \Exment::getQueryMarkAndValue(true, $input);
         // get values ids
         $ids = $this->getQueryIds($mark, $value);
         if (is_nullorempty($ids)) {
@@ -497,9 +497,7 @@ class File extends CustomItem
      * @param Form $form
      * @return void
      */
-    public function setCustomColumnDefaultValueForm(&$form, bool $asCustomForm = false)
-    {
-    }
+    public function setCustomColumnDefaultValueForm(&$form, bool $asCustomForm = false) {}
 
     /**
      * Set Custom Column Option Form. Using laravel-admin form option

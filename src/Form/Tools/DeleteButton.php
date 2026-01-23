@@ -26,15 +26,15 @@ class DeleteButton
         $confirm = trans('admin.confirm');
         $cancel = trans('admin.cancel');
         return <<<EOT
-        $('#{$id}').on('click', function(){
-            Exment.CommonEvent.ShowSwal('$url', {
-                title: "$title",
-                method: 'delete',
-                confirm:"$confirm",
-                cancel:"$cancel"
-            });
-        })
-EOT;
+                    $('#{$id}').on('click', function(){
+                        Exment.CommonEvent.ShowSwal('$url', {
+                            title: "$title",
+                            method: 'delete',
+                            confirm:"$confirm",
+                            cancel:"$cancel"
+                        });
+                    })
+            EOT;
     }
 
     // @phpstan-ignore-next-line

@@ -11,9 +11,7 @@ use Exceedone\Exment\Enums\LoginType;
  */
 class SamlNameUniqueRule implements Rule
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
     * Check Validation
@@ -41,6 +39,6 @@ class SamlNameUniqueRule implements Rule
      */
     public function message()
     {
-        return (string)trans('validation.unique');
+        return (string) trans('validation.unique');
     }
 }

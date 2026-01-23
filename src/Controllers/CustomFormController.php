@@ -487,10 +487,10 @@ class CustomFormController extends AdminControllerTableBase
 
         // create endpoint
         $formroot = admin_url("form/{$this->custom_table->table_name}");
-        $endpoint = $formroot.(isset($id) ? "/{$id}" : "");
+        $endpoint = $formroot . (isset($id) ? "/{$id}" : "");
         $content->row(view('exment::custom-form.form', [
             'formroot' => $formroot,
-            'endpoint'=> $endpoint,
+            'endpoint' => $endpoint,
             'custom_form_blocks' => $custom_form_blocks,
             'editmode' => isset($id),
             'headerBox' => $this->getHeaderBox($form, $formroot),
@@ -609,7 +609,7 @@ class CustomFormController extends AdminControllerTableBase
         if (!isset($req_custom_form_blocks)
         ) {
             return $form->custom_form_blocks->sortBy(function ($item, $key) {
-                return $item->getOption('form_block_order')?? 0;
+                return $item->getOption('form_block_order') ?? 0;
             });
         }
 
@@ -872,8 +872,7 @@ class CustomFormController extends AdminControllerTableBase
     // @phpstan-ignore-next-line
     protected function form($id = null)
     {
-        return Admin::form(CustomForm::class, function (Form $form) {
-        });
+        return Admin::form(CustomForm::class, function (Form $form) {});
     }
 
     /**

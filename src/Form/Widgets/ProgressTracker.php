@@ -40,10 +40,10 @@ class ProgressTracker implements Renderable
                 $class = 'complete';
             };
             $this->steps[] = [
-                'title' => isset($option['title']) ? $option['title'] : 'Step '.($index + 1),
+                'title' => $option['title'] ?? 'Step ' . ($index + 1),
                 'class' => $class,
-                'url' => isset($option['url']) ? $option['url'] : '#',
-                'description' => isset($option['description']) ? $option['description'] : '',
+                'url' => $option['url'] ?? '#',
+                'description' => $option['description'] ?? '',
             ];
         }
 

@@ -12,6 +12,6 @@ class Plugin extends PluginBatchBase
     public function execute()
     {
         // @phpstan-ignore-next-line
-        1/0;
+        1 / 0;
     }
 }

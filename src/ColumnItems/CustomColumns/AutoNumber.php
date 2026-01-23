@@ -33,7 +33,7 @@ class AutoNumber extends CustomItem
      */
     protected function getGridFilterOption(): ?string
     {
-        return (string)FilterOption::LIKE;
+        return (string) FilterOption::LIKE;
     }
 
     /**
@@ -96,16 +96,16 @@ class AutoNumber extends CustomItem
             ->required()
             ->options(
                 [
-                'format' => exmtrans("custom_column.options.auto_number_type_format"),
-                'random25' => exmtrans("custom_column.options.auto_number_type_random25"),
-                'random32' => exmtrans("custom_column.options.auto_number_type_random32"),
-                'other' => exmtrans("custom_column.options.auto_number_other"),
+                    'format' => exmtrans("custom_column.options.auto_number_type_format"),
+                    'random25' => exmtrans("custom_column.options.auto_number_type_random25"),
+                    'random32' => exmtrans("custom_column.options.auto_number_type_random32"),
+                    'other' => exmtrans("custom_column.options.auto_number_other"),
                 ]
             )
-            ->attribute(['data-filtertrigger' =>true]);
+            ->attribute(['data-filtertrigger' => true]);
 
         // set manual
-        $manual_url = getManualUrl('column?id='.exmtrans('custom_column.auto_number_format_rule'));
+        $manual_url = getManualUrl('column?id=' . exmtrans('custom_column.auto_number_format_rule'));
         $form->text('auto_number_format', exmtrans("custom_column.options.auto_number_format"))
             ->attribute(['data-filter' => json_encode([
                 ['parent' => 1, 'key' => 'options_auto_number_type', 'value' => 'format'],
@@ -121,9 +121,7 @@ class AutoNumber extends CustomItem
      * @param Form $form
      * @return void
      */
-    public function setCustomColumnDefaultValueForm(&$form, bool $asCustomForm = false)
-    {
-    }
+    public function setCustomColumnDefaultValueForm(&$form, bool $asCustomForm = false) {}
 
 
     /**

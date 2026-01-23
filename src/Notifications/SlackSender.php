@@ -108,7 +108,7 @@ class SlackSender extends SenderBase
             $mentions[] = "<@$mention_user>";
         }
         if (!empty($mentions)) {
-            $content = implode(' ', $mentions) . "\n". $content;
+            $content = implode(' ', $mentions) . "\n" . $content;
         }
 
         preg_match_all(Define::RULES_REGEX_LINK_FORMAT, $content, $matches);

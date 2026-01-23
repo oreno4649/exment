@@ -23,7 +23,7 @@ class SystemTableName extends EnumBase
     public const MAIL_SEND_LOG = 'mail_send_log';
     public const BASEINFO = 'base_info';
     public const DOCUMENT = 'document';
-    public const FILE= 'files';
+    public const FILE = 'files';
     public const NOTIFY_HISTORY = 'notify_history';
     public const NOTIFY_HISTORY_USER = 'notify_history_user';
     public const CUSTOM_TABLE = 'custom_tables';

@@ -124,8 +124,7 @@ class CrudGrid extends CrudBase
 
         if ($this->pluginClass->enableFreewordSearch()) {
             Grid::setSearchKey('query');
-            $grid->quickSearch(function ($model, $input) {
-            }, 'left');
+            $grid->quickSearch(function ($model, $input) {}, 'left');
         }
 
         $plugin = $this->plugin;

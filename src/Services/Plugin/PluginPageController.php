@@ -55,7 +55,7 @@ class PluginPageController extends Controller
         // @phpstan-ignore-next-line
         if (method_exists($this->pluginPage, '_showHeader') && $this->pluginPage->_showHeader()) {
             $content->header($this->plugin->plugin_view_name)
-            ->headericon($this->plugin->getOption('icon')?? 'fa-pencil');
+            ->headericon($this->plugin->getOption('icon') ?? 'fa-pencil');
         }
 
         return $content;

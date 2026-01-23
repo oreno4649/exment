@@ -147,7 +147,7 @@ class PluginServiceProvider extends ServiceProvider
                     $routes[] = [
                         'method' => 'get',
                         'uri' => '',
-                        'function' => $defaultFunction ?? 'index'
+                        'function' => $defaultFunction ?? 'index',
                     ];
                 }
 
@@ -166,7 +166,7 @@ class PluginServiceProvider extends ServiceProvider
                             $func = array_get($route, 'function');
                             /** @var string $uri */
                             $uri = array_get($route, 'uri');
-                            $router = Route::{$methodStr}($uri, $plugin_name . '@'. $func);
+                            $router = Route::{$methodStr}($uri, $plugin_name . '@' . $func);
                             $router->middleware(ApiScope::getScopeString($isApi, ApiScope::PLUGIN));
                             $router->name("exment.plugins.{$plugin->id}.{$methodStr}.{$func}");
                         }

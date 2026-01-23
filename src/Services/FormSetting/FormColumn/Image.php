@@ -29,7 +29,7 @@ class Image extends OtherBase
         } else {
             $form->description(exmtrans('custom_form.message.image_need_delete'));
 
-            $imagetag = '<img src="'.$imageurl.'" class="mw-100 image_html" style="max-height:200px;" />';
+            $imagetag = '<img src="' . $imageurl . '" class="mw-100 image_html" style="max-height:200px;" />';
             $form->description($imagetag)->escape(false);
         }
         $form->switchbool('image_aslink', exmtrans('custom_form.image_aslink'))->default(false)

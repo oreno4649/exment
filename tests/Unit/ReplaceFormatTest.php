@@ -81,7 +81,7 @@ class ReplaceFormatTest extends UnitTestBase
         $now = \Carbon\Carbon::now();
 
         foreach ($dateFormats as $format) {
-            $text = ReplaceFormatService::replaceTextFromFormat('${now:'  . $format . '}');
+            $text = ReplaceFormatService::replaceTextFromFormat('${now:' . $format . '}');
             $this->assertMatch($text, $now->format($format));
         }
     }
@@ -98,14 +98,14 @@ class ReplaceFormatTest extends UnitTestBase
             'ymd',
             'yMd',
             'yMD',
-            'Y/m/d'
+            'Y/m/d',
         ];
 
         $custom_value_edit = CustomTable::getEloquent('custom_value_edit')->getValueModel(1);
         $date = \Carbon\Carbon::parse($custom_value_edit->getValue('date'));
 
         foreach ($dateFormats as $format) {
-            $text = ReplaceFormatService::replaceTextFromFormat('${value:date/format="'  . $format . '"}', $custom_value_edit);
+            $text = ReplaceFormatService::replaceTextFromFormat('${value:date/format="' . $format . '"}', $custom_value_edit);
             $this->assertMatch($text, $date->format($format));
         }
     }

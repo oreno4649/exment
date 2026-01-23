@@ -15,7 +15,7 @@ class SqlServerProcessor extends BaseSqlServerProcessor
     // @phpstan-ignore-next-line
     public function processGetVersion($results)
     {
-        $string = collect((array)$results[0])->first();
+        $string = collect((array) $results[0])->first();
 
         // match regex
         preg_match('/\d+\.\d+\.\d+\.\d+/u', $string, $m);
@@ -88,7 +88,7 @@ class SqlServerProcessor extends BaseSqlServerProcessor
     public function processConstraints($results)
     {
         return collect($results)->map(function ($result) {
-            return array_get((array)$result, 'name');
+            return array_get((array) $result, 'name');
         })->filter()->toArray();
     }
 }

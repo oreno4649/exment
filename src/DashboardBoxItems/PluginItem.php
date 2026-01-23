@@ -106,14 +106,12 @@ class PluginItem implements ItemInterface
      * saving event
      */
     // @phpstan-ignore-next-line
-    public static function saving(&$form)
-    {
-    }
+    public static function saving(&$form) {}
 
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($dashboard_box) = $args + [null];
+        [$dashboard_box] = $args + [null];
         return new self($dashboard_box);
     }
 

@@ -29,7 +29,7 @@ class TimeoutTime extends SystemRequireBase
     public function getResultText(): ?string
     {
         if ($this->result == 0) {
-            return $this->result .  '(Unlimited)';
+            return $this->result . '(Unlimited)';
         }
         return $this->result . exmtrans('common.second');
     }

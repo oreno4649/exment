@@ -67,9 +67,9 @@ class ParentItem implements ItemInterface
         if (array_get($this->options, 'grid_column')) {
             return 'parent_id';
         } elseif ($this->target_parent) {
-            return 'parent_id_'.$this->parent_table->table_name.'_'.$this->custom_table->table_name;
+            return 'parent_id_' . $this->parent_table->table_name . '_' . $this->custom_table->table_name;
         } else {
-            return 'parent_id_'.$this->custom_table->table_name;
+            return 'parent_id_' . $this->custom_table->table_name;
         }
     }
 
@@ -88,7 +88,7 @@ class ParentItem implements ItemInterface
     // @phpstan-ignore-next-line
     public function sqltypename()
     {
-        return $this->sqlUniqueTableName() .'.parent_type';
+        return $this->sqlUniqueTableName() . '.parent_type';
     }
 
     /**
@@ -131,7 +131,7 @@ class ParentItem implements ItemInterface
     {
         if (!isset($v)) {
             return null;
-        // get text column
+            // get text column
         } elseif ($this->isPublicForm()) {
             return $v->getLabel();
         } else {
@@ -270,21 +270,21 @@ class ParentItem implements ItemInterface
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($custom_table, $custom_value, $parent_table) = $args + [null, null, null];
+        [$custom_table, $custom_value, $parent_table] = $args + [null, null, null];
         return new self($custom_table, $custom_value);
     }
 
     // @phpstan-ignore-next-line
     public static function getItemWithParent(...$args)
     {
-        list($custom_table, $parent_table) = $args + [null, null];
+        [$custom_table, $parent_table] = $args + [null, null];
         return new self($custom_table, null, $parent_table);
     }
 
     // @phpstan-ignore-next-line
     public static function getItemWithRelation(...$args)
     {
-        list($custom_table, $custom_relation) = $args + [null, null];
+        [$custom_table, $custom_relation] = $args + [null, null];
         return new self($custom_table, null, null, $custom_relation);
     }
 

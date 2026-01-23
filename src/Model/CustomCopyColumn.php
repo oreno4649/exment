@@ -48,7 +48,7 @@ class CustomCopyColumn extends ModelBase implements Interfaces\TemplateImporterI
         'uniqueKeys' => [
             'export' => ['from_column_type', 'from_column_target_name', 'from_column_table_name', 'to_column_type', 'to_column_target_name', 'to_column_table_name'],
             'import' => ['custom_copy_id', 'from_column_type', 'from_column_table_id', 'from_column_target_id', 'to_column_type', 'to_column_table_id', 'to_column_target_id'],
-        ] ,
+        ],
         'uniqueKeyReplaces' => [
             [
                 'replaceNames' => [
@@ -56,8 +56,8 @@ class CustomCopyColumn extends ModelBase implements Interfaces\TemplateImporterI
                         'replacedName' => [
                             'table_name' => 'from_column_table_name',
                             'column_name' => 'from_column_target_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getFromUniqueKeyValues',
             ],
@@ -67,12 +67,12 @@ class CustomCopyColumn extends ModelBase implements Interfaces\TemplateImporterI
                         'replacedName' => [
                             'table_name' => 'to_column_table_name',
                             'column_name' => 'to_column_target_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getToUniqueKeyValues',
             ],
-        ]
+        ],
     ];
 
 
@@ -253,12 +253,12 @@ class CustomCopyColumn extends ModelBase implements Interfaces\TemplateImporterI
         $custom_copy = array_get($options, 'parent');
 
         // get from and to column
-        list($from_column_target_id, $from_column_table_id) = static::getColumnAndTableId(
+        [$from_column_target_id, $from_column_table_id] = static::getColumnAndTableId(
             array_get($json, "from_column_type"),
             array_get($json, "from_column_target_name"),
             $custom_copy->from_custom_table
         );
-        list($to_column_target_id, $to_column_table_id) = static::getColumnAndTableId(
+        [$to_column_target_id, $to_column_table_id] = static::getColumnAndTableId(
             array_get($json, "to_column_type"),
             array_get($json, "to_column_target_name"),
             $custom_copy->to_custom_table

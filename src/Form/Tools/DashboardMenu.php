@@ -52,7 +52,7 @@ class DashboardMenu
             'systemdashboards' => $systemdashboards,
             'userdashboards' => $userdashboards,
             'settings' => $settings,
-            'base_uri' => admin_url('')
+            'base_uri' => admin_url(''),
         ]);
     }
 }

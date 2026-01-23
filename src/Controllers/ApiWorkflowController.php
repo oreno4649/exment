@@ -219,7 +219,7 @@ class ApiWorkflowController extends AdminControllerBase
                 $custom_value,
                 WorkflowGetAuthorityType::CURRENT_WORK_USER,
                 [
-                    'orgAsUser' => $orgAsUser
+                    'orgAsUser' => $orgAsUser,
                 ]
             ));
         }
@@ -300,7 +300,7 @@ class ApiWorkflowController extends AdminControllerBase
         ]);
         if ($validator->fails()) {
             return abortJson(400, [
-                'errors' => $this->getErrorMessages($validator)
+                'errors' => $this->getErrorMessages($validator),
             ], ErrorCode::VALIDATION_ERROR());
         }
 
@@ -354,7 +354,7 @@ class ApiWorkflowController extends AdminControllerBase
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 return abortJson(400, [
-                    'errors' => $this->getErrorMessages($validator)
+                    'errors' => $this->getErrorMessages($validator),
                 ], ErrorCode::VALIDATION_ERROR());
             }
         }
@@ -418,7 +418,7 @@ class ApiWorkflowController extends AdminControllerBase
 
         if (!empty($errors)) {
             return abortJson(400, [
-                'errors' => $errors
+                'errors' => $errors,
             ], ErrorCode::VALIDATION_ERROR());
         }
 

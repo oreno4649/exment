@@ -62,7 +62,7 @@ class CustomTableAction extends ExportActionBase implements ActionInterface
         // get default data
         $providers[] = new Export\DefaultTableProvider([
             'custom_table' => $this->custom_table,
-            'grid' => $this->grid
+            'grid' => $this->grid,
         ]);
 
 
@@ -73,7 +73,7 @@ class CustomTableAction extends ExportActionBase implements ActionInterface
                     $providers[] = new Export\RelationPivotTableProvider(
                         [
                             'relation' => $relation,
-                            'grid' => $this->grid
+                            'grid' => $this->grid,
                         ]
                     );
                 } else {

@@ -363,7 +363,7 @@ class Permission
 
         // if find endpoint "data/", check as data
         $list = implode('|', array_merge(Define::CUSTOM_TABLE_ENDPOINTS, ['plugins']));
-        if (preg_match('/^(' . $list  . ')\/(.+)$/u', $endpoint, $matched)) {
+        if (preg_match('/^(' . $list . ')\/(.+)$/u', $endpoint, $matched)) {
             return $this->hasPermissionByEndpoint($matched[2], $isMenu, $matched[1], true);
         }
 
@@ -400,11 +400,11 @@ class Permission
             // if $uri is "auth", get next uri.
             if (in_array($uri, array_merge(Define::CUSTOM_TABLE_ENDPOINTS, ['auth', 'saml', 'plugins']))) {
                 // but url is last item, return $uri.
-                if (count($uris) <= $k+1) {
+                if (count($uris) <= $k + 1) {
                     return $uri;
                 }
                 // return $uri adding next item.
-                return url_join($uri, $uris[$k+1]);
+                return url_join($uri, $uris[$k + 1]);
             } else {
                 return $uri;
             }

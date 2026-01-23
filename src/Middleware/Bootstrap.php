@@ -110,7 +110,7 @@ class Bootstrap
             $ver = date('YmdHis');
         }
         // @phpstan-ignore-next-line
-        Ad::jslast(asset('vendor/exment/js/customscript.js?ver='.$ver));
+        Ad::jslast(asset('vendor/exment/js/customscript.js?ver=' . $ver));
 
         // delete object
         $delete_confirm = trans('admin.delete_confirm');
@@ -118,22 +118,22 @@ class Bootstrap
         $cancel = trans('admin.cancel');
 
         $script = <<<EOT
-    ///// delete click event
-    $(document).off('click', '[data-exment-delete]').on('click', '[data-exment-delete]', {}, function(ev){
-        ev.preventDefault();
+                ///// delete click event
+                $(document).off('click', '[data-exment-delete]').on('click', '[data-exment-delete]', {}, function(ev){
+                    ev.preventDefault();
 
-        // get url
-        let url = $(ev.target).closest('[data-exment-delete]').data('exment-delete');
+                    // get url
+                    let url = $(ev.target).closest('[data-exment-delete]').data('exment-delete');
 
-        Exment.CommonEvent.ShowSwal(url, {
-            title: "$delete_confirm",
-            confirm:"$confirm",
-            method: 'delete',
-            cancel:"$cancel",
-        });
-    });
+                    Exment.CommonEvent.ShowSwal(url, {
+                        title: "$delete_confirm",
+                        confirm:"$confirm",
+                        method: 'delete',
+                        cancel:"$cancel",
+                    });
+                });
 
-EOT;
+            EOT;
         Ad::script($script);
     }
 }

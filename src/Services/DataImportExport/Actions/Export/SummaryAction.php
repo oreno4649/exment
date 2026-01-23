@@ -12,7 +12,7 @@ class SummaryAction extends ViewAction
         return new Export\SummaryProvider([
             'custom_table' => $this->custom_table,
             'custom_view' => $this->custom_view,
-            'grid' => $this->grid
+            'grid' => $this->grid,
         ]);
     }
 }

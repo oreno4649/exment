@@ -303,7 +303,7 @@ class PermissionEndpointTest extends UnitTestBase
         ]);
 
         $isPass = $permission->shouldPassEndpoint($endpoint);
-        $this->assertTrue($expectResult ? $isPass : !$isPass, "Endpoint {$endpoint}, expect Permission is " . ($expectResult ? 'Pass' : 'Deny') . ", but result is "  . ($expectResult ? 'Deny' : 'Pass'));
+        $this->assertTrue($expectResult ? $isPass : !$isPass, "Endpoint {$endpoint}, expect Permission is " . ($expectResult ? 'Pass' : 'Deny') . ", but result is " . ($expectResult ? 'Deny' : 'Pass'));
     }
 
     /**
@@ -315,6 +315,6 @@ class PermissionEndpointTest extends UnitTestBase
     protected function executeTestPermissionUser(string $endpoint, bool $expectResult, LoginUser $user)
     {
         $isPass = $user->visible($endpoint);
-        $this->assertTrue($expectResult ? $isPass : !$isPass, "Endpoint {$endpoint}, expect Permission is " . ($expectResult ? 'Pass' : 'Deny') . ", but result is "  . ($expectResult ? 'Deny' : 'Pass'));
+        $this->assertTrue($expectResult ? $isPass : !$isPass, "Endpoint {$endpoint}, expect Permission is " . ($expectResult ? 'Pass' : 'Deny') . ", but result is " . ($expectResult ? 'Deny' : 'Pass'));
     }
 }

@@ -73,8 +73,8 @@ class CustomView extends ModelBase implements Interfaces\TemplateImporterInterfa
                         'replacingName' => 'custom_table_id',
                         'replacedName' => [
                             'table_name' => 'table_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyClassName' => CustomTable::class,
             ],
@@ -87,7 +87,7 @@ class CustomView extends ModelBase implements Interfaces\TemplateImporterInterfa
             'view_type' => ViewType::class,
             'view_kind_type' => ViewKindType::class,
         ],
-        'children' =>[
+        'children' => [
             'custom_view_columns' => CustomViewColumn::class,
             'custom_view_filters' => CustomViewFilter::class,
             'custom_view_sorts' => CustomViewSort::class,
@@ -494,7 +494,7 @@ class CustomView extends ModelBase implements Interfaces\TemplateImporterInterfa
                             ->render();
                     }
                     // add hidden item about data id
-                    $link .= '<input type="hidden" data-id="'.array_get($data, 'id').'" />';
+                    $link .= '<input type="hidden" data-id="' . array_get($data, 'id') . '" />';
                     $body_items[] = $link;
                 }
 
@@ -829,7 +829,7 @@ class CustomView extends ModelBase implements Interfaces\TemplateImporterInterfa
                 $service->setRelationJoin($filter);
             }
 
-            $func = boolval($this->condition_reverse)? 'whereNot': 'where';
+            $func = boolval($this->condition_reverse) ? 'whereNot' : 'where';
             $query->{$func}(function ($query) use ($custom_view_filters, $service) {
                 foreach ($custom_view_filters as $filter) {
                     $service->whereCustomViewFilter($filter, $this->filter_is_or, $query);

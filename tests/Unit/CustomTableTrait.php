@@ -29,7 +29,7 @@ trait CustomTableTrait
             'column_type' => ColumnType::TEXT,
             'options' => [
                 'index_enabled' => 1,
-                'freeword_search' => '1'
+                'freeword_search' => '1',
             ],
         ]);
         return $custom_table;

@@ -103,7 +103,7 @@ class ResetPasswordCommand extends Command
             $data = \array_merge($options, ['password_confirmation' => $options['password']]);
             $rules = [
                 'password' => get_password_rule(true, $login_user),
-                ];
+            ];
             $validation = \Validator::make($data, $rules);
             if ($validation->fails()) {
                 $messages = collect($validation->errors()->messages());
@@ -128,7 +128,7 @@ class ResetPasswordCommand extends Command
     {
         try {
             // get parameters
-            list($login_user, $options) = $this->getParameters();
+            [$login_user, $options] = $this->getParameters();
 
             LoginService::resetPassword($login_user, [
                 'password' => $options['password'],

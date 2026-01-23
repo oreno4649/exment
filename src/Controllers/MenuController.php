@@ -98,7 +98,7 @@ class MenuController extends AdminControllerBase
                         break;
                     case MenuType::TABLE:
                         $icon = $branch['icon'];
-                        $uri = isset($branch['uri']) ? $branch['uri'] : url_join('data', $branch['table_name']);
+                        $uri = $branch['uri'] ?? url_join('data', $branch['table_name']);
                         break;
                     case MenuType::SYSTEM:
                         $icon = $branch['icon'];
@@ -162,13 +162,12 @@ class MenuController extends AdminControllerBase
 
         $form->select('menu_target', exmtrans("menu.menu_target"))
             ->attribute(['data-changedata' => json_encode(
-                ['getitem' =>
-                    [  'uri' => admin_url('webapi/menu/menutargetvalue')
-                        , 'key' => ['menu_type']
-                    ]
+                ['getitem'
+                    => [  'uri' => admin_url('webapi/menu/menutargetvalue'), 'key' => ['menu_type'],
+                    ],
                 ]
             ), 'data-filter' => json_encode([
-                'key' => 'menu_type', 'readonlyValue' => [MenuType::CUSTOM, MenuType::PARENT_NODE]
+                'key' => 'menu_type', 'readonlyValue' => [MenuType::CUSTOM, MenuType::PARENT_NODE],
             ])])
             ->options(function ($value, $field, $model) use ($menu, $contoller) {
                 // get menu type
@@ -182,11 +181,11 @@ class MenuController extends AdminControllerBase
                 return $contoller->getMenuType($menu_type, false);
             })
             ->attribute([
-                'data-linkage' => json_encode(['menu_target_view' => admin_url('webapi/menu/menutargetview')])
+                'data-linkage' => json_encode(['menu_target_view' => admin_url('webapi/menu/menutargetview')]),
             ]);
         $form->select('menu_target_view', exmtrans("menu.menu_target_view"))
             ->attribute(['data-filter' => json_encode([
-                'key' => 'menu_type', 'value' => [MenuType::TABLE]
+                'key' => 'menu_type', 'value' => [MenuType::TABLE],
             ])])
             ->options(function ($value, $field) use ($menu, $contoller) {
                 $menu_type = $contoller->getMenuTypeValue($field, $menu);
@@ -212,7 +211,7 @@ class MenuController extends AdminControllerBase
         ;
         $form->text('uri', trans('admin.uri'))
             ->attribute(['data-filter' => json_encode([
-                'key' => 'menu_type', 'readonlyValue' => [MenuType::SYSTEM, MenuType::PLUGIN, MenuType::TABLE, MenuType::PARENT_NODE]
+                'key' => 'menu_type', 'readonlyValue' => [MenuType::SYSTEM, MenuType::PLUGIN, MenuType::TABLE, MenuType::PARENT_NODE],
             ])]);
         if (!isset($id)) {
             $form->text('menu_name', exmtrans("menu.menu_name"))
@@ -221,7 +220,7 @@ class MenuController extends AdminControllerBase
                 [
                     Rule::unique(config('admin.database.menu_table'))->ignore($id),
                     "max:40",
-                    'regex:/'.Define::RULES_REGEX_ALPHANUMERIC_UNDER_HYPHEN.'/'
+                    'regex:/' . Define::RULES_REGEX_ALPHANUMERIC_UNDER_HYPHEN . '/',
                 ]
             )->help(exmtrans('common.help_code'));
         } else {
@@ -329,7 +328,7 @@ class MenuController extends AdminControllerBase
                     if (!$this->isAddSystemMenuOptions($k, $value)) {
                         continue;
                     }
-                    $options[] = ['id' => $k, 'text' => exmtrans("menu.system_definitions.".$k) ];
+                    $options[] = ['id' => $k, 'text' => exmtrans("menu.system_definitions." . $k) ];
                 }
                 break;
             case MenuType::PLUGIN:
@@ -363,7 +362,7 @@ class MenuController extends AdminControllerBase
                 $item = array_get(Define::MENU_SYSTEM_DEFINITION, $value);
                 $result = [
                     'menu_name' => $value,
-                    'title' => exmtrans("menu.system_definitions.".$value),
+                    'title' => exmtrans("menu.system_definitions." . $value),
                     'icon' => array_get($item, 'icon'),
                     'uri' => array_get($item, 'uri'),
                 ];

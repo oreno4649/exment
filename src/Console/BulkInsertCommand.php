@@ -67,7 +67,7 @@ class BulkInsertCommand extends Command
             // get all csv file names in target directory
             $files = $this->getFiles('csv');
 
-            $this->line("該当ファイル数：".count($files));
+            $this->line("該当ファイル数：" . count($files));
 
             $path = null;
             foreach ($files as $index => $file) {
@@ -150,9 +150,9 @@ class BulkInsertCommand extends Command
         // open input file as csv
         $fileobj = $file->openFile();
         $fileobj->setFlags(
-            \SplFileObject::READ_CSV |
-            \SplFileObject::READ_AHEAD |
-            \SplFileObject::SKIP_EMPTY
+            \SplFileObject::READ_CSV
+            | \SplFileObject::READ_AHEAD
+            | \SplFileObject::SKIP_EMPTY
         );
 
         // get locale
@@ -222,7 +222,7 @@ class BulkInsertCommand extends Command
     private function getTsvData($field, $header, $line)
     {
         // extract header item that matches the field name
-        $keys = preg_grep('/^'.$field.'(\..+)?$/i', $header);
+        $keys = preg_grep('/^' . $field . '(\..+)?$/i', $header);
         // @phpstan-ignore-next-line
         if (count($keys) == 0) {
             return null;
@@ -252,23 +252,23 @@ class BulkInsertCommand extends Command
         $file = new \SplFileInfo($file);
         // load table data from tsv file
         $targets = explode('.', $file->getFileName());
-        $cmd =<<<__EOT__
-        LOAD DATA local INFILE '%s' 
-        INTO TABLE %s 
-        CHARACTER SET 'UTF8' 
-        FIELDS TERMINATED BY '\t' 
-        OPTIONALLY ENCLOSED BY '\"' 
-        ESCAPED BY '\"' 
-        LINES TERMINATED BY '\\n' 
-        IGNORE 1 LINES 
-        SET created_at = NOW(),
-            updated_at = NOW(),
-            deleted_at = nullif(deleted_at, '0000-00-00 00:00:00'),
-            created_user_id = nullif(created_user_id, 0),
-            updated_user_id = nullif(updated_user_id, 0),
-            deleted_user_id = nullif(deleted_user_id, 0),
-            parent_id = nullif(parent_id, 0)
-__EOT__;
+        $cmd = <<<__EOT__
+                    LOAD DATA local INFILE '%s' 
+                    INTO TABLE %s 
+                    CHARACTER SET 'UTF8' 
+                    FIELDS TERMINATED BY '\t' 
+                    OPTIONALLY ENCLOSED BY '\"' 
+                    ESCAPED BY '\"' 
+                    LINES TERMINATED BY '\\n' 
+                    IGNORE 1 LINES 
+                    SET created_at = NOW(),
+                        updated_at = NOW(),
+                        deleted_at = nullif(deleted_at, '0000-00-00 00:00:00'),
+                        created_user_id = nullif(created_user_id, 0),
+                        updated_user_id = nullif(updated_user_id, 0),
+                        deleted_user_id = nullif(deleted_user_id, 0),
+                        parent_id = nullif(parent_id, 0)
+            __EOT__;
         $query = sprintf($cmd, addslashes($file->getPathName()), $targets[0]);
         $cnt = \DB::connection()->getpdo()->exec($query);
     }

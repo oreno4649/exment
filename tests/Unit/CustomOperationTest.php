@@ -72,7 +72,7 @@ class CustomOperationTest extends UnitTestBase
             'update_columns' => [[
                 'column_name' => 'date',
                 'update_value_text' => OperationValueType::EXECUTE_DATETIME,
-                'update_type' => 'system'
+                'update_type' => 'system',
             ]],
         ];
         $operation = $this->_prepareCustomOperation($settings);
@@ -176,7 +176,7 @@ class CustomOperationTest extends UnitTestBase
             'operation_type' => [CustomOperationType::BULK_UPDATE],
             'operation_name' => 'test bulk update filter',
             'options' => [
-                'condition_reverse' => '1'
+                'condition_reverse' => '1',
             ],
             'update_columns' => [[
                 'column_name' => 'user',
@@ -219,7 +219,7 @@ class CustomOperationTest extends UnitTestBase
             'operation_name' => 'test bulk update filter',
             'options' => [
                 'condition_join' => 'or',
-                'condition_reverse' => '1'
+                'condition_reverse' => '1',
             ],
             'update_columns' => [[
                 'column_name' => 'user',
@@ -269,7 +269,7 @@ class CustomOperationTest extends UnitTestBase
             'update_columns' => [[
                 'column_name' => 'user',
                 'update_value_text' => OperationValueType::LOGIN_USER,
-                'update_type' => 'system'
+                'update_type' => 'system',
             ]],
         ];
         $operation = $this->_prepareCustomOperation($settings);
@@ -299,7 +299,7 @@ class CustomOperationTest extends UnitTestBase
             'update_columns' => [[
                 'column_name' => 'organization',
                 'update_value_text' => OperationValueType::BERONG_ORGANIZATIONS,
-                'update_type' => 'system'
+                'update_type' => 'system',
             ]],
         ];
         $operation = $this->_prepareCustomOperation($settings);
@@ -401,7 +401,7 @@ class CustomOperationTest extends UnitTestBase
                 'operation_type' => [CustomOperationType::BUTTON],
                 'operation_name' => 'unit test',
                 'options' => [
-                    'condition_join' => 'and'
+                    'condition_join' => 'and',
                 ],
                 'update_columns' => [],
                 'conditions' => [],
@@ -440,7 +440,7 @@ class CustomOperationTest extends UnitTestBase
                 'view_column_target_id' => $target_column->id,
                 'update_value_text' => $update_column['update_value_text'],
                 'options' => [
-                    'operation_update_type' => isset($update_column['update_type']) ? $update_column['update_type'] : 'default'
+                    'operation_update_type' => $update_column['update_type'] ?? 'default',
                 ],
             ]);
         }

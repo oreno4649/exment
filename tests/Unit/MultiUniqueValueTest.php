@@ -31,8 +31,8 @@ class MultiUniqueValueTest extends UnitTestBase
         $duplicate = CustomTable::getEloquent('child_table')->getValueModel(1);
 
         $result = $custom_table->validatorUniques(['value' => [
-            'text' => $duplicate->getValue('text'), 
-            'decimal' => $duplicate->getValue('decimal')
+            'text' => $duplicate->getValue('text'),
+            'decimal' => $duplicate->getValue('decimal'),
         ]]);
 
         $this->assertTrue(count($result) > 0);
@@ -56,9 +56,9 @@ class MultiUniqueValueTest extends UnitTestBase
         $duplicate = CustomTable::getEloquent('child_table')->getValueModel(1);
 
         $result = $custom_table->validatorUniques(['value' => [
-            'user' => $duplicate->getValue('user', ValueType::PURE_VALUE), 
-            'date' => $duplicate->getValue('date'), 
-            'integer' => $duplicate->getValue('integer') 
+            'user' => $duplicate->getValue('user', ValueType::PURE_VALUE),
+            'date' => $duplicate->getValue('date'),
+            'integer' => $duplicate->getValue('integer'),
         ]]);
 
         $this->assertTrue(count($result) > 0);
@@ -82,10 +82,10 @@ class MultiUniqueValueTest extends UnitTestBase
         $duplicate = CustomTable::getEloquent('child_table')->getValueModel(1);
 
         $result = $custom_table->validatorUniques([
-            'parent_id' => $duplicate->parent_id, 
+            'parent_id' => $duplicate->parent_id,
             'value' => [
-                'odd_even' => $duplicate->getValue('odd_even'), 
-                'currency' => $duplicate->getValue('currency') 
+                'odd_even' => $duplicate->getValue('odd_even'),
+                'currency' => $duplicate->getValue('currency'),
             ]]);
 
         $this->assertTrue(count($result) > 0);
@@ -100,9 +100,9 @@ class MultiUniqueValueTest extends UnitTestBase
 
         $result = $custom_table->validatorUniques([
             'value' => [
-                'odd_even' => $original->getValue('odd_even'), 
+                'odd_even' => $original->getValue('odd_even'),
                 'currency' => $original->getValue('currency'),
-                'integer' => 1212 
+                'integer' => 1212,
             ]], $original);
 
         $this->assertTrue(count($result) == 0);
@@ -121,9 +121,9 @@ class MultiUniqueValueTest extends UnitTestBase
 
         $result = $custom_table->validatorUniques([
             'value' => [
-                'odd_even' => $duplicate->getValue('odd_even'), 
+                'odd_even' => $duplicate->getValue('odd_even'),
                 'currency' => $duplicate->getValue('currency'),
-                'integer' => 1212 
+                'integer' => 1212,
             ]], $original);
 
         $this->assertTrue(count($result) > 0);

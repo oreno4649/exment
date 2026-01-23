@@ -91,7 +91,7 @@ class Plugin extends PluginDashboardBase
                     'button_text' => '減算',
                     'action_name' => 'minus',
                 ],
-            ]
+            ],
         ];
     }
 }

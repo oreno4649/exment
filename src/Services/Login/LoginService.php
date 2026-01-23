@@ -114,7 +114,7 @@ class LoginService
         return [
             'access_token' => array_get($session, 'access_token'),
             'refresh_token' => array_get($session, 'refresh_token'),
-            'provider' => array_get($session, 'provider')
+            'provider' => array_get($session, 'provider'),
         ];
     }
 
@@ -194,12 +194,12 @@ class LoginService
 
         $data = $custom_login_user->mapping_values;
         $errors = CustomTable::getEloquent(SystemTableName::USER)->validatorUniques($data, $exment_user, [
-            'addValue' => false
+            'addValue' => false,
         ]);
 
-        $res=[];
+        $res = [];
         array_walk($errors, function ($x) use (&$res) {
-            $res=array_merge($res, $x);
+            $res = array_merge($res, $x);
         });
 
         return $res;
@@ -277,7 +277,7 @@ class LoginService
         $message[] = $result === true ? exmtrans('common.message.success_execute') : exmtrans('common.message.error_execute');
 
         if (is_string($messages)) {
-            $message = array_merge($message, (array)$messages);
+            $message = array_merge($message, (array) $messages);
         } elseif (is_array($messages)) {
             $message = array_merge($message, $messages);
         } elseif ($messages instanceof \Illuminate\Support\MessageBag) {

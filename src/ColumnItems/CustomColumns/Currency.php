@@ -10,7 +10,7 @@ class Currency extends Decimal
     // @phpstan-ignore-next-line
     protected function _text($v)
     {
-        list($symbol, $value) = $this->getSymbolAndValue($v);
+        [$symbol, $value] = $this->getSymbolAndValue($v);
         if (!isset($symbol)) {
             return $value;
         }
@@ -21,7 +21,7 @@ class Currency extends Decimal
     // @phpstan-ignore-next-line
     protected function _html($v)
     {
-        list($symbol, $value) = $this->getSymbolAndValue($v);
+        [$symbol, $value] = $this->getSymbolAndValue($v);
         if (!isset($symbol)) {
             return $value;
         }
@@ -43,7 +43,7 @@ class Currency extends Decimal
                 $digit = intval(array_get($this->custom_column, 'options.decimal_digit'));
                 // @phpstan-ignore-next-line
                 $value = number_format($v, $digit);
-            //$value = preg_replace("/\.?0+$/",'', $value);
+                //$value = preg_replace("/\.?0+$/",'', $value);
             } else {
                 // @phpstan-ignore-next-line
                 $value = number_format($v);

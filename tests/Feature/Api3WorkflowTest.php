@@ -98,9 +98,9 @@ class Api3WorkflowTest extends ApiTestBase
                     '*' => [
                         'workflow_statuses',
                         'workflow_actions',
-                        ],
                     ],
-                ]);
+                ],
+            ]);
     }
 
     /**
@@ -129,7 +129,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'workflow'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -160,7 +160,7 @@ class Api3WorkflowTest extends ApiTestBase
             ->assertStatus(200)
             ->assertJsonStructure([
                 'workflow_statuses',
-                'workflow_actions'
+                'workflow_actions',
             ]);
     }
 
@@ -176,7 +176,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'workflow', '9999'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -206,8 +206,8 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'workflow', '999', 'statuses'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
-        ]);
+                'code' => ErrorCode::DATA_NOT_FOUND,
+            ]);
     }
 
     /**
@@ -236,8 +236,8 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'workflow', '999', 'actions'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
-        ]);
+                'code' => ErrorCode::DATA_NOT_FOUND,
+            ]);
     }
 
     /**
@@ -254,11 +254,11 @@ class Api3WorkflowTest extends ApiTestBase
             ->assertJsonFragment([
                 'id' => 4,
                 'workflow_id' => '2',
-                'status_type'=> '0',
-                'order'=> '0',
+                'status_type' => '0',
+                'order' => '0',
                 'status_name' => 'waiting',
-                'datalock_flg'=> '0',
-                'completed_flg'=> '0',
+                'datalock_flg' => '0',
+                'completed_flg' => '0',
             ]);
     }
 
@@ -274,8 +274,8 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'status', '999'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
-        ]);
+                'code' => ErrorCode::DATA_NOT_FOUND,
+            ]);
     }
 
     /**
@@ -294,12 +294,12 @@ class Api3WorkflowTest extends ApiTestBase
                 'workflow_id' => '2',
                 'status_from' => 'start',
                 'action_name' => 'send',
-                'ignore_work'=> '0',
-                'options'=> [
+                'ignore_work' => '0',
+                'options' => [
                     'comment_type' => 'nullable',
                     'flow_next_type' => 'some',
                     'flow_next_count' => '1',
-                    'work_target_type' => 'fix'
+                    'work_target_type' => 'fix',
                 ],
             ]);
     }
@@ -316,7 +316,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'action', '999'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -335,11 +335,11 @@ class Api3WorkflowTest extends ApiTestBase
                 'workflow_id' => '2',
                 'morph_type' => 'custom_value_access_all',
                 'morph_id' => '1000',
-                'workflow_action_id'=> '5',
-                'workflow_status_from_id'=> '4',
-                'workflow_status_to_id'=> '5',
-                'action_executed_flg'=> '0',
-                'latest_flg'=> '1',
+                'workflow_action_id' => '5',
+                'workflow_status_from_id' => '4',
+                'workflow_status_to_id' => '5',
+                'action_executed_flg' => '0',
+                'latest_flg' => '1',
             ]);
     }
 
@@ -355,10 +355,10 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'custom_value_edit', '1000', 'value') . '?expands=status_from,status_to,action')
             ->assertStatus(200);
         $response->assertJsonStructure([
-                'workflow_status_from',
-                'workflow_status_to',
-                'workflow_action',
-            ]);
+            'workflow_status_from',
+            'workflow_status_to',
+            'workflow_action',
+        ]);
     }
 
     /**
@@ -373,7 +373,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'custom_value_access_all', '9999', 'value'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -389,7 +389,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'custom_value_edit_all', '10', 'value'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::WORKFLOW_NOSTART
+                'code' => ErrorCode::WORKFLOW_NOSTART,
             ]);
     }
 
@@ -405,7 +405,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'no_permission', '1000', 'value'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -421,7 +421,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'custom_value_edit', '1000', 'value'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -437,7 +437,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'custom_value_edit', '1', 'work_users'))
             ->assertStatus(200)
             ->assertJsonFragment([
-                'organization_name' => 'dev'
+                'organization_name' => 'dev',
             ]);
     }
 
@@ -454,7 +454,7 @@ class Api3WorkflowTest extends ApiTestBase
             ->assertStatus(200)
             ->assertJsonCount(1)
             ->assertJsonFragment([
-                'organization_name' => 'dev'
+                'organization_name' => 'dev',
             ]);
     }
 
@@ -498,7 +498,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'custom_value_access_all', '9999', 'work_users'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -514,7 +514,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'custom_value_access_all', '1000', 'work_users'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::WORKFLOW_END
+                'code' => ErrorCode::WORKFLOW_END,
             ]);
     }
 
@@ -530,7 +530,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'no_permission', '1000', 'work_users'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -546,7 +546,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'custom_value_edit', '1000', 'work_users'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -609,7 +609,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'custom_value_edit', '99999', 'actions'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -673,7 +673,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'workflow2', '99999', 'actions'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -691,7 +691,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'not_found_table', '1', 'actions'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::INVALID_PARAMS
+                'code' => ErrorCode::INVALID_PARAMS,
             ]);
     }
 
@@ -707,7 +707,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'custom_value_edit', '1000', 'actions'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::WORKFLOW_END
+                'code' => ErrorCode::WORKFLOW_END,
             ]);
     }
 
@@ -723,7 +723,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'no_permission', '1000', 'actions'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -739,7 +739,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'custom_value_edit', '1000', 'actions'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -783,7 +783,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'custom_value_edit', '99999', 'histories'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -799,7 +799,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'not_found_table', '1', 'histories'))
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::INVALID_PARAMS
+                'code' => ErrorCode::INVALID_PARAMS,
             ]);
     }
 
@@ -815,7 +815,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'no_permission', '1000', 'histories'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -831,7 +831,7 @@ class Api3WorkflowTest extends ApiTestBase
         ])->get(admin_urls('api', 'wf', 'data', 'custom_value_edit', '1000', 'histories'))
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -851,11 +851,11 @@ class Api3WorkflowTest extends ApiTestBase
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'custom_value_edit_all', '1000', 'value'), [
             'workflow_action_id' => 2,
-            'comment' => $comment
+            'comment' => $comment,
         ])
         ->assertStatus(400)
         ->assertJsonFragment([
-            'code' => ErrorCode::VALIDATION_ERROR
+            'code' => ErrorCode::VALIDATION_ERROR,
         ]);
     }
 
@@ -873,13 +873,13 @@ class Api3WorkflowTest extends ApiTestBase
             'workflow_action_id' => 2,
             'next_users' => '4,3',
             'next_organizations' => 2,
-            'comment' => $comment
+            'comment' => $comment,
         ])
         ->assertStatus(201)
         ->assertJsonFragment([
             'workflow_action_id' => 2,
             'comment' => $comment,
-            'created_user_id' => "6" //dev0-userB
+            'created_user_id' => "6", //dev0-userB
         ]);
 
         // @phpstan-ignore-next-line
@@ -892,9 +892,9 @@ class Api3WorkflowTest extends ApiTestBase
         $this->assertTrue(count($authorities) === 3);
         foreach ($authorities as $authority) {
             $this->assertTrue(
-                ($authority->related_id == '2' && $authority->related_type == 'organization') ||
-                ($authority->related_id == '3' && $authority->related_type == 'user') ||
-                ($authority->related_id == '4' && $authority->related_type == 'user')
+                ($authority->related_id == '2' && $authority->related_type == 'organization')
+                || ($authority->related_id == '3' && $authority->related_type == 'user')
+                || ($authority->related_id == '4' && $authority->related_type == 'user')
             );
         }
     }
@@ -909,11 +909,11 @@ class Api3WorkflowTest extends ApiTestBase
         $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'custom_value_edit', '1000', 'value'), [
-            'comment' => 'comment'
+            'comment' => 'comment',
         ])
         ->assertStatus(400)
         ->assertJsonFragment([
-            'code' => ErrorCode::VALIDATION_ERROR
+            'code' => ErrorCode::VALIDATION_ERROR,
         ]);
     }
 
@@ -927,11 +927,11 @@ class Api3WorkflowTest extends ApiTestBase
         $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'custom_value_edit_all', '1000', 'value'), [
-            'workflow_action_id' => 3
+            'workflow_action_id' => 3,
         ])
         ->assertStatus(400)
         ->assertJsonFragment([
-            'code' => ErrorCode::VALIDATION_ERROR
+            'code' => ErrorCode::VALIDATION_ERROR,
         ]);
     }
 
@@ -948,14 +948,14 @@ class Api3WorkflowTest extends ApiTestBase
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'custom_value_edit_all', '1000', 'value'), [
             'workflow_action_id' => 3,
-            'comment' => $comment
+            'comment' => $comment,
         ])
         ->assertStatus(201)
         ->assertJsonFragment([
             'workflow_action_id' => 3,
             'workflow_status_to_id' => '2',
             'created_user_id' => "3", //User1
-            'comment' => $comment
+            'comment' => $comment,
         ]);
     }
 
@@ -972,14 +972,14 @@ class Api3WorkflowTest extends ApiTestBase
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'custom_value_edit_all', '1000', 'value'), [
             'workflow_action_id' => 3,
-            'comment' => $comment
+            'comment' => $comment,
         ])
         ->assertStatus(201)
         ->assertJsonFragment([
             'workflow_action_id' => 3,
             'workflow_status_to_id' => '3',
             'created_user_id' => "6", //User1
-            'comment' => $comment
+            'comment' => $comment,
         ]);
     }
 
@@ -993,11 +993,11 @@ class Api3WorkflowTest extends ApiTestBase
         $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'custom_value_edit', '1000', 'value'), [
-            'workflow_action_id' => 99999
+            'workflow_action_id' => 99999,
         ])
         ->assertStatus(400)
         ->assertJsonFragment([
-            'code' => ErrorCode::WORKFLOW_ACTION_DISABLED
+            'code' => ErrorCode::WORKFLOW_ACTION_DISABLED,
         ]);
     }
 
@@ -1011,11 +1011,11 @@ class Api3WorkflowTest extends ApiTestBase
         $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'custom_value_edit', '1', 'value'), [
-            'workflow_action_id' => 6
+            'workflow_action_id' => 6,
         ])
         ->assertStatus(400)
         ->assertJsonFragment([
-            'code' => ErrorCode::WORKFLOW_ACTION_DISABLED
+            'code' => ErrorCode::WORKFLOW_ACTION_DISABLED,
         ]);
     }
 
@@ -1035,11 +1035,11 @@ class Api3WorkflowTest extends ApiTestBase
         $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'custom_value_edit', $custom_value->id, 'value'), [
-            'workflow_action_id' => 6
+            'workflow_action_id' => 6,
         ])
         ->assertStatus(400)
         ->assertJsonFragment([
-            'code' => ErrorCode::WORKFLOW_ACTION_DISABLED
+            'code' => ErrorCode::WORKFLOW_ACTION_DISABLED,
         ]);
     }
 
@@ -1059,7 +1059,7 @@ class Api3WorkflowTest extends ApiTestBase
         $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'custom_value_edit', $custom_value->id, 'value'), [
-            'workflow_action_id' => 6
+            'workflow_action_id' => 6,
         ])
         ->assertStatus(201)
         ->assertJsonFragment([
@@ -1079,11 +1079,11 @@ class Api3WorkflowTest extends ApiTestBase
         $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'custom_value_edit', '99999', 'value'), [
-            'workflow_action_id' => 3
+            'workflow_action_id' => 3,
         ])
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::DATA_NOT_FOUND
+                'code' => ErrorCode::DATA_NOT_FOUND,
             ]);
     }
 
@@ -1097,11 +1097,11 @@ class Api3WorkflowTest extends ApiTestBase
         $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'not_found_table', '1', 'value'), [
-            'workflow_action_id' => 3
+            'workflow_action_id' => 3,
         ])
             ->assertStatus(400)
             ->assertJsonFragment([
-                'code' => ErrorCode::INVALID_PARAMS
+                'code' => ErrorCode::INVALID_PARAMS,
             ]);
     }
 
@@ -1115,11 +1115,11 @@ class Api3WorkflowTest extends ApiTestBase
         $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'no_permission', '1000', 'value'), [
-            'workflow_action_id' => 3
+            'workflow_action_id' => 3,
         ])
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -1133,11 +1133,11 @@ class Api3WorkflowTest extends ApiTestBase
         $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'custom_value_edit', '1000', 'value'), [
-            'workflow_action_id' => 3
+            'workflow_action_id' => 3,
         ])
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::PERMISSION_DENY
+                'code' => ErrorCode::PERMISSION_DENY,
             ]);
     }
 
@@ -1151,11 +1151,11 @@ class Api3WorkflowTest extends ApiTestBase
         $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'custom_value_edit', '1000', 'value'), [
-            'workflow_action_id' => 3
+            'workflow_action_id' => 3,
         ])
             ->assertStatus(403)
             ->assertJsonFragment([
-                'code' => ErrorCode::WRONG_SCOPE
+                'code' => ErrorCode::WRONG_SCOPE,
             ]);
     }
 
@@ -1177,14 +1177,14 @@ class Api3WorkflowTest extends ApiTestBase
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'workflow1', '61', 'value'), [
             'workflow_action_id' => 9,
-            'comment' => $comment
+            'comment' => $comment,
         ])
         ->assertStatus(201)
         ->assertJsonFragment([
             'workflow_action_id' => 9,
             'workflow_status_to_id' => '8',
             'comment' => $comment,
-            'created_user_id' => "7" //dev1-userC
+            'created_user_id' => "7", //dev1-userC
         ]);
 
         // @phpstan-ignore-next-line
@@ -1213,11 +1213,11 @@ class Api3WorkflowTest extends ApiTestBase
         $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'workflow1', '61', 'value'), [
-            'workflow_action_id' => 1
+            'workflow_action_id' => 1,
         ])
         ->assertStatus(400)
         ->assertJsonFragment([
-            'code' => ErrorCode::WORKFLOW_ACTION_DISABLED
+            'code' => ErrorCode::WORKFLOW_ACTION_DISABLED,
         ]);
     }
 
@@ -1231,11 +1231,11 @@ class Api3WorkflowTest extends ApiTestBase
         $this->withHeaders([
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'workflow1', '61', 'value'), [
-            'workflow_action_id' => 10
+            'workflow_action_id' => 10,
         ])
         ->assertStatus(400)
         ->assertJsonFragment([
-            'code' => ErrorCode::WORKFLOW_ACTION_DISABLED
+            'code' => ErrorCode::WORKFLOW_ACTION_DISABLED,
         ]);
     }
 
@@ -1252,14 +1252,14 @@ class Api3WorkflowTest extends ApiTestBase
             'Authorization' => "Bearer $token",
         ])->post(admin_urls('api', 'wf', 'data', 'workflow1', '61', 'value'), [
             'workflow_action_id' => 10,
-            'comment' => $comment
+            'comment' => $comment,
         ])
         ->assertStatus(201)
         ->assertJsonFragment([
             'workflow_action_id' => 10,
             'workflow_status_to_id' => '9',
             'created_user_id' => "6", //dev0-userB
-            'comment' => $comment
+            'comment' => $comment,
         ]);
     }
 }

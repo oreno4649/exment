@@ -32,7 +32,7 @@ class OAuthLoginTest extends UnitTestBase
             'sso_jit' => '0',
             'update_user_info' => '0',
             'user_code' => 'unittest_user',
-            'email' => 'unittest@mail.com'
+            'email' => 'unittest@mail.com',
         ], $options);
 
         $login_setting = LoginSetting::create([
@@ -70,8 +70,8 @@ class OAuthLoginTest extends UnitTestBase
      */
     public function testNewUserNoCreate1()
     {
-        list($custom_login_user, $validator) = $this->_commonProcess([
-            'update_user_info' => '1'
+        [$custom_login_user, $validator] = $this->_commonProcess([
+            'update_user_info' => '1',
         ]);
 
         $this->assertTrue($validator->passes(), 'Validation pass error.');
@@ -93,7 +93,7 @@ class OAuthLoginTest extends UnitTestBase
      */
     public function testNewUserNoCreate2()
     {
-        list($custom_login_user, $validator) = $this->_commonProcess();
+        [$custom_login_user, $validator] = $this->_commonProcess();
 
         $this->assertTrue($validator->passes(), 'Validation pass error.');
         try {
@@ -114,9 +114,9 @@ class OAuthLoginTest extends UnitTestBase
      */
     public function testNewUserCreate1()
     {
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'sso_jit' => '1',
-            'update_user_info' => '1'
+            'update_user_info' => '1',
         ]);
 
         $this->assertTrue($validator->passes(), 'Validation pass error.');
@@ -137,7 +137,7 @@ class OAuthLoginTest extends UnitTestBase
      */
     public function testNewUserCreate2()
     {
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'sso_jit' => '1',
         ]);
 
@@ -160,7 +160,7 @@ class OAuthLoginTest extends UnitTestBase
      */
     public function testValidateErrorEmail()
     {
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'sso_jit' => '1',
             'email' => 'error_mail_address',
         ]);
@@ -180,7 +180,7 @@ class OAuthLoginTest extends UnitTestBase
      */
     public function testValidateErrorUserCode()
     {
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'sso_jit' => '1',
             'user_code' => 'あいうえお',
         ]);
@@ -202,7 +202,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'update_user_info' => '1',
             'user_code' => $user->getValue('user_code'),
             'email' => $user->getValue('email'),
@@ -228,7 +228,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'user_code' => $user->getValue('user_code'),
             'email' => $user->getValue('email'),
         ]);
@@ -253,7 +253,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'sso_jit' => '1',
             'update_user_info' => '1',
             'user_code' => $user->getValue('user_code'),
@@ -280,7 +280,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'sso_jit' => '1',
             'user_code' => $user->getValue('user_code'),
             'email' => $user->getValue('email'),
@@ -306,7 +306,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'update_user_info' => '1',
             'email' => $user->getValue('email'),
         ]);
@@ -328,7 +328,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'email' => $user->getValue('email'),
         ]);
 
@@ -352,7 +352,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'sso_jit' => '1',
             'update_user_info' => '1',
             'email' => $user->getValue('email'),
@@ -375,7 +375,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'sso_jit' => '1',
             'email' => $user->getValue('email'),
         ]);
@@ -401,7 +401,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'sso_jit' => '1',
             'update_user_info' => '1',
             'user_code' => 'あいうえお',
@@ -426,7 +426,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'sso_jit' => '1',
             'user_code' => 'あいうえお',
             'email' => $user->getValue('email'),
@@ -453,7 +453,7 @@ class OAuthLoginTest extends UnitTestBase
         $user1 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
         $user2 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER2);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'update_user_info' => '1',
             'user_code' => $user2->getValue('user_code'),
             'email' => $user1->getValue('email'),
@@ -477,7 +477,7 @@ class OAuthLoginTest extends UnitTestBase
         $user1 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
         $user2 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER2);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'user_code' => $user2->getValue('user_code'),
             'email' => $user1->getValue('email'),
         ]);
@@ -503,7 +503,7 @@ class OAuthLoginTest extends UnitTestBase
         $user1 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
         $user2 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER2);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'sso_jit' => '1',
             'update_user_info' => '1',
             'user_code' => $user2->getValue('user_code'),
@@ -528,7 +528,7 @@ class OAuthLoginTest extends UnitTestBase
         $user1 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
         $user2 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER2);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'sso_jit' => '1',
             'user_code' => $user2->getValue('user_code'),
             'email' => $user1->getValue('email'),
@@ -554,7 +554,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'mapping_user_column' => 'user_code',
             'update_user_info' => '1',
             'user_code' => $user->getValue('user_code'),
@@ -580,7 +580,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'mapping_user_column' => 'user_code',
             'user_code' => $user->getValue('user_code'),
         ]);
@@ -605,7 +605,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'mapping_user_column' => 'user_code',
             'sso_jit' => '1',
             'update_user_info' => '1',
@@ -632,7 +632,7 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'mapping_user_column' => 'user_code',
             'sso_jit' => '1',
             'user_code' => $user->getValue('user_code'),
@@ -658,12 +658,12 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'mapping_user_column' => 'user_code',
             'sso_jit' => '1',
             'update_user_info' => '1',
             'user_code' => $user->getValue('user_code'),
-            'email' => 'wrongaddress'
+            'email' => 'wrongaddress',
         ]);
 
         $result = $validator->passes();
@@ -683,11 +683,11 @@ class OAuthLoginTest extends UnitTestBase
     {
         $user = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'mapping_user_column' => 'user_code',
             'sso_jit' => '1',
             'user_code' => $user->getValue('user_code'),
-            'email' => 'wrongaddress'
+            'email' => 'wrongaddress',
         ]);
 
         $this->assertTrue($validator->passes(), 'Validation pass error.');
@@ -711,7 +711,7 @@ class OAuthLoginTest extends UnitTestBase
         $user1 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
         $user2 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER2);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'mapping_user_column' => 'user_code',
             'update_user_info' => '1',
             'user_code' => $user2->getValue('user_code'),
@@ -736,7 +736,7 @@ class OAuthLoginTest extends UnitTestBase
         $user1 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
         $user2 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER2);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'mapping_user_column' => 'user_code',
             'user_code' => $user2->getValue('user_code'),
             'email' => $user1->getValue('email'),
@@ -763,7 +763,7 @@ class OAuthLoginTest extends UnitTestBase
         $user1 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
         $user2 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER2);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'mapping_user_column' => 'user_code',
             'sso_jit' => '1',
             'update_user_info' => '1',
@@ -789,7 +789,7 @@ class OAuthLoginTest extends UnitTestBase
         $user1 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER1);
         $user2 = CustomTable::getEloquent(SystemTableName::USER)->getValueModel(TestDefine::TESTDATA_USER_LOGINID_USER2);
 
-        list($custom_login_user, $validator) = $this->_commonProcess([
+        [$custom_login_user, $validator] = $this->_commonProcess([
             'mapping_user_column' => 'user_code',
             'sso_jit' => '1',
             'user_code' => $user2->getValue('user_code'),

@@ -92,7 +92,7 @@ trait SummaryItemTrait
             $result = \DB::getQueryGrammar()->getDateFormatString($group_condition, $value_table_column, !$asSelect);
         } else {
             /** @phpstan-ignore-next-line */
-            $result = $is_wrapped? $value_table_column: \Exment::wrapColumn($value_table_column);
+            $result = $is_wrapped ? $value_table_column : \Exment::wrapColumn($value_table_column);
         }
 
         return $result;

@@ -342,7 +342,7 @@ class SelectTableTest extends UnitTestBase
         $custom_item = $custom_column->column_item;
 
         $field = $custom_item->getAdminField();
-        list($parentValue, $linkage) = $this->getParentValueAndLinkage($custom_column, $options);
+        [$parentValue, $linkage] = $this->getParentValueAndLinkage($custom_column, $options);
         $fieldOptions = $this->getSelectFieldOptions($custom_column, $linkage, $parentValue, $options);
 
         // get select option(Displaying)

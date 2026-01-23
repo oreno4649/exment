@@ -59,7 +59,7 @@ trait ExmentKitPrepareTrait
             'options[icon]' => 'fa-automobile',
             'options[search_enabled]' => $search_enabled,
             'options[one_record_flg]' => $one_record_flg,
-            'options[all_user_editable_flg]' => '1'
+            'options[all_user_editable_flg]' => '1',
         ];
         // Create custom table
         $this->visit(admin_url('table/create'))
@@ -110,7 +110,7 @@ trait ExmentKitPrepareTrait
             'column_view_name' => 'Select From Static Value',
             'column_type' => 'select',
             'options' => [
-                'select_item' => 'Option 1'."\n".'Option 2',
+                'select_item' => 'Option 1' . "\n" . 'Option 2',
                 'multiple_enabled' => 1,
                 'index_enabled' => 1,
             ],
@@ -137,7 +137,7 @@ trait ExmentKitPrepareTrait
             'column_view_name' => 'Select Save Value and Lable',
             'column_type' => 'select_valtext',
             'options' => [
-                'select_item_valtext' => '1,Value 1'."\n".'2,Value 2',
+                'select_item_valtext' => '1,Value 1' . "\n" . '2,Value 2',
                 'multiple_enabled' => 1,
             ],
         ];

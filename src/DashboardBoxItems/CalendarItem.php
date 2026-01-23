@@ -64,9 +64,7 @@ class CalendarItem implements ItemInterface
      * saving event
      */
     // @phpstan-ignore-next-line
-    public static function saving(&$form)
-    {
-    }
+    public static function saving(&$form) {}
 
     /**
      * get html(for display)
@@ -116,7 +114,7 @@ class CalendarItem implements ItemInterface
             ->options($tables)
             ->attribute([
                 'data-linkage' => json_encode(['options_target_view_id' => admin_urls('dashboardbox', 'table_views', DashboardBoxType::CALENDAR)]),
-                'data-linkage-expand' => json_encode(['dashboard_suuid' => $dashboard->suuid])
+                'data-linkage-expand' => json_encode(['dashboard_suuid' => $dashboard->suuid]),
             ]);
 
         $form->select('target_view_id', exmtrans("dashboard.dashboard_box_options.target_view_id"))
@@ -129,7 +127,7 @@ class CalendarItem implements ItemInterface
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($dashboard_box) = $args + [null];
+        [$dashboard_box] = $args + [null];
         return new self($dashboard_box);
     }
 }

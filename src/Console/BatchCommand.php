@@ -66,7 +66,7 @@ class BatchCommand extends Command
         }
 
         $batch = $plugin->getClass(PluginType::BATCH, [
-            'command_options' => $this->options()
+            'command_options' => $this->options(),
         ]);
         $result = $batch->execute();
 

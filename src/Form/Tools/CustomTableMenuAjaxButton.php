@@ -19,10 +19,10 @@ class CustomTableMenuAjaxButton extends ModalTileAjaxMenuButton
         parent::__construct(
             null,
             [
-            'label' => exmtrans("change_page_menu.change_page_label"),
-            'icon' => 'fa-cog',
-            'button_class' => 'btn-default',
-        ]
+                'label' => exmtrans("change_page_menu.change_page_label"),
+                'icon' => 'fa-cog',
+                'button_class' => 'btn-default',
+            ]
         );
         $this->modal_title = exmtrans("change_page_menu.change_page_label");
     }
@@ -40,21 +40,21 @@ class CustomTableMenuAjaxButton extends ModalTileAjaxMenuButton
 
         return <<<EOT
 
-        $('.block_custom_table').find('.grid-row-checkbox').off('ifChanged').on('ifChanged',function(ev){
-            var rows = selectedRows();
-            $('[data-widgetmodal_uuid="$uuid"]').attr('disabled', rows.length !== 1);
-        });
+                    $('.block_custom_table').find('.grid-row-checkbox').off('ifChanged').on('ifChanged',function(ev){
+                        var rows = selectedRows();
+                        $('[data-widgetmodal_uuid="$uuid"]').attr('disabled', rows.length !== 1);
+                    });
 
-        $('[data-widgetmodal_uuid="$uuid"]').off('click').on('click', function(ev){
-            var rows = selectedRows();
-            if(rows.length !== 1){
-                return;
-            }
+                    $('[data-widgetmodal_uuid="$uuid"]').off('click').on('click', function(ev){
+                        var rows = selectedRows();
+                        if(rows.length !== 1){
+                            return;
+                        }
 
-            url = admin_url(URLJoin('table', 'menuModal', rows[0]));
-            Exment.ModalEvent.ShowModal($(ev.target), url);
-        });
-EOT;
+                        url = admin_url(URLJoin('table', 'menuModal', rows[0]));
+                        Exment.ModalEvent.ShowModal($(ev.target), url);
+                    });
+            EOT;
     }
 
     /**
@@ -70,7 +70,7 @@ EOT;
         }
 
         $this->groups = [[
-            'items' => $items
+            'items' => $items,
         ]];
 
         return parent::html();

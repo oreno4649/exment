@@ -38,16 +38,12 @@ class PluginButtonBase
     }
 
     // @phpstan-ignore-next-line
-    public function execute()
-    {
-    }
+    public function execute() {}
 
     /**
      * Render button freeformat.
      *
      * @return string|Renderable|null
      */
-    public function render()
-    {
-    }
+    public function render() {}
 }

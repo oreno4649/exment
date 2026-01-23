@@ -47,7 +47,7 @@ class WorkflowItem extends SystemItem
         }
 
         if ($appendTable) {
-            return $this->sqlUniqueTableName() .'.'. $sqlname;
+            return $this->sqlUniqueTableName() . '.' . $sqlname;
         }
         return $sqlname;
     }
@@ -55,7 +55,7 @@ class WorkflowItem extends SystemItem
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($custom_table, $column_name, $custom_value) = $args + [null, null, null];
+        [$custom_table, $column_name, $custom_value] = $args + [null, null, null];
         return new self($custom_table, $column_name, $custom_value);
     }
 

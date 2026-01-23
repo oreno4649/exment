@@ -36,7 +36,7 @@ class Count extends ItemBase
     // @phpstan-ignore-next-line
     public function val()
     {
-        return '${count:' . array_get($this->child_custom_table, 'table_name') .'}';
+        return '${count:' . array_get($this->child_custom_table, 'table_name') . '}';
     }
 
     // @phpstan-ignore-next-line

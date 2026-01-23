@@ -101,7 +101,7 @@ class TableService
                 'btn_class' => 'btn-success download-qr',
                 'title' => exmtrans("common.download"),
                 'text' => exmtrans('common.message.confirm_execute', exmtrans('common.download')),
-                'method' => 'post'
+                'method' => 'post',
             ]));
             $tools->append(new ModalButton([
                 'url' => route('exment.form_create_qrcode', ['tableKey' => $custom_table->id]),

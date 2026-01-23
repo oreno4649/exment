@@ -56,8 +56,8 @@ class BooleanRule implements Rule
             $values[] = $v;
         }
 
-        return (string)trans('validation.in', [
-            'values' => implode(",", $values)
+        return (string) trans('validation.in', [
+            'values' => implode(",", $values),
         ]);
     }
 }

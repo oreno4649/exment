@@ -52,21 +52,21 @@ class PluginMenuButton
         $plugin_type = $this->plugin_type;
         return <<<EOT
 
-        $('#menu_button_$uuid').off('click').on('click', function(){
-            let select_ids = $('.column-__row_selector__').length > 0 ? $.admin.grid.selected() : null;
-            Exment.CommonEvent.ShowSwal("$url", {
-                title: "$label",
-                text: "$text",
-                confirm:"$confirm",
-                cancel:"$cancel",
-                data: {
-                    uuid:"$uuid",
-                    plugin_type: '$plugin_type',
-                    select_ids: select_ids
-                }
-            });
-        });
-EOT;
+                    $('#menu_button_$uuid').off('click').on('click', function(){
+                        let select_ids = $('.column-__row_selector__').length > 0 ? $.admin.grid.selected() : null;
+                        Exment.CommonEvent.ShowSwal("$url", {
+                            title: "$label",
+                            text: "$text",
+                            confirm:"$confirm",
+                            cancel:"$cancel",
+                            data: {
+                                uuid:"$uuid",
+                                plugin_type: '$plugin_type',
+                                select_ids: select_ids
+                            }
+                        });
+                    });
+            EOT;
     }
 
     // @phpstan-ignore-next-line

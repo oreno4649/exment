@@ -22,7 +22,7 @@ class LoginUserAction extends ExportActionBase implements ActionInterface
     public function datalist()
     {
         $provider = new Export\LoginUserProvider([
-            'grid' => $this->grid
+            'grid' => $this->grid,
         ]);
 
         $datalist = [];

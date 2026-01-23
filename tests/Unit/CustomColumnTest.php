@@ -21,7 +21,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testText($value_type)
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::TEXT);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, 'text');
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, 'text');
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, 'text');
@@ -61,7 +61,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testTextarea($value_type, $matchedValue)
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::TEXTAREA);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::TEXTAREA_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::TEXTAREA_VALUE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -106,7 +106,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testEditor($value_type, $matchedValue)
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::EDITOR);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::EDITOR_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::EDITOR_VALUE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -133,7 +133,7 @@ class CustomColumnTest extends UnitTestBase
      */
     public function testEditorHtml()
     {
-        $this->_testEditor(ValueType::HTML, '<div class="show-tinymce">'.replaceBreak(html_clean(static::EDITOR_VALUE), false).'</div>');
+        $this->_testEditor(ValueType::HTML, '<div class="show-tinymce">' . replaceBreak(html_clean(static::EDITOR_VALUE), false) . '</div>');
     }
 
 
@@ -151,7 +151,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testUrl($value_type, $matchedValue)
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::URL);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::URL_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::URL_VALUE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -196,7 +196,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testEmail($value_type, $matchedValue)
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::EMAIL);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::EMAIL_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::EMAIL_VALUE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -241,7 +241,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testInteger($value_type, $matchedValue, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::INTEGER, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::INTEGER_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::INTEGER_VALUE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -313,9 +313,9 @@ class CustomColumnTest extends UnitTestBase
      */
     public function _testDecimal($value_type, $matchedValue, $options = [], $originalValue = null)
     {
-        $originalValue = $originalValue?? static::CURRENCY_VALUE;
+        $originalValue ??= static::CURRENCY_VALUE;
         $custom_column = $this->getCustomColumnModel(ColumnType::DECIMAL, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, $originalValue);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, $originalValue);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -444,9 +444,9 @@ class CustomColumnTest extends UnitTestBase
      */
     public function _testCurrency($value_type, $matchedValue, $options = [], $originalValue = null)
     {
-        $originalValue = $originalValue?? static::CURRENCY_VALUE;
+        $originalValue ??= static::CURRENCY_VALUE;
         $custom_column = $this->getCustomColumnModel(ColumnType::CURRENCY, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, $originalValue);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, $originalValue);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -510,7 +510,7 @@ class CustomColumnTest extends UnitTestBase
             ValueType::TEXT,
             '1000.00円',
             ['currency_symbol' => CurrencySymbol::JPY2,
-             'decimal_digit' => 2],
+                'decimal_digit' => 2],
             static::CURRENCY_VALUE2
         );
     }
@@ -524,8 +524,8 @@ class CustomColumnTest extends UnitTestBase
             ValueType::TEXT,
             '1,000.00円',
             ['currency_symbol' => CurrencySymbol::JPY2,
-             'number_format' => 1,
-             'decimal_digit' => 2],
+                'number_format' => 1,
+                'decimal_digit' => 2],
             static::CURRENCY_VALUE2
         );
     }
@@ -539,7 +539,7 @@ class CustomColumnTest extends UnitTestBase
             ValueType::TEXT,
             '$1000.20',
             ['currency_symbol' => CurrencySymbol::USD,
-             'decimal_digit' => 2],
+                'decimal_digit' => 2],
             static::CURRENCY_VALUE3
         );
     }
@@ -553,8 +553,8 @@ class CustomColumnTest extends UnitTestBase
             ValueType::TEXT,
             '$1,000.20',
             ['currency_symbol' => CurrencySymbol::USD,
-             'number_format' => 1,
-             'decimal_digit' => 2],
+                'number_format' => 1,
+                'decimal_digit' => 2],
             static::CURRENCY_VALUE3
         );
     }
@@ -575,7 +575,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testDate($value_type, $matchedValue, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::DATE, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::DATE_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::DATE_VALUE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -649,7 +649,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testTime($value_type, $matchedValue, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::TIME, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::TIME_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::TIME_VALUE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -723,7 +723,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testDateTime($value_type, $matchedValue, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::DATETIME, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::DATETIME_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::DATETIME_VALUE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -794,7 +794,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testSelect($value_type, $matchedValue, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::SELECT, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::SELECT_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::SELECT_VALUE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -834,7 +834,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testSelectMultiple($value_type, $matchedValue, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::SELECT, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::SELECT_VALUE_MULTIPLE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::SELECT_VALUE_MULTIPLE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -881,7 +881,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testSelectValText($value_type, $matchedValue, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::SELECT_VALTEXT, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::SELECT_VALTEXT_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::SELECT_VALTEXT_VALUE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -924,7 +924,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testSelectValTextMultiple($value_type, $matchedValue, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::SELECT_VALTEXT, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::SELECT_VALTEXT_VALUE_MULTIPLE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::SELECT_VALTEXT_VALUE_MULTIPLE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -970,7 +970,7 @@ class CustomColumnTest extends UnitTestBase
         $options['select_target_table'] = CustomTable::getEloquent('information')->id;
 
         $custom_column = $this->getCustomColumnModel(ColumnType::SELECT_TABLE, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, 1);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, 1);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -1013,7 +1013,7 @@ class CustomColumnTest extends UnitTestBase
         $options['select_target_table'] = CustomTable::getEloquent('information')->id;
 
         $custom_column = $this->getCustomColumnModel(ColumnType::SELECT_TABLE, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, [1, 2]);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, [1, 2]);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -1061,7 +1061,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testUser($value_type, $matchedValue, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::USER, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, 1);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, 1);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -1106,7 +1106,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testOrganization($value_type, $matchedValue, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::ORGANIZATION, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, 1);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, 1);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -1148,7 +1148,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testYesNo($value_type, $matchedValue, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::YESNO, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::YESNO_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::YESNO_VALUE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);
@@ -1194,7 +1194,7 @@ class CustomColumnTest extends UnitTestBase
     public function _testBoolean($value_type, $matchedValue, $options = [])
     {
         $custom_column = $this->getCustomColumnModel(ColumnType::BOOLEAN, $options);
-        list($custom_value, $column_item) = $this->getCustomValueAndColumnItem($custom_column, static::BOOLEAN_VALUE);
+        [$custom_value, $column_item] = $this->getCustomValueAndColumnItem($custom_column, static::BOOLEAN_VALUE);
 
         $v = $column_item->{$value_type}();
         $this->assertMatch($v, $matchedValue);

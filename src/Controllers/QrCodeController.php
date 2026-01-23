@@ -24,7 +24,7 @@ class QrCodeController extends Controller
         if (!$custom_table) {
             return view('exment::qr-code.error')->render();
         }
-        $form_id = (int)$custom_table->getOption('form_after_read');
+        $form_id = (int) $custom_table->getOption('form_after_read');
         if ($form_id == 0) {
             $form_suuid = CustomForm::getDefault($custom_table)->suuid;
         } else {
@@ -32,11 +32,11 @@ class QrCodeController extends Controller
         }
         if ($custom_table->getOption('action_after_read') === DataScanSubmitRedirect::CONTINUE_EDITING) {
             $url = admin_urls('data', $custom_table->table_name, $id, 'edit?formid=' . $form_suuid . '&after-save=1');
-        } else if ($custom_table->getOption('action_after_read') === DataScanSubmitRedirect::VIEW) {
+        } elseif ($custom_table->getOption('action_after_read') === DataScanSubmitRedirect::VIEW) {
             $url = admin_urls('data', $custom_table->table_name, $id, 'edit?formid=' . $form_suuid . '&after-save=3');
-        } else if ($custom_table->getOption('action_after_read') === DataScanSubmitRedirect::LIST) {
+        } elseif ($custom_table->getOption('action_after_read') === DataScanSubmitRedirect::LIST) {
             $url = admin_urls('data', $custom_table->table_name, $id, 'edit?formid=' . $form_suuid);
-        } else if ($custom_table->getOption('action_after_read') === DataScanSubmitRedirect::CAMERA) {
+        } elseif ($custom_table->getOption('action_after_read') === DataScanSubmitRedirect::CAMERA) {
             $url = admin_urls('data', $custom_table->table_name, $id, 'edit?formid=' . $form_suuid . '&redirect-camera=1');
         } else {
             $url = admin_urls('data', $custom_table->table_name, $id, 'edit?formid=' . $form_suuid . '&redirect-dashboard=1');

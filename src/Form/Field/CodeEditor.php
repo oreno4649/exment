@@ -34,17 +34,17 @@ class CodeEditor extends Textarea
         $height = $this->height;
         $this->script = <<<EOT
 
-        var elem = document.querySelector('{$this->getElementClassSelector()}');
-        var myCodeMirror = CodeMirror.fromTextArea(elem, {
-            mode: '$mode',
-            lineNumbers: true,
-            indentUnit: 4,
-        });
-EOT;
+                    var elem = document.querySelector('{$this->getElementClassSelector()}');
+                    var myCodeMirror = CodeMirror.fromTextArea(elem, {
+                        mode: '$mode',
+                        lineNumbers: true,
+                        indentUnit: 4,
+                    });
+            EOT;
         if (!is_nullorempty($height)) {
             $this->script .= <<<EOT
-        myCodeMirror.setSize(null, $height);
-EOT;
+                        myCodeMirror.setSize(null, $height);
+                EOT;
         }
 
         return parent::render();

@@ -35,7 +35,7 @@ class InitializeForm
         $form->password('password', exmtrans('user.password'))->required()->help(\Exment::get_password_help());
         $form->password('password_confirmation', exmtrans('user.password_confirmation'))->required();
         return view('exment::initialize.content', [
-            'content'=> $form->render(),
+            'content' => $form->render(),
             'header' => exmtrans('system.initialize_header'),
             'description' => exmtrans('system.initialize_description'),
         ]);

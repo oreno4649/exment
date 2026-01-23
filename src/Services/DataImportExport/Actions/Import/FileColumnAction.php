@@ -69,13 +69,13 @@ class FileColumnAction implements ActionInterface
                 }
 
                 // validate data
-                list($data_import, $error_data) = $provider->validateImportData($dataObject);
+                [$data_import, $error_data] = $provider->validateImportData($dataObject);
 
                 // if has error data, return error data
                 if (is_array($error_data) && count($error_data) > 0) {
                     $error_msg = [];
                     if ($data_import_cnt > 0) {
-                        $messages[] = $table_name.':'.$data_import_cnt;
+                        $messages[] = $table_name . ':' . $data_import_cnt;
                     }
                     if (count($messages) > 0) {
                         $error_msg[] = exmtrans('command.import.error_info_ex', implode(',', $messages));
@@ -124,9 +124,7 @@ class FileColumnAction implements ActionInterface
 
 
     // @phpstan-ignore-next-line
-    public function import($datalist, $options = [])
-    {
-    }
+    public function import($datalist, $options = []) {}
 
     /**
      * filter only custom_table or relations datalist.

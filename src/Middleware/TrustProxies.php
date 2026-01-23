@@ -38,11 +38,11 @@ class TrustProxies extends BaseTrustProxies
         if (!is_nullorempty($headers)) {
             $this->headers = constant("\Illuminate\Http\Request::$headers");
         } else {
-            $this->headers = Request::HEADER_X_FORWARDED_FOR |
-                Request::HEADER_X_FORWARDED_HOST |
-                Request::HEADER_X_FORWARDED_PORT |
-                Request::HEADER_X_FORWARDED_PROTO |
-                Request::HEADER_X_FORWARDED_AWS_ELB
+            $this->headers = Request::HEADER_X_FORWARDED_FOR
+                | Request::HEADER_X_FORWARDED_HOST
+                | Request::HEADER_X_FORWARDED_PORT
+                | Request::HEADER_X_FORWARDED_PROTO
+                | Request::HEADER_X_FORWARDED_AWS_ELB
             ;
         }
 

@@ -31,7 +31,7 @@ trait ImportTrait
 
             $exts = stringToArray($ext);
             foreach ($exts as $e) {
-                if (preg_match('/.+\.'.$e.'$/i', $file)) {
+                if (preg_match('/.+\.' . $e . '$/i', $file)) {
                     return true;
                 }
             }

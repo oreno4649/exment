@@ -55,8 +55,8 @@ class CustomViewColumn extends ModelBase
                         'replacedName' => [
                             'table_name' => 'view_column_table_name',
                             'column_name' => 'view_column_target_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getUniqueKeyValues',
             ],
@@ -66,8 +66,8 @@ class CustomViewColumn extends ModelBase
                         'replacedName' => [
                             'table_name' => 'view_pivot_table_name',
                             'column_name' => 'view_pivot_column_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getPivotUniqueKeyValues',
             ],
@@ -146,7 +146,7 @@ class CustomViewColumn extends ModelBase
             return $this;
         }
 
-        list($column_type, $column_table_id, $column_type_target, $view_pivot_column, $view_pivot_table) = $this->getViewColumnTargetItems($end_date);
+        [$column_type, $column_table_id, $column_type_target, $view_pivot_column, $view_pivot_table] = $this->getViewColumnTargetItems($end_date);
 
         $this->setOption('end_date_type', $column_type);
         $this->setOption('end_date_target', $column_type_target);
@@ -211,7 +211,7 @@ class CustomViewColumn extends ModelBase
     // @phpstan-ignore-next-line
     protected function exportReplaceJson(&$json)
     {
-        self:: exportReplaceJsonTrait($json);
+        self::exportReplaceJsonTrait($json);
 
         $end_date_type = array_get($json, 'options.end_date_type');
         $end_date_target = array_get($json, 'options.end_date_target');
@@ -221,7 +221,7 @@ class CustomViewColumn extends ModelBase
                 $custom_column = CustomColumn::find($end_date_target);
 
                 // @phpstan-ignore-next-line
-                $json['end_date_target_name'] = $custom_column? $custom_column->column_name: null;
+                $json['end_date_target_name'] = $custom_column ? $custom_column->column_name : null;
             } elseif ($end_date_type == ConditionType::SYSTEM) {
                 $json['end_date_target_name'] =  SystemColumn::getOption(['id' => $end_date_target])['name'];
             }

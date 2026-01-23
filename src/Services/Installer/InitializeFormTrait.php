@@ -50,7 +50,7 @@ trait InitializeFormTrait
                 'deleteExtraData'      => [
                     '_token'           => csrf_token(),
                     '_method'          => 'PUT',
-                ]
+                ],
             ]
         );
         array_set($fileOption, 'deleteExtraData.delete_flg', 'site_logo');
@@ -184,7 +184,7 @@ trait InitializeFormTrait
         ];
         if ($initialize) {
             $rules = array_merge($rules, [
-                'user_code' => 'required|max:32|regex:/'.Define::RULES_REGEX_ALPHANUMERIC_UNDER_HYPHEN.'/',
+                'user_code' => 'required|max:32|regex:/' . Define::RULES_REGEX_ALPHANUMERIC_UNDER_HYPHEN . '/',
                 'user_name' => 'required|max:32',
                 'email' => 'required|email',
                 'password' => get_password_rule(true, null),
@@ -243,31 +243,31 @@ trait InitializeFormTrait
         $template_search_url = admin_urls('api', 'template', 'search');
         $script = <<<EOT
 
-    $(function(){
-        searchTemplate(null);
-    });
+                $(function(){
+                    searchTemplate(null);
+                });
 
-    function searchTemplate(q, url){
-        if(!hasValue(url)){
-            url = '$template_search_url';
-        }
-        $('#tile-template .overlay').show();
-        $.ajax({
-            method: 'POST',
-            url: url,
-            data: {
-                q: q,
-                name: 'template',
-                column: 'template',
-                _token:LA.token,
-            },
-            success: function (data) {
-                $('#tile-template .tile-group-items').html(data);
-                $('#tile-template .overlay').hide();
-            }
-        });
-    }
-EOT;
+                function searchTemplate(q, url){
+                    if(!hasValue(url)){
+                        url = '$template_search_url';
+                    }
+                    $('#tile-template .overlay').show();
+                    $.ajax({
+                        method: 'POST',
+                        url: url,
+                        data: {
+                            q: q,
+                            name: 'template',
+                            column: 'template',
+                            _token:LA.token,
+                        },
+                        success: function (data) {
+                            $('#tile-template .tile-group-items').html(data);
+                            $('#tile-template .overlay').hide();
+                        }
+                    });
+                }
+            EOT;
         \Admin::script($script);
     }
     /**

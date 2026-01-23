@@ -232,7 +232,7 @@ class MySqlConnection extends BaseConnection implements ConnectionInterface
         // execute backup. contains soft deleted table
         \DB::table($table)->orderBy('id')->chunk(1000, function ($rows) use ($file, $outcols) {
             foreach ($rows as $row) {
-                $array = (array)$row;
+                $array = (array) $row;
                 $row = array_map(function ($key) use ($array) {
                     return $array[$key];
                 }, $outcols);
@@ -329,22 +329,22 @@ class MySqlConnection extends BaseConnection implements ConnectionInterface
                 \DB::table($table)->truncate();
 
                 $cmd = <<<__EOT__
-                LOAD DATA local INFILE '%s'
-                INTO TABLE %s
-                CHARACTER SET 'UTF8'
-                FIELDS TERMINATED BY '\t'
-                OPTIONALLY ENCLOSED BY '\"'
-                ESCAPED BY '\"'
-                LINES TERMINATED BY '\\n'
-                IGNORE 1 LINES
-                SET created_at = nullif(created_at, '0000-00-00 00:00:00'),
-                    updated_at = nullif(updated_at, '0000-00-00 00:00:00'),
-                    deleted_at = nullif(deleted_at, '0000-00-00 00:00:00'),
-                    created_user_id = nullif(created_user_id, 0),
-                    updated_user_id = nullif(updated_user_id, 0),
-                    deleted_user_id = nullif(deleted_user_id, 0),
-                    parent_id = nullif(parent_id, 0)
-__EOT__;
+                                    LOAD DATA local INFILE '%s'
+                                    INTO TABLE %s
+                                    CHARACTER SET 'UTF8'
+                                    FIELDS TERMINATED BY '\t'
+                                    OPTIONALLY ENCLOSED BY '\"'
+                                    ESCAPED BY '\"'
+                                    LINES TERMINATED BY '\\n'
+                                    IGNORE 1 LINES
+                                    SET created_at = nullif(created_at, '0000-00-00 00:00:00'),
+                                        updated_at = nullif(updated_at, '0000-00-00 00:00:00'),
+                                        deleted_at = nullif(deleted_at, '0000-00-00 00:00:00'),
+                                        created_user_id = nullif(created_user_id, 0),
+                                        updated_user_id = nullif(updated_user_id, 0),
+                                        deleted_user_id = nullif(deleted_user_id, 0),
+                                        parent_id = nullif(parent_id, 0)
+                    __EOT__;
                 $query = sprintf($cmd, addslashes($file->getPathName()), $table);
                 $cnt = \DB::connection()->getpdo()->exec($query);
 

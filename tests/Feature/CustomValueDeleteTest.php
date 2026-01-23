@@ -183,7 +183,7 @@ class CustomValueDeleteTest extends FeatureTestBase
     public function testSoftDeleteRelation()
     {
         $this->init(false);
-        list($custom_value, $children) = $this->initTestDataRelation1n();
+        [$custom_value, $children] = $this->initTestDataRelation1n();
 
         // get custom value info
         $info = $this->getCustomValueInfo($custom_value->custom_table, $custom_value->id);
@@ -253,7 +253,7 @@ class CustomValueDeleteTest extends FeatureTestBase
     public function testForceDeleteRelation()
     {
         $this->init(true);
-        list($custom_value, $children) = $this->initTestDataRelation1n();
+        [$custom_value, $children] = $this->initTestDataRelation1n();
 
         // get custom value info
         $info = $this->getCustomValueInfo($custom_value->custom_table, $custom_value->id);
@@ -357,8 +357,11 @@ class CustomValueDeleteTest extends FeatureTestBase
     protected function assertCustomRelationCount(CustomValue $custom_value, int $dataCount, int $deleteCount)
     {
         // delete custom relation is 1:n value
-        $relation = CustomRelation::getRelationByParentChild($custom_value->custom_table, 
-            TestDefine::TESTDATA_TABLE_NAME_CHILD_TABLE, RelationType::ONE_TO_MANY);
+        $relation = CustomRelation::getRelationByParentChild(
+            $custom_value->custom_table,
+            TestDefine::TESTDATA_TABLE_NAME_CHILD_TABLE,
+            RelationType::ONE_TO_MANY
+        );
 
         $children = $custom_value->getChildrenValues($relation, true)
             ->withTrashed()

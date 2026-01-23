@@ -13,7 +13,6 @@ use Exceedone\Exment\Enums\TemplateImportResult;
  */
 trait TemplateTrait
 {
-
     // @phpstan-ignore-next-line
     protected static $defaultExcepts = ['id', 'created_at', 'updated_at', 'created_user_id', 'updated_user_id', 'disabled_delete'];
 
@@ -371,7 +370,7 @@ trait TemplateTrait
                 foreach (array_get($json, $key, []) as $count => $child) {
                     $classname::importTemplate($child, $is_update, [
                         'parent' => $obj,
-                        'count' => ($count + 1)
+                        'count' => ($count + 1),
                     ]);
                 }
             }

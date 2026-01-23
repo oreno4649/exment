@@ -42,17 +42,17 @@ class CopyMenuButton implements Renderable
         $label = sprintf(exmtrans('common.message.confirm_execute'), ($label ?? exmtrans('common.copy')));
         return <<<EOT
 
-        $('#menu_button_$uuid').off('click').on('click', function(){
-            Exment.CommonEvent.ShowSwal("$url", {
-                title: "$label",
-                confirm:"$confirm",
-                cancel:"$cancel",
-                data: {
-                    'uuid': '$uuid',
-                },
-            });
-        });
-EOT;
+                    $('#menu_button_$uuid').off('click').on('click', function(){
+                        Exment.CommonEvent.ShowSwal("$url", {
+                            title: "$label",
+                            confirm:"$confirm",
+                            cancel:"$cancel",
+                            data: {
+                                'uuid': '$uuid',
+                            },
+                        });
+                    });
+            EOT;
     }
 
     // @phpstan-ignore-next-line
@@ -67,13 +67,13 @@ EOT;
         }
         return <<<EOT
 
-        $('#menu_button_$uuid').off('click').on('click', function(){
-            Exment.ModalEvent.ShowModal($("#modal-form-$uuid"), '$url', {
-                'uuid': '$uuid'
-            });
-            return;
-        });
-EOT;
+                    $('#menu_button_$uuid').off('click').on('click', function(){
+                        Exment.ModalEvent.ShowModal($("#modal-form-$uuid"), '$url', {
+                            'uuid': '$uuid'
+                        });
+                        return;
+                    });
+            EOT;
     }
 
     /**

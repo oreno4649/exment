@@ -85,12 +85,12 @@ trait AuthTrait
                 // Only if oauth provider type is 'other'
                 // ( Because no other provider type has 'getLogoutUrl' )
                 /** @phpstan-ignore-next-line */
-                if ( $oauth_setting->getOption('oauth_provider_type') == 'other' ) {
+                if ($oauth_setting->getOption('oauth_provider_type') == 'other') {
                     $socialite_provider = LoginSetting::getSocialiteProvider($provider_name);
                     /** @phpstan-ignore-next-line */
-                    if ( $oauth_setting->getOption('oauth_option_single_logout') == 1 && method_exists($socialite_provider, 'getLogoutUrl')  ) {
+                    if ($oauth_setting->getOption('oauth_option_single_logout') == 1 && method_exists($socialite_provider, 'getLogoutUrl')) {
                         /** @phpstan-ignore-next-line */
-                        return redirect( $socialite_provider->getLogoutUrl( \URL::route('exment.login') ) );
+                        return redirect($socialite_provider->getLogoutUrl(\URL::route('exment.login')));
                     }
                 }
                 break;

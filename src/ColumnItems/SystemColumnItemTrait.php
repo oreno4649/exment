@@ -40,7 +40,7 @@ trait SystemColumnItemTrait
     protected function getViewPivotValue($custom_value, $options)
     {
         $view_pivot_column = array_get($options, 'view_pivot_column');
-        $valuekey = $this instanceof \Exceedone\Exment\ColumnItems\SystemItem ? $this->name() : 'value.'.$this->name();
+        $valuekey = $this instanceof \Exceedone\Exment\ColumnItems\SystemItem ? $this->name() : 'value.' . $this->name();
 
         $pivot_custom_value = $this->getViewPivotCustomValue($custom_value, $options);
 
@@ -66,7 +66,7 @@ trait SystemColumnItemTrait
     {
         $view_pivot_column = array_get($options, 'view_pivot_column');
 
-        $valuekey = $this instanceof \Exceedone\Exment\ColumnItems\SystemItem ? $this->name() : 'value.'.$this->name();
+        $valuekey = $this instanceof \Exceedone\Exment\ColumnItems\SystemItem ? $this->name() : 'value.' . $this->name();
         // for relation ----------------------------------------------------
         if ($view_pivot_column == SystemColumn::PARENT_ID) {
             /** @phpstan-ignore-next-line */
@@ -84,10 +84,10 @@ trait SystemColumnItemTrait
             }
 
             return $relation_custom_value;
-        // for select table ----------------------------------------------------
+            // for select table ----------------------------------------------------
         } else {
             $pivot_custom_column = CustomColumn::getEloquent($view_pivot_column);
-            $pivot_id =  array_get($custom_value, 'value.'.$pivot_custom_column->column_name);
+            $pivot_id =  array_get($custom_value, 'value.' . $pivot_custom_column->column_name);
 
             /** @phpstan-ignore-next-line */
             if (is_list($pivot_id)) {

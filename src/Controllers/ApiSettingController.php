@@ -92,7 +92,7 @@ class ApiSettingController extends AdminControllerBase
             $form->radio('client_type', exmtrans('api.client_type_text'))->options(ApiClientType::transArray('api.client_type_options'))
             ->default(ApiClientType::CLIENT_CREDENTIALS)
             ->required()
-            ->attribute(['data-filtertrigger' =>true])
+            ->attribute(['data-filtertrigger' => true])
             ->help(exmtrans('common.help.init_flg'));
         } else {
             $form->display('client_type_text', exmtrans('api.client_type_text'));

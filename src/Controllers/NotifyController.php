@@ -56,7 +56,7 @@ class NotifyController extends AdminControllerBase
         }
 
         return [
-            $keyName => $mail_template->id
+            $keyName => $mail_template->id,
         ];
     }
 }

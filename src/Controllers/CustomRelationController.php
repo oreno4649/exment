@@ -151,7 +151,7 @@ class CustomRelationController extends AdminControllerTableBase
                 ->displayText($child_table->table_view_name);
             $form->display('relation_type', exmtrans("custom_relation.relation_type"))
                 ->displayText(function ($val) use ($relation_type) {
-                    $relation_type = RelationType::getEnum($val?? $relation_type);
+                    $relation_type = RelationType::getEnum($val ?? $relation_type);
                     return $relation_type->transKey('custom_relation.relation_type_options');
                 });
             $form->hidden('child_custom_table_id')->default($child_table->id);
@@ -173,18 +173,18 @@ class CustomRelationController extends AdminControllerTableBase
             $form->select('relation_type', exmtrans("custom_relation.relation_type"))
                 ->options($relation_type_options)
                 ->required()
-                ->attribute(['data-filtertrigger' =>true]);
+                ->attribute(['data-filtertrigger' => true]);
         }
 
         $form->embeds('options', exmtrans("custom_column.options.header"), function ($form) use ($custom_table) {
-            $manual_url = getManualUrl('data_import_export?id='.exmtrans('custom_column.help.select_import_column_id_key'));
+            $manual_url = getManualUrl('data_import_export?id=' . exmtrans('custom_column.help.select_import_column_id_key'));
             $form->select('parent_import_column_id', exmtrans("custom_relation.parent_import_column_id"))
                 ->help(exmtrans("custom_relation.help.parent_import_column_id", $manual_url))
                 ->attribute(['data-filter' => json_encode(['parent' => 1, 'key' => 'relation_type', 'value' => [RelationType::ONE_TO_MANY]])])
                 ->options(function ($select_table, $form) use ($custom_table) {
                     return CustomTable::getEloquent($custom_table)->getColumnsSelectOptions([
                         'append_table' => false,
-                        'include_system' => false
+                        'include_system' => false,
                     ]) ?? [];
                 });
 
@@ -194,7 +194,7 @@ class CustomRelationController extends AdminControllerTableBase
                 ->options(function ($select_table, $form) use ($custom_table) {
                     return CustomTable::getEloquent($custom_table)->getColumnsSelectOptions([
                         'append_table' => false,
-                        'include_system' => false
+                        'include_system' => false,
                     ]) ?? [];
                 });
         })->disableHeader();

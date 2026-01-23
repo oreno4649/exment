@@ -105,7 +105,7 @@ class Boolean extends CustomItem
         $column = $this->custom_column;
         return [
             $this->getFalseValue()    => array_get($column, 'options.false_label'),
-            $this->getTrueValue()    => array_get($column, 'options.true_label')
+            $this->getTrueValue()    => array_get($column, 'options.true_label'),
         ];
     }
 

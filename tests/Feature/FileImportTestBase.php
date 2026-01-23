@@ -57,7 +57,7 @@ abstract class FileImportTestBase extends FeatureTestBase
             $dirs = scandir($sourceDir);
             // @phpstan-ignore-next-line
             foreach ($dirs as $dir) {
-                if ($dir == '.' ||$dir == '..') {
+                if ($dir == '.' || $dir == '..') {
                     continue;
                 }
                 $sourceFullDir = path_join_os($sourceDir, $dir);
@@ -108,7 +108,7 @@ abstract class FileImportTestBase extends FeatureTestBase
         $this->init();
 
         $console = $this->getCommand($target_name);
-        $console->expectsOutput(exmtrans('command.import.file_count')."1");
+        $console->expectsOutput(exmtrans('command.import.file_count') . "1");
         $console->assertExitCode($isSuccess ? 0 : -1);
         $console->run();
 

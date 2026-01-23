@@ -31,7 +31,7 @@ abstract class GridBase
     // @phpstan-ignore-next-line
     public static function getItem(...$args)
     {
-        list($custom_table, $custom_view) = $args + [null, null];
+        [$custom_table, $custom_view] = $args + [null, null];
 
         /** Unsafe usage of new static(). */
         /** @phpstan-ignore-next-line */
@@ -77,9 +77,7 @@ abstract class GridBase
      * set laravel-admin grid using custom_view
      */
     // @phpstan-ignore-next-line
-    public function setGrid($grid)
-    {
-    }
+    public function setGrid($grid) {}
 
     /**
      * Get callback filter function
@@ -101,7 +99,7 @@ abstract class GridBase
         $this->custom_view = CustomView::getAllData($this->custom_table);
         $service = $this->custom_view->getSearchService();
         $group_view->setSearchService($service);
-        
+
         $filters = [];
         // @phpstan-ignore-next-line
         foreach ($group_keys as $key => $value) {
@@ -141,7 +139,7 @@ abstract class GridBase
                 $query_value = $column_item->convertFilterValue($filter_raw->view_filter_condition_value_text);
                 if (is_nullorempty($query_value)) {
                     if ($filter_raw->is_multiple) {
-                        $model->where(function($query) use($value_table_column) {
+                        $model->where(function ($query) use ($value_table_column) {
                             $query->whereNull($value_table_column)->orWhere($value_table_column, '[]');
                         });
                     } else {
@@ -170,7 +168,7 @@ abstract class GridBase
         $form->switchbool('use_view_infobox', exmtrans("custom_view.use_view_infobox"))
             ->help(exmtrans("custom_view.help.use_view_infobox"))
             ->default(false)
-            ->attribute(['data-filtertrigger' =>true]);
+            ->attribute(['data-filtertrigger' => true]);
 
         $form->text('view_infobox_title', exmtrans("custom_view.view_infobox_title"))
             ->help(exmtrans("custom_view.help.view_infobox_title"))
@@ -189,7 +187,7 @@ abstract class GridBase
             $keys = preg_split('/\?/', $query, 2);
             $items = preg_split('/\:/', $item);
             // @phpstan-ignore-next-line
-            return [$keys[1] => [$query => trim($items[count($items)-1])]];
+            return [$keys[1] => [$query => trim($items[count($items) - 1])]];
         })->map(function ($item, $key) use ($defaultCustomTable) {
             if (empty($key)) {
                 $label = $defaultCustomTable->table_view_name;
@@ -205,7 +203,7 @@ abstract class GridBase
             }
             return [
                 'label' => $label,
-                'options' => call_user_func_array("array_merge", $item)
+                'options' => call_user_func_array("array_merge", $item),
             ];
         })->toArray();
         return $options;
@@ -221,7 +219,7 @@ abstract class GridBase
      */
     public static function setFilterFields(&$form, $custom_table, $is_aggregate = false)
     {
-        $manualUrl = getManualUrl('column?id='.exmtrans('custom_column.options.index_enabled'));
+        $manualUrl = getManualUrl('column?id=' . exmtrans('custom_column.options.index_enabled'));
         $targetOptions = $custom_table->getColumnsSelectOptions(
             [
                 'append_table' => true,
@@ -311,7 +309,7 @@ abstract class GridBase
      */
     public static function setSortFields(&$form, $custom_table, $include_parent = false)
     {
-        $manualUrl = getManualUrl('column?id='.exmtrans('custom_column.options.index_enabled'));
+        $manualUrl = getManualUrl('column?id=' . exmtrans('custom_column.options.index_enabled'));
 
         // sort setting
         $form->hasManyTable('custom_view_sorts', exmtrans("custom_view.custom_view_sorts"), function ($form) use ($custom_table, $include_parent) {

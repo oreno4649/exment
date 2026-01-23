@@ -61,7 +61,7 @@ trait BetweenTrait
     {
         $reflection = new \ReflectionFunction($closure);
 
-        return md5($reflection->getFileName().$reflection->getStartLine().$reflection->getEndLine().$label);
+        return md5($reflection->getFileName() . $reflection->getStartLine() . $reflection->getEndLine() . $label);
     }
 
     /**

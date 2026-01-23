@@ -141,14 +141,14 @@ class Decimal extends CustomItem
     protected function setValidates(&$validates)
     {
         $options = $this->custom_column->options;
-        $decimal_digit = intval(array_get($options, 'decimal_digit')?? 2);
+        $decimal_digit = intval(array_get($options, 'decimal_digit') ?? 2);
         $integer_digit =  Define::MAX_FLOAT_PRECISION - $decimal_digit;
         // @phpstan-ignore-next-line
         $max_size_number = floatval(str_repeat(9, $integer_digit) . '.' . str_repeat(9, $decimal_digit));
         $min_size_number = -1 * $max_size_number;
 
-        $number_min = max(array_get($options, 'number_min')?? $min_size_number, $min_size_number);
-        $number_max = min(array_get($options, 'number_max')?? $max_size_number, $max_size_number);
+        $number_min = max(array_get($options, 'number_min') ?? $min_size_number, $min_size_number);
+        $number_max = min(array_get($options, 'number_max') ?? $max_size_number, $max_size_number);
 
         // value size
         $validates[] = new Validator\NumberMinRule($number_min);
@@ -172,7 +172,7 @@ class Decimal extends CustomItem
         if (array_has($this->custom_column, 'options.decimal_digit')) {
             return [DatabaseDataType::TYPE_DECIMAL, true, [
                 'length' => 50,
-                'decimal_digit' => intval(array_get($this->custom_column, 'options.decimal_digit', 2))
+                'decimal_digit' => intval(array_get($this->custom_column, 'options.decimal_digit', 2)),
             ]];
         } else {
             return [DatabaseDataType::TYPE_DECIMAL, true, []];

@@ -9,9 +9,7 @@ use Illuminate\Contracts\Validation\Rule;
  */
 class StringNumericRule implements Rule
 {
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
     * Check Validation
@@ -40,6 +38,6 @@ class StringNumericRule implements Rule
      */
     public function message()
     {
-        return (string)trans('validation.string');
+        return (string) trans('validation.string');
     }
 }

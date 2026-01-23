@@ -45,7 +45,7 @@ class SelectTable extends Column
         $relationColumns = $this->getRelationFileterColumns();
         if ($relationColumns->count() > 0) {
             $form->exmheader(exmtrans('custom_form.relation_filter'))->hr();
-            $manualUrl = getManualUrl('form?id='.exmtrans('custom_form.relation_filter_manual'));
+            $manualUrl = getManualUrl('form?id=' . exmtrans('custom_form.relation_filter_manual'));
             $form->description(exmtrans('custom_form.help.relation_filter') . '<br/>' . exmtrans('common.help.more_help_here', $manualUrl))->escape(false);
 
             $form->select('relation_filter_target_column_id', exmtrans('custom_form.relation_filter'))

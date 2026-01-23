@@ -117,7 +117,7 @@ class ApiController extends AdminControllerBase
         $options = [
             'getModel' => false,
             'with' => $this->getJoinTables($request, 'custom'),
-            'permissions' => Permission::AVAILABLE_ACCESS_CUSTOM_VALUE
+            'permissions' => Permission::AVAILABLE_ACCESS_CUSTOM_VALUE,
         ];
         // filterd by id
         if ($request->has('id')) {
@@ -407,7 +407,7 @@ class ApiController extends AdminControllerBase
         ]);
         if ($validator->fails()) {
             return abortJson(400, [
-                'errors' => $this->getErrorMessages($validator)
+                'errors' => $this->getErrorMessages($validator),
             ], ErrorCode::VALIDATION_ERROR());
         }
 
@@ -424,7 +424,7 @@ class ApiController extends AdminControllerBase
 
         if ($error_users->count() > 0) {
             return abortJson(400, [
-                'errors' => ['target_users' => exmtrans('api.errors.user_notfound', $error_users->implode(','))]
+                'errors' => ['target_users' => exmtrans('api.errors.user_notfound', $error_users->implode(','))],
             ], ErrorCode::VALIDATION_ERROR());
         }
 
@@ -438,7 +438,7 @@ class ApiController extends AdminControllerBase
                 'target_user_id' => $target_user,
                 'notify_subject' => $request->get('notify_subject'),
                 'notify_body' => $request->get('notify_body'),
-                'trigger_user_id' => \Exment::getUserId()
+                'trigger_user_id' => \Exment::getUserId(),
             ]);
 
             $notify->saveOrFail();
@@ -520,10 +520,10 @@ class ApiController extends AdminControllerBase
                     'color' => $color ?? null,
                     'table_view_name' => $table_view_name ?? null,
                     'label' => array_get($l, 'notify_subject'),
-                    'href' => admin_urls('notify_navbar', $l->id)
+                    'href' => admin_urls('notify_navbar', $l->id),
                 ];
             }),
-            'noItemMessage' => exmtrans('notify_navbar.message.no_newitem')
+            'noItemMessage' => exmtrans('notify_navbar.message.no_newitem'),
         ];
     }
 
@@ -555,7 +555,7 @@ class ApiController extends AdminControllerBase
             ]);
             if ($validator->fails()) {
                 return abortJson(400, [
-                    'errors' => $this->getErrorMessages($validator)
+                    'errors' => $this->getErrorMessages($validator),
                 ], ErrorCode::VALIDATION_ERROR());
             }
 

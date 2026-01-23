@@ -83,7 +83,7 @@ class ChangeField extends Field
     {
         if (preg_match('/(^[^\[\]]+)\[([^\[\]]+)\]\[([^\[\]]+)\]$/', $this->elementName, $array_result)) {
             array_shift($array_result);
-            $array_result[1] = 'rowno-'.$array_result[1];
+            $array_result[1] = 'rowno-' . $array_result[1];
             return $array_result;
         }
         return [];
@@ -200,8 +200,8 @@ class ChangeField extends Field
         $replaceWord = $this->replaceWord;
 
         $script = <<<EOT
-            Exment.ChangeFieldEvent.ChangeFieldEvent('$ajax', '$eventTriggerSelector', '$eventTargetSelector', '$replaceSearch', '$replaceWord', '$showConditionKey', '$hasManyTableClass');
-EOT;
+                        Exment.ChangeFieldEvent.ChangeFieldEvent('$ajax', '$eventTriggerSelector', '$eventTargetSelector', '$replaceSearch', '$replaceWord', '$showConditionKey', '$hasManyTableClass');
+            EOT;
 
         static::$scripts[] = $script;
     }
@@ -224,9 +224,9 @@ EOT;
         $this->script();
 
         if (isset($field)) {
-            if (!($field instanceof \Exceedone\Exment\Form\Field\SwitchField) &&
-                !($field instanceof \Exceedone\Exment\Form\Field\Checkboxone) &&
-                !$this->allowNull) {
+            if (!($field instanceof \Exceedone\Exment\Form\Field\SwitchField)
+                && !($field instanceof \Exceedone\Exment\Form\Field\Checkboxone)
+                && !$this->allowNull) {
                 // required if visible
                 $field->required();
             }

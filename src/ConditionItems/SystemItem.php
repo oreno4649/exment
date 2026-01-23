@@ -106,7 +106,7 @@ class SystemItem extends ConditionItemBase implements ConditionItemInterface
 
         $system_info = SystemColumn::getOption(['id' => array_get($custom_view_column, 'view_column_target_id')]);
         if (is_nullorempty($column_view_name)) {
-            $column_view_name = exmtrans('common.'.$system_info['name']);
+            $column_view_name = exmtrans('common.' . $system_info['name']);
         }
 
         return $column_view_name;

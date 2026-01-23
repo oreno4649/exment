@@ -22,7 +22,7 @@ abstract class NullBase extends ViewFilterBase
                 $query->orWhere($query_column, '[]');
             });
         } else {
-            $query->{$method_name. 'Null'}($query_column);
+            $query->{$method_name . 'Null'}($query_column);
         }
     }
 

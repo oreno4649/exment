@@ -48,7 +48,7 @@ trait InstallUpdateTrait
 
         // @phpstan-ignore-next-line
         $this->laravel['files']->put($file, $contents);
-        $this->line('<info>Bootstrap file was created:</info> '.str_replace(base_path(), '', $file));
+        $this->line('<info>Bootstrap file was created:</info> ' . str_replace(base_path(), '', $file));
     }
 
     /**
@@ -79,6 +79,6 @@ trait InstallUpdateTrait
         }
 
         // @phpstan-ignore-next-line
-        $this->laravel['files']->makeDirectory($dirpath, 0755, true, true);
+        $this->laravel['files']->makeDirectory($dirpath, 0o755, true, true);
     }
 }

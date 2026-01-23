@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Scope;
 
 class OrderScope implements Scope
 {
-
     // @phpstan-ignore-next-line
     private $column;
 

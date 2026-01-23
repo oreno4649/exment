@@ -2,6 +2,4 @@
 
 namespace Exceedone\Exment\Exceptions;
 
-class BackupRestoreCheckException extends \Exception
-{
-}
+class BackupRestoreCheckException extends \Exception {}

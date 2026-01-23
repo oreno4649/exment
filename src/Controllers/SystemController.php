@@ -213,7 +213,7 @@ class SystemController extends AdminControllerBase
             ->options(function ($option) {
                 $options = CustomTable::getEloquent(SystemTableName::USER)->getColumnsSelectOptions([
                     'include_system' => false,
-                    'ignore_attachment' => true
+                    'ignore_attachment' => true,
                 ]);
                 $options[SystemColumn::CREATED_AT] = exmtrans('common.created_at');
                 return $options;
@@ -322,7 +322,7 @@ class SystemController extends AdminControllerBase
      */
     protected function getVersionBox()
     {
-        list($latest, $current) = \Exment::getExmentVersion();
+        [$latest, $current] = \Exment::getExmentVersion();
         $version = \Exment::checkLatestVersion();
         $showLink = false;
 
@@ -353,9 +353,9 @@ class SystemController extends AdminControllerBase
             //if disable update button, showing only update link
             //if(boolval(config('exment.system_update_display_disabled', false))){
             $manualUrl = exmtrans('common.message.label_link', [
-                        'label' => exmtrans('system.call_update_howto'),
-                        'link' => \Exment::getManualUrl('update'),
-                    ]);
+                'label' => exmtrans('system.call_update_howto'),
+                'link' => \Exment::getManualUrl('update'),
+            ]);
             $form->display(exmtrans('system.call_update_howto'))
                         ->displayText($manualUrl)
                         ->escape(false);

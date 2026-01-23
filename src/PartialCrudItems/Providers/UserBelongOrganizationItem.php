@@ -85,10 +85,10 @@ class UserBelongOrganizationItem extends ProviderBase
             },
             'dbDeleteFilter' => function (&$model, $dbValue) use ($id) {
                 $model->where('child_id', $id)
-                    ->where('parent_id', array_get((array)$dbValue, 'parent_id'));
+                    ->where('parent_id', array_get((array) $dbValue, 'parent_id'));
             },
             'matchFilter' => function ($dbValue, $value) {
-                return array_get((array)$dbValue, 'parent_id') == array_get($value, 'parent_id');
+                return array_get((array) $dbValue, 'parent_id') == array_get($value, 'parent_id');
             },
         ]);
     }
@@ -104,7 +104,7 @@ class UserBelongOrganizationItem extends ProviderBase
         }
         $this->options = $custom_table->getSelectOptions([
             'notAjax' => true,
-            'target_view' => $custom_view
+            'target_view' => $custom_view,
         ]);
     }
 }

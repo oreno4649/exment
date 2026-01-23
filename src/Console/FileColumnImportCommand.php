@@ -84,7 +84,7 @@ class FileColumnImportCommand extends Command
                 throw new \Exception('File not found : ' . $this->directory);
             }
 
-            $this->line(exmtrans('command.import.file_count').count($files));
+            $this->line(exmtrans('command.import.file_count') . count($files));
 
             foreach ($files as $index => $file) {
                 $file_name = $file->getFileName();

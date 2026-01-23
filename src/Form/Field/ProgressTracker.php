@@ -49,10 +49,10 @@ class ProgressTracker extends Field\Display
                 $class = 'complete';
             };
             $this->options[] = [
-                'title' => isset($option['title']) ? $option['title'] : 'Step '.($index + 1),
+                'title' => $option['title'] ?? 'Step ' . ($index + 1),
                 'class' => $class,
-                'url' => isset($option['url']) ? $option['url'] : '#',
-                'description' => isset($option['description']) ? $option['description'] : '',
+                'url' => $option['url'] ?? '#',
+                'description' => $option['description'] ?? '',
             ];
         }
 

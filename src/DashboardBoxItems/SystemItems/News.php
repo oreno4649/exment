@@ -156,7 +156,7 @@ class News
                 }
                 session()->put(Define::SYSTEM_KEY_SESSION_UPDATE_NEWS, json_encode([
                     'update_time' => Carbon::now()->toDateTimeString(),
-                    'contents' => $contents
+                    'contents' => $contents,
                 ]));
             }
 

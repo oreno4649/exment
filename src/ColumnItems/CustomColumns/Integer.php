@@ -95,8 +95,8 @@ class Integer extends CustomItem
         $max_size_number = Define::MAX_SIZE_NUMBER;
         $min_size_number = -1 * $max_size_number;
 
-        $number_min = max(array_get($options, 'number_min')?? $min_size_number, $min_size_number);
-        $number_max = min(array_get($options, 'number_max')?? $max_size_number, $max_size_number);
+        $number_min = max(array_get($options, 'number_min') ?? $min_size_number, $min_size_number);
+        $number_max = min(array_get($options, 'number_max') ?? $max_size_number, $max_size_number);
 
         // value size
         $validates[] = new Validator\NumberMinRule($number_min);

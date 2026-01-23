@@ -39,7 +39,7 @@ class CustomViewFilter extends ModelBase
             'export' => ['custom_table', 'view_column_table_id', 'view_column_target_id', 'custom_view_id', 'view_column_target', 'custom_column', 'view_filter_condition_value_table_id', 'view_filter_condition_value_id'],
         ],
         'uniqueKeys' => [
-            'custom_view_id', 'view_column_type', 'view_column_target_id', 'view_column_table_id', 'view_filter_condition'
+            'custom_view_id', 'view_column_type', 'view_column_target_id', 'view_column_table_id', 'view_filter_condition',
         ],
         'parent' => 'custom_view_id',
         'uniqueKeyReplaces' => [
@@ -49,8 +49,8 @@ class CustomViewFilter extends ModelBase
                         'replacedName' => [
                             'table_name' => 'view_column_table_name',
                             'column_name' => 'view_column_target_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getUniqueKeyValues',
             ],
@@ -60,8 +60,8 @@ class CustomViewFilter extends ModelBase
                         'replacedName' => [
                             'table_name' => 'view_pivot_table_name',
                             'column_name' => 'view_pivot_column_name',
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
                 'uniqueKeyFunction' => 'getPivotUniqueKeyValues',
             ],

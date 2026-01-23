@@ -39,6 +39,4 @@ namespace Exceedone\Exment\Facades;
  * @see \Illuminate\Database\DatabaseManager
  * @see \Illuminate\Database\Connection
  */
-class ExmentDBFacade extends \Illuminate\Support\Facades\DB
-{
-}
+class ExmentDBFacade extends \Illuminate\Support\Facades\DB {}

@@ -64,10 +64,10 @@ class NestedEmbeddedForm extends EmbeddedForm
 
         if (is_array($column)) {
             foreach ($column as $k => $name) {
-                $elementClass[$k] = $key. "_" . $name;
+                $elementClass[$k] = $key . "_" . $name;
             }
         } else {
-            $elementClass = [$key. "_" . $column, $column];
+            $elementClass = [$key . "_" . $column, $column];
             if (isset($this->data_key) && is_numeric($this->data_key)) {
                 $elementClass[] = "rownum_" . $this->data_key;
             }
@@ -102,7 +102,7 @@ class NestedEmbeddedForm extends EmbeddedForm
         }
 
         return $scripts;
-//        return implode("\r\n", $scripts);
+        //        return implode("\r\n", $scripts);
     }
 
     /**

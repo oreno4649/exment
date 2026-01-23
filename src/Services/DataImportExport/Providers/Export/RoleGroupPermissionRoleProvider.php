@@ -15,14 +15,14 @@ class RoleGroupPermissionRoleProvider extends RoleGroupPermissionProvider
     {
         return 'role_group_permission_role';
     }
-    
+
     // @phpstan-ignore-next-line
     protected function setRoleTypeFilter(&$query)
     {
         $query->where('role_group_permission_type', RoleType::SYSTEM)
             ->where('role_group_target_id', 1);
     }
-    
+
     protected function getRoleGroupType(): RoleGroupType
     {
         return RoleGroupType::ROLE_GROUP();

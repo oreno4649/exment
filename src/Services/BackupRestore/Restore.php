@@ -18,9 +18,7 @@ class Restore
      *
      * @return void
      */
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
      * Get restore target list
@@ -44,7 +42,7 @@ class Restore
                 'file_key' => pathinfo($file, PATHINFO_FILENAME),
                 'file_name' => mb_basename($file),
                 'file_size' => bytesToHuman($disk->size($file)),
-                'created' => date("Y/m/d H:i:s", $disk->lastModified($file))
+                'created' => date("Y/m/d H:i:s", $disk->lastModified($file)),
             ];
         }
 

@@ -52,7 +52,7 @@ class Dashboard extends ModelBase implements Interfaces\TemplateImporterInterfac
             'options.row3' => 0,
             'options.row4' => 0,
         ],
-        'children' =>[
+        'children' => [
             'dashboard_boxes' => DashboardBox::class,
         ],
     ];

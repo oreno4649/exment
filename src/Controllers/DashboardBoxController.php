@@ -109,7 +109,7 @@ class DashboardBoxController extends AdminControllerBase
         // get request
         $request = request();
         // get dashboard, row_no, column_no, ... from query "dashboard_suuid"
-        list($dashboard, $dashboard_box_type, $row_no, $column_no) = $this->getDashboardInfo($id);
+        [$dashboard, $dashboard_box_type, $row_no, $column_no] = $this->getDashboardInfo($id);
         if (!isset($dashboard)) {
             return redirect(admin_url(''));
         }
@@ -138,7 +138,7 @@ class DashboardBoxController extends AdminControllerBase
             $tools->disableList();
 
             // addhome button
-            $tools->append('<a href="'.admin_url('').'" class="btn btn-sm btn-default"  style="margin-right: 5px"><i class="fa fa-home"></i>&nbsp;'. exmtrans('common.home').'</a>');
+            $tools->append('<a href="' . admin_url('') . '" class="btn btn-sm btn-default"  style="margin-right: 5px"><i class="fa fa-home"></i>&nbsp;' . exmtrans('common.home') . '</a>');
         });
         // add form saving and saved event
         $this->manageFormSaving($form);
@@ -260,7 +260,7 @@ class DashboardBoxController extends AdminControllerBase
                 return array_get($value, 'view_type') == ViewType::SYSTEM;
             })
             ->map(function ($value) {
-                return array('id' => $value->id, 'text' => $value->view_view_name);
+                return ['id' => $value->id, 'text' => $value->view_view_name];
             });
         // if count > 0, return value.
         // @phpstan-ignore-next-line

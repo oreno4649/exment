@@ -2,6 +2,4 @@
 
 namespace Exceedone\Exment\Services\Plugin\PluginOption;
 
-class PluginOptionBase
-{
-}
+class PluginOptionBase {}

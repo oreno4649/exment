@@ -151,8 +151,8 @@ trait CustomViewColumnTrait
         $column_type = array_get($this, $column_type_key);
         $column_type_target = array_get($this, $column_type_target_key);
 
-        if (!isset($column_type) ||
-            !isset($column_type_target)) {
+        if (!isset($column_type)
+            || !isset($column_type_target)) {
             return null;
         }
 
@@ -181,7 +181,7 @@ trait CustomViewColumnTrait
      */
     protected function setViewColumnTarget($view_column_target, $column_table_name_key = 'custom_view', $column_table_id_key = 'view_column_table_id', $column_type_key = 'view_column_type', $column_type_target_key = 'view_column_target_id')
     {
-        list($column_type, $column_table_id, $column_type_target, $view_pivot_column, $view_pivot_table) = $this->getViewColumnTargetItems($view_column_target, $column_table_name_key);
+        [$column_type, $column_table_id, $column_type_target, $view_pivot_column, $view_pivot_table] = $this->getViewColumnTargetItems($view_column_target, $column_table_name_key);
 
         $this->{$column_table_id_key} = $column_table_id;
         $this->{$column_type_key} = $column_type;
@@ -351,7 +351,7 @@ trait CustomViewColumnTrait
         }
 
         ///// set view_column_table_name and view_column_target_name
-        list($view_column_target_id, $view_column_table_id) = static::getColumnAndTableId(
+        [$view_column_target_id, $view_column_table_id] = static::getColumnAndTableId(
             array_get($json, "view_column_type"),
             array_get($json, "view_column_target_name"),
             $custom_table
@@ -368,7 +368,7 @@ trait CustomViewColumnTrait
         if (array_key_value_exists("view_pivot_column_name", $json)) {
             $view_pivot_column_name = array_get($json, "view_pivot_column_name");
             if ($view_pivot_column_name == 'parent_id') {
-                list($view_pivot_column_id, $view_pivot_table_id) = static::getColumnAndTableId(
+                [$view_pivot_column_id, $view_pivot_table_id] = static::getColumnAndTableId(
                     null,
                     null,
                     array_get($json, "view_pivot_table_name")
@@ -376,26 +376,26 @@ trait CustomViewColumnTrait
                 $json['view_pivot_column_id'] = $view_pivot_column_name;
                 $json['view_pivot_table_id'] = $view_pivot_table_id;
             } elseif (array_key_value_exists("view_pivot_column_table", $json)) {
-                list($view_pivot_column_id, $view_pivot_table_id) = static::getColumnAndTableId(
+                [$view_pivot_column_id, $view_pivot_table_id] = static::getColumnAndTableId(
                     null,
                     array_get($json, "view_pivot_column_name"),
                     array_get($json, "view_pivot_column_table")
                 );
                 $json['view_pivot_column_id'] = $view_pivot_column_id;
 
-                list($view_pivot_column_id, $view_pivot_table_id) = static::getColumnAndTableId(
+                [$view_pivot_column_id, $view_pivot_table_id] = static::getColumnAndTableId(
                     null,
                     null,
                     array_get($json, "view_pivot_table_name")
                 );
                 $json['view_pivot_table_id'] = $view_pivot_table_id;
             } else {
-                list($view_pivot_column_id, $view_pivot_table_id) = static::getColumnAndTableId(
+                [$view_pivot_column_id, $view_pivot_table_id] = static::getColumnAndTableId(
                     null,
                     array_get($json, "view_pivot_column_name"),
                     array_get($json, "view_pivot_table_name")
                 );
-    
+
                 $json['view_pivot_column_id'] = $view_pivot_column_id;
                 $json['view_pivot_table_id'] = $view_pivot_table_id;
             }
@@ -406,7 +406,7 @@ trait CustomViewColumnTrait
 
         ///// set options.end_date_target
         if (array_key_value_exists("end_date_target_name", $json)) {
-            list($end_date_target, $end_date_table_id) = static::getColumnAndTableId(
+            [$end_date_target, $end_date_table_id] = static::getColumnAndTableId(
                 array_get($json, "options.end_date_type"),
                 array_get($json, "end_date_target_name"),
                 $custom_table

@@ -56,33 +56,27 @@ class LoginUserItem extends ProviderBase
             ->default('1')
             ->help(exmtrans('user.help.create_password_auto'))
             ->attribute(['data-filter' => json_encode([
-                ['key' => 'use_loginuser', 'value' => '1']
-                , ['key' => 'reset_password', 'value' => "1"]
-                ])]);
+                ['key' => 'use_loginuser', 'value' => '1'], ['key' => 'reset_password', 'value' => "1"],
+            ])]);
 
         $form->password('password', exmtrans('user.password'))->default('')
                 ->help(\Exment::get_password_help())
                 ->attribute(['data-filter' => json_encode([
-                    ['key' => 'use_loginuser', 'value' => '1']
-                    , ['key' => 'reset_password', 'value' => "1"]
-                    , ['key' => 'create_password_auto', 'value' => '0']
-                    ])]);
+                    ['key' => 'use_loginuser', 'value' => '1'], ['key' => 'reset_password', 'value' => "1"], ['key' => 'create_password_auto', 'value' => '0'],
+                ])]);
 
         $form->password('password_confirmation', exmtrans('user.password_confirmation'))->default('')
             ->attribute(['data-filter' => json_encode([
-                ['key' => 'use_loginuser', 'value' => '1']
-                , ['key' => 'reset_password', 'value' => "1"]
-                , ['key' => 'create_password_auto', 'value' => '0']
-                ])]);
+                ['key' => 'use_loginuser', 'value' => '1'], ['key' => 'reset_password', 'value' => "1"], ['key' => 'create_password_auto', 'value' => '0'],
+            ])]);
 
         if (!System::first_change_password()) {
             $form->switchbool('password_reset_flg', exmtrans('user.password_reset_flg'))
                 ->default('0')
                 ->help(exmtrans('user.help.password_reset_flg'))
                 ->attribute(['data-filter' => json_encode([
-                    ['key' => 'use_loginuser', 'value' => '1']
-                    , ['key' => 'reset_password', 'value' => "1"]
-                    ])]);
+                    ['key' => 'use_loginuser', 'value' => '1'], ['key' => 'reset_password', 'value' => "1"],
+                ])]);
         }
 
         // "send_password"'s data-filter is whether $id is null or hasvalue
@@ -145,7 +139,7 @@ class LoginUserItem extends ProviderBase
         }
 
         // return [$login_user, $has_change, $send_password, boolval(array_get($data, 'password_reset_flg'))];
-        list($login_user, $password, $has_change, $send_password, $password_reset_flg) = $info;
+        [$login_user, $password, $has_change, $send_password, $password_reset_flg] = $info;
 
         try {
             if ($has_change) {
@@ -203,7 +197,7 @@ class LoginUserItem extends ProviderBase
                 $has_change = true;
             } elseif (boolval(array_get($data, 'password'))) {
                 $rules = [
-                'password' => get_password_rule(true, $login_user),
+                    'password' => get_password_rule(true, $login_user),
                 ];
                 $validation = \Validator::make($data, $rules);
                 if ($validation->fails()) {

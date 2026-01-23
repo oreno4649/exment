@@ -70,8 +70,8 @@ abstract class ExmentKitTestCase extends BaseTestCase
             } catch (\Exception $e) {
                 // If we still can't find or create the user, throw an informative error
                 throw new \RuntimeException(
-                    "Test user with ID " . $targetId . " not found and could not be created. " .
-                    "Please ensure test data is properly seeded. Error: " . $e->getMessage()
+                    "Test user with ID " . $targetId . " not found and could not be created. "
+                    . "Please ensure test data is properly seeded. Error: " . $e->getMessage()
                 );
             }
         }
@@ -151,11 +151,11 @@ abstract class ExmentKitTestCase extends BaseTestCase
             // Try to seed again
             \Artisan::call('db:seed', [
                 '--class' => 'Exceedone\\Exment\\Database\\Seeder\\InstallSeeder',
-                '--force' => true
+                '--force' => true,
             ]);
             \Artisan::call('db:seed', [
                 '--class' => 'Exceedone\\Exment\\Database\\Seeder\\TestDataSeeder',
-                '--force' => true
+                '--force' => true,
             ]);
         }
     }

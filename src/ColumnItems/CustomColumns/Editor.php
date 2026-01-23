@@ -63,7 +63,7 @@ class Editor extends CustomItem
             $text = get_omitted_string(strip_tags($text));
         }
 
-        return  '<div class="show-tinymce">'.replaceBreak(html_clean($text), false).'</div>';
+        return  '<div class="show-tinymce">' . replaceBreak(html_clean($text), false) . '</div>';
     }
 
     // @phpstan-ignore-next-line
@@ -190,7 +190,7 @@ class Editor extends CustomItem
                 // save document model
                 $this->tmpfiles[] = [
                     'file' => $exmentfile,
-                    'filename' => $original_name??$filename,
+                    'filename' => $original_name ?? $filename,
                 ];
 
                 // delete temporary file
@@ -203,7 +203,7 @@ class Editor extends CustomItem
                     'column_name' => $this->custom_column->column_name,
                     'custom_table' => $this->custom_table,
                     'path' => $exmentfile->path,
-                    'replace' => false
+                    'replace' => false,
                 ];
                 $file_uuids[] = $file_uuid;
                 System::requestSession(Define::SYSTEM_KEY_SESSION_FILE_UPLOADED_UUID, $file_uuids);
@@ -221,7 +221,7 @@ class Editor extends CustomItem
 
             preg_match('/data-exment-file-uuid="(?<uuid>.*?)"/u', $replaceValue, $replaceMatch);
             if ($replaceMatch) {
-                $uuid = isset($uuid) ? $uuid : array_get($replaceMatch, 'uuid');
+                $uuid ??= array_get($replaceMatch, 'uuid');
                 $replaceValue = preg_replace('/data-exment-file-uuid="(.*?)"/u', 'data-exment-file-uuid="' . $uuid . '"', $replaceValue);
             }
             // not exists "data-exment-file-uuid", add
@@ -243,10 +243,10 @@ class Editor extends CustomItem
 
         $types = [
             'image/gif' => 'gif',
-            'image/jpeg'=>'jpg',
-            'image/png'=>'png',
-            'image/svg+xml'=>'svg',
-            'image/bmp'=>'bmp',
+            'image/jpeg' => 'jpg',
+            'image/png' => 'png',
+            'image/svg+xml' => 'svg',
+            'image/bmp' => 'bmp',
         ];
         foreach ($types as $t => $ext) {
             if (isMatchString($t, $type)) {

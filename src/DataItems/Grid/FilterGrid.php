@@ -2,6 +2,4 @@
 
 namespace Exceedone\Exment\DataItems\Grid;
 
-class FilterGrid extends DefaultGrid
-{
-}
+class FilterGrid extends DefaultGrid {}

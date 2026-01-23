@@ -28,7 +28,7 @@ trait BootstrapTrait
             $func .= 'last';
         }
         foreach ($list as $l) {
-            Ad::{$func}(asset($l . '?ver='.$ver));
+            Ad::{$func}(asset($l . '?ver=' . $ver));
         }
     }
 
@@ -82,7 +82,7 @@ trait BootstrapTrait
                 if (!$p) {
                     continue;
                 }
-                Ad::{$p.'last'}($cdn);
+                Ad::{$p . 'last'}($cdn);
             }
 
             $items = collect($pluginClass->{$p}(true))->map(function ($item) use ($pluginClass, $asPublicForm) {
@@ -90,7 +90,7 @@ trait BootstrapTrait
             });
             if (!$items->isEmpty()) {
                 foreach ($items as $item) {
-                    Ad::{$p.'last'}($item);
+                    Ad::{$p . 'last'}($item);
                 }
             }
         }

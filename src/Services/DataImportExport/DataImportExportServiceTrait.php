@@ -364,12 +364,12 @@ trait DataImportExportServiceTrait
             if ($result === false) {
                 return [
                     'result' => false,
-                    'toastr' => exmtrans('common.message.import_error')
+                    'toastr' => exmtrans('common.message.import_error'),
                 ];
             } else {
                 return [
                     'result' => true,
-                    'toastr' => exmtrans('common.message.import_success')
+                    'toastr' => exmtrans('common.message.import_success'),
                 ];
             }
         } else {
@@ -411,10 +411,10 @@ trait DataImportExportServiceTrait
             ],
             [
                 'file'          => 'required',
-                'custom_table_file'      => 'required|in:'.$formatObj->accept_extension(),
+                'custom_table_file'      => 'required|in:' . $formatObj->accept_extension(),
             ],
             [
-                'custom_table_file' => \Lang::get('validation.mimes')
+                'custom_table_file' => \Lang::get('validation.mimes'),
             ]
         );
         if ($validator->fails()) {
@@ -460,7 +460,7 @@ trait DataImportExportServiceTrait
         /** @phpstan-ignore-next-line */
         $form->descriptionHtml('<span class="red">' . exmtrans('common.help.import_max_row_count', [
             'count' => config('exment.import_max_row_count', 1000),
-            'manual' => \getManualUrl('data_bulk_insert')
+            'manual' => \getManualUrl('data_bulk_insert'),
         ]) . '</span>')
         ->setWidth(8, 3);
 
@@ -513,7 +513,7 @@ trait DataImportExportServiceTrait
         return getAjaxResponse([
             'body'  => $form->render(),
             'script' => $form->getScript(),
-            'title' => exmtrans('common.import') . ' - ' . $this->importAction->getImportHeaderViewName()
+            'title' => exmtrans('common.import') . ' - ' . $this->importAction->getImportHeaderViewName(),
         ]);
     }
 
@@ -539,7 +539,7 @@ trait DataImportExportServiceTrait
         // add key name "value.";
         $val_columns = [];
         foreach ($columns as $column_key => $column_value) {
-            $val_columns['value.'.$column_key] = $column_value;
+            $val_columns['value.' . $column_key] = $column_value;
         }
 
         // merge
@@ -584,7 +584,7 @@ trait DataImportExportServiceTrait
                         })->first();
                     }
                     if (isset($target_column->column_item)) {
-                        $target_table = isset($target_column->select_target_table) ? $target_column->select_target_table : $target_column->custom_table_cache;
+                        $target_table = $target_column->select_target_table ?? $target_column->custom_table_cache;
                         static::getImportColumnValue($data, $key, $value, $target_column->column_item, $target_column->column_item->label(), $s ?? null, $target_table, $options);
                     }
                 }
@@ -614,7 +614,7 @@ trait DataImportExportServiceTrait
     // @phpstan-ignore-next-line
     protected static function getImportColumnValue(&$data, $key, &$value, $column_item, $column_view_name, $setting, $target_table, $options = [])
     {
-        $setting = $setting ?? [];
+        $setting ??= [];
         $options = array_merge(
             [
                 'errorCallback' => null,
@@ -646,10 +646,10 @@ trait DataImportExportServiceTrait
 
         // if not found, set error
         if (!boolval(array_get($importValue, 'result'))) {
-            $message = isset($importValue['message']) ? $importValue['message'] : exmtrans('validation.not_has_custom_value', [
+            $message = $importValue['message'] ?? exmtrans('validation.not_has_custom_value', [
                 'attribute' => $column_view_name,
                 'value' => is_array($base_value) ? implode(exmtrans('common.separate_word'), $base_value) : $base_value,
-                'table_view_name' => $target_table->table_view_name
+                'table_view_name' => $target_table->table_view_name,
             ]);
 
             if (isset($options['errorCallback'])) {

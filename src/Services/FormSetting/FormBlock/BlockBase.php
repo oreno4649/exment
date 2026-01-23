@@ -133,7 +133,7 @@ abstract class BlockBase
             'suggests' => $this->getSuggestItems(),
             'custom_form_rows' => $this->getCustomFormRows(),
             'hasmany_type' => $this->custom_form_block->getOption('hasmany_type'),
-            'form_block_order' => $this->custom_form_block->getOption('form_block_order')
+            'form_block_order' => $this->custom_form_block->getOption('form_block_order'),
         ];
     }
 
@@ -228,7 +228,7 @@ abstract class BlockBase
      */
     protected function getHtmlHeaderName()
     {
-        $key = $this->custom_form_block['id'] ?? $this->custom_form_block->request_key ?? 'NEW__'.make_uuid();
+        $key = $this->custom_form_block['id'] ?? $this->custom_form_block->request_key ?? 'NEW__' . make_uuid();
         return "custom_form_blocks[{$key}]";
     }
 
@@ -329,8 +329,8 @@ abstract class BlockBase
                 if (boolval(array_get($custom_form_column, 'delete_flg'))) {
                     return false;
                 }
-                return array_get($custom_form_column, 'form_column_type') == $suggest_form_column_type &&
-                array_get($custom_form_column, 'form_column_target_id') == $suggest_form_column_target_id;
+                return array_get($custom_form_column, 'form_column_type') == $suggest_form_column_type
+                && array_get($custom_form_column, 'form_column_target_id') == $suggest_form_column_target_id;
             });
     }
 

@@ -67,7 +67,7 @@ class BackupController extends AdminControllerBase
                 'file_key' => pathinfo($file, PATHINFO_FILENAME),
                 'file_name' => mb_basename($file),
                 'file_size' => bytesToHuman($disk->size($file)),
-                'created' => date("Y/m/d H:i:s", $disk->lastModified($file))
+                'created' => date("Y/m/d H:i:s", $disk->lastModified($file)),
             ];
         }
 
@@ -103,8 +103,8 @@ class BackupController extends AdminControllerBase
         ;
 
         $form->switchbool('backup_enable_automatic', exmtrans("backup.enable_automatic"))
-            ->help(exmtrans("backup.help.enable_automatic") . sprintf(exmtrans("common.help.task_schedule"), getManualUrl('quickstart_more?id='.exmtrans('common.help.task_schedule_id'))))
-            ->attribute(['data-filtertrigger' =>true]);
+            ->help(exmtrans("backup.help.enable_automatic") . sprintf(exmtrans("common.help.task_schedule"), getManualUrl('quickstart_more?id=' . exmtrans('common.help.task_schedule_id'))))
+            ->attribute(['data-filtertrigger' => true]);
 
         $form->number('backup_automatic_term', exmtrans("backup.automatic_term"))
             ->help(exmtrans("backup.help.automatic_term"))
@@ -236,7 +236,7 @@ class BackupController extends AdminControllerBase
 
         // validate "\", "/", "."
         $validator = Validator::make(['ymdhms' => $ymdhms], [
-            'ymdhms' => ['required', 'regex:/' . Define::RULES_REGEX_BACKUP_FILENAME . '/']
+            'ymdhms' => ['required', 'regex:/' . Define::RULES_REGEX_BACKUP_FILENAME . '/'],
         ]);
 
         if (!$validator->passes()) {
@@ -294,7 +294,7 @@ class BackupController extends AdminControllerBase
             ->help(exmtrans(
                 'backup.help.file_name',
                 array_get($fileOption, 'maxFileSizeHelp'),
-                getManualUrl('backup?id='.exmtrans('backup.filesize_over'))
+                getManualUrl('backup?id=' . exmtrans('backup.filesize_over'))
             ));
         }
 
@@ -310,7 +310,7 @@ class BackupController extends AdminControllerBase
         return getAjaxResponse([
             'body'  => $form->render(),
             'script' => $form->getScript(),
-            'title' => exmtrans('backup.restore')
+            'title' => exmtrans('backup.restore'),
         ]);
     }
 

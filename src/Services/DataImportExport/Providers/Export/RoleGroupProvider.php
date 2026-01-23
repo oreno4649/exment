@@ -65,7 +65,7 @@ class RoleGroupProvider extends ProviderBase
             'role_group_view_name',
             'role_group_order',
             'description',
-            'delete_flg'
+            'delete_flg',
         ];
 
         // 2nd row, column view name
@@ -75,7 +75,7 @@ class RoleGroupProvider extends ProviderBase
             exmtrans('role_group.role_group_view_name'),
             exmtrans('role_group.role_group_order'),
             exmtrans('custom_table.field_description'),
-            exmtrans('common.deleted')
+            exmtrans('common.deleted'),
         ];
 
         return $rows;

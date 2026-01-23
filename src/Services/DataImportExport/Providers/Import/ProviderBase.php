@@ -15,7 +15,7 @@ abstract class ProviderBase
     protected function isReadRow(int $row_no, array $options = []): bool
     {
         // get options
-        list($start, $end) = [
+        [$start, $end] = [
             array_get($options, 'row_start'),
             array_get($options, 'row_end'),
         ];

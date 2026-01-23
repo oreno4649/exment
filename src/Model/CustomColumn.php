@@ -65,10 +65,10 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
         'excepts' => ['suuid', 'required', 'index_enabled', 'unique', 'custom_table'],
         'uniqueKeys' => [
             'export' => [
-                'custom_table.table_name', 'column_name'
+                'custom_table.table_name', 'column_name',
             ],
             'import' => [
-                'custom_table_id', 'column_name'
+                'custom_table_id', 'column_name',
             ],
         ],
         'langs' => [
@@ -84,7 +84,7 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
                         'replacedName' => [
                             'table_name' => 'options.select_target_table_name',
                         ],
-                    ]
+                    ],
                 ],
                 'uniqueKeyClassName' => CustomTable::class,
             ],
@@ -95,7 +95,7 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
                         'replacedName' => [
                             'suuid' => 'options.select_target_view_suuid',
                         ],
-                    ]
+                    ],
                 ],
                 'uniqueKeyClassName' => CustomView::class,
             ],
@@ -105,19 +105,19 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
                         'replacedName' => [
                             'table_name' => 'options.select_import_table_name',
                             'column_name' => 'options.select_import_column_name',
-                        ]
+                        ],
                     ],
                     [
                         'replacedName' => [
                             'table_name' => 'options.select_export_table_name',
                             'column_name' => 'options.select_export_column_name',
-                        ]
+                        ],
                     ],
                 ],
                 'uniqueKeyFunction' => 'getUniqueKeyValues',
                 'uniqueKeyFunctionArgs' => ['options.select_import_column_id', 'options.select_export_column_id'],
             ],
-        ]
+        ],
     ];
 
 
@@ -402,8 +402,8 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
 
         // deleted event
         static::deleted(function ($model) {
-            $model->custom_table_cache->getValueQuery()->
-                updateRemovingJsonKey("value->{$model->column_name}");
+            $model->custom_table_cache->getValueQuery()
+                ->updateRemovingJsonKey("value->{$model->column_name}");
         });
     }
 
@@ -424,7 +424,7 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
         }
 
         if ($column_obj instanceof \stdClass) {
-            $column_obj = array_get((array)$column_obj, 'id');
+            $column_obj = array_get((array) $column_obj, 'id');
         }
 
         if (is_array($column_obj)) {
@@ -511,7 +511,7 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
      */
     public function getIndexColumnName($alterColumn = true)
     {
-        $name = 'column_'.array_get($this, 'suuid');
+        $name = 'column_' . array_get($this, 'suuid');
         $db_table_name = getDBTableName($this->custom_table_cache);
 
         // if not exists, execute alter column
@@ -632,7 +632,7 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
         }
 
         if (is_string($select_item)) {
-            $str = str_replace(array("\r\n","\r","\n"), "\n", $select_item);
+            $str = str_replace(["\r\n","\r","\n"], "\n", $select_item);
             if (!is_nullorempty($str) && mb_strlen($str) > 0) {
                 // loop for split new line
                 $array = explode("\n", $str);
@@ -712,7 +712,7 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
 
         $obj_column = CustomColumn::firstOrNew([
             'custom_table_id' => $custom_table->id,
-            'column_name' => $column_name
+            'column_name' => $column_name,
         ]);
 
         // importReplaceJsonCustomColumn using import and update column
@@ -744,7 +744,7 @@ class CustomColumn extends ModelBase implements Interfaces\TemplateImporterInter
 
         $obj_column = CustomColumn::firstOrNew([
             'custom_table_id' => $custom_table->id,
-            'column_name' => $column_name
+            'column_name' => $column_name,
         ]);
 
         // if record is already exists skip process, when update

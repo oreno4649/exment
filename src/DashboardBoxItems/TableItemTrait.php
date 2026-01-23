@@ -43,7 +43,7 @@ trait TableItemTrait
         // check edit permission
         if ($this->custom_table->hasPermission(Permission::AVAILABLE_EDIT_CUSTOM_VALUE)) {
             $new_url = admin_url("data/{$this->custom_table->table_name}/create");
-            $list_url = admin_url("data/{$this->custom_table->table_name}?view=".$this->custom_view->suuid);
+            $list_url = admin_url("data/{$this->custom_table->table_name}?view=" . $this->custom_view->suuid);
         } else {
             $new_url = null;
             $list_url = null;
@@ -83,7 +83,7 @@ trait TableItemTrait
         if (isset($value)) {
             $custom_view = CustomView::getEloquent($value);
             $custom_table = $custom_view ? $custom_view->custom_table : null;
-        /** @phpstan-ignore-next-line */
+            /** @phpstan-ignore-next-line */
         } elseif (!is_nullorempty($field->data())) {
             $custom_table = CustomTable::getEloquent(array_get($field->data(), 'target_table_id'));
         }

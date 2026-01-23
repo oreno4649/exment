@@ -23,7 +23,7 @@ class Plugin extends PluginApiBase
         ]);
         if ($validator->fails()) {
             return abortJson(400, [
-                'errors' => $this->getErrorMessages($validator)
+                'errors' => $this->getErrorMessages($validator),
             ], ErrorCode::VALIDATION_ERROR());
         }
 

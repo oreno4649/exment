@@ -79,7 +79,7 @@ class NestedEmbeds extends Embeds
         $attributes = [];
         foreach ($this->buildEmbeddedForm()->fields() as $field) {
             // @phpstan-ignore-next-line
-            $attributes[$this->column . '.'. $field->column] = $field->label();
+            $attributes[$this->column . '.' . $field->column] = $field->label();
         }
         return $attributes;
     }

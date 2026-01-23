@@ -22,7 +22,7 @@ class MySqlGrammar extends BaseGrammar implements GrammarInterface
 
         $field = $this->wrapValue(array_shift($path));
 
-        $accessor = "'$.\"".implode('"."', $path)."\"'";
+        $accessor = "'$.\"" . implode('"."', $path) . "\"'";
 
         $column = "{$field} = json_remove({$field}, {$accessor})";
 
@@ -33,7 +33,7 @@ class MySqlGrammar extends BaseGrammar implements GrammarInterface
 
         if (isset($query->joins)) {
             // @phpstan-ignore-next-line
-            $joins = ' '.$this->compileJoins($query, $query->joins);
+            $joins = ' ' . $this->compileJoins($query, $query->joins);
         }
 
         // Of course, update queries may also be constrained by where clauses so we'll

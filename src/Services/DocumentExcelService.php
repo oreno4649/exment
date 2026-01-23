@@ -1,4 +1,5 @@
 <?php
+
 /*
  */
 
@@ -150,7 +151,7 @@ class DocumentExcelService
                 if (count($splits) < 3) {
                     continue;
                 }
-                list($format_key, $table_name, $column_name) = $splits;
+                [$format_key, $table_name, $column_name] = $splits;
 
                 // not $format_key is not "loop", continue
                 if (!in_array($format_key, ['loop', 'loop-item'])) {
@@ -183,7 +184,7 @@ class DocumentExcelService
                     $loops[$table_name]['columns'][$cell_column]['text'] = getCellValue($cell, $sheet);
                     $loops[$table_name]['columns'][$cell_column]['formats'][] = [
                         'format_text' => $matches[0][$index],
-                        'column_name' => '${value:'. $column_name . '}',
+                        'column_name' => '${value:' . $column_name . '}',
                     ];
                 }
             }
@@ -265,7 +266,7 @@ class DocumentExcelService
                     continue;
                 }
                 // if match value
-                preg_match_all('/'.Define::RULES_REGEX_VALUE_FORMAT.'/', $cellValue, $matches);
+                preg_match_all('/' . Define::RULES_REGEX_VALUE_FORMAT . '/', $cellValue, $matches);
                 if (count($matches) == 0) {
                     continue;
                 }
@@ -305,7 +306,7 @@ class DocumentExcelService
                 return $drawing;
             }
         };
-        return replaceTextFromFormat($text, $model?? $this->model, $options);
+        return replaceTextFromFormat($text, $model ?? $this->model, $options);
     }
 
     /**
@@ -338,7 +339,7 @@ class DocumentExcelService
             // get template file name
             $this->filename = $this->getText($this->outputfilename) ?? make_uuid();
         }
-        return $this->filename.'.xlsx';
+        return $this->filename . '.xlsx';
     }
 
     /**
@@ -349,7 +350,7 @@ class DocumentExcelService
     {
         if (!isset($this->uniqueFileName)) {
             $ext = '.xlsx';
-            $this->uniqueFileName = make_uuid().$ext;
+            $this->uniqueFileName = make_uuid() . $ext;
         }
         return $this->uniqueFileName;
     }
@@ -402,7 +403,7 @@ class DocumentExcelService
      */
     protected function getFullPathTmp()
     {
-        $filepath = path_join($this->getDirPath(), $this->getFileName().'tmp');
+        $filepath = path_join($this->getDirPath(), $this->getFileName() . 'tmp');
         return getFullpath($filepath, Define::DISKNAME_ADMIN_TMP, true);
     }
 

@@ -22,7 +22,7 @@ class SystemValue extends ItemBase
         else {
             $str = $this->custom_value->{$this->key};
             if (count($this->length_array) > 1) {
-                $str = sprintf('%0'.$this->length_array[1].'d', $str);
+                $str = sprintf('%0' . $this->length_array[1] . 'd', $str);
             }
 
             return $str;

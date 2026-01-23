@@ -44,7 +44,7 @@ abstract class PluginDocumentBase
         $this->executing();
 
         // create pdf
-        list($template_path, $output_filename) = $this->getDocumentInfo();
+        [$template_path, $output_filename] = $this->getDocumentInfo();
         $service = new DocumentExcelService(
             $this->custom_value,
             $template_path,
@@ -120,7 +120,7 @@ abstract class PluginDocumentBase
     // @phpstan-ignore-next-line
     protected function getDocumentInfo()
     {
-        $default_document_name = "document".\Carbon\Carbon::now()->format('YmdHis');
+        $default_document_name = "document" . \Carbon\Carbon::now()->format('YmdHis');
         $dir_path = $this->plugin->getFullPath();
         // read config.json
         $document_json_path = $this->plugin->getFullPath('config.json');
@@ -135,7 +135,7 @@ abstract class PluginDocumentBase
         // if not exists, document and date time
         return [
             path_join($dir_path, 'document.xlsx'),
-            $filename
+            $filename,
         ];
     }
 
@@ -154,17 +154,13 @@ abstract class PluginDocumentBase
      * execute before creating document
      */
     // @phpstan-ignore-next-line
-    protected function executing()
-    {
-    }
+    protected function executing() {}
 
     /**
      * execute after creating document
      */
     // @phpstan-ignore-next-line
-    protected function executed()
-    {
-    }
+    protected function executed() {}
 
     /**
      * After called document service. If set custom value to document. Please override this.
@@ -172,9 +168,7 @@ abstract class PluginDocumentBase
      * @return void
      */
     // @phpstan-ignore-next-line
-    protected function called($spreadsheet)
-    {
-    }
+    protected function called($spreadsheet) {}
 
     /**
      * Before saving document. If set custom value to document. Please override this.
@@ -182,7 +176,5 @@ abstract class PluginDocumentBase
      * @return void
      */
     // @phpstan-ignore-next-line
-    protected function saving($spreadsheet)
-    {
-    }
+    protected function saving($spreadsheet) {}
 }

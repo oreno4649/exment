@@ -59,13 +59,13 @@ class CustomFormBlock extends ModelBase implements Interfaces\TemplateImporterIn
                         'replacedName' => [
                             'table_name' => 'form_block_target_table_name',
                         ],
-                    ]
+                    ],
                 ],
                 'uniqueKeyClassName' => CustomTable::class,
             ],
         ],
-        'children' =>[
-            'custom_form_columns' => CustomFormColumn::class
+        'children' => [
+            'custom_form_columns' => CustomFormColumn::class,
         ],
     ];
 
@@ -163,7 +163,7 @@ class CustomFormBlock extends ModelBase implements Interfaces\TemplateImporterIn
 
         if (!isset($block_label)) {
             $enum = FormBlockType::getEnum(array_get($this, 'form_block_type'));
-            $block_label = exmtrans("custom_form.table_".$enum->lowerKey()."_label") . $target_table->table_view_name;
+            $block_label = exmtrans("custom_form.table_" . $enum->lowerKey() . "_label") . $target_table->table_view_name;
         }
 
         if (isMatchString(array_get($this, 'form_block_type'), FormBlockType::DEFAULT)) {

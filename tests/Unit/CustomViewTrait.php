@@ -27,7 +27,7 @@ trait CustomViewTrait
      */
     protected function getCustomViewData(array $options = [], $view_kind_type = ViewKindType::DEFAULT)
     {
-        list($custom_view, $data) = $this->getCustomView($options, $view_kind_type);
+        [$custom_view, $data] = $this->getCustomView($options, $view_kind_type);
 
         return $data;
     }
@@ -73,8 +73,8 @@ trait CustomViewTrait
             'view_type' => ViewType::SYSTEM,
             'view_kind_type' => $view_kind_type,
             'options' => [
-                'condition_join' => $condition_join?? 'and',
-                'condition_reverse' => $condition_reverse?? '0'
+                'condition_join' => $condition_join ?? 'and',
+                'condition_reverse' => $condition_reverse ?? '0',
             ],
         ]);
 
@@ -120,9 +120,9 @@ trait CustomViewTrait
      */
     protected function getCustomView(array $options = [], $view_kind_type = ViewKindType::DEFAULT)
     {
-        $get_count = array_get($options, 'get_count')?? false;
+        $get_count = array_get($options, 'get_count') ?? false;
 
-        list($custom_table, $custom_view) = $this->createCustomViewAll($options, $view_kind_type);
+        [$custom_table, $custom_view] = $this->createCustomViewAll($options, $view_kind_type);
 
         $query = $custom_table->getValueQuery();
         if ($view_kind_type == ViewKindType::AGGREGATE) {
@@ -160,7 +160,9 @@ trait CustomViewTrait
      */
     protected function getTargetColumnId($setting, $custom_table, $is_pivot = false)
     {
-        if (!isset($setting['column_name'])) return null;
+        if (!isset($setting['column_name'])) {
+            return null;
+        }
 
         if ($setting['column_name'] == SystemColumn::PARENT_ID) {
             $column_id = $is_pivot ? $setting['column_name'] : Define::CUSTOM_COLUMN_TYPE_PARENT_ID;
@@ -196,7 +198,7 @@ trait CustomViewTrait
     protected function getViewColumnInfo($custom_table, $custom_view, $column_setting, $index)
     {
         $options = $this->getViewColumnBase($custom_table, $custom_view, $column_setting);
-        $options['order'] = $column_setting['order']?? $index + 1;
+        $options['order'] = $column_setting['order'] ?? $index + 1;
         return $options;
     }
 
@@ -210,8 +212,8 @@ trait CustomViewTrait
     {
         $options = $this->getViewColumnBase($custom_table, $custom_view, $column_setting);
         unset($options['view_column_name']);
-        $options['view_filter_condition'] = $column_setting['filter_condition']?? null;
-        $options['view_filter_condition_value_text'] = $column_setting['filter_value_text']?? null;
+        $options['view_filter_condition'] = $column_setting['filter_condition'] ?? null;
+        $options['view_filter_condition_value_text'] = $column_setting['filter_value_text'] ?? null;
         return $options;
     }
 
@@ -225,8 +227,8 @@ trait CustomViewTrait
     {
         $options = $this->getViewColumnBase($custom_table, $custom_view, $column_setting);
         unset($options['view_column_name']);
-        $options['sort'] = $column_setting['sort']?? 1;
-        $options['priority'] = $column_setting['priority']?? 1;
+        $options['sort'] = $column_setting['sort'] ?? 1;
+        $options['priority'] = $column_setting['priority'] ?? 1;
         return $options;
     }
 
@@ -246,7 +248,7 @@ trait CustomViewTrait
                 $column_setting['options']['view_pivot_table_id'] = $custom_table->id;
                 $column_setting['options']['view_pivot_column_id'] = $this->getTargetColumnId([
                     'column_name' => $column_setting['reference_column'],
-                ], boolval(array_get($column_setting, 'is_refer'))? $refer_table: $custom_table, true);
+                ], boolval(array_get($column_setting, 'is_refer')) ? $refer_table : $custom_table, true);
             }
         } else {
             $view_column_table_id = $custom_table->id;
@@ -257,8 +259,8 @@ trait CustomViewTrait
             'view_column_type' => $column_setting['condition_type'] ?? ConditionType::COLUMN,
             'view_column_table_id' => $view_column_table_id,
             'view_column_target_id' => $view_column_target_id,
-            'view_column_name' => $column_setting['view_column_name']?? null,
-            'options' => $column_setting['options']?? null,
+            'view_column_name' => $column_setting['view_column_name'] ?? null,
+            'options' => $column_setting['options'] ?? null,
         ];
     }
 

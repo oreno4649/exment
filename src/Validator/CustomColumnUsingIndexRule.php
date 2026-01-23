@@ -87,6 +87,6 @@ class CustomColumnUsingIndexRule implements Rule
      */
     public function message()
     {
-        return (string)exmtrans('validation.using_index_column');
+        return (string) exmtrans('validation.using_index_column');
     }
 }

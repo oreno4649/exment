@@ -283,9 +283,7 @@ trait ItemTrait
     /**
      * @return void
      */
-    public function prepare()
-    {
-    }
+    public function prepare() {}
 
     /**
      * whether column is enabled index.
@@ -807,7 +805,7 @@ trait ItemTrait
      */
     public function getSearchQueries($mark, $value, $takeCount, $q, $options = [])
     {
-        list($mark, $pureValue) = $this->getQueryMarkAndValue($mark, $value, $q, $options);
+        [$mark, $pureValue] = $this->getQueryMarkAndValue($mark, $value, $q, $options);
 
         $query = $this->custom_table->getValueQuery();
 
@@ -829,7 +827,7 @@ trait ItemTrait
      */
     public function setSearchOrWhere(&$query, $mark, $value, $q)
     {
-        list($mark, $pureValue) = $this->getQueryMarkAndValue($mark, $value, $q);
+        [$mark, $pureValue] = $this->getQueryMarkAndValue($mark, $value, $q);
 
         if (is_list($pureValue)) {
             $query->orWhereIn($this->custom_column->getIndexColumnName(), toArray($pureValue));
@@ -940,9 +938,7 @@ trait ItemTrait
      * @return void
      */
     // @phpstan-ignore-next-line
-    protected function setAdminFilterOptions(&$filter)
-    {
-    }
+    protected function setAdminFilterOptions(&$filter) {}
 
     /**
      * Get grid filter option. Use grid filter, Ex. LIKE search.
@@ -951,7 +947,7 @@ trait ItemTrait
      */
     protected function getGridFilterOption(): ?string
     {
-        return (string)FilterOption::EQ;
+        return (string) FilterOption::EQ;
     }
 
     /**
@@ -1042,7 +1038,9 @@ trait ItemTrait
     // @phpstan-ignore-next-line
     protected function getWeekdayFormat($val)
     {
-        if (is_null($val)) return null;
+        if (is_null($val)) {
+            return null;
+        }
 
         // get weekday and no list
         $weekdayNos = $this->getWeekdayNolist();

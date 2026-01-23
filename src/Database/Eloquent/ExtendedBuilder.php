@@ -33,7 +33,8 @@ class ExtendedBuilder extends Builder
 
         $total = func_num_args() === 5 ? value(func_get_arg(4)) : $this->toBase()->getCountForPagination();
 
-        $perPage = ($perPage instanceof Closure
+        $perPage = (
+            $perPage instanceof Closure
             ? $perPage($total)
             : $perPage
         ) ?: $this->model->getPerPage();
@@ -60,7 +61,7 @@ class ExtendedBuilder extends Builder
         $bindings = $this->getBindings();
         if (count($bindings) > 0) {
             // @phpstan-ignore-next-line
-            $query = preg_replace_callback('/\?/', function() use (&$bindings) {
+            $query = preg_replace_callback('/\?/', function () use (&$bindings) {
                 $binding = array_shift($bindings);
                 return is_numeric($binding) ? $binding : "'" . addslashes($binding) . "'";
             }, $sql);

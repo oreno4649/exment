@@ -20,9 +20,7 @@ class TimeRule implements Rule
         '^(0[0-9]|1[0-9]|2[0-3])[0-5][0-9][0-5][0-9]$',
     ];
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     /**
     * Check Validation
@@ -59,6 +57,6 @@ class TimeRule implements Rule
      */
     public function message()
     {
-        return (string)trans('validation.regex');
+        return (string) trans('validation.regex');
     }
 }

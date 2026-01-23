@@ -184,14 +184,14 @@ class PluginCodeController extends AdminControllerBase
     {
         $this->plugin = Plugin::getEloquent($id);
 
-        list($view, $isBox) = $this->getFileEditFormView($request, $id);
+        [$view, $isBox] = $this->getFileEditFormView($request, $id);
 
         if ($isBox) {
             $box = new Box('', $view);
             $view = $box->style('info');
         }
         return [
-            'editor' => $view->render()
+            'editor' => $view->render(),
         ];
     }
 
@@ -226,7 +226,7 @@ class PluginCodeController extends AdminControllerBase
                 ]), false];
             }
 
-            list($mode, $image, $can_delete) = $this->getPluginFileType($nodepath);
+            [$mode, $image, $can_delete] = $this->getPluginFileType($nodepath);
 
             $message = exmtrans('plugincode.message.irregular_ext');
 
@@ -261,7 +261,7 @@ class PluginCodeController extends AdminControllerBase
                 'filepath' => $nodepath,
                 'nodeid' => $nodeid,
                 'can_delete' => $can_delete,
-                'message' => $message
+                'message' => $message,
             ]), false];
         } catch (FileNotFoundException $ex) {
             //Todo:FileNotFoundException

@@ -30,7 +30,7 @@ class ViewWithParentTest extends TestCase
     protected function init()
     {
         $this->initAllTest();
-//        $this->be(LoginUser::find(TestDefine::TESTDATA_USER_LOGINID_ADMIN));
+        //        $this->be(LoginUser::find(TestDefine::TESTDATA_USER_LOGINID_ADMIN));
     }
 
     /**
@@ -647,8 +647,8 @@ class ViewWithParentTest extends TestCase
             if (is_null($user)) {
                 return false;
             }
-            return strpos($user->getValue('user_name'), 'user') !== 0 &&
-                $parent?->getValue('text') != 'test_2';
+            return strpos($user->getValue('user_name'), 'user') !== 0
+                && $parent?->getValue('text') != 'test_2';
         }, $options);
     }
 
@@ -760,8 +760,8 @@ class ViewWithParentTest extends TestCase
             if (array_get($prev_data, $unique_name) < array_get($data, $unique_name)) {
                 return true;
             }
-            return array_get($prev_data, $unique_name) == array_get($data, $unique_name) &&
-                array_get($prev_data, $unique_name_2) >= array_get($data, $unique_name_2);
+            return array_get($prev_data, $unique_name) == array_get($data, $unique_name)
+                && array_get($prev_data, $unique_name_2) >= array_get($data, $unique_name_2);
         }, $options);
     }
 
@@ -805,8 +805,8 @@ class ViewWithParentTest extends TestCase
             if ($prev_parent->getValue('index_text') > $parent?->getValue('index_text')) {
                 return true;
             }
-            return $prev_parent->getValue('index_text') == $parent?->getValue('index_text') &&
-                $prev_user->getValue('user_name') <= $user?->getValue('user_name');
+            return $prev_parent->getValue('index_text') == $parent?->getValue('index_text')
+                && $prev_user->getValue('user_name') <= $user?->getValue('user_name');
         }, $options);
     }
 
@@ -843,8 +843,8 @@ class ViewWithParentTest extends TestCase
             if (array_get($prev_data, $unique_name) < array_get($data, $unique_name)) {
                 return true;
             }
-            return array_get($prev_data, $unique_name) == array_get($data, $unique_name) &&
-                array_get($prev_data, $unique_name_2) >= array_get($data, $unique_name_2);
+            return array_get($prev_data, $unique_name) == array_get($data, $unique_name)
+                && array_get($prev_data, $unique_name_2) >= array_get($data, $unique_name_2);
         }, $options);
     }
 
@@ -888,8 +888,8 @@ class ViewWithParentTest extends TestCase
             if (array_get($prev_parent, 'id') > array_get($parent, 'id')) {
                 return true;
             }
-            return array_get($prev_parent, 'id') == array_get($parent, 'id') &&
-                array_get($prev_user, 'id') <= array_get($user, 'id');
+            return array_get($prev_parent, 'id') == array_get($parent, 'id')
+                && array_get($prev_user, 'id') <= array_get($user, 'id');
         }, $options);
     }
 
@@ -1373,7 +1373,7 @@ class ViewWithParentTest extends TestCase
     protected function getColumnFilterData(\Closure $testCallback, array $options = [])
     {
         // create custom view
-        list($custom_table, $custom_view) = $this->createCustomViewAll($options);
+        [$custom_table, $custom_view] = $this->createCustomViewAll($options);
 
         $classname = getModelName($custom_table->table_name);
         $grid = new Grid(new $classname());
